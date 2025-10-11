@@ -1,2 +1,2 @@
 # Doutorado
-Repositório de proamas desenvolvidos para o Doutorado
+Repositório de programas desenvolvidos para o Doutorado
