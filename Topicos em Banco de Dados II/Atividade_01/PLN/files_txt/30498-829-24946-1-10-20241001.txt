@@ -1,0 +1,344 @@
+GECET: Garotas nas Engenharias, Ciências Exatas e Tecnologias
+Projeto de Extensão voltado para a participação feminina nas áreas STEM
+Giovana A. Benvenuto
+Analice C. Brandi
+giovana.a.benvenuto@unesp.br
+analice.brandi@unesp.br
+Faculdade de Ciências e Tecnologia –
+Universidade Estadual Paulista
+(FCT/UNESP)
+Presidente Prudente, São Paulo
+Marilaine Colnago
+Rafaella S. Ferreira
+marilaine.colnago@unesp.br
+rafaella.ferreira@unesp.br
+Instituto de Biociências, Letras e
+Ciências Exatas – Universidade
+Estadual Paulista (IBILCE/UNESP)
+São José do Rio Preto, São Paulo
+Helen S. Picoli
+h263551@dac.unicamp.br
+Faculdade de Tecnologia -
+Universidade Estadual de Campinas
+(FT/UNICAMP)
+Limeira, São Paulo
+Figura 1: Logo e ações do projeto de extensão GECET
+W4E’2024, Juiz de Fora/MG, Brazil
+Benvenuto et al.
+o enriquecimento cultural e a pluralidade de pensamento das en-
+volvidas. Neste artigo, compartilharemos as experiências de nossos
+principais projetos, discutindo seus impactos e resultados. Entre as
+ações realizadas pelo projeto, destacam-se:
+• Atividades de Formação e Divulgação: Promoção de eventos
+e debates, divulgação de conhecimentos científicos e criação
+de materiais educativos.
+• Criação de Grupos e Canais: Formação do Pyladies Rosana e
+estabelecimento de canais de comunicação.
+• Cursos: Curso de linguagem Python para garotas, curso de
+Formação para Quebra de Estereótipos de Gênero no ambi-
+ente escolar e curso de Liderança Feminina nas STEM.
+• Participação em Eventos e Parcerias: Participação na confer-
+ência Meninas Digitais e Women in Information Technology,
+além de parcerias com o AprovEnem e o grupo #unidaspela-
+matemática para expandir nossos horizontes.
+HISTÓRICO DE AÇÕES
+Ao longo de sua trajetória, o projeto buscou fomentar a participação
+feminina em diversas idades e níveis de escolaridade, promovendo
+ações desde a educação básica. O objetivo, a médio e longo prazo,
+é aumentar o ingresso de mulheres em áreas predominantemente
+masculinas, reforçando a autoconfiança e a identidade das partici-
+pantes, especialmente aquelas com poucas referências no tema ou
+pertencentes a classes financeiramente desfavorecidas. Para isso,
+entende-se a importância da formação e conscientização de profes-
+sores da educação básica, bem como do incentivo à sua participação
+no processo de redução da desigualdade de gênero e estímulo à
+participação de futuras alunas nas carreiras STEM.
+Para as mulheres que já iniciaram suas carreiras nessas áreas,
+o projeto oferece formações e grupos de apoio, com o objetivo de
+auxiliar na jornada de autoconhecimento das participantes e pro-
+porcionar espaços onde se sintam seguras, ouvidas e reconhecidas.
+Os encontros abordam temas voltados tanto para questões de saúde
+mental quanto para a identificação de ambientes tóxicos, permitindo
+a partilha de experiências.
+A seguir, são descritas algumas das ações realizadas pelo projeto
+de extensão GECET.
+2.1
+M++: Almanaque de ciências e curiosidades
+A criação do almanaque "M++" (Figura 2) foi uma das ações do
+projeto, visando disponibilizar materiais de apoio para professores
+da educação básica. Disponibilizado gratuitamente para download
+em 2021, o material de livre acesso sobre ciências destaca a partic-
+ipação de mulheres na STEM. O almanaque ilustra mensalmente
+uma cientista e suas contribuições para a área, além de apresen-
+tar desafios e curiosidades. As atividades elucidam cientistas e a
+ciência de forma divertida, com o objetivo de despertar o interesse
+inicial de crianças e adolescentes nessas áreas de conhecimento,
+além de trazer representatividade para que mais meninas possam
+se identificar.
+Figura 2: Capa do Almanaque M++ e exemplo de uma página
+falando sobre a Katherine Johnson. Conteúdo disponível em:
+https://www.viser.com.br/gecet/m
+2.2
+Programa Interdisciplinar Tecnológico -
+InterTec
+Com o objetivo de reunir mulheres de diversas áreas do conheci-
+mento interessadas em desenvolver técnicas de resolução de prob-
+lemas através de modelagem matemática e programação, o GECET
+propôs, em 2021, o curso denominado InterTec. O curso, aplicado
+quinzenalmente de forma totalmente online, contou com a partici-
+pação de 11 mulheres que estavam cursando ou já haviam concluído
+cursos técnicos e/ou superiores em diversas áreas do conhecimento.
+Através dos encontros, as participantes puderam ter contato com
+noções de lógica de programação e ciência de dados, aprofundando-
+se no uso da linguagem de programação Python. Elas aplicaram o
+conteúdo aprendido em problemas do dia a dia e em seus próprios
+domínios. Ao final do projeto, as participantes demonstraram suas
+aplicações, o que possibilitou a geração de uma publicação na qual
+foi analisada a distribuição de bolsas de estudo do programa Uni-
+versidade para Todos (PROUNI) [4].
+2.3
+Curso de programação SuperPython
+Outra atividade, também direcionada ao ensino básico e realizada
+durante o período em que foi necessário o remanejamento das ativi-
+dades presenciais, foi o “SuperPython”. Realizado de forma remota,
+o projeto atraiu 35 inscrições de meninas de diferentes regiões do
+Brasil, com idades entre 11 e 18 anos. O objetivo do SuperPython
+foi ensinar a linguagem de programação Python por meio do desen-
+volvimento de jogos, proporcionando uma experiência educativa e
+envolvente.
+A proposta foi criada para aproveitar o talento e a criatividade
+de crianças e jovens, permitindo-lhes produzir histórias interativas
+baseadas em computador. Ao criar jogos, as participantes puderam
+experimentar a satisfação de realizar seu mundo lúdico, enquanto
+aprendiam e produziam material que poderia ser desfrutado e apre-
+ciado por seus colegas. Considerando que muitas meninas nessa
+faixa etária percebem os cursos de tecnologia como ambientes
+hostis para mulheres, o que muitas vezes as desestimula a seguir
+carreiras nessa área [11], o curso tinha, além do objetivo de ensinar,
+a intenção de despertar o interesse das participantes por carreiras
+em STEM. O projeto buscou oferecer uma nova perspectiva sobre
+essas áreas, incentivando as meninas a enxergarem o potencial e as
+oportunidades que elas podem oferecer.
+GECET: Garotas nas Engenharias, Ciências Exatas e Tecnologias
+W4E’2024, Juiz de Fora/MG, Brazil
+A linguagem de programação utilizada no SuperPython é de fácil
+aprendizado e permite a criação de programas de qualidade profis-
+sional, adaptados à faixa etária dos alunos. Os participantes precis-
+aram entregar resultados tangíveis rapidamente, motivados pela
+aquisição de habilidades de programação cada vez mais complexas,
+com orientação em aulas síncronas e suporte contínuo através de
+canais de comunicação.
+Dentro desta proposta, foram desenvolvidos jogos em Python que
+contavam histórias de mulheres cientistas. O público-alvo foram alu-
+nas do ensino fundamental II e médio interessadas em desenvolver
+habilidades de programação e resolução de problemas. Ao término
+do projeto, o jogo premiado contou a história de Ada Lovelace por
+meio da Programação Orientada a Objetos, um exemplo pode ser
+observado na Figura 3. Dois artigos relatando a experiência desse
+projeto foram gerados, um apresentado no XIV Latin-American Con-
+gress on Electricity Generation and Transmission (CLAGTEE) [5],
+e o segundo no Congresso Nacional de Matemática Aplicada e
+Computacional (CNMAC) [6].
+Figura 3: Tela do jogo desenvolvido por uma das participantes
+e trecho do código.
+2.4
+Formação quebra de estereótipos de gênero
+no ambiente escolar
+Na sociedade em que vivemos, somos constantemente confrontados
+com conceitos de coisas tipicamente masculinas ou femininas, sejam
+elas cores, brinquedos ou até profissões. Esses padrões nos são
+apresentados desde a infância, perpetuando preconceitos e criando
+barreiras para aqueles que desejam romper com esses padrões pré-
+definidos pelo Estereótipo de Gênero.
+Devido aos estereótipos de gênero, é comum que certos clichês
+relacionados a profissões sejam reforçados na sociedade, o que
+acaba limitando o desenvolvimento das habilidades e capacidades
+dos indivíduos. Como consequência, apenas um terço das garotas
+que chegam à universidade optam por cursos de ciências. Segundo
+dados da Unesco, apenas 30% das universitárias escolhem carreiras
+relacionadas a STEM [1].
+Para combater esse problema, o GECET ofereceu um curso de for-
+mação docente voltado para licenciandos em áreas de exatas, com o
+objetivo de incentivar a quebra de estereótipos no ambiente escolar,
+o convite para a participação pode ser visto na Figura 4. A formação
+contou com encontros mensais de forma online, no período de junho
+a outubro de 2022, com a presença de 15 licenciandos, abordando
+temas como, mulheres nas ciências exatas, apresentando várias
+biografias de mulheres que fizeram história, como as escolhas das
+profissões são influenciadas pelos estereótipos de gênero, e como
+quebrar este paradigma. Além desses temas, foram apresentadas
+atividades sobre quebra de estereótipos aplicáveis em sala de aula.
+No ambiente escolar, é essencial que o professor aborde temas
+como reflexões sobre gêneros, promoção da equidade, estímulo à
+empatia e fortalecimento do empoderamento feminino. É impor-
+tante que algumas atividades sejam inseridas no plano de aula
+do professor, tais como: destacar a importância das mulheres na
+história; incentivar a leitura de livros escritos por mulheres; pro-
+mover atividades físicas inclusivas; moderar debates sobre gênero
+e feminismo; e fomentar a equidade em todas as disciplinas.
+Figura 4: Convite para a inscrição dos encontros: Quebra de
+estereótipos no ambiente escolar
+2.5
+Guia de profissões
+Direcionado aos anos finais do ensino, o GECET produziu, em 2023,
+um “Guia de Profissões”, vide Figura 5, focado em carreiras em
+STEM. O material inclui mais de 20 cursos de graduação e licen-
+ciatura, apresentando aspectos gerais sobre a formação, atribuições
+e áreas de atuação, além de opções de onde cursar e perfis de mul-
+heres da área, tanto pioneiras quanto profissionais da atualidade.
+Esse conteúdo é disponibilizado de forma online e gratuita e pode
+ser encontrado na página do projeto 1.
+Além disso, nas redes sociais do projeto, foram realizadas entre-
+vistas com profissionais de diversas áreas relacionadas à STEM no
+formato de Lives com transmissão pelo Youtube ou pelo Instagram.
+2.6
+Divulgação cientifica através de Redes
+Sociais
+O trabalho de divulgação científica é uma ação recorrente do pro-
+jeto. No Instagram2, buscamos ativamente apresentar e destacar a
+participação feminina em áreas correlatas às ciências exatas, home-
+nageando mulheres históricas e apresentando as mulheres que hoje
+escrevem sua história em áreas majoritariamente dominadas por
+homens. O perfil também informa sobre notícias atuais relacionadas
+1https://www.viser.com.br/gecet
+2@gecet.unesp
+W4E’2024, Juiz de Fora/MG, Brazil
+Benvenuto et al.
+Figura 5: Capa do Guia de Profissões e exemplo da página
+sobre Engenharia Ambiental. Conteúdo disponível em: https:
+//www.viser.com.br/gecet
+à área, além de compartilhar indicações de livros e filmes sobre o
+tema.
+Ademais, datas comemorativas são marcadas pela divulgação de
+mulheres que conduzem pesquisas e contribuem significativamente
+para a área, destacando a ciência que produzem. Interações, quizzes
+e sorteios também foram algumas das ações promovidas nas redes
+sociais, com o objetivo de engajar o público e ampliar o alcance do
+conteúdo produzido pelo projeto.
+CICLO ATUAL DE ATIVIDADES
+Em 2023, o GECET iniciou um novo ciclo de atividades focado
+na formação de lideranças em STEM, especialmente voltado para
+estudantes mulheres de graduação e pós-graduação. Um estudo
+realizado por Santos e Marczak [10] revelou que os principais fatores
+de evasão de mulheres na área de computação incluem ansiedade,
+estresse, falta de suporte e influência de terceiros.
+Diante desse contexto, o projeto foi estruturado em duas frentes
+principais: formação de lideranças e programação, ambas com a
+missão comum de construir um futuro mais inclusivo em STEM.
+Com 81 inscrições nas duas frentes, o projeto visa proporcionar a
+essas mulheres uma rede de apoio, promovendo trocas de exper-
+iências e oferecendo suporte para reafirmarem suas posições como
+líderes, independentemente de suas áreas de atuação.
+3.1
+Formação de Lideranças em STEM
+Na formação de lideranças, são realizados encontros remotos men-
+sais com palestrantes convidados que promovem diálogos inspi-
+radores e reflexões críticas. Na Figura 6 vemos dois exemplos de
+convites dos encontros propostos onde foram tratados temas como
+a síndrome de impostora e a saúde mental, com a participação de
+palestrantes das áreas. Esses encontros são projetados para criar
+uma rede de apoio entre as participantes, além de desenvolver ha-
+bilidades interpessoais essenciais para a liderança.
+Figura 6: Convites para os encontros de liderança expondo
+os palestrantes convidados e temas trabalhados.
+3.2
+Curso de Programação em Python
+No contexto de Programação, inspirado pela boa experiência do
+InterTec mencionado anteriormente, são organizadas mensalmente
+sessões de aprendizado técnico focadas na linguagem de progra-
+mação Python (Figura 7). O objetivo é introduzir e aprimorar as
+habilidades das participantes de maneira colaborativa, fortalecendo
+seu domínio técnico em um ambiente de apoio mútuo. As aulas
+abrangem diferentes domínios e gradualmente aplicam um olhar
+crítico sobre a disparidade de gênero, utilizando os conceitos apren-
+didos para análise de dados que revelam as barreiras ainda presentes
+nos diversos setores da sociedade. Além disso, essa atividade pro-
+porciona um espaço para a interação entre profissionais de áreas
+diversas, buscando integrar outros campos do conhecimento às
+ciências exatas.
+Figura 7: Telas de encontros do curso de Python, mostrando
+uma apresentação e um trecho de código em python.
+IMPACTOS E RESULTADOS
+O projeto buscou ter um impacto significativo no aumento do inter-
+esse pelas áreas STEM. Somando as inscrições em todos os projetos
+realizados pelo GECET, mais de 140 pessoas foram alcançadas. Du-
+rante essas ações, as participantes manifestaram interesse crescente
+em cursos de STEM, relatando motivação e encorajamento para
+seguir essas carreiras.
+Além disso, ações realizadas nas redes sociais, como a Semana
+da Engenharia, lives de bate-papo, e posts de divulgação científica,
+também tiveram um papel importante. Esses eventos geraram de-
+poimentos de mulheres atuantes nas áreas abordadas, contribuindo
+para reduzir a evasão e motivando alunas desmotivadas a continuar
+seus cursos.
+Houve uma reflexão importante sobre estereótipos de gênero,
+com um aumento no engajamento de professores no curso de for-
+mação de quebra de estereótipos. Esses educadores passaram a se
+GECET: Garotas nas Engenharias, Ciências Exatas e Tecnologias
+W4E’2024, Juiz de Fora/MG, Brazil
+conscientizar mais sobre a importância de apoiar alunas e alunos a
+seguirem as carreiras desejadas, independentemente do gênero.
+O projeto também se destacou no desenvolvimento de materiais
+educativos, como o almanaque “M++” e o “Guia de Profissões”.
+Esses materiais, disponibilizados gratuitamente atingindo tanto o
+público da edução básica como do ensino médio, contribui para o
+enriquecimento cultural e a pluralidade de pensamento entre os
+estudantes.
+Vale ressaltar que muitas das ações do projeto resultaram em
+produções acadêmicas e participações de congressos, como a já
+citada participação no CLAGTEE[5] e também os seguintes resumos
+apresentados no CNMAC:
+• Análise da representação da diversidade de gênero nos cursos
+de graduação da Universidade Estadual Paulista (Unesp) [7]
+• Uma análise de gênero na premiação da OBMEP ao longo
+dos anos [8]
+• Análise de Gênero nas Diretorias de Sociedades Científi-
+cas [3]
+O artigo completo publicado, também apresentado no CNMAC
+[4], foi reconhecido como o melhor trabalho da sessão técnica em
+que foi apresentado. A seleção e certificação foram realizadas pelo
+British Council e pelo Comitê Temático de Mulheres da Sociedade
+Brasileira de Matemática Aplicada e Computacional (SBMAC).
+No âmbito das redes sociais, o Instagram do projeto atualmente
+conta com 1.486 seguidores e já realizou 986 publicações. A atuação
+do projeto na divulgação científica pelas redes sociais foi premiada
+duas vezes consecutivas, em 2022 e 2023, pela iniciativa Women in
+Information Technology (WIT), promovida pela SBC para debater
+questões de gênero nas áreas de tecnologia no Brasil.
+CONCLUSÃO
+O GECET surgiu como um projeto de extensão universitária local
+em Rosana, no interior do estado de São Paulo, com o objetivo de
+mudar a realidade escassa da participação feminina nos cursos das
+áreas de STEM. Após um período de adaptação, encontrou no for-
+mato online a oportunidade de atingir mulheres de diversas regiões
+do Brasil, ultrapassando a barreira da distância física. Atualmente,
+o projeto une integrantes de três diferentes instituições de ensino
+superior: a Universidade Federal do Rio Grande (FURG), a Univer-
+sidade Federal de Lavras (UFLA) e a Universidade Estadual Paulista
+(UNESP), com integrantes em quatro campi diferentes: Araraquara-
+SP, Bauru-SP, Presidente Prudente-SP, Rosana-SP e São José do Rio
+Preto-SP. Além disso, o projeto conta com integrantes já formadas
+que atuam em redes de ensino fundamental e médio, tendo contato
+direto com crianças e adolescentes.
+A transição para atividades online, inicialmente vista como um
+desafio, revelou-se uma oportunidade para ampliar o alcance do
+projeto. A utilização das redes sociais e outras plataformas digitais
+permitiu uma participação mais diversificada e um impacto mais
+profundo. No entanto, a necessidade de constante inovação e adap-
+tação permanece crucial para manter o engajamento e a eficácia
+das iniciativas.
+Este projeto demonstrou que é possível promover a equidade de
+gênero nas áreas STEM através de uma abordagem multifacetada
+que inclui formação de professores, criação de materiais educativos
+e uso estratégico das mídias sociais. A adaptação para o formato
+online durante a pandemia não apenas garantiu a continuidade
+das atividades, mas também ampliou o impacto, mostrando a im-
+portância de flexibilidade e inovação em projetos educativos. Con-
+tinuaremos a incentivar meninas e mulheres a buscar seus sonhos
+nas áreas STEM, contribuindo para a construção de um futuro mais
+equitativo.
+AGRADECIMENTOS
+As autoras agradecem à CAPES - Código de Financiamento 001,
+pelo apoio para realização do presente trabalho, ao Comitê das
+Mulheres da SBMAC e ao programa Meninas Digitais da SBC pelo
+apoio.

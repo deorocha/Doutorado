@@ -1,0 +1,148 @@
+Paralelização de Tarefas de Codificação de Vídeo VVC utilizando
+GPGPUs
+Iago Storch
+icstorch@inf.ufrgs.br
+Universidade Federal do Rio Grande
+do Sul (UFRGS)
+Porto Alegre, Brasil
+Daniel Palomino
+dpalomino@inf.ufpel.edu.br
+Universidade Federal de Pelotas
+(UFPel)
+Pelotas, Brasil
+Sergio Bampi
+bampi@inf.ufrgs.br
+Universidade Federal do Rio Grande
+do Sul (UFRGS)
+Porto Alegre, Brasil
+1. Partindo do nível de abstração mais alto
+em direção ao mais baixo, as contribuições são divididas em Geren-
+ciamento de Carga de Trabalho, Paralelização de Algoritmo
+e Co-otimização de Algoritmo e Recursos da GPU.
+As contribuições de Gerenciamento de Carga de Trabalho
+se concentram em decisões de alto nível que não interferem dire-
+tamente na implementação. Isso inclui gerenciar a codificação de
+Paralelização de Algoritmo
+Co-otimização de Algoritmo e Recursos da GPU
+Alto nível de abstração
+Baixo nível de abstração
+...
+...
+...
+...
+...
+...
+...
+...
+...
+...
+Gerenciamento de Carga de Trabalho
+...
+Figura 1: Metodologia Integrada de Aceleração com GPUs
+para Aplicações de Codificação de Vídeo (MIAG-CV).
+CTD’2024, Juiz de Fora/MG, Brazil
+Iago Storch, Daniel Palomino, and Sergio Bampi
+blocos com múltiplas dimensões e posições, mapear as tarefas de
+codificação em kernels para fornecer encapsulamento, e gerenciar a
+execução e comunicação de kernels para maximizar a utilização dos
+recursos. Esta tese de doutorado também propõe uma estratégia
+chamada unidades de carga de trabalho para suportar as estruturas
+de particionamento flexíveis dos padrões de codificação de vídeo
+modernos. Essa estratégia consiste em enumerar todas as possibili-
+dades de partição permitidas para uma ferramenta de codificação e,
+em seguida, para cada bloco de 128×128 pixels da imagem, organizar
+essas partições em uma estrutura semelhante a um mosaico (uma
+unidade de carga de trabalho) que mantém blocos com a mesma
+dimensão na mesma unidade para manter a regularidade. Cada re-
+gião 128×128 gera várias unidades de carga de trabalho para cobrir
+todas as possibilidades de particionamento, e todas as unidades
+de carga de trabalho são processadas simultaneamente. Essa estra-
+tégia maximiza a ocupação enquanto mantém uma estrutura de
+processamento regular para se adequar à arquitetura das GPUs.
+O nível de Paralelização de Algoritmo está preocupado em
+identificar e criar oportunidades de paralelização nos algoritmos de
+codificação de vídeo. Isso envolve identificar estágios que podem ser
+paralelizados de maneira direta devido à ausência de dependências
+de dados e também desenvolver métodos para quebrar dependências
+de dados não críticas e permitir a execução paralela de algoritmos
+que, de outra forma, seriam sequenciais — nesse caso, assume-se
+perdas de eficiência de codificação. Estas contribuições estão foca-
+das na concepção geral do algoritmo, e não em sua implementação.
+As contribuições no nível de Co-otimização de Algoritmo
+e Recursos da GPU consistem em desenvolver implementações
+eficientes dos algoritmos paralelos considerando o hardware das
+GPUs. Isso inclui gerenciar o layout de dados e a hierarquia de
+memória explicitamente para coalescer os acessos à memória e
+maximizar o reuso de dados, usar instruções especializadas da GPU e
+escalonar as tarefas na GPU para maximizar o throughput. Esta tese
+de doutorado propõe uma abstração lógica chamada de conjuntos de
+trabalho para auxiliar nesse escalonamento. Cada grupo de threads
+do lado do software é responsável por uma unidade de carga de
+trabalho com múltiplos blocos. Os conjuntos de trabalho são usados
+para subdividir as threads em grupos menores de acordo com a
+estrutura de particionamento de cada unidade de carga de trabalho,
+facilitando o mapeamento entre threads e amostras em um bloco.
+VALIDAÇÃO EXPERIMENTAL
+O padrão Versatile Video Coding (VVC) [2] alcança eficiência de
+codificação estado-da-arte, mas também impõe uma grande carga
+computacional. Portanto, a MIAG-CV é aplicado a duas ferramen-
+tas de codificação introduzidas pelo VVC. Além de demonstrar a
+aplicação da metodologia, isso também auxilia na redução da carga
+computacional dos codificadores VVC. As ferramentas abordadas
+são a Estimação de Movimento Afim (Affine ME) e a Predição Intra
+Baseada em Matrizes (MIP) [2]. A Affine ME é projetado para ex-
+plorar padrões de movimento não translacionais. Em contrapartida,
+a MIP explora métodos baseados em aprendizado de máquina para
+representar um bloco com base nas amostras vizinhas já codificadas.
+Para a Affine ME, as contribuições no gerenciamento de carga
+de trabalho incluem a definição das unidades de carga de trabalho e
+a exclusão de blocos improváveis. As contribuições na paralelização
+do algoritmo incluem o cálculo dos vetores de movimento ignorando
+blocos adjacentes, o cálculo de erro de predição e gradiente das
+amostras em paralelo, e a construção de sistemas de equações em
+paralelo. No nível mais baixo, quatro granularidades de dados são
+definidas para processar diferentes estágios de forma eficiente. A
+ferramenta MIP também utiliza unidades de carga de trabalho
+no nível de gerenciamento de carga, além de um método baseado
+em filtros passa-baixa para reproduzir o efeito da quantização e
+quebrar as dependências entre blocos adjacentes. As contribuições
+na paralelização do algoritmo incluem o cálculo do erro de predição
+em paralelo. No nível de implementação, operações especializadas
+de produto escalar são usadas para gerar a predição. A abstração
+definida pela MIAG-CV permite que algumas contribuições sejam
+reutilizadas entre duas ferramentas completamente diferentes.
+A validação experimental comparou o tempo de processamento,
+o consumo energético e a eficiência de codificação dos kernels de
+codificação implementados em GPU com o codificador de referên-
+cia rodando em CPU. O codificador de referência do VVC, cha-
+mado VTM, foi executado em um processador Intel Core i9 7900X
+com 64GB de RAM. Os kernels de GPU foram implementados em
+OpenCL e executados em três dispositivos: NVIDIA GTX 1080, NVI-
+DIA Titan V e Radeon RX 6900XT. Os utilitários RAPL, nvidia-smi
+e rocm-smi foram utilizados para monitorar o consumo de energia.
+Os experimentos com Affine ME mostraram que a codificação
+baseada em GPU foi de 19 a 267 vezes mais rápida que o codificador
+de referência, enquanto consumiu entre 2,10% e 22,42% da energia
+consumida pela CPU. Os resultados variam com base no conteúdo
+do vídeo e no dispositivo GPU, mas a solução proposta é tanto
+mais rápida quanto mais eficiente em termos de energia em todos
+os casos. As modificações do algoritmo para expor o paralelismo
+requerem um bitrate adicional de 0,017% ∼1,784% para alcançar a
+mesma qualidade visual, de acordo com a métrica BD-BR.
+Para a MIP, os kernels de GPU aceleram a codificação entre 10
+e 136 vezes, enquanto consomem entre 0,75% e 21,45% da energia
+consumida pela CPU. Novamente, a solução baseada em GPU é mais
+rápida e mais eficiente em termos de energia. Por fim, a solução
+com GPUs exige um bitrate adicional entre 0,105% e 0,736% para
+alcançar a qualidade visual do codificador VTM.
+CONCLUSÃO
+Esta tese de doutorado propôs a MIAG-CV, uma metodologia hi-
+erárquica para desenvolver soluções de aceleração por GPU em
+aplicações de codificação de vídeo. A abstração proporcionada pela
+MIAG-CV permitiu que procedimentos de aceleração semelhantes
+fossem aplicados em ferramentas de codificação distintas. Resulta-
+dos experimentais mostraram que os kernels de computação em
+GPU, desenvolvidos com a MIAG-CV, são centenas de vezes mais
+rápidos que o codificador em CPU, consumindo menos de 22% da
+energia utilizada pela CPU. Os impactos na eficiência de codificação
+foram praticamente desprezíveis.

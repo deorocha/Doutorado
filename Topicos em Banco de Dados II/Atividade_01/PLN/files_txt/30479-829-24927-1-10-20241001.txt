@@ -1,0 +1,274 @@
+Modelagem e análise de redes sociais através de hipergrafos
+Matheus H. B. dos Santos
+matheusrickbatista@aluno.ufsj.edu.br
+Universidade Federal de São João del-Rei
+Vinícius da F. Vieira
+vinicius@ufsj.edu.br
+Universidade Federal de São João del-Rei
+Carolina R. Xavier
+carolinaxavier@ufsj.edu.br
+Universidade Federal de São João del-Rei
+Jussara M. de Almeida
+jussara@dcc.ufmg.br
+Universidade Federal de Minas Gerais
+CTIC’2024, Juiz de Fora/MG, Brazil
+Vinícius da F. Vieira et al.
+Figure 1: Exemplo da representação de autoria de artigos cien-
+tíficos (a) modelada como: um grafo clássico; (b) um hiper-
+grafo (c).
+Figure 2: Projeções de um hipergrafo (a) em grafos 𝑠-linha
+(b), grafo clique (c), grafo bipartido (d).
+em um artigo científico como uma hiperaresta, ilustrada por uma
+região de uma cor.
+É possível estabelecer métodos para a projeção de hipergrafos
+em grafos sob diferentes perspectivas. A Figura 2 apresenta um
+exemplo de projeção de um hipergrafo (Fig. 2(a)) em três tipos de
+grafos: grafos 𝑠-linha, para 𝑠= 1, 𝑠= 2 e 𝑠= 3 (Fig. 2(b)), grafo
+clique (Fig. 2(c)) e grafo bipartido (Fig. 2(d)). Embora a projeção
+de hipergrafos em grafos seja muito útil para a aplicação de um
+grande conjunto de técnicas clássicas utilizadas em análise de redes,
+descritas e aplicadas de maneira vasta na literatura, sua utilização re-
+sulta, inevitavelmente, em modelos com uma perda de informação.
+Assim, há um enorme desafio em generalizar técnicas de ciên-
+cia de redes baseadas em grafos para um contexto de hiper-redes,
+em que as relações de alta-ordem sejam respeitadas. Askoy et al.
+[1] fazem uma revisão de definições relacionadas a hipergrafos e
+propõem uma série de conceitos baseados em passeios que estão na
+base de métodos para a definição de coeficientes e centralidades apli-
+cados a hiper-redes que sejam análogos àqueles tradicionalmente
+aplicados na análise de redes.
+Uma delas é a definição de 𝑠-caminho, que conecta um par de vér-
+tices 𝑣𝑖e 𝑣𝑗em um hipergrafo utilizando apenas hiperarestas que
+compartilham ao menos 𝑠vértices e permite definir a 𝑠-distância
+𝑠−𝑙(𝑣𝑖, 𝑣𝑗), que caracteriza o tamanho do menor 𝑠-caminho entre
+𝑣𝑖e 𝑣𝑗em um hipergrafo. Dessa forma, as noções de centralidade
+de proximidade (closeness centrality) e centralidade de intermedi-
+ação (betweenness centrality), tradicionalmente utilizadas em grafos
+clássicos, podem ser utilizadas para hipergrafos como 𝑠-closeness
+centrality e 𝑠-betweenness centrality, respectivamente1. A definição
+de centralidade de grau (𝑠-degree centrality) de um vértice 𝑣𝑖em um
+hipergrafo também pode ser facilmente estendida daquela aplicada
+a grafos e pode ser calculada proporcionalmente ao número de
+1Neste trabalho, será utilizada a terminologia 𝑠-closeness centrality e 𝑠-betweenness
+centrality no idioma inglês, como no trabalho de Askoy et al. [1].
+hiperarestas que possuem ao menos 𝑠vértices às quais o vértice 𝑣𝑖
+pertence.
+Uma das tarefas mais importantes na ciência de redes é a iden-
+tificação de comunidades que, de maneira consensual pode ser
+descrita como a busca por grupos de vértices com alta densidade
+interna quando comparada ao volume de ligações externas [12].
+Em um esforço de identificar comunidades em hiper-redes, Kumar
+et al. ([9]) definem um método baseado no tradicional método de
+Louvain [7], frequentemente utilizado para a caracterização de co-
+munidades em grafos. Kumar et al. apontam que uma estratégia
+simples para generalização do problema de identificação de comu-
+nidades em hiper-redes poderia ser a projeção do hipergrafo em um
+grafo clássico e a aplicação de algoritmos tradicionais, mas que essa
+abordagem faria com que informações essenciais das hiperarestas
+fossem perdidas.
+MATERIAIS E MÉTODOS
+Os experimentos neste estudo são conduzidos tomando como base
+a CSBCSet [8], um conjunto de dados sobre publicações acadêmico-
+científicas nos eventos mais longevos realizados no Congresso da
+Sociedade Brasileira de Computação (CSBC) 2. A CSBCSet apre-
+senta metadados de todas as publicações disponíveis entre 2013
+e 2022 de 97 edições de dez eventos. Há na CSBCSet um total de
+4961 autores, já desambiguados pelos na base de dados, e 1997
+publicações distintas.
+A partir de um conjunto de A autores e um conjunto de suas
+P publicações são construídas uma rede e uma hiper-rede, repre-
+sentadas, respectivamente, por um grafo G = (V, L) e por um
+hipergrafo H = (V, E). Cada autor é representado por um vértice
+em G e H. Cada publicação 𝑝∈P é representada por uma clique
+em G, cujas arestas 𝑙𝑘∈𝐿relacionam os pares de vértices (𝑣𝑖, 𝑣𝑗)
+correspondentes a 𝑝e por uma hiperaresta 𝑒𝑘∈𝐸que relaciona o
+conjunto de autores 𝑣𝑖correspondentes a 𝑝.
+Considerando a definição de Aksoy et al. [1], são também con-
+struídas redes baseadas em grafos 𝑠-linha para 𝑠= 1, 𝑠= 2 e 𝑠= 3,
+que serão utilizados na investigação sobre os autores mais centrais,
+tomando como base os métodos de 𝑠-degree centrality, 𝑠-closeness
+centrality e 𝑠-betweenness centrality. Para o restante do trabalho,
+as projeções da hiper-rede em grafos grafos 𝑠-linha, para 𝑠= 1,
+𝑠= 2 e 𝑠= 3, serão chamadas, respectivamente, de Hiper-rede 𝑠= 1,
+Hiper-rede 𝑠= 2 e Hiper-rede 𝑠= 3.
+EXPERIMENTOS E DISCUSSÃO
+Considerando a metodologia proposta (Seção 3), esta seção apre-
+senta os experimentos conduzidos com o objetivo de responder às
+questões de pesquisa (Seção 1).
+A Figura 3 apresenta uma representação visual dos modelos
+de Rede (Figs. 3a e 3b) e Hiper-rede (Figs. 3c e 3d). É importante
+destacar que a Hiper-rede de coautorias resultou em uma visual-
+ização bastante poluída e pouco atrativa e, por isso, optou-se por
+aplicar: um filtro de todos os trabalho, mas apenas do ano de 2022
+(Fig. 3c) e um filtro de todos os anos, mas apenas de trabalhos do
+BraSNAM (Figs. 3d).
+Foi realizado um estudo sobre os autores mais centrais, que po-
+dem representar pessoas com maior importância dentro do contexto
+2https://csbc.sbc.org.br/
+Modelagem e análise de redes sociais através de hipergrafos
+CTIC’2024, Juiz de Fora/MG, Brazil
+(a) Rede de coautoria.
+(b) Rede de coautoria (apenas
+2022).
+(c) Hiper-rede de coautoria
+de todos os eventos (apenas
+2022).
+(d) Hiper-rede de coautoria
+de todos os anos (apenas
+BraSNAM).
+Figure 3: Representação visual da hiper-rede e da rede de
+coautoria da CSBCSet.
+(a) 𝑠-degree
+(b) 𝑠-closeness
+(c) 𝑠-betweenness
+Figure 4: Coeficientes AO dos ranks obtidos em cada modelo
+de (Hiper-)rede para cada centralidade estudada.
+explorado. Para comparar os autores mais centrais identificados
+nos modelos de (Hiper-)redes estudados, foram calculados os ranks
+de autores considerando as centralidades estudadas para os mode-
+los de Grafo, Hipergrafo (𝑠= 1), Hipergrafo (𝑠= 2) e Hipergrafo
+(𝑠= 3) descritos na seção 3. Após definir um rank dos autores mais
+centrais, concentramos a análise nas top-k posições, com 𝑘= 100,
+de forma a minimizar o impacto de divergências que posições infe-
+riores (e menos interessantes) pudessem trazer ao resultado. Assim,
+é necessário correlacionar ranks com elementos potencialmente
+diferentes e, para isso, utilizamos a métrica Average Overlap (AO)
+[14], que mede a similaridade entre ranks de items possivelmente
+diferentes. A Figura 4 apresenta o resultado dos coeficientes AO, em
+forma de mapa de calor, comparando os ranks obtidos em cada mod-
+elo de (Hiper-)rede para a 𝑠-degree centrality (Fig. 4a), 𝑠-closeness
+centrality (Fig. 4b) e 𝑠-betweenness centrality (Fig. 4c).
+Padrões bastante distintos de correlação para a 𝑠-degree cen-
+trality podem ser observados na Figura 4, quando comparada às
+𝑠-closeness centrality e 𝑠-betweenness centrality. Para a 𝑠-degree cen-
+trality (Fig. 4a), há uma correlação apenas moderada entre os ranks
+(a) 𝑠-degree.
+(b) 𝑠-closeness.
+(c) 𝑠-betweenness.
+Figure 5: Comparação de valores de centralidade das dez pes-
+soas autoras mais centrais tomando como referência o mod-
+elo de Rede.
+gerados para a Rede e a Hiper-rede (𝑠= 1), o que está ligado à
+diferença na própria definição de grau para redes e hiper-redes.
+Enquanto o grau em uma rede de coautoria está relacionado à quan-
+tidade de coautores aos quais um indivíduo está relacionado, em
+uma hiper-rede de coautoria o grau está relacionado à quantidade
+de trabalhos dos quais ela participa. À medida em que o valor 𝑠
+aumenta para a construção do modelo de Hiper-rede, autores que
+participam em artigos com menos coautores são desconsiderados,
+e o rank prioriza, em suas posições mais altas, autores que colabo-
+ram em trabalhos com mais colaboradores. Dessa forma, aumenta
+também a correlação entre os ranks gerados para a Rede e as Hiper-
+redes (𝑠= 2) e (𝑠= 3). Nos ranks gerados para 𝑠-closeness centrality
+e 𝑠-betweenness centrality, observa-se que há uma baixa correlação
+entre os ranks dos autores das Redes e Hiper-redes (𝑠= 1) e (𝑠= 2)
+e apenas a Hiper-rede (𝑠= 3) apresenta uma correlação significativa
+com a Rede. Novamente, ao desconsiderar autores com participação
+em trabalhos com poucos autores, o modelo de Hiper-rede (𝑠= 3)
+coloca como mais centrais as pessoas com um maior volume de auto-
+rias, assim como o modelo de Rede. O resultado revelado pela Fig. 4
+indica que o modelo de grafo clique, tradicionalmente utilizado para
+representar redes de coautoria, ao priorizar como autores mais cen-
+trais aqueles que possuem um volume maior de colaboração, pode
+estar subestimando o potencial de autores com um menor número
+de colaborações, mas que mantêm colaborações mais consistentes
+em servir como ponte intermediadora entre relações.
+Com o objetivo de aprofundar o estudo sobre os autores mais
+centrais encontrados em cada um dos modelos de (Hiper-)redes, foi
+realizada uma investigação mais próxima dos nomes presentes nas
+primeiras posições dos ranks. O resultado desse experimento é apre-
+sentado na Figura 5, onde cada uma das subfiguras (Fig. 5a, 5b e 5c)
+apresenta a comparação para cada uma das centralidades estudadas.
+Para isso, o modelo de rede foi utilizado como referência e suas dez
+pessoas autoras mais centrais foram encontradas. Em cada uma das
+subfiguras da Fig. 5, o eixo-x apresenta os nomes das pessoas nas
+dez primeiras posições do respectivo rank no modelo de Rede. O
+eixo-y apresenta a medida de centralidade observada para essas
+pessoas no modelo de Rede, mas também a medida observada no
+modelos de Hiper-redes 𝑠= 1, 𝑠= 2 e 𝑠= 3, possibilitando, assim,
+uma avaliação da estabilidade dos ranks de centralidade nos difer-
+entes modelos. Primeiramente, nota-se que há pouca concordância
+nas primeiras posições dos ranks encontrados para o modelo de
+Rede e os modelos de Hiper-redes, o que pode ser visto pelo fato
+que há um comportamento monotônico para as barras referentes ao
+modelo de Rede – naturalmente, já que é esse o modelo usado como
+CTIC’2024, Juiz de Fora/MG, Brazil
+Vinícius da F. Vieira et al.
+referência –, mas que não se repete para os modelos de Hiper-redes.
+Uma notória exceção ocorre na primeira posição observada para a
+𝑠-degree centrality (Fig. 5a), onde há um alinhamento na primeira
+posição dos ranks para todos os modelos. Para a 𝑠-closeness cen-
+trality (Fig. 5b) e a 𝑠-betweenness centrality (Fig. 5c) nota-se que
+há algumas pessoas para as quais nem há valor de centralidade
+associado nos modelos de Hiper-redes, indicando que essas foram
+desconsideradas por esses modelos. Esse fato é ainda mais evidente
+nas primeiras posições do gráfico da Fig. 5c, o que mostra que pes-
+soas que colaboram em artigos com poucos coautores têm papel de
+destaque como intermediadores de relações no modelo representado
+por Redes, corroborando o resultado apresentado pela Figura 4.
+Os resultados das Figuras 4 e 5 evidenciam a importância da
+modelagem de coautorias como Hiper-redes como ferramenta para
+análise do fenômeno de colaboração em artigos científicos sob uma
+ótica alternativa àquela fornecida por modelos de Redes para a
+investigação local. Uma investigação da organização topológica das
+(Hiper-)redes foi também realizada para que as coautorias na CSBC-
+Set pudessem ser exploradas sob uma perspectiva global. Tomando
+como base o método de Louvain [7] e o método de Kumar et al.
+[9], como descrito na Seção 2, foram identificadas as comunidades
+considerando os modelos de Redes e Hiper-redes, repectivamente.
+A modularidade da partição obtida pelo método de Louvain para o
+modelo de Rede foi de 𝑄𝐺= 0.96, enquanto um valor 𝑄𝐻= 0.97 foi
+obtido para a partição encontrada pelo método de Kumar et al. Esses
+resultados mostram que, quando são consideradas as coautorias de
+trabalhos no CSBC no período investigado, há uma clara divisão
+topológica da (Hiper-)rede de autores, implicando em um alto valor
+de modularidade para ambos modelos considerados.
+A extensão da sobreposição da partição obtida nos modelos de
+(Hiper-)redes, foi avaliada através do coeficiente Overlapping Nor-
+malized Mutual Information (ONMI) [11], que retorna um valor 0
+quando não há informação mútua entre as partições e 1 quando há
+uma perfeita correlação. Quando todas as comunidades são consid-
+eradas, obtém-se um valor de ONMI = 0.91, indicando uma grande
+sobreposição. Com o objetivo de verificar se o coeficiente ONMI
+está dominado por comunidades de tamanhos muito pequenos, um
+filtro foi aplicado para que apenas comunidades com mais que dez
+vértices fossem avaliadas. Após a aplicação desse filtro, foi obtido
+um valor de ONMI = 0.83, indicando que há, sim, uma sobreposição
+concentrada nas comunidades menores, mas, mesmo sem considerá-
+las, a sobreposição entre as partições é bastante significativa.
+CONCLUSÃO
+Este trabalho investiga o uso de hiper-redes para a modelagem de
+relações sociais de alta-ordem. Nesse sentido, é importante destacar
+que a área ainda é incipiente e oferece um grande potencial de
+pesquisa, principalmente considerando a baixa quantidade de tra-
+balhos sobre hiper-redes em língua portuguesa (nenhum trabalho
+em língua portuguesa foi encontrado em assunto relacionado ao
+aqui explorado, por exemplo).
+Em relação à QPI, pode-se notar que ainda há uma certa limi-
+tação nas ferramentas computacionais para modelagem e análise
+de hiper-redes quando compara-se com aquelas voltadas a redes
+tradicionais. Porém, a análise de hiper-redes, apesar de não ser uma
+área de pesquisa nova, tem recebido, apenas recentemente, uma
+atenção mais dedicada, ao contrário da análise de redes tradicionais,
+que já encontra uma área bastante consolidada. Mesmo assim, há
+uma grande quantidade de métodos relatados na literatura para
+investigação de hiper-relações, tanto de maneira local, como de
+maneira global, o que permite que se tire proveito da riqueza na
+representação de relações de alta-ordem trazida pelas hiper-redes,
+mas fazendo análises que sejam coerentes com aquelas realizadas
+com ferramentas oriundas da ciência de redes. Assim, é possível
+avançar também na resposta à QPII, verificando que a aplicação
+de modelos de hipergrafos para a compreensão da coautoria de
+artigos científicos pode revelar aspectos importantes sobre, não
+apenas o número de interações realizadas por cada indivíduo, mas a
+maneira como se dão essas interações. Assim, pode-se compreender
+com mais clareza o papel de indivíduos com diferentes padrões de
+colaboração na intermediação de relações e, consequentemente, na
+difusão de ideias e conhecimento através da hiper-rede.
+Como possíveis direções futuras, então, pode-se buscar a verifi-
+cação da generalidade das observações aqui realizadas em outras
+bases de dados de interações sociais, inclusive de colaboração e,
+mais especificamente, de coautoria, mas em outros contextos. Além
+disso, diversos outros métodos de análise de hiper-redes podem ser
+empregados, como forma de confrontar os resultados aqui obtidos
+sob outras perspectivas.

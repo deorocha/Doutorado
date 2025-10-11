@@ -1,0 +1,123 @@
+Mitigando os Limites das Métricas Atuais de Avaliação de
+Estratégias de Modelagem de Tópicos
+Antônio Pereira de Souza
+Júnior
+antonio.pereira@aluno.ufsj.edu.br
+Universidade Federal de São João Del
+Rei – UFSJ
+Minas Gerais, Brasil
+Felipe Augusto Resende Viegas
+frviegas@dcc.ufmg.br
+Universidade Federal de São João Del
+Rei – UFSJ
+Minas Gerais, Brasil
+Leonardo Chaves Dutra da
+Rocha
+lcrocha@ufsj.edu.br
+Universidade Federal de São João Del
+Rei – UFSJ
+Minas Gerais, Brasil
+CTD’2024, Juiz de Fora/MG, Brazil
+Pereira A. et al.
+cada documento é conhecido (i.e., ACM, 20News e WOS). Compa-
+ramos a qualidade dos tópicos gerados por quatro das principais
+estratégias de MT (i.e., LDA, NMF, CluWords e BERTopic) com
+a estrutura de tópicos prévia de cada coleção. Nossos resultados
+mostram que, apesar da importância das métricas de avaliação atu-
+ais, estas não conseguiram captar alguns aspectos idiossincráticos
+importantes da MT, indicando a necessidade de propor novas mé-
+tricas que considerem, por exemplo, a estrutura e organização dos
+documentos que compõem os tópicos.
+2.2
+Objetivo
+Mitigar as limitações das métricas de avaliação de MT atuais pro-
+pondo/adaptando e avaliando novas métricas.
+2.3
+Solução
+Propomos adaptar métricas comumente utilizadas para avaliar al-
+goritmos de clusterização [3], uma vez que existem semelhanças
+significativas entre as estratégias de MT e de clusterização, como
+sua natureza não-supervisionada e o objetivo de agrupar elemen-
+tos semelhantes: Silhouette Score, Calinski-Harabasz e BetaCV. No
+entanto, isto implica expandir o espaço de análise por meio da in-
+clusão de um novo conjunto de métricas. Assim, propomos também
+a consolidação das várias métricas, que consideram tanto a quali-
+dade das palavras que compõem os tópicos (tradicionais) como a
+estrutura organizacional dos documentos, num resultado unificado
+multiperspectiva, utilizando metodologia Multiattribute Utility The-
+ory (MAUT) [1] (MAUT). Trata-se de uma metodologia comum em
+Teoria de Jogos para tomada de decisão, que visa auxiliar na escolha
+de uma alternativa entre várias opções, considerando múltiplos
+atributos e preferências conflitantes. A MAUT se fundamenta em
+três conceitos principais: atributos, funções de utilidade e pesos. Na
+proposta utilizada neste trabalho, os atributos correspondem aos va-
+lores de todas as métricas utilizadas (i.e., NPMI, TF-IDF Coherence,
+WEP, Silhouette Score, Calinski-Harabasz e Beta CV), a função de
+utilidade é a min-max [4] e os pesos, que representam a importância
+relativa de cada atributo, foram iguais para todas as métricas. Com
+essa adaptação, os tópicos gerados por cada uma das técnicas de
+MT podem ser avaliados sob diferente perspectivas.
+2.4
+Avaliação
+A avaliação experimental proposta considerou as mesmas três co-
+leções de dados (i.e., ACM, 20News e WOS), primeiramente compa-
+rando os tópicos gerados pelas mesmas estratégias de MT (i.e., LDA,
+NMF, CluWords e BERTopic), com a estrutura prévia de classes
+dos documentos de cada coleção, o ground truth, considerando a
+três métricas adaptadas do contexto de clustering (i.e., Silhouette
+Score, Calinski-Harabasz e BetaCV). Analisando os resultados ob-
+tidos, conforme esperado, a estrutura do ground truth demonstrou
+o melhor desempenho nessas métricas, com valores superiores aos
+encontrados nas estratégias de MT. Ao contrário das métricas tradi-
+cionais de MT que apresentaram resultados contraditórios, quando
+os resultados do ground truth eram comparados com os tópicos
+gerados pelas técnicas de MT, as métricas de clusterização, sob esse
+aspecto, foram bem consistentes, evidenciando sua eficácia na dis-
+tinção dos resultados dos algoritmos de MT e do ground truth. Por
+outro lado, para ambos os conjuntos de métricas, tradicionais de MT
+e de clusterização, não houve um consenso que apontasse qual a
+melhor das estratégias de MT para todas as coleções. A partir dessa
+constatação, todos os algoritmos de MT foram novamente avaliados
+na mesma configuração experimental, dessa vez considerando a
+MAUT. Especificamente, nossos resultados permitiram observar os
+avanços semânticos gerados pelo uso de word embeddings em algu-
+mas estratégias de MT, além da solidez e consistência da construção
+de tópicos por meio de estratégias de fatorização de matrizes.
+AVANÇO NO ESTADO-DA-ARTE
+O principal avanço da dissertação está na identificação das limi-
+tações das métricas atuais de avaliação de estratégias de MT que
+impactam diretamente na evolução dessas estratégias. Apresen-
+tamos uma proposta inicial de novas métricas e também de uma
+metodologia de avaliação multiperspectiva por meio da MAUT
+que abrem caminho para que futuras pesquisas desenvolvam e re-
+finam ainda mais o processo de avaliação de estratégias de MT,
+garantindo uma comparação justa, permitindo melhorar a geração
+e organização de tópicos em grandes conjuntos de dados textuais.
+CONCLUSÃO
+Neste trabalho, voltamos nossa atenção para um importante desa-
+fio no contexto da MT, que é a avaliação de tópicos gerados pelas
+diversas estratégias. As métricas tradicionais capturam a qualidade
+dos tópicos avaliando estritamente as palavras que construíram
+os tópicos, sintaticamente (ou seja, NPMI, TF-IDF Coherence) ou
+semanticamente (ou seja, WEP). Este trabalho demonstrou empiri-
+camente, através de experimentos extensivos, que o conjunto atual
+de métricas negligência um importante aspecto que geralmente é
+esperado por estratégias de MT, a capacidade de organizar semanti-
+camente o espaço de documentos em grupos significativos.
+Foi proposto então, a utilização de métricas empregadas na ava-
+liação de estratégias de clusterização, que quantificam a qualidade
+da estrutura e organização dos documentos que compõem os tópi-
+cos. Foi adotado também uma abordagem que tem o potencial de
+integrar ambos os conjuntos de métricas, MAUT, resultando em
+uma avaliação unificada e mais abrangente. Essa estratégia permitiu
+avaliar melhor as várias estratégias de MT presentes na literatura.
+Como trabalho futuro, pretendemos empregar a metodologia
+de avaliação desenvolvida para contrastar os algoritmos de MT
+utilizados aqui com a geração de tópicos por meio de modelos Large
+Language Model (LLM). Nosso objetivo é estender as análises que
+tratam dos tópicos induzidos pelas estratégias de MT. Considerando
+outras coleções e sistemas de classificação, bem como estender tam-
+bém nossa avaliação para estratégias de tópicos hierárquicas, con-
+siderando avaliação de Modelagem de Tópicos Hierárquica (MTH).
+AGRADECIMENTOS
+Este trabalho foi financiado por CNPq, CAPES, Fapemig e AWS

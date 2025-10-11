@@ -1,0 +1,214 @@
+PAR Digital: Uma Ferramenta Web em Prol da Educação Inclusiva
+Daniele C. S. Diniz, Adriano C. M. Pereira
+Departamento de Ciência de Computação | DCC
+Universidade Federal de Minas Gerais | UFMG
+Belo Horizonte, Brasil
+danielecassia@ufmg.br,adrianoc@ufmg.br
+Adriana Borges, Adriana Valladão, Maria Luisa
+Nogueira
+FAE | EEFFTO | FAFICH - UFMG
+Belo Horizonte, Brasil
+{adrianaapb,avaladao,marialuisamn}@ufmg.br
+WFA’2024, Juiz de Fora/MG, Brazil
+Daniele C. S. Diniz, Adriano C. M. Pereira and Adriana Borges, Adriana Valladão, Maria Luisa Nogueira
+OBJETIVO
+O objetivo do projeto PAR Digital é proporcionar uma ferramenta
+acessível e intuitiva que facilite o preenchimento e a gestão do Plano
+Educacional Individualizado (PEI) [1], essencial para o desenvolvi-
+mento educacional dos alunos com deficiência. Desenvolvido a par-
+tir de princípios do Desenho Universal de Aprendizagem (DUA) e de
+uma parceria com o Atendimento Educacional Especializado (AEE),
+o sistema visa integrar-se de maneira eficiente na rotina diária dos
+educadores, promovendo um ensino inclusivo e personalizado.
+ARQUITETURA
+A estrutura do projeto é organizada de maneira a facilitar a manutenção
+e a expansão do mesmo. A Figura 2 ilustra a arquitetura do sistema
+PAR Digital, que foi concebido seguindo boas práticas de padrões
+de desenvolvimento Web.
+Figure 2: Arquitetura do sistema PAR Digital
+As principais tecnologias utilizadas no projeto incluem React.js,
+uma biblioteca JavaScript para construção de interfaces de usuário,
+escolhida por sua eficiência na criação de componentes reutilizáveis
+e desempenho otimizado. O TypeScript é usado para adicionar
+tipagem estática ao código JavaScript, aumentando a robustez e
+facilitando a manutenção. O Redux é empregado para o gerenci-
+amento de estado da aplicação, ideal para aplicações de médio e
+grande porte que necessitam de um controle mais sofisticado do es-
+tado. A biblioteca Material-UI é utilizada para implementar o design
+system do Google Material Design, enquanto o Axios serve como
+cliente HTTP para realizar requisições a APIs. Ferramentas como
+Jest e React Testing Library são utilizadas para testes automatizados,
+garantindo a qualidade e a funcionalidade do código.
+O fluxo de dados na aplicação é gerenciado pelo Redux, que
+centraliza o estado da aplicação em um único store. As ações são
+despachadas a partir dos componentes, que são tratadas pelos ‘re-
+ducers‘ para atualizar o estado global. Essa abordagem facilita a
+depuração e o desenvolvimento de novas funcionalidades, uma vez
+que o estado da aplicação se torna previsível e controlado.
+A estilização da aplicação é feita utilizando CSS-in-JS com a
+biblioteca Material-UI, permitindo uma aplicação consistente do
+design system através dos componentes. A utilização de temas
+facilita a customização e a manutenção do estilo visual da aplicação.
+Para a integração e entrega contínua (CI/CD), o projeto utiliza
+o GitHub Actions, configurado para executar testes automatizados
+e builds a cada commit, garantindo que a aplicação se mantenha
+estável e pronta para deployment.
+FUNCIONALIDADES
+O projeto oferece diversas funcionalidades voltadas para o suporte
+educacional de estudantes com necessidades especiais. A Figura 3
+ilustra o painel de funcionalidades vinculadas ao aluno. Nesta seção,
+são descritas as principais funcionalidades do sistema, cada uma
+desempenhando um papel crucial na promoção de um ambiente
+inclusivo e eficaz para o aprendizado do aluno.
+Figure 3: Tela do painel do aluno do sistema PAR Digital
+4.1
+CRUD de Usuários
+No sistema, os administradores são responsáveis por gerenciar as
+escolas, acesso a relatórios e detalhes como professores e estratégias.
+As escolas criam professores, responsáveis e desenvolvem o PEI,
+além de visualizar estratégias e dados dos alunos e professores.
+Os coordenadores acompanham o progresso dos alunos e es-
+tratégias, visualizando o andamento dos alunos.
+Os professores regulares são os usuários chave, criando e
+aplicando estratégias, e adicionando relatórios de progresso.
+Os professores AEE auxiliam os regulares, visualizando estraté-
+gias do PEI e relatórios, e participando de fóruns.
+Os responsáveis adicionam documentos necessários e acom-
+panham o desenvolvimento dos alunos, visualizando seus dados e
+relatórios parciais.
+4.2
+Criação do PEI
+A funcionalidade de criação do Plano Educacional Individualizado
+(PEI) é uma das mais importantes, permitindo que educadores e
+coordenadores elaborem planos personalizados para atender às
+necessidades específicas de cada aluno. A Figura 4 ilustra a tela de
+criação do PEI.
+4.3
+Estratégias do PEI
+Dentro do PEI, os educadores podem definir e documentar diversas
+estratégias pedagógicas adaptadas às necessidades do aluno. Essas
+estratégias são orientações práticas que guiam os professores na
+implementação do plano e ajudam a monitorar o progresso do aluno.
+A Figura 5 ilustra a tela de listagem das estratégias.
+PAR Digital: Uma Ferramenta Web em Prol da Educação Inclusiva
+WFA’2024, Juiz de Fora/MG, Brazil
+Figure 4: Tela de criação do PEI do sistema PAR Digital
+Figure 5: Tela de listagem de todas as estratégias de um PEI
+do sistema PAR Digital
+4.4
+Relatório sobre Estratégias
+A funcionalidade de relatórios permite que educadores e coorde-
+nadores acompanhem o andamento das estratégias definidas no
+PEI. Esses relatórios são fundamentais para avaliar o progresso do
+aluno, identificar áreas que necessitam de ajustes e garantir que
+as estratégias estão sendo eficazmente implementadas. A Figura 6
+ilustra a tela que apresenta o relatório.
+Figure 6: Tela que exibe relatório parcial baseado nos status
+de finalização das estratégias por disciplina
+4.5
+Fórum de Acompanhamento do Aluno
+O fórum de acompanhamento do aluno é uma plataforma colabo-
+rativa onde professores, coordenadores e outros profissionais po-
+dem discutir o progresso do aluno, compartilhar insights e propor
+ajustes no PEI. Este fórum promove uma abordagem colaborativa
+e integrada ao acompanhamento educacional. A Figura 7 ilustra a
+tela do fórum.
+Figure 7: Tela que exibe um fórum entre professores sobre o
+aluno do sistema PAR Digital
+4.6
+Reutilização de Estratégias
+O sistema possui um banco de estratégias pedagógicas que podem
+ser reutilizadas. Educadores podem consultar esse banco para en-
+contrar estratégias que já foram aplicadas com sucesso em situações
+similares , facilitando a implementação de práticas comprovada-
+mente eficazes. A Figura 8 ilustra a tela do banco de estratégia.
+Figure 8: Tela com lista das estratégias do sistema PAR Digital
+4.7
+Compartilhamento de Recursos
+Uma funcionalidade vital do PAR Digital é o compartilhamento
+de recursos, especialmente Tecnologias Assistivas. Esse recurso
+permite que professores e coordenadores acessem ferramentas e
+materiais que podem ser utilizados para apoiar o aprendizado dos
+alunos com necessidades especiais. A Figura 9 ilustra a tela de
+compartilhamento de recursos externos.
+4.8
+Perfil do Aluno
+O sistema mantém um perfil detalhado do aluno, que inclui in-
+formações educacionais e fundamentais. Esse perfil permite que
+educadores e coordenadores tenham uma visão abrangente das
+necessidades, capacidades e progressos do aluno, facilitando a per-
+sonalização do ensino e a monitorização do desenvolvimento edu-
+cacional. A Figura 10 ilustra a o formulário para preenchimento do
+Perfil Educacional do aluno.
+WFA’2024, Juiz de Fora/MG, Brazil
+Daniele C. S. Diniz, Adriano C. M. Pereira and Adriana Borges, Adriana Valladão, Maria Luisa Nogueira
+Figure 9: Tela que disponibiliza materiais externos para aux-
+iliar no desenvolvimento do ensino no sistema PAR Digital
+Figure 10: Tela do Perfil Educacional Infantil do aluno
+LICENÇA E PERSPECTIVAS DO PROJETO
+5.1
+Licença
+O projeto PAR Digital foi concebido como um software acadêmico,
+com objetivo de ser utilizado de forma tutorada por Secretarias de
+Ensino. A propriedade intelectual da ferramenta pertence a uma
+Instituição de Ensino Superior (IES) brasileira e foi validada em
+escolas de ensino público.
+5.2
+Perspectiva Acadêmica
+O PAR Digital representa uma inovação significativa no campo
+da educação inclusiva, oferecendo uma ferramenta tecnológica
+poderosa para a gestão eficiente de Plano Educacional Individual-
+izado (PEI). Academicamente, essa ferramenta pode servir como
+um catalisador para a pesquisa e o desenvolvimento contínuo de
+estratégias pedagógicas adaptativas.
+O acesso a dados detalhados sobre o progresso dos alunos, bem
+como o compartilhamento de estratégias bem-sucedidas entre os
+educadores, pode promover a produção de conhecimento acadêmico
+relevante na área da educação inclusiva.
+Além disso, o projeto pode facilitar estudos longitudinais sobre
+o impacto de intervenções específicas no desenvolvimento educa-
+cional de alunos com deficiência, fornecendo insights valiosos para
+a comunidade acadêmica.
+5.3
+Perspectiva Social
+Socialmente, o PAR Digital tem o potencial de promover a inclusão
+e a igualdade de oportunidades na educação. Ao oferecer uma
+plataforma acessível e intuitiva para a gestão de PEIs, o sistema
+capacita os educadores a oferecer um suporte mais eficaz aos alunos
+com deficiência, adaptando seus métodos de ensino às necessidades
+individuais de cada estudante. Isso não apenas melhora a exper-
+iência educacional desses alunos, mas também fortalece a coesão
+social ao reconhecer e valorizar a diversidade no ambiente escolar.
+Além disso, ao envolver os pais e responsáveis no processo edu-
+cacional por meio do acompanhamento do progresso dos alunos,
+o software promove uma parceria colaborativa entre escola e co-
+munidade, fortalecendo os laços sociais e a confiança na instituição
+educacional.
+CONCLUSÃO E TRABALHOS FUTUROS
+Este artigo apresentou a ferramenta PAR Digital, que é resultado
+de muitos anos de pesquisa de pesquisadores e professores de difer-
+entes áreas do conhecimento, em especial da educação, terapia
+ocupacional, psicologia e ciência da computação.
+Baseado no Planejamento de Ensino Individualizado (PEI), o soft-
+ware se organiza a partir dos princípios do Desenho Universal de
+Aprendizagem – Engajamento, Apresentação, Ação e Expressão. A
+parceria com o responsável pelo Atendimento Educacional Espe-
+cializado (AEE) é fundamental nesse processo.
+O PAR é um instrumento que pretende facilitar o acompan-
+hamento do aluno com deficiência no ambiente escolar. Sua utiliza-
+ção deve estar presente no dia-a-dia da sala de aula. Esperamos que
+com esta tecnologia pode contribuir de forma relevante com a edu-
+cação de crianças e adolescentes com autismo e outras deficiências,
+auxiliando os professores, pedagogos e profissionais de diferentes
+áreas que atuam para contribuir para a formação e desenvolvimento
+de importantes habilidades dessas crianças com deficiência.
+Como trabalhos futuros, pretendemos adicionar novas funcional-
+idades à ferramenta, tais como um novo instrumento de avaliação
+de crianças do ensino fundamental para traçar o perfil e auxiliar
+o trabalho dos profissionais e uma nova ferramenta de auxílio na
+gestão de carreira e vocação profissional.
+AGRADECIMENTOS
+Gostaríamos de expressar nossa sincera gratidão pelo apoio pro-
+porcionado pela FAPEMIG, pelo CNPq, pela CAPES e por todos
+os colaboradores deste projeto. A colaboração e o apoio recebidos
+foram fundamentais para o desenvolvimento deste projeto.

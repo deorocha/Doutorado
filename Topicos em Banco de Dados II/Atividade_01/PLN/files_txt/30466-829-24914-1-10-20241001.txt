@@ -1,0 +1,91 @@
+Autoria Imersiva em Realidade Virtual para Aplicações
+Mulsemídia Interativas
+Flávio Miranda de Farias
+flavio.farias@midiacom.uff.br
+Laboratório MídiaCom, Instituto de Computação
+Universidade Federal Fluminense
+Niterói, RJ, Brasil
+Débora C. Muchaluat-Saade
+debora@midiacom.uff.br
+Laboratório MídiaCom, Instituto de Computação
+Universidade Federal Fluminense
+Niterói, RJ, Brasil
+CTD’2024, Juiz de Fora/MG, Brazil
+Farias et al.
+Figure 2: Benchmark UEQ comparativo entre implemen-
+tações do AMUSEVR com HMD Oculus e Vive.
+positiva da ferramenta. Os participantes destacaram a facilidade de
+uso e a capacidade de criar conteúdos imersivos e interativos de
+maneira intuitiva, confirmando a eficácia do AMUSEVR como uma
+ferramenta de autoria para ambientes de realidade virtual.
+Na escala SUS, o AMUSEVR alcançou uma pontuação média
+de 82,25, indicando uma excelente usabilidade, visto que qualquer
+valor acima de 68 é considerado acima da média. Os participantes
+relataram que a interface do AMUSEVR é intuitiva e fácil de usar,
+facilitando a criação de conteúdos imersivos sem a necessidade de
+conhecimentos técnicos avançados. No UEQ, que avalia diversas
+dimensões da experiência do usuário, como atratividade, clareza,
+eficiência, precisão, estimulação e novidade, o AMUSEVR recebeu
+avaliações positivas em todas as dimensões. Os usuários destacaram
+a atratividade visual e a clareza da ferramenta, bem como a eficiência
+e precisão na manipulação direta dos objetos no espaço 3D. No
+benchmark do UEQ (Figura 2), o AMUSEVR foi classificado como
+excelente, sugerindo que a ferramenta não só atende, mas supera as
+expectativas dos usuários em termos de qualidade de experiência.
+CONCLUSÃO
+O ambiente de autoria fornece uma imersão ao autor em realidade
+virtual, com liberdade criativa e a disponibilidade de usar uma
+ampla variedade de tipos de objetos de mídia e efeitos sensoriais.
+Os diversos experimentos realizados de usabilidade e experiência
+de usuário com dezenas de participantes apontam a viabilidade da
+mesma, pois todos os usuários concluíram suas tarefas de criação em
+todas as atividades propostas em todos os três experimentos, no qual
+precisavam produziram uma apresentação mulsemídia interativa
+360 graus para um aplicativo turístico sem necessidade de auxílio
+adicional.
+Portanto, através dos experimentos conseguimos responder à
+pergunta principal de pesquisa desta tese: "Qual é a experiência
+do autor na criação de aplicações multissensoriais interativas em
+360 graus usando um ambiente de autoria imersivo?", indicando
+grande potencial da abordagem imersiva para facilitar a criação de
+projetos multissensoriais interativos com conteúdo 360 graus na
+prática, já que a experiência relatada pelos usuários que realizaram
+os experimentos foi bastante positiva.
+PUBLICAÇÕES
+Durante o doutorado, diversos trabalhos e publicações foram real-
+izados como visto na Tabela 1, além de dois artigos em processo de
+submissão a journals.
+Table 1: Tabela com trabalhos já publicados.
+Ano
+Publicação
+2020 Memo-VR: Exercício Cognitivo para Idosos Utilizando Real-
+idade Virtual e Interface com as Mãos [3].
+2021 AMUSEVR: A Virtual Reality Authoring Environment for
+Immersive Mulsemedia Applications [1].
+2022 An Immersive Memory Game as a Cognitive Exercise for El-
+derly Users [4].
+2022 Immersive Authoring of 360 Degree Interactive Applications
+[2]
+2022 AMUSEVR - Authoring 360° Multimedia and Sensory Ef-
+fects in VR, software registrado no INPI - registro número
+512022003596-0, data de registro: 24/12/2022.
+O trabalho publicado no SBCAS 2020 [3] serviu de base para o
+aprendizado e para adquirir experiência em desenvolvimento de
+aplicações em Realidade Virtual. Em 2022, este trabalho foi atual-
+izado e publicado [4] em workshop do ACM IMX.
+Em 2021, foram publicados os resultados preliminares da primeira
+implementação e avaliação do AMUSEVR com HMD Vive em [1],
+em workshop do ACM IMX.
+Em 2022, foi realizada uma publicação no journal IEEE Access
+[2], no qual apresentou uma atualização da pesquisa, incluindo
+experimentos com mais usuários e a metodologia GQM para avali-
+ação.
+Em 2022, foi realizado o registro de software da aplicação AMU-
+SEVR Oculos com título “AMUSEVR - Authoring 360° MUltimedia
+and Sensory Effects in VR” no INPI (Instituto Nacional da Propriedade
+Industrial).
+Atualmente, estão em processo de submissão dois artigos de
+journal, sendo um relacionado ao resultado dos experimentos da
+Linguagem MultiSEL para AMUSEVR e o outro mais completo sobre
+o AMUSEVR Oculus, apresentando dados sobre efeitos sensoriais e
+utilização do MultiSEL.

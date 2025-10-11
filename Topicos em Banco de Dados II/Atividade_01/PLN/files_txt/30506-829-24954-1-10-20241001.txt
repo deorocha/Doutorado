@@ -1,0 +1,306 @@
+Planejamento e Estratégia de Comunicação para a TV UFMA na
+transição para a TV 3.0
+Miguel Bruno Alves Chaves
+miguel.chaves@discente.ufma.br
+Universidade Federal do Maranhão
+São Luís, Maranhão
+Li-Chang Shuen
+li.chang@ufma.br
+Universidade Federal do Maranhão
+São Luís, Maranhão
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Miguel Bruno Alves Chaves and Li-Chang Shuen
+c) Você sabe quando a nova geração TV 3.0 vai iniciar sua
+operação no Brasil?
+d) Quais as suas expectativas para a inclusão da TV UFMA na
+próxima geração de TV digital brasileira?
+O objetivo principal desta pesquisa foi compreender a profun-
+didade do debate sobre a transição para a TV de próxima geração
+dentro da emissora, identificando o comprometimento da equipe
+com este processo e as preocupações emergentes. Procurou-se tam-
+bém investigar como cada membro da equipe está se preparando
+para essa migração em suas respectivas áreas de atuação e quais
+limitações têm sido encontradas durante este período de transição.
+Além do questionário principal, um questionário separado foi
+enviado ao diretor de engenharia e ao técnico operacional, com as
+seguintes questões específicas:
+a) O que a TV UFMA precisa fazer para se adequar à TV 3.0
+orientada a apps?
+b) Como está o parque tecnológico da emissora?
+Participaram da pesquisa um total de 13 indivíduos, incluindo es-
+tagiários, editores, gerentes, jornalistas, diretores e o departamento
+de engenharia. A diversidade dos participantes permitiu a obtenção
+de uma ampla gama de perspectivas, enriquecendo a análise dos
+dados coletados. Através desta investigação, espera-se não apenas
+mapear o atual estado de preparação da TV UFMA para a imple-
+mentação da TV do Futuro, mas também fornecer subsídios para a
+formulação de políticas e práticas que possam melhorar a eficiência
+deste processo de transição.
+A EVOLUÇÃO TECNOLÓGICA DA
+TELEVISÃO BRASILEIRA
+A televisão, ao longo de sua história, passou por transformações sig-
+nificativas que moldaram não apenas sua tecnologia, mas também
+sua influência na sociedade [7]. Desde os primeiros dias em que o
+áudio mono dominava as transmissões em preto e branco até os
+avanços mais recentes em alta definição e interatividade, a televisão
+tem sido um reflexo das inovações tecnológicas e das demandas do
+público.
+Foram necessários 22 anos desde o início das transmissões tele-
+visivas no Brasil para a primeira grande mudança significativa: a
+transição do áudio mono para o estéreo. Este avanço permitiu uma
+experiência sonora mais imersiva para os telespectadores, enrique-
+cendo ainda mais o conteúdo transmitido.
+Além disso, a introdução das cores no lugar do tradicional preto
+e branco revolucionou a forma como as pessoas viam televisão,
+proporcionando uma experiência mais vibrante e realista. Na década
+de 1980, o surgimento do closed caption trouxe acessibilidade para
+pessoas com deficiência auditiva, permitindo que elas pudessem
+fruir melhor os programas televisivos.
+Enquanto os radiodifusores privados exploravam essas funcionali-
+dades com fins comerciais, é crucial reconhecer a atuação das tele-
+visões públicas, especialmente as educativas e universitárias em
+desempenhar um papel fundamental em dar visibilidade àqueles que
+tradicionalmente têm menos representação na mídia. Sua responsa-
+bilidade vai além do entretenimento, estendendo-se à educação e à
+promoção da diversidade cultural.
+Com o advento da TV 3.0, novas possibilidades se apresentam.
+Desde a transmissão em alta definição até a integração de funcionali-
+dades como multitelas, interatividade e acessibilidade avançada, a
+televisão ficará mais dinâmica ([5]; [6]; [3]; [2]; [1]). No entanto,
+surge a questão de como esse processo se dará dentro das televisões
+universitárias já em operação.
+Em São Luís, a TV UFMA, pioneira na transmissão digital, está à
+frente desse processo. Através de seu departamento de engenharia,
+a TV UFMA está acompanhando de perto as tendências da TV
+3.0 e buscando integrar essas inovações em sua programação. À
+medida que nos aproximamos da era da TV 3.0, é essencial que todos
+os setores, incluindo governamentais, acadêmicos e empresariais,
+estejam alinhados com as tendências e inovações que estão por vir.
+A comunicação institucional é um elemento vital para qualquer
+organização, incluindo instituições de ensino superior. A Univer-
+sidade Federal do Maranhão (UFMA) não é uma exceção e possui
+regimentos específicos que direcionam suas práticas comunica-
+cionais. Com o advento da próxima geração de TV digital terrestre,
+que introduz novas formas de interação entre emissora e público, é
+imperativo analisar como essas mudanças tecnológicas podem ser
+integradas às estratégias de comunicação da UFMA.
+A evolução da tecnologia televisiva está levando as emissoras a
+se adaptarem a novas plataformas e formatos, como a substituição
+do paradigma de orientação a canais para a orientação a aplica-
+tivos. Para que a TV UFMA se adapte adequadamente a essa nova
+realidade, é essencial que a equipe compreenda plenamente as lin-
+guagens de programação e as ferramentas que serão utilizadas na
+TV 3.0. Essa compreensão permitirá à emissora identificar e adquirir
+os equipamentos e softwares necessários para o desenvolvimento
+de aplicações compatíveis com essa tecnologia emergente, além
+do investimento em qualificação para as equipes de produção e
+edição de conteúdo. A antecipação dessas mudanças tecnológicas é
+crucial para garantir que a TV UFMA mantenha sua relevância e
+capacidade de inovação no cenário televisivo atual.
+O quadro de pessoal da emissora é composto por uma equipe
+técnica e de produção que desempenha papéis fundamentais na
+operação da TV. No âmbito técnico, a equipe inclui um engenheiro
+de telecomunicações, responsável por garantir a integridade técnica
+das transmissões, um coordenador técnico que supervisiona as
+operações diárias, um técnico que executa as tarefas de manutenção
+e suporte técnico, um profissional de Descrição Técnica de Vídeo
+(DTV) que assegura a acessibilidade dos conteúdos, e um diretor
+de estúdio que coordena as atividades de gravação e transmissão.
+Essa estrutura de pessoal é essencial para o funcionamento eficaz
+da emissora e para a implementação de novas tecnologias.
+A TV UFMA, embora tenha sido concebida como uma emis-
+sora digital, enfrenta o desafio de adaptar e transformar todo o
+seu parque tecnológico para a transição completa para a TV 3.0.
+Atualmente, a emissora opera com um sistema digital HD, que
+atende aos requisitos das redes sociais e seus respectivos protoco-
+los. No entanto, para se alinhar às demandas da nova geração de TV
+digital terrestre, será necessária a atualização das ilhas de edição,
+câmeras de externa e estúdio, switcher, master e por fim, os recep-
+tores domésticos, garantindo que os conteúdos gerados possam ser
+adequadamente recebidos e exibidos pelos telespectadores.
+Planejamento e Estratégia de Comunicação para a TV UFMA na transição para a TV 3.0
+WTVDI’2024, Juiz de Fora/MG, Brazil
+TV UNIVERSITÁRIA COMO LABORATÓRIO
+DE INOVAÇÃO
+No dia 7 de outubro de 2015, entrou no ar a primeira televisão
+universitária do Maranhão: TV UFMA. Disponível no canal aberto
+16.1, na NET/Claro TV canal 17, na Sky canal 316 e na TVN canal 16.
+Possui um site oficial, um canal no YouTube e perfis nas redes sociais
+Instagram e Facebook. Além disso, está disponível na plataforma
+Eduplay, mantida pela Rede Nacional de Ensino e Pesquisa (RNP),
+que oferece canais universitários online.
+No site da TV UFMA, é possível assistir à programação ao vivo
+e acessar as redes sociais do canal. No entanto, é importante notar
+que a página do Facebook não recebe atualizações desde maio de
+2023. O YouTube da TV UFMA funciona como um repositório de
+programas. Na programação, destaca-se o JTV UFMA, um telejornal
+diário transmitido às 12h30 com interpretação simultânea em Libras.
+Atualmente, o setor de mídias da TV UFMA concentra seus esforços
+de divulgação no Instagram, com postagens diárias e conteúdo nos
+stories, incluindo bastidores. Além disso, listas de transmissão no
+WhatsApp são usadas para divulgar as manchetes do jornal.
+A TV UFMA implementou uma estratégia de transmissão que
+tem mostrado resultados significativos. Seu conteúdo é disponi-
+bilizado tanto em seu canal no YouTube quanto na plataforma
+Eduplay, com transmissão ao vivo da programação e a opção de
+acessar os conteúdos por meio de playlists na plataforma. No Edu-
+play, a TV UFMA se consolidou como a terceira TV universitária
+mais assistida do país, com mais de 500 matérias produzidas em
+2023 e 20 programas autorais.
+A interação entre a TV aberta, a internet e as redes sociais digitais
+sugere um futuro promissor para a TV UFMA, especialmente com
+as novas oportunidades oferecidas pela TV 3.0. Esse cenário já
+tem se refletido positivamente, posicionando a TV UFMA como a
+maior fornecedora de conteúdo para os protótipos de demonstração
+desenvolvidos pela equipe de P&D UFMA/UFJF/PUC-Rio no âmbito
+do projeto TV 3.0. As figuras a seguir ilustram a participação da
+emissora como laboratório de conteúdos.
+Figure 1: Catálogo de apps de tv aberta
+A próxima geração da TV brasileira representa uma revolução
+na forma como o conteúdo televisivo é produzido, distribuído e con-
+sumido. Ela promete uma interação mais dinâmica e personalizada,
+algo que vai além da veiculação tradicional de reportagens e pro-
+gramas locais. Com a TV 3.0, novas possibilidades de interatividade
+Figure 2: Tela da sugestão de aplicativo principal com con-
+teúdo da TV UFMA
+Figure 3: Tela com sugestão de recomendações/aplicativo
+secundário com conteúdo da TV UFMA. As recomendações
+de conteúdo extra podem vir pelo ar (OTA) ou por broadband
+(OTT)
+se abrem, permitindo uma participação mais ativa dos telespecta-
+dores. Isso inclui a possibilidade de personalização de conteúdo,
+maior integração com outras plataformas digitais e a utilização de
+tecnologias emergentes como realidade aumentada e virtual.
+Essas mudanças trazem consigo uma série de desafios tecnológi-
+cos. A transição para a TV 3.0 exige uma atualização significativa ou
+até mesmo a total substituição de tecnologias e equipamentos. Isso
+inclui a adoção de novos padrões de transmissão, a implementação
+de infraestrutura compatível e a formação de pessoal capacitado
+para operar e manter essas novas tecnologias. A TV UFMA, assim
+como outras emissoras, terá que investir em capacitação técnica e
+em pesquisa para acompanhar essa evolução e explorar plenamente
+as potencialidades oferecidas pela TV 3.0.
+Além dos desafios técnicos, há também um desafio estratégico. A
+emissora maranhense precisa redefinir seu papel e suas estratégias
+de conteúdo para se manter relevante e cumprir sua missão educa-
+tiva e cultural no novo cenário digital. Isso implica em desenvolver
+novos formatos de programas que aproveitem as funcionalidades
+interativas da TV 3.0 e estabelecer parcerias que potencializam sua
+capacidade de produção e distribuição de conteúdo. Dessa forma,
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Miguel Bruno Alves Chaves and Li-Chang Shuen
+a TV UFMA poderá fortalecer seu vínculo com a sociedade e con-
+tribuir para o desenvolvimento de uma televisão mais participativa
+e inclusiva, refletindo os avanços tecnológicos e as mudanças nos
+hábitos de consumo de mídia, sem deixar de lado seu papel como
+emissora que faz parte de um ecossistema de comunicação pública
+[4].
+Um levantamento foi conduzido com profissionais de comuni-
+cação que prestam serviços à TV UFMA, incluindo servidores, co-
+laboradores terceirizados e estagiários, com o objetivo de avaliar
+percepções e expectativas em relação à transição para a TV de pró-
+xima geração. Três perguntas objetivas foram formuladas para obter
+uma visão abrangente sobre o processo de adaptação tecnológica e
+operacional da emissora.
+A maioria dos profissionais já têm conhecimento do processo
+de desenvolvimento da TV 3.0: 69,2%. No entanto, 61,5% dos entre-
+vistados afirmam não saber o prazo para a próxima geração de TV
+entrar em operação no Brasil. Com relação às características que os
+colaboradores da emissora associam à TV 3.0, a interatividade e a
+personalização de conteúdos são aquelas mais lembradas, conforme
+gráfico a seguir.
+Figure 4: Gráfico das características mais associadas à TV 3.0
+pelos colaboradores da TV UFMA
+A análise das respostas revela que, embora a maioria dos en-
+trevistados ainda não consiga determinar com precisão o início
+das atividades da nova geração de televisão, há uma expectativa
+considerável em torno da TV 3.0. Esta tecnologia emergente pro-
+mete transformar tanto a produção quanto o consumo de conteúdo
+audiovisual. As inovações associadas à TV 3.0 incluem a integração
+de funcionalidades interativas e a oferta de conteúdo personalizado,
+o que representa um avanço significativo em relação aos modelos
+tradicionais de transmissão.
+Para os produtores de conteúdo, a TV 3.0 possibilita novas formas
+de engajamento com o público, permitindo a criação de narrativas
+mais dinâmicas e interativas. Esta evolução tecnológica oferece um
+campo fértil para a experimentação criativa e a inovação, possibili-
+tando o desenvolvimento de conteúdos que atendam às demandas
+de uma audiência cada vez mais diversificada e exigente. Além
+disso, as ferramentas avançadas de coleta de dados, medição de
+audiência e feedback em tempo real proporcionam aos produtores
+a capacidade de ajustar rapidamente suas estratégias de conteúdo
+para otimizar a experiência do telespectador.
+Do ponto de vista dos telespectadores, a TV 3.0 oferece uma ex-
+periência de visualização mais rica e personalizada. A possibilidade
+de acessar conteúdo sob demanda, combinado com recursos intera-
+tivos, transforma a televisão em uma plataforma mais atraente.
+Isso é particularmente relevante no contexto da TV UFMA, cujo
+foco principal é a produção de conteúdo educativo. A TV 3.0 não
+apenas amplia o alcance desse conteúdo, mas também enriquece a
+experiência de aprendizagem dos telespectadores.
+Além disso, a introdução da TV 3.0 na Universidade Federal do
+Maranhão oferece uma oportunidade valiosa para os estudantes do
+curso de Comunicação Social em suas três habilitações (Jornalismo,
+Rádio e TV e Relações Públicas). O envolvimento direto com a nova
+tecnologia em um ambiente de estágio proporciona uma experiên-
+cia prática única, permitindo que os alunos adquiram habilidades
+essenciais e se familiarizem com as últimas tendências do setor.
+Este aspecto educacional tem muita importância para preparar a
+próxima geração de profissionais de comunicação, que serão res-
+ponsáveis por explorar e expandir as possibilidades oferecidas por
+essa tecnologia emergente.
+Vale destacar também que a grade curricular do curso de Rádio e
+TV, oferecido pela UFMA, passou por uma atualização significativa
+em 2023. Este bacharelado, com carga horária de 2.910 horas, agora
+tem como foco principal a formação de novos profissionais que terão
+contato direto com as inovações da próxima geração de televisão.
+As disciplinas incluem Roteiro para Audiovisual, Direção de Arte,
+Edição e Pós-Produção, Mídia Digital e Dinâmicas Emergentes, en-
+tre outras. Essa atualização curricular reflete a preocupação do curso
+em se alinhar com os novos processos comunicacionais, garantindo
+que os alunos estejam preparados para enfrentar os desafios e opor-
+tunidades do setor.
+CONSIDERAÇÕES FINAIS
+As emissoras universitárias em operação enfrentarão desafios téc-
+nicos, tecnológicos, econômicos e políticos na transição para TV
+3.0, pois são radiodifusores dependentes de orçamentos limitados e
+com pouca autonomia decisória dentro da estrutura das instituições
+que as abrigam. Mesmo assim, as possibilidades de ampliação da
+interação com o público e de personalização do conteúdo oferecido
+faz com que essas pequenas emissoras públicas já se movimentem e
+se preparem, na medida do possível, para avançar rumo à próxima
+geração de TV aberta brasileira.
+Em relação à TV UFMA, os colaboradores da emissora possuem
+um nível razoável de conhecimento e alto de expectativa em relação
+à nova tecnologia, apesar das incertezas quanto ao cronograma
+de implementação e do acesso aos insumos necessários para ade-
+quação do canal. Os principais desafios identificados incluem a
+atualização tecnológica e a necessidade de qualificação profissional,
+ambos essenciais para uma adaptação bem-sucedida. Como emis-
+sora universitária, a TV UFMA desempenha um papel pedagógico
+na experimentação e no desenvolvimento de novas práticas comuni-
+cacionais, precisando estar apta para preparar futuros profissionais
+para as demandas da TV digital.
+Conforme citado neste position paper, o curso de Comunicação
+Social da UFMA, que dá suporte à emissora, começou o processo
+de atualização curricular pela habilitação Rádio e TV, inserindo
+disciplinas e atividades extensionistas com foco em formar profis-
+sionais preparados para a nova realidade tecnológica vindoura, mas
+os atuais colaboradores do canal universitário também demandam
+Planejamento e Estratégia de Comunicação para a TV UFMA na transição para a TV 3.0
+WTVDI’2024, Juiz de Fora/MG, Brazil
+capacitação para não apenas transmitirem um sinal digital mais
+avançado mas, sobretudo, ofertarem conteúdo compatível com as
+expectativas criadas com as possibilidades da próxima geração de
+TV digital terrestre.
+Este cenário não é exclusivo da emissora maranhense, posto
+que os canais universitários fazem parte de um ecossistema de
+comunicação pública que enfrenta desafios semelhantes em todos
+os estados – sejam as TV’s universitárias, legislativas, educativas
+estaduais, do judiciário ou do executivo federal. A academia, como
+parte integrante do processo de Pesquisa & Desenvolvimento do
+Projeto TV 3.0 tem uma demanda a ser enfrentada: a de desenvolver
+meios que promovam a equidade entre as emissoras comerciais e
+as emissoras públicas para que o advento de TV 3.0 não aumente a
+disparidade e nem promova a exclusão da comunicação pública do
+espectro da radiodifusão digital.

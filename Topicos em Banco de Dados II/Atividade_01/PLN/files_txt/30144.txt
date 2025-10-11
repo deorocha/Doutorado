@@ -1,0 +1,534 @@
+Integrando Avaliações Textuais de Usuários em Recomendação
+baseada em Aprendizado por Reforço
+Naan Vasconcelos
+naan.vasconcelos@aluno.ufsj.edu.br
+UFSJ
+Minas Gerais, Brazil
+Davi Reis
+davireisjesus@aluno.ufsj.edu.br
+UFSJ
+Minas Gerais, Brazil
+Thiago Silva
+thiagosilva@ufsj.edu.br
+UFSJ
+Minas Gerais, Brazil
+Nícollas Silva
+ncsilvaa@dcc.ufmg.br
+UFMG
+Minas Gerais, Brazil
+Washington Cunha
+washingtoncunha@dcc.ufmg.br
+UFMG
+Minas Gerais, Brazil
+Elisa Tuler
+etuler@ufsj.edu.br
+UFSJ
+Minas Gerais, Brazil
+Leonardo Rocha
+lcrocha@ufsj.edu.br
+UFSJ
+Minas Gerais, Brazil
+5. Apesar dos novos valores
+WebMedia’2024, Juiz de Fora, Brazil
+Vasconcelos N. et al.
+estarem mais de acordo com as preferências dos usuários [11, 17],
+provocaram um desequilíbrio no dilema de exploration/exploitation:
+uma redução significativa na entropia de ratings impacta no explo-
+ration. Esses resultados apontam que para que MAB possam utilizar
+RARS com sucesso, suas estratégias de exploration precisam buscar
+alternativas à entropia.
+FUNDAMENTAÇÃO TEÓRICA
+2.1
+Multi-Armed Bandits
+Multi-Armed Bandits (MAB) é a principal abordagem de Apren-
+dizado por Reforço para SsR interativa [15]. Trata-se de um modelo
+de decisão sequencial que, continuamente, escolhe uma ação 𝑎entre
+um conjunto de ações A, denominadas arms. A cada seleção de
+uma ação em um ponto 𝑡no tempo resulta em uma recompensa
+𝑅(𝑎𝑡) ∈R. Esses modelos precisam decidir entre: 1) exploitation,
+que visa selecionar os arms com as maiores recompensas do pas-
+sado; e 2) exploration, que seleciona diferentes arms para obter
+mais informações sobre o domínio e tomar decisões futuras mel-
+hores. A escolha entre essas duas opções caracterizam o dilema
+de exploitation-exploration (i.e. exp-exp) e exige que o modelo seja
+capaz de explorar o máximo conhecimento disponível enquanto
+também explora o espaço de solução para adquirir ainda mais con-
+hecimento sobre o domínio [32]. Em RS, os itens a serem recomen-
+dados são modelados como os arms e a recompensa é o feedback do
+usuário para essa recomendação (e.g., rating) [19]. Essa resposta dos
+usuários é, em geral, coletada e salva continuamente em um con-
+junto H (𝑡). Um item é recomendado de acordo com uma regra de
+predição 𝜋, definida como uma função que explora as informações
+atuais sobre o usuário: 𝑖(𝑡) ≡𝜋(H (𝑡)). Por isso, a estratégia ideal
+deve maximizar as recompensas nas 𝑇interações:
+𝑖∗(·) = arg max
+𝑖(·)
+𝑇
+∑︁
+𝑡=1
+E [𝑟𝑢,𝑖(𝑡) |𝑡]
+(1)
+Para definir a utilidade dos itens para cada usuário, as principais
+abordagens utilizam uma formulação matricial probabilística via
+PMF (Probabilistic Matrix Factorization), modelando a distribuição
+de rewards pelos fatores latentes de usuários e itens, semelhantes aos
+métodos model-based [27]. A recompensa esperada é quase sempre
+modelada como o produto dos fatores latentes do usuário 𝒑𝒖com
+os fatores do item 𝒒𝒊. A função objetivo e dada da seguinte forma:
+𝑖∗(·) = arg max
+𝑖(·)
+𝑇
+∑︁
+𝑡=1
+E [𝑟𝑢,𝑖(𝑡) |𝑡] = arg max
+𝑖(·)
+𝑇
+∑︁
+𝑡=1
+E [𝒑⊤
+𝒖𝒒𝒊(𝒕) |𝑡]
+(2)
+Os esforços atuais estão concentrados em como otimizar essa
+função objetivo, equilibrando o dilema de exp-exp. As abordagens
+tradicionais do MAB, como 𝜖-Greedy, UCB e Thompson Sam-
+pling, utilizadas no presente estudo, consideram essa função obje-
+tivo como regra de predição [26]. A diferença entre esses algoritmos
+está na maneira como eles controlam o dilema de exp-exp [2, 20–22].
+Enquanto o 𝜖-Greedy explora a regra de predição com probabili-
+dade (1 −𝜖), os algoritmos UCB e Thompson Sampling primeiro
+medem uma incerteza Σ em torno das informações disponíveis
+sobre o usuário e os itens. Thompson Sampling é um algoritmo
+probabilístico que extrai os vetores de usuários e itens de uma dis-
+tribuição normal definida pelas informações atuais disponíveis. No
+entanto, mesmo essa abordagem mede a recomendação com base
+na combinação de 𝑝𝑢e 𝑞𝑖.
+2.2
+Recomendações Review-Aware
+Sistemas de Recomendação Review-Aware [23] partem da premissa
+que as preferências dos usuários sobre itens consumidos podem
+ser melhor capturadas por meio das avaliações textuais (reviews)
+fornecidas pelos usuários ao invés dos ratings diretamente assinal-
+ados [12, 17]. Essa área vem sendo impulsionada pelos expressivos
+avanços em propostas de arquiteturas de redes neurais aplicadas
+a PLN [18]. Há um número crescente de SsR que vêm adaptando
+essas propostas de PLN, considerando diferentes abordagens de
+arquitetura, tais como redes Attention-Based [14], redes convolu-
+cionais temporais (TCN) [5], grafos [31], extração de aspectos [6] e
+tópicos [24], análise de sentimento [7] e, mais recentemente, apren-
+dizagem contrastiva [29]. Recentemente, em [4] realizou-se uma
+revisão sistemática da literatura dessas abordagens, comparando-as
+experimentalmente.
+Um algoritmo de destaque nessa avaliação é o HRDR [16], que
+transforma os comentários em representações vetoriais por meio
+de embeddings. Em seguida, aplica-se uma camada de convolução
+2D para capturar padrões locais e, em seguida, um mecanismo de
+atenção para calcular pesos de atenção, focando em aspectos rele-
+vantes das representações. As representações ajustadas pelo mecan-
+ismo de atenção são combinadas, resultando em representações
+finais dos usuários e itens. De forma semelhante, o CARP [13] tam-
+bém vetoriza os comentários de usuários e itens que são processados
+por camadas CNN para capturar o contexto e extrair características
+importantes. O modelo calcula pesos de atenção para diferentes
+partes dos comentários usando mecanismos de autoatenção. Essas
+representações de usuários e itens capturam as variações e aspec-
+tos relevantes dos comentários. Outro algoritmo de destaque é o
+CARM [14] que também utiliza uma camada CNN sobre repre-
+sentações vetoriais para aprender características importantes dos
+comentários. As características convolucionais extraídas são combi-
+nadas com os fatores latentes dos usuários e itens, obtidos através
+da PMF. Essas características combinadas são então passadas por
+uma camada linear (fully connected) e uma função de ativação Tanh,
+transformando as características aprendidas em uma representação
+mais compacta. Por fim, o MAN [28] utiliza redes convolucionais
+temporais sobre as representações vetoriais para capturar padrões
+locais nos comentários. Uma função de atenção calcula uma matriz
+de atenção entre as representações dos usuários e itens, as quais
+são novamente processadas por uma camada convolucional tem-
+poral para ajustar os pesos da atenção. Este processo resulta em
+características de interação entre usuários e itens.
+Uma característica comum às abordagens de MAB é que todas
+consideram os rewards de forma explícita, ou seja, por meio das
+ratings atribuídas pelos usuários aos itens recomendados. Nesse
+trabalho, nossa meta é alterar esses rewards explícitos por valores
+implícitos, extraídos dos reviews dos usuários por meio de aborda-
+gens acima descritas.
+Integrando Avaliações Textuais de Usuários em Recomendação baseada em Aprendizado por Reforço
+WebMedia’2024, Juiz de Fora, Brazil
+Dataset
+MusicalInstruments
+MusicalInstrumentsMAN
+MusicalInstrumentsCARM
+MusicalInstrumentsHRDR
+MusicalInstrumentsCARP
+Measure
+Hits
+Hits
+Hits
+Hits
+Hits
+T
+Linear UCB
+0.267
+0.408
+0.584
+0.188
+0.321
+0.484
+0.191
+0.314
+0.463
+0.185
+0.272
+0.446
+0.192
+0.272
+0.461
+e-Greedy
+0.033
+0.062
+0.125
+0.026
+0.053
+0.106
+0.025
+0.051
+0.102
+0.025
+0.051
+0.103
+0.025
+0.047
+0.105
+TS
+0.122
+0.187
+0.287
+0.102
+0.163
+0.270
+0.116
+0.187
+0.301
+0.114
+0.181
+0.279
+0.004
+0.015
+0.048
+Measure
+UsersCoverage
+UsersCoverage
+UsersCoverage
+UsersCoverage
+UsersCoverage
+T
+Linear UCB
+0.068
+0.145
+0.228
+0.052
+0.131
+0.197
+0.056
+0.121
+0.186
+0.051
+0.105
+0.177
+0.057
+0.128
+0.191
+e-Greedy
+0.031
+0.058
+0.106
+0.025
+0.050
+0.092
+0.025
+0.049
+0.092
+0.024
+0.047
+0.089
+0.023
+0.044
+0.090
+TS
+0.101
+0.140
+0.191
+0.084
+0.121
+0.174
+0.089
+0.128
+0.188
+0.092
+0.131
+0.179
+0.004
+0.015
+0.044
+Table 1: Musical Instruments - Efetividade e diversidade das estratégias MAB aplicadas nas coleções originais e suas versões
+modificadas. Valores em negrito correspondem aos melhores valores validados estatisticamente por Wilcoxon com p-value = 0.05
+Dataset
+Tucson
+TucsonMAN
+TucsonCARM
+TucsonHRDR
+TucsonCARP
+Measure
+Hits
+Hits
+Hits
+Hits
+Hits
+T
+Linear UCB
+0.133
+0.225
+0.430
+0.062
+0.142
+0.212
+0.080
+0.151
+0.230
+0.082
+0.147
+0.233
+0.072
+0.136
+0.208
+e-Greedy
+0.023
+0.056
+0.118
+0.022
+0.032
+0.060
+0.010
+0.020
+0.049
+0.018
+0.036
+0.072
+0.018
+0.032
+0.064
+TS
+0.073
+0.128
+0.223
+0.057
+0.090
+0.143
+0.044
+0.078
+0.128
+0.052
+0.091
+0.147
+0.045
+0.076
+0.133
+Measure
+UsersCoverage
+UsersCoverage
+UsersCoverage
+UsersCoverage
+UsersCoverage
+T
+Linear UCB
+0.113
+0.155
+0.265
+0.058
+0.128
+0.170
+0.073
+0.128
+0.167
+0.077
+0.125
+0.171
+0.065
+0.117
+0.156
+e-Greedy
+0.023
+0.054
+0.104
+0.022
+0.032
+0.059
+0.010
+0.020
+0.046
+0.018
+0.034
+0.065
+0.018
+0.031
+0.062
+TS
+0.069
+0.113
+0.180
+0.056
+0.087
+0.131
+0.042
+0.071
+0.111
+0.050
+0.084
+0.128
+0.044
+0.072
+0.118
+Table 2: Tucson - Efetividade e diversidade das estratégias MAB aplicadas nas coleções originais e suas versões modificadas.
+Valores em negrito correspondem aos melhores valores validados estatisticamente por Wilcoxon com p-value = 0.05
+AVALIAÇÃO EXPERIMENTAL
+O objetivo dessa seção é responder a pergunta de pesquisa Qual
+o impacto do uso de ratings extraídos de comentários de usuários e
+itens em SsR interativos baseados em MAB? Para isso, nossos ex-
+perimentos consistem em comparar o desempenho das estratégias
+MAB utilizando as bases de dados originais que contém ratings
+assinalados de forma explícita, com versões modificadas dessas
+mesmas coleções, onde os ratings são calculados a partir dos comen-
+tários textuais.Os modelos de MAB utilizados nos experimentos
+estão destacados na Seção 2.1: 𝜖-Greedy, UCB e Thompson Sampling.
+Tratam-se das estratégias que são base de funcionamento da grande
+maioria das estratégias atuais. Para a geração das bases de dados
+modificadas, os cálculos dos ratings foram extraídos pelas quatro
+estratégias descritas na Seção 2.2: MAN, CARM, HRDR e CARP,
+escolhidos por apresentarem bons resultados em uma recente e
+vasta avaliação experimental [4].
+Coleção
+# Usuários
+# Itens
+Esparsidade
+Amazon - Musical Instruments
+27.530
+10.620
+99.92%
+Yelp 2021 - Tucson
+8.540
+8.867
+99,99%
+Table 3: Visão geral das coleções utilizadas nas avaliações.
+Avaliamos a combinação das estratégias de MAB e Review-Aware
+em duas coleções de cenários distintos, uma de comércio eletrônico
+e outra de pontos de interesse, conforme descritos na Tabela 3. Em
+ambas as coleções, todos os itens com rating também possuem um
+comentário textual correspondente. Para cada uma delas, foram
+geradas outras quatro versões modificadas pelas quatro estratégias
+de Review-Aware.
+As três estratégias de MAB foram aplicadas sobre as cinco ver-
+sões da base (uma original e quatro modificadas). Consideramos
+duas métricas distintas de avaliação, uma de precisão e outra de
+diversidade: 1) Hits métrica de precisão que corresponde ao número
+de recomendações que pertencem ao histórico de cada usuário;
+2) Users Coverage, métrica de diversidade que corresponde à por-
+centagem de usuários distintos que estão interessados nos itens
+recomendados. Para comparar os resultados alcançados com vali-
+dação estatística, adotamos o teste de Wilcoxon, visto a distribuição
+não normal dos conjuntos de dados de recomendação [4].
+3.1
+Resultados Experimentais
+As Tabelas 1 e 2 apresentam os resultados de nossa avaliação para
+as coleções Musical Instruments e Tucson, respectivamente. Os resul-
+tados remetem a média de Hits e UserCoverage acumulados após 𝑇
+interações dos usuários com o sistema. Tanto em efetividade quanto
+em diversidade, os melhores resultados foram alcançados pelas es-
+tratégias MAB nas coleções originais, nas quais os ratings foram
+assinalados de forma explícita pelos usuários. As diferenças entre os
+resultados alcançados nas bases originais e modificadas são ainda
+maiores à medida que ocorrem mais iterações. A principal razão é
+que as estratégias MAB aprendem menos sobre os usuários quando
+consideram bases com ratings calculados por estratégias RARs.
+Tratam-se de resultados que contrastam com aqueles reportados na
+literatura para outros cenários, por exemplo recomendação offline,
+que apontam ratings extraídos a partir dos reviews dos usuários são
+capazes de elucidar melhor as preferências dos usuários [12, 17, 28].
+WebMedia’2024, Juiz de Fora, Brazil
+Vasconcelos N. et al.
+(a) Distribuição Acumulativa de Ratings
+(b) Popularidade vs. Entropia - Original
+(c) Popularidade vs. Entropia - CARM
+Figure 1: Caracterização Comparativa entre a coleção original Musical Instruments e suas versões modificadas por RARs.
+Para compreender o comportamento das estratégias MAB nas
+coleções modificadas, realizamos uma caracterização comparativa
+delas com suas versões originais. Por restrição de espaço, os resulta-
+dos serão reportados apenas para coleção Musical Instruments, mas
+as conclusões são similares na Tucson. Primeiramente, comparamos
+a distribuição de ratings, apresentadas na Figura 1(a). Observamos
+que enquanto na base original essa distribuição é bem dispersa entre
+os valores de 1 a 5, a distribuição está concentrada entre os valores
+de 3,5 a 5 nas bases modificadas. Os valores calculados estão coer-
+entes com a literatura [12, 17], que aponta que os mesmos refletem
+de forma mais fidedigna as preferências dos usuários. Todavia, essa
+alteração causou um desequilíbrio em como as estratégias MAB
+lidam com o dilema exp-exp.
+Assim, em nossa segunda caracterização, comparamos a cor-
+relação entre popularidade dos itens, comumente utilizada como
+uma estratégia de exploitation, e a entropia entre os itens, comu-
+mente utilizada como uma abordagem de exploration, conforme
+apresentado nas Figuras 1(b) - base original - e 1(c) - base modifi-
+cada pelo algoritmo CARM (resultados semelhantes obtidos pelos
+demais algoritmos de RARS). Conforme podemos observar, na base
+modificada essa correlação é muito alta quando comparada à base
+original, o que significa que as bases modificadas apresentam uma
+baixa entropia, impactando diretamente no Exploration.
+Exploration geralmente apresenta uma correlação significativa
+entre seu comportamento e a entropia dos itens. Em um cenário sem
+entropia, onde os rewards são mais previsíveis e não há incerteza,
+o comportamento dos algoritmos mudam significativamente. O e-
+Greedy, por exemplo, rapidamente converge para a exploitation, com
+um valor de 𝜖tendendo a zero. O UCB também reduz o exploration,
+pois os intervalos de confiança são muito estreitos devido à certeza
+das recompensas. No caso do Thompson Sampling, as distribuições
+posteriores se tornam muito concentradas em torno do valor ver-
+dadeiro da recompensa de cada opção. Isso resultaria em menos
+amostragem de opções não ótimas, pois a incerteza é praticamente
+inexistente. Portanto, a alteração da entropia dos itens nas bases
+modificadas impacta diretamente o equilíbrio entre exploration e ex-
+ploitation, sendo crucial para o design de sistemas de recomendação
+baseados em algorimos de aprendizado por reforço eficazes. Tais
+análises respondem a pergunta de pesquisa estudada neste trabalho.
+CONCLUSÕES E TRABALHOS FUTUROS
+Em Sistemas de Recomendação (SsR), Multi-Armed-Bandits (MAB)
+são modelos de decisão sequencial que continuamente escolhe entre
+um conjunto de itens, aqueles que maximizam o reward esperado
+(e.g., a satisfação do usuário), visando equilibrar a seleção entre
+itens com as maiores recompensas no passado (exploitation) ou
+itens inexplorados (exploration). Esses modelos utilizam como re-
+ward valores numéricos explicitamente assinalados pelos usuários
+aos itens. Neste trabalho apresentamos um estudo preliminar do
+impacto do uso de ratings extraídos de comentários textuais por
+meio de recomendação Review-Aware (RARS) em SsR interativos.
+Comparamos experimentalmente o desempenho de três estraté-
+gias clássicas de MAB utilizando coleções de dados com ratings
+assinalados de forma explícita (originais) com suas versões na qual
+os ratings eram calculados por meio de quatro estratégias de RARS.
+Os melhores resultados foram obtidos nas bases originais, contrar-
+iando com resultados reportados na literatura para outros cenários
+além de MAB. Nesse sentido, caracterizamos comparativamente as
+coleções e constatamos uma redução significativa na entropia de
+ratings dos itens nas bases modificadas. Em um cenário de entropia
+reduzida, a dinâmica entre exploration e exploitation é drasticamente
+simplificada, com os algoritmos rapidamente se concentrando em
+exploitation e reduzindo o aprendizado sobre os usuários. Dessa
+forma, nosso trabalho abre a possibilidade de novas propostas de
+alterações nas estratégias de exploration, que permitam que as abor-
+dagens MAB sejam também capazes de usufruir da habilidade de
+estratégias RARs em capturar melhor as preferências dos usuários.
+Também pretendemos estudar como combinar as duas os ratings
+explícitos com a informação obtida por meio das RARs.
+AGRADECIMENTOS
+Este trabalho foi financiado por CNPq, CAPES, Fapemig, FAPESP,
+CIIA-Saúde e AWS.
+Integrando Avaliações Textuais de Usuários em Recomendação baseada em Aprendizado por Reforço
+WebMedia’2024, Juiz de Fora, Brazil

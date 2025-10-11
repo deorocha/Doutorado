@@ -1,0 +1,276 @@
+OlivesApp: Aplicativo de Classificação do Índice de Maturação de
+Azeitonas através do YOLOv8
+Diogo da Silva Alvino*, Jhon Randler dos Santos Belarmino*, Warley M. Valente Junior*, Elton Rafael
+Alves*, Aline Santana Oliveira Valente*, Cleiton Antônio Nunes†, Amanda Carolina Souza Andrada
+Anconi†
+diogo.alvino@unifesspa.edu.br,jhon.randler@unifesspa.edu.br,wmvj@unifesspa.edu.br,eltonalves@unifesspa.edu.br
+asoliveirav@gmail.com,cleiton.nunes@ufla.br,quimica.amandasouza@gmail.com
+*Universidade Federal do Sul e Sudeste do Pará - Marabá - Pará - Brasil
+†Universidade Federal de Lavras - Lavras - Minas Gerais - Brasil
+WFA’2024, Juiz de Fora/MG, Brazil
+Alvino et al.
+tecnológicos das camadas de front-end e back-end. Nas subseções
+2.3 e 2.4 são apresentados os fluxos de interações e as principais fun-
+cionalidades da ferramenta, respectivamente. Por fim, a conclusão
+e trabalhos futuros são apresentados na Seção 3.
+APLICATIVO DE CLASSIFICAÇÃO
+2.1
+Metas do Aplicativo
+O OlivesApp tem como objetivo principal aumentar a eficiência do
+processo de classificação do índice de maturação das azeitonas de
+modo a permitir aos olivicultores tomarem decisões mais precisas
+durante a colheita. Para atingir esse objetivo, o aplicativo oferece
+funcionalidades como: (1) captura de imagens de azeitonas pela
+câmera do smartphone e por meio do espaço de armazenamento lo-
+cal; (2) cadastro de novos lotes de imagens de azeitonas; (3) definição
+de padrões de cores das azeitonas; (4) classificação e ilustração do
+índice de maturação do lote de azeitonas; e (5) armazenamento
+local dos resultados coletados para posterior análise. Todas estas
+funcionalidades são acessíveis via uma interface intuitiva destinada
+a olivicultores e pesquisadores da área. Como benefício, o aplica-
+tivo permite que o olivicultor faça uma determinação mais exata
+do índice de maturação de azeitonas, já que atualmente ele é deter-
+minado visualmente e consequentemente suscetível a erros. Outro
+benefício é garantir decisões mais acertadas no processo de colheita
+das azeitonas, pois o olivicultor precisa decidir se as azeitonas de
+uma determinada área devem ser colhidas ou não, pois há um nível
+de maturação considerado "ideal" para colher, o qual resultaria em
+um azeite de melhor qualidade.
+2.2
+Arquitetura Proposta
+De acordo com a Figura 1, o modelo arquitetural Cliente-Servidor foi
+selecionado para o desenvolvimento do aplicativo, levando em con-
+sideração sua eficiência e escalabilidade. Esta abordagem permite
+que o aplicativo OlivesApp mantenha uma interface de usuário leve
+e responsiva, enquanto o servidor (API REST) lida com o processa-
+mento mais intensivo para tratamento da imagem e classificação das
+azeitonas, além do armazenamento dos resultados da classificação.
+API REST
+Módulo de
+tratamento de imagem
+Módulo de classificação
+de azeitonas
+Olivicultor
+Imagem de
+azeitonas
+Resultado da
+classificação
+Figure 1: Arquitetura da aplicação
+O processo inicia com o olivicultor usando um aplicativo móvel
+para capturar e enviar uma imagem das azeitonas. Essa imagem é
+transmitida para uma API REST desenvolvida especificamente para
+o processamento. A API utiliza o YOLOv8 para identificar azeitonas
+na imagem, gerando uma máscara que identifica a localização da
+azeitona na imagem. Após essa etapa, o módulo de tratamento de
+imagem é executado, utilizando a máscara gerada pelo YOLOv8 para
+remover o fundo da imagem original e deixando apenas as azeitonas
+sobre um fundo branco. Com isso, a imagem das azeitonas com
+fundo branco é analisada pelo módulo de classificação de azeitonas,
+que irá categorizar as azeitonas e retornar para o aplicativo móvel
+do olivicultor o resultado da classificação.
+Os três principais módulos do aplicativo são descritos a seguir:
+• YOLOv8: está sendo utilizado para detectar azeitonas na
+imagem enviada pelo usuário. Quando o usuário envia uma
+imagem, o YOLO irá realizar todo o processamento da im-
+agem para que seja gerado uma máscara da azeitona na
+imagem enviada. Ou seja, o YOLO irá entregar o resultado
+da sua detecção com uma imagem de fundo preto, e apenas
+a azeitona detectada em branco.
+• Módulo de tratamento de imagem: é responsável por
+ajustar a imagem enviada pelo usuário para a forma que o
+módulo de classificação necessita para entregar um resultado
+preciso. Com a máscara gerada pelo YOLO, esse módulo irá
+fazer com que a máscara sobreponha a imagem original en-
+viada pelo usuário. Assim, após essa sobreposição o módulo
+recorta a azeitona da imagem original, gerando uma imagem
+apenas da azeitona com o fundo branco. Assim, o módulo de
+classificação poderá analisar cada pixel da azeitona sem o
+risco de ter impacto por conta das cores de fundo da imagem.
+• Módulo de classificação de azeitonas: realiza a análise da
+imagem da azeitona com fundo branco para determinar a
+classe de maturação da azeitona. Utilizando padrões de cores
+predefinidos, ele calcula a porcentagem de pixels em cada
+cor padrão e classifica a azeitona em uma das 8 classes de
+maturação. O resultado final é uma classificação detalhada
+que inclui a distribuição percentual das diferentes classes de
+azeitonas na imagem analisada.
+2.2.1
+Tecnologias da camada front-end. O front-end da aplicação
+foi todo desenvolvido em Flutter, um framework para criar inter-
+faces de usuário (UI) atraentes e nativas para aplicativos móveis
+(iOS e Android), bem como para aplicações web e desktop. O flutter
+utiliza a linguagem de programação Dart e oferece uma rica coleção
+de widgets personalizáveis para construir interfaces de usuário (UI)
+atraentes e responsivas.
+2.2.2
+Tecnologias da camada back-end. Toda a codificação do back-
+end da aplicação foi feita em Python devido sua ampla gama de
+bibliotecas, oferecendo suporte para bibliotecas de aprendizagem de
+máquina e visão computacional, e também para criação de APIs. A
+criação de endpoints da API e manipulação de requisições HTTP foi
+feita com Flask. Atualmente o Flask gerencia as rotas, recepciona
+os dados JSON enviados pelo usuário (como padrões de cores e
+imagens) e devolve respostas JSON após o processamento. Além
+disso, também controla a execução do servidor web, tornando a API
+acessível aos dispositivos móveis ou outros clientes.
+O YOLOv8 é utilizado para a detecção de azeitonas em imagens.
+O YOLO é um modelo de detecção de objetos em tempo real que
+OlivesApp: Aplicativo de Classificação do Índice de Maturação de Azeitonas através do YOLOv8
+WFA’2024, Juiz de Fora/MG, Brazil
+é rápido e preciso, ideal para a tarefa de identificar azeitonas nas
+imagens. No projeto ele está sendo utilizado para detectar azeitonas
+nas imagens enviadas. Ele processa a imagem e gera binárias que
+são utilizadas para isolar a azeitona do restante da imagem.
+Ainda no back-end, o NumPy, uma biblioteca fundamental para
+computação científica em Python, foi essencial para o desenvolvi-
+mento deste projeto devido às suas capacidades de manipulação
+de arrays e operações matemáticas eficientes. O NumPy permite
+a conversão rápida de dados de imagem para arrays, facilitando
+operações como cálculo de distâncias e manipulação de pixels. No
+projeto do aplicativo, o NumPy é usado para transformar as ima-
+gens em matrizes numéricas, realizando cálculos necessários para
+o processamento de imagem e classificação de azeitonas.
+2.3
+Fluxograma da aplicação
+A Figura 2 apresenta todo o fluxograma da proposta, deixando claro
+os principais pontos de inserção de dados, validações, detecção de
+objetos, resultados, etc. Cada etapa é de extrema importância para
+o funcionamento correto do aplicativo, visando um fluxo simples e
+bem validado.
+Analisando a Figura 2, o fluxo de utilização da principal fun-
+cionalidade do aplicativo está dividido da seguinte maneira:
+• Evento Inicial: Nesta etapa o usuário acessa o menu principal
+do aplicativo.
+• Nova Amostragem: O fluxo de nova amostragem se trata da
+principal funcionalidade da plataforma, onde o usuário pode
+cadastrar um lote para verificar o índice de maturação do
+mesmo.
+• Preenchimento de dados: Nessa etapa o usuário deve preencher
+os dados solicitados após clicar na opção de nova amostragem,
+como nome do lote, quantidade de amostras, padrões de
+cores, etc. Importante lembrar que esses dados estão sendo
+validados, ou seja, se faltar alguma informação obrigatória o
+usuário não conseguirá prosseguir com o cadastro do lote.
+Caso contrário, o botão de iniciar será liberado para dar
+continuidade com o cadastro.
+• Seleção de imagens: O usuário deverá selecionar as imagens
+das azeitonas que irão compor o lote cadastrado, onde o
+aplicativo irá validar se a quantidade de imagens inseridas
+é a mesma quantidade de amostras informadas no cadastro.
+Desse modo, caso seja informado que o lote é formado por
+15 amostras, o usuário deve realizar o upload de 15 imagens
+de azeitonas.
+• Reconhecimento da IA (YOLOv8): Nessa fase o aplicativo irá
+trabalhar em volta das imagens inseridas, onde cada uma das
+amostras passará pela detecção de objetos visando um "refi-
+namento" da imagem para que o algoritmo de classificação
+funcione corretamente.
+• Classificar a maturação do lote: Com todas as imagens tratadas
+pelo YOLOv8, o aplicativo irá passar cada uma das imagens
+pelo algoritmo de classificação de índice de maturação e
+armazenar os resultados de todo o lote em uma lista.
+• Entrega dos resultados: Por fim, a lista contendo dados como
+índice de maturação do lote e percentual de cada classificação
+será apresentada ao usuário, onde o mesmo poderá visualizar
+e analisar as informações do lote cadastrado.
+Evento Inicial
+Nova Amostragem
+Libera o botão de
+"iniciar"
+Preenchimento de
+dados
+Falta dados?
+Sim
+Não autoriza
+iniciar
+Não
+Seleção de imagens
+Número de
+imagens é igual ao de
+amostras?
+Retorna para
+a seleção de
+imagens
+Reconhecimento da IA
+(YOLOv8)
+Classificar a maturação do
+lote
+Entrega dos
+resultados
+Não
+Sim
+Figure 2: Fluxograma da aplicação
+2.4
+Principais Funcionalidades
+A Figura 3 ilustra as principais interfaces do aplicativo OlivesApp.
+Para detalhes, é possível visualizar as interações por meio do seguinte
+link: https://youtu.be/DpYgObAVmgo.
+Na Figura 3a, as imagens das azeitonas são inseridas pelo olivicul-
+tor, sendo que neste cenário foram selecionadas quatro imagens
+sendo duas pertencentes a mesma classe e as duas restantes a classes
+distintas. De acordo com a Figura 3b o olivicultor insere os dados
+referente ao lote que deseja cadastrar, onde o campo "Nome do
+lote", corresponde a uma identificação para a classificação do lote
+de amostras; "Nº de amostras", refere-se a quantidade de amostras
+que o lote possui (o número de imagens enviadas deve ser o mesmo);
+"Padrão de Cor", refere-se ao padrão de classificação usado para
+aquele lote (no aplicativo é possível definir a cor que representa
+um verde escuro, por exemplo); por fim o campo "Informações"
+destinado para anotações extras sobre o lote. Nas Figuras 3c e 3d
+é gerado o resultado do lote cadastrado com todos os detalhes in-
+cluindo o valor para o "Índice de Maturação" que neste exemplo
+corresponde ao valor "3", pois foram identificadas três classes dis-
+tintas de IM para a amostra das azeitonas. A seguir é ilustrado uma
+tabela com todas as possíveis classes de IM, respectiva imagem
+representativa, percentual de acordo com o número de amostras, e
+a quantidade exata. Para este exemplo, o aplicativo revela que uma
+azeitona pertence a classe 1 (cor totalmente verde), uma azeitona
+pertence a classe 3 (cor < 1/2) e duas azeitonas pertencem a classe 4
+(cor > 1/2), sendo que as duas ultimas classes são classificadas como
+azeitonas mistas.
+WFA’2024, Juiz de Fora/MG, Brazil
+Alvino et al.
+(a) Imagem de quatro amostras de
+azeitonas.
+(b) Configuração de um novo lote de
+azeitonas.
+(c) Resultado da classificação do IM
+das azeitonas.
+(d) Gráfico interativo com os resulta-
+dos.
+Figure 3: Funcionalidades do OlivesApp.
+2.5
+Do tipo de licença e perspectivas criadas
+pelo Aplicativo
+Atualmente o OlivesApp está em processo de registro de soft-
+ware junto ao INPE (Instituto Nacional da Propriedade Industrial)
+e encontra-se licenciado como software gratuito (sem acesso ao
+código fonte) para fins de validação das interfaces e da experiên-
+cia de uso junto aos olivicultores e pesquisadores interessados. A
+perspectiva é que seja comercializado como um software freemium
+com assinatura premium, ou seja, oferecemos uma versão básica
+do aplicativo gratuitamente com funcionalidades essenciais como,
+cadastro de até cinco lotes de imagens de azeitonas, configuração
+do padrão de cor, capacidade de classificar até cinco azeitonas em
+uma só imagem e armazenamento dos resultados diretamente no
+smartphone. Para funcionalidades avançadas que corresponde a
+assinatura premium, o aplicativo permite classificar quantidade
+indeterminada de azeitonas em uma só imagem, fazer captura dire-
+tamente da câmera do smartphone, opção de classificação off-line,
+além de todas as funções previamente listadas para a versão básica
+sem qualquer restrição.
+CONCLUSÃO
+O presente trabalho teve por objetivo apresentar o OlivesApp,
+aplicativo para detecção e classificação do IM de azeitonas através
+do YOLOv8 e algoritmos de tratamento de imagem e classificação
+das azeitonas. Os resultados alcançados mostram que o aplica-
+tivo é promissor como produto final para apoiar olivicultores e
+pesquisadores, utilizando tecnologias avançadas de visão computa-
+cional e aprendizado de máquina.
+Das limitações do trabalho, além da quantidade limitada de
+olivicultores, destacamos que por tratar-se de um protótipo, ainda
+não foi possível disponibilizar para download. Como trabalhos
+futuros, planejamos realizar avaliação de usabilidade junto aos po-
+tenciais usuários e parcerias com as associações dos olivicultores
+de todas as regiões do país para a implementação da proposta e
+assim atingir o impacto pretendido com a solução.

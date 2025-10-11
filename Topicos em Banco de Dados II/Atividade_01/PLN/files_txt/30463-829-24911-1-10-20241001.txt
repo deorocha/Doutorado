@@ -1,0 +1,118 @@
+Explorando Formas de Calibração e Redução do Viés de
+Popularidade em Sistemas de Recomendação
+Rodrigo F. Souza
+Universidade de São Paulo
+São Carlos-SP, Brasil
+rodrigofsouza@usp.br
+Marcelo G. Manzato
+Universidade de São Paulo
+São Carlos-SP, Brasil
+mmanzato@icmc.usp.br
+CTD’2024, Juiz de Fora/MG, Brazil
+Souza & Manzato
+Tabela 1: Comparação das abordagens no Movie Lens 20M. Os melhores valores estão em negrito.
+Algoritmo
+MAP
+MRMC Gên.
+MRMC Pop.
+F1 Score
+LTC
+Δ𝐺𝐴𝑃𝐵𝐵
+Δ𝐺𝐴𝑃𝑁
+Δ𝐺𝐴𝑃𝐷
+RMSE
+BPR Modificado
+0.001
+0.45
+0.33
+0.596
+0.46
+-0.865
+-0.060
+-0.693
+0.370
+SVD++ + Calibração personalizada [9]
+0.001
+0.41
+0.69
+0.407
+0.42
+-0.992
+-0.970
+-0.985
+0.568
+SVD++ + Calibração dupla [10]
+0.001
+0.26
+0.68
+0.447
+0.38
+-0.990
+-0.969
+-0.983
+0.566
+NMF + Calibração personalizada [9]
+0.077
+0.35
+0.11
+0.752
+0.01
+-0.171
+0.238
+-0.212
+0.121
+NMF + Calibração dupla [10]
+0.081
+0.23
+0.17
+0.799
+0.01
+-0.379
+0.046
+-0.152
+0.137
+VAE + Calibração personalizada [9]
+0.079
+0.47
+0.35
+0.584
+0.14
+0.850
+1.553
+1.386
+0.750
+VAE + Calibração dupla [10]
+0.055
+0.27
+0.28
+0.725
+0.11
+0.359
+1.636
+0.981
+0.647
+explorar outras abordagens em pós-processamento e mecan-
+ismos de nudges.
+• Redução do viés de popularidade através de nudges, recomen-
+dando itens diferentes do perfil do usuário.
+• Calibração em pós-processamento, validada por experimento
+com usuários, demonstrando a relevância dos itens calibra-
+dos.
+• Calibração personalizada, usando uma estratégia de chavea-
+mento para recomendações baseadas na popularidade ou no
+gênero dos itens.
+• Calibração dupla, uma evolução da personalizada, empil-
+hando calibração por gênero seguida de popularidade.
+A Tabela 1 resume os resultados obtidos na base de dados Movie
+Lens 20M com as abordagens propostas neste trabalho. Cada abor-
+dagem tem vantagens específicas, compatíveis com as necessidades
+do sistema.
+A abordagem BPR modificado obteve altos valores para a métrica
+LTC, indicada para diversidade. Para precisão, a calibração dupla
+combinada com NMF é a melhor. Se o objetivo for justiça em popu-
+laridade e gêneros, a calibração dupla com NMF também é recomen-
+dada. Para reduzir o viés de popularidade em diferentes grupos, a
+calibração personalizada combinada com NMF é mais eficaz.
+AGRADECIMENTOS
+Os autores agradecem CAPES, CNPq e FAPESP pelo apoio finan-
+ceiro.

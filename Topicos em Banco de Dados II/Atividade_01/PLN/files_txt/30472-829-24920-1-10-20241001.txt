@@ -1,0 +1,419 @@
+A social curiosity-driven approach to analyzing the information
+dissemination in Telegram political groups
+Francisco F. Vasconcelos
+francisco.vasconcelos@aluno.ufop.edu.br
+Universidade Federal de Ouro Preto
+Alexandre M. de Sousa
+alexandre.sousa@ufop.edu.br
+Universidade Federal de Ouro Preto
+Jussara M. Almeida
+jussara@dcc.ufmg.br
+Universidade Federal de Minas Gerais
+2022. Para isso, este trabalho pretende responder
+questões de pesquisa (QP) definidas a seguir:
+– QP1: Como o compartilhamento de mensagens em grupos do Telegram pode
+ser caracterizado pelo estímulo de curiosidade social?
+– QP2: Como o comportamento dos usuários em grupos do Telegram pode ser
+caracterizado pelo estímulo de curiosidade social?
+CTIC’2024, Juiz de Fora/MG, Brazil
+Vasconcelos et al.
+– QP3: Como o comportamento agregado dos grupos do Telegram pode ser
+caracterizado pelo estímulo de curiosidade social?
+– QP4: Como a dinâmica do estímulo de curiosidade social dos grupos do
+Telegram em relação aos conteúdos compartilhados evolui ao longo do tempo?
+Para responder a essas questões de pesquisa, serão aplicadas a
+metodologia e o modelo de curiosidade social proposto por Sousa
+et al. [9]. Dessa forma, este trabalho traz uma nova contribuição
+para a literatura ao ser o primeiro estudo a aplicar o modelo de
+curiosidade na modelagem do comportamento do usuário na análise
+de grupos políticos do Telegram. Vale ressaltar que o ano de ativi-
+dade desses grupos é marcado por diversas polêmicas envolvendo a
+disseminação de fake news, desinformação e coordenação de mani-
+festações sociais. Isso forma o ambiente ideal para a pesquisa sobre
+curiosidade em uma plataforma com número de membros ilimitado
+pois fornece uma nova perspectiva da disseminação de informação.
+COLEÇÃO DE DADOS E METODOLOGIA
+Este trabalho utiliza o modelo de curiosidade e a metodologia pro-
+posta por Sousa et al. [9] e Sousa et al. [8] para analisar o papel da
+curiosidade social no processo de disseminação de informação em
+grupos do Telegram. Para tanto, foi utilizada a coleção de dados
+do Telegram do trabalho de Venâncio et al. [11] que construiu um
+crawler que buscou links de grupos relacionados à política no Twit-
+ter/X e que, por meio da API Telethon2, coletou mensagens e dados
+de grupos do Telegram. Cada registro da coleção de dados conta
+com o texto da mensagem, o tipo de mídia (e.g., texto, URL, imagem
+ou vídeo), o tempo em que a mensagem foi compartilhada, um iden-
+tificador anônimo do usuário e a identificação do grupo. O período
+de análise considerado neste trabalho é de 1° de janeiro de 2022 a
+28 de fevereiro de 2023 e conta com 4.807.516 mensagens compar-
+tilhadas por 137.111 remetentes únicos em 282 grupos. Ressalta-se
+que canais não foram considerados para análise. A metodologia
+deste trabalho é dividida em 5 etapas conforme descrito a seguir.
+I) Definição das premissas do modelo de curiosidade: uma
+vez que o ambiente de análise é composto por um conjunto de
+mensagens compartilhadas em grupos do Telegram, este trabalho
+utiliza as mesmas premissas do modelo de curiosidade definidas no
+trabalho de Sousa et al. [9] para o WhatsApp, principalmente pelo
+uso de recursos em comum existentes nas duas plataformas. Dessa
+forma, as ações do usuário de interesse são o compartilhamento de
+mensagens de diferentes tipos de mídias (e.g., texto, URL, imagem
+e vídeo) as quais formam o histórico de eventos de ação do usuário.
+As premissas a serem consideradas são definidas a seguir:
+(1) A curiosidade do usuário pode ser estimulada de diferentes formas
+dependendo dos recursos da plataforma e do tipo de ação do usuário.
+(2) A forma com que um usuário reage a um estímulo de curiosidade
+muda no decorrer do tempo.
+(3) A curiosidade do usuário tem um período de ativação que é definido
+de acordo com o intervalo de tempo que precede à sua ação de com-
+partilhamento, que é chamado de janela de interação, durante a qual
+as ações dos membros do grupo podem provocar sua curiosidade.
+(4) A curiosidade social de um indivíduo varia dependendo das pessoas
+com quem ele interage em um grupo particular.
+(5) A curiosidade social é estimulada por outros usuários que compar-
+tilham mensagens durante a janela de interação.
+(6) A curiosidade social pode ser estimada pelo histórico da frequência
+das interações entre os usuários dentro de cada janela de interação.
+2https://docs.telethon.dev/en/stable/
+Para o cálculo das métricas, são considerados somente usuários
+com no mínimo 30 mensagens e uma janela de interação de 30
+minutos com pelo menos 10 mensagens. Após esse filtro, restaram
+277 grupos e 3.026.345 mensagens de 10.277 usuários únicos.
+II) Definição das métricas de curiosidade: neste trabalho são uti-
+lizadas quatro métricas de curiosidade social propostas no trabalho
+de Sousa et al. [9], as quais são derivadas de métricas da teoria da
+informação e capturam aspectos do estímulo de curiosidade no com-
+partilhamento de mensagens em nível individual: (𝑎) curiosidade
+social direta máxima; (𝑏) curiosidade social direta média; (𝑐) curiosi-
+dade social indireta máxima; e (𝑑) curiosidade social indireta média.
+Ainda, para análise em nível agregado (comportamento coletivo),
+são utilizadas métricas de grupo tais como entropia, que representa
+a incerteza em termos da quantidade de informação disponível no
+grupo, e informação mútua, que denota a redução da incerteza em
+função da existência da curiosidade social no grupo. Além disso, são
+calculadas métricas de curiosidade referentes às variáveis colativas
+tradicionais, a saber, novidade, incerteza e conflito para o tipo de
+mídia e para os usuários que compartilharam mensagens dentro da
+janela de interação. E, por fim, a métrica de complexidade do tipo de
+mídia. Estas 7 métricas são utilizadas para mostrar até que ponto as
+métricas de curiosidade social capturam aspectos que não são cap-
+turados pelas variáveis colativas. Todas as métricas são calculadas
+para cada mensagem compartilhada por um usuário em um grupo.
+III) Processo de seleção das métricas de curiosidade: esta etapa
+é realizada com o objetivo de identificar quais métricas capturam as-
+pectos complementares do estímulo de curiosidade, principalmente
+para evitar possíveis problemas de multicolinearidade. Para esse fim,
+foram calculados os coeficientes de correlação de Spearman para
+cada par de métricas de cada usuário (11 variáveis resultam em 55
+coeficientes). Em seguida, verifica-se qual é o percentual de usuários
+que possuem coeficientes de correlação no intervalo (−1, −0.5) e
+(+0.5, +1.0), considerados como correlação moderada/alta. Então, o
+par de métricas que possui mais de 70% dos casos (usuários) com
+correlação moderada/alta é considerado como redundante e, do par,
+é selecionada apenas uma. Assim, apenas as métricas consideradas
+complementares são selecionadas para análise.
+IV) Caracterização da curiosidade social: a caracterização dos
+estímulos de curiosidade social foi dividida nos três passos a seguir.
+(A) Caracterização de mensagens: utiliza apenas as métricas de cu-
+riosidade social em nível individual selecionadas na etapa III e
+visa identificar perfis de mensagens por meio da clusterização de
+mais de 3 milhões de mensagens utilizando o algoritmo Mini-batch
+K-means e o número ideal de clusters é selecionado pelo maior
+índice de Silhouette. (B) Caracterização do perfil dos usuários: a
+partir dos perfis de mensagens obtidos, cada usuário é representado
+por meio de um User Behavorial Model Graph (UBMG). Um UBMG é
+um grafo onde cada nó representa um perfil de mensagem (estado)
+e as arestas representam as transições entre os perfis de mensagens
+de um usuário. O peso de cada aresta é dado pela probabilidade de
+transição entre os perfis de mensagens. Um mesmo usuário pode
+ser representado por um UBMG diferente para cada grupo em que
+participa. Visando identificar perfis de usuários distintos, os 10
+mil UBMGs dos usuários são agrupados por meio do algoritmo
+Mini-batch K-means e o número ideal de clusters é selecionado pelo
+maior índice de Silhouette. (C) Caracterização do comportamento
+coletivo: visando identificar diferentes clusters relacionados aos 277
+CTIC’2024, Juiz de Fora/MG, Brazil
+ 
+ 
+
+90%
+65%
+79.7%
+3.3%
+6.6%
+22%
+13%
+16.8%
+3.5%
+(a) U0: 2.230 usuários (332 msgs/user).
+ 
+ 
+
+86%
+75%
+75%
+6.6%
+7.3%
+12.7%
+12.3%
+16%
+9%
+(d) U1: 4.319 usuários (423 msgs/user).
+ 
+ 
+
+97.5%
+51.0%
+59.4%
+1.6%
+48.8%
+21.1%
+19.5%
+(b) U2: 3.234 usuários (86 msgs/user).
+ 
+ 
+
+92.7%
+42.3%
+20%
+2.6%
+4.7%
+52.2%
+5.5%
+78%
+2%
+(c) U3: 1.912 usuários (96 msgs/user).
+Figure 1: Centroides relativos aos perfis de usuários
+grupos do Telegram, o algoritmo K-means é utilizado. Para isso, os
+grupos são representados pelas 2 métricas de curiosidade de grupos
+em nível agregado, entropia e informação mútua, e pelo número
+total de membros. Por fim, o número ideal de clusters é selecionado
+pelo maior índice de Silhouette.
+V) Análise de tópicos e do impacto da curiosidade social na
+disseminação de informação: a análise de tópicos é realizada a
+partir do conteúdo das mensagens de texto compartilhadas para que
+elas possam ser rotuladas por assunto, o que facilita a identificação
+do conteúdo das mensagens durante as conversas nos grupos. Para
+isso, é utilizada a ferramenta Bertopic [2] que faz uso de modelos
+pré-treinados disponibilizados na plataforma Hugging Face 3 e o
+modelo utilizado é o Bertimbau [10]. Os resultados dos tópicos per-
+mitem identificar quais assuntos foram discutidos nos grupos ao
+longo do tempo. Dessa forma, assuntos abordados durante a ocor-
+rência de eventos importantes (eleições ou manifestações) podem
+ser relacionados com o impacto da curiosidade social no grupo.
+RESULTADOS
+Nesta seção são descritos os resultados para cada etapa da metodolo-
+gia que ajudam a responder a cada uma das questões de pesquisa
+conforme a seguir. Os resultados da Etapa III da metodologia
+mostram que, para mais de 84% dos casos as métricas de curiosi-
+dade social são complementares às métricas das variáveis colativas
+tradicionais (i.e., capturam aspectos relevantes). Para as métricas de
+curiosidade social, são selecionadas as métricas curiosidade social
+direta máxima e curiosidade social indireta máxima e média (são
+complementares para mais de 59% dos casos). Essas métricas são
+então utilizadas na Etapa IV (A) para clusterização das mensagens,
+na qual foram identificados os perfis de mensagens (1) Dependente,
+com 53% das mensagens (msgs), onde a métrica de curiosidade social
+direta domina; (2) Independente em que as métricas de curiosidade
+social são menores (20% das msgs); e (3) Indireto no qual as métricas
+de curiosidade social indiretas dominam (27% das msgs).
+A análise da Etapa IV (B) foi realizada por meio da clusterização
+dos UBMGs construídos com os perfis de mensagens obtidos na
+Etapa IV (A). Dessa forma, foram encontrados 4 perfis de usuários
+cujos centroides são apresentados na Figura 1. No geral, nota-se
+que os perfis dos usuários têm uma tendência maior de permanecer
+no estado Dependente (perfil de mensagens) bem como de tran-
+sitarem dos estados Indireto e Independente para Dependente. Há um
+destaque para o UBMG 𝑈2 que não tem transições para o estado In-
+direto e possui maior probabilidade de transição para Independente.
+3https://huggingface.co/
+Informação mútua de grupo
+Entropia de grupo
+G0
+G1
+G2
+G3
+(a) Clusters de grupos.
+(a) Tópico 1.
+(b) Tópico 2.
+(c) Tópico 3.
+(d) Tópico 4.
+(b) Wordclouds dos Top 4 tópicos.
+Figure 2: Resultados das Etapas IV(C) e V.
+Na Etapa IV (C), a clusterização de grupos do Telegram resultou
+em 4 clusters ilustrados na Figura 2a por diferentes cores. Nessa
+figura, cada grupo é um ponto em que o eixo 𝑥representa a in-
+formação mútua e o eixo 𝑦denota a entropia. Ainda, o impacto da
+curiosidade social na entropia dos grupos é calculado pela razão
+entre a informação mútua e a entropia. Essa razão possui valores
+entre 0 e 1 e, quanto mais próximo de 1, maior é o impacto da curiosi-
+dade social para o grupo. A linha vermelha na diagonal da Figura
+2a mostra quando essa razão é igual à 1. Dessa forma, os clusters
+𝐺2 (18% dos grupos) e 𝐺3 (34% dos grupos) estão mais próximos
+dessa linha vermelha na figura e são os que têm o maior impacto
+da curiosidade social. Para os clusters 𝐺0 (12% dos grupos) e 𝐺1
+(36% dos grupos) a curiosidade social representa um papel menos
+importante na disseminação de informação.
+Na análise de tópicos da Etapa V, foram identificados 536 tópicos
+das mensagens de texto. Após a remoção e filtragem de tópicos
+irrelevantes (saudações, reações ou onomatopeias), foram identi-
+ficados 37 tópicos que tratam de assuntos importantes e cobrem
+30% de todas as mensagens. A Figura 2b apresenta as wordclouds
+dos Top 4 tópicos mais frequentes nas conversas (41% dos tópicos).
+Nessa figura, os assuntos abordados são referentes à vacinação
+e pandemia da COVID-19 (tópico 1), questões religiosas (tópico
+2), processo democrático e urnas eletrônicas (tópico 3), e, por fim,
+forças armadas e intervenção militar (tópico 4).
+Ainda, para ilustrar os resultados Etapa V, foram selecionados
+2 grupos que pertencem a clusters de grupos diferentes e que pos-
+suem atividade de compartilhamento de mensagens significativa
+no período de análise. Os grupos são: (a) “Pátria News” do cluster
+𝐺0 com 1.804 usuários e 24.382 mensagens e impacto de curiosi-
+dade social de 53%; (b) “Grupo Controle Brasil REVELATION 13
+WWWIII” do cluster 𝐺1 com 34% de impacto de curiosidade social,
+460 usuários e 10.704 mensagens. A Figura 3 apresenta as séries
+temporais para as métricas de grupo e para o percentual do impacto
+da curiosidade social para os 2 grupos de exemplo. Nessa figura, é
+possível observar uma queda nas atividades no grupo “Controle
+Brasil” em abril de 2022, a qual pode ser relacionado a um bloqueio
+de grupos de Telegram ordenado pelo STF em março4, seguido por
+um bloqueio no dia 19 de abril5. O mesmo aconteceu no grupo
+“Pátria News” em fevereiro de 2023, possivelmente por causa das
+manifestações do dia 8 de janeiro de 2023 em Brasília6.
+4http://glo.bo/4aNLpPs
+5https://bit.ly/3VpWGBm
+6https://bit.ly/3yKDMvY
+CTIC’2024, Juiz de Fora/MG, Brazil
+Vasconcelos et al.
+1/2022
+2/2022
+3/2022
+4/2022
+5/2022
+6/2022
+7/2022
+8/2022
+9/2022
+10/2022
+11/2022
+12/2022
+1/2023
+2/2023
+Bits
+Informação mútua de grupo
+Entropia de grupo
+(a) Pátria News.
+1/2022
+2/2022
+3/2022
+4/2022
+5/2022
+6/2022
+7/2022
+8/2022
+9/2022
+10/2022
+11/2022
+12/2022
+1/2023
+2/2023
+Bits
+Informação mútua de grupo
+Entropia de grupo
+(b) Controle Brasil REV. 13 WWIII.
+1/2022
+2/2022
+3/2022
+4/2022
+5/2022
+6/2022
+7/2022
+8/2022
+9/2022
+10/2022
+11/2022
+12/2022
+1/2023
+2/2023
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+Impacto da curiosidade social
+Pátria News
+Grupo Controle Brasil
+(c) Impacto da curiosidade social.
+Figure 3: Evolução da dinâmica da curiosidade social nos grupos de exemplo.
+Também é possível observar uma relação entre o aumento de
+atividade das conversas dos tópicos com as métricas de curiosidade
+ao longo dos meses. As Figuras 4a e 4b apresentam uma heatmap
+em que a coluna representa o mês e as linhas representam os Top
+10 tópicos mais frequentes. Esse heatmap mostra para qual mês
+o compartilhamento de mensagens de um determinado tópico au-
+menta no decorrer do ano. Para o grupo da Fig. 4a, o tópico 6 sobre
+família domina as conversas até 09/23. Já, para o grupo da Fig. 4b,
+o tópico 1 foi dominante em quase o ano todo, exceto em 09/22 e
+10/22. É possível notar que os tópicos de 1 a 4 (wordclouds da Fig.
+2b) tiveram um aumento de atividade em 10/22 até 02/23, período
+durante e depois das eleições presidenciais. Esses tópicos se ref-
+erem a questões religiosas, questionamentos do processo eleitoral
+e incitações à intervenção militar. A Fig. 3c mostra um aumento
+constante do impacto de curiosidade social para os 2 grupos após o
+2º turno das eleições (10/22) até jan/fev de 2023, mesmo período em
+que houve aumento de atividade dos tópicos de 1 a 4 (Fig. 4a e 4b).
+1/2022
+2/2022
+3/2022
+4/2022
+5/2022
+6/2022
+7/2022
+8/2022
+9/2022
+10/2022
+11/2022
+12/2022
+1/2023
+2/2023
+Id do tópico
+# messagens(normalizado)
+(a) Pátria News.
+1/2022
+2/2022
+3/2022
+4/2022
+5/2022
+6/2022
+7/2022
+8/2022
+9/2022
+10/2022
+11/2022
+12/2022
+1/2023
+2/2023
+Id do tópico
+# messagens(normalizado)
+(b) Controle Brasil REV.13 WWWIII.
+Figure 4: Top 10 tópicos mais abordados por mês.
+DISCUSSÃO E CONSIDERAÇÕES FINAIS
+Este trabalho apresentou uma análise da curiosidade social a partir
+de uma coleção de dados do Telegram, referente a um período de
+turbulência no cenário político e social no Brasil. Os resultados
+mostram como a curiosidade social está relacionada ao conteúdo
+da informação disseminada nos grupos do Telegram. Por meio da
+clusterização das mensagens, foi possível responder a QP1 onde 3
+perfis de estímulo de curiosidade de mensagens foram encontrados.
+Ainda, por meio desses perfis de estímulo, UBMGs dos usuários
+foram construídos e sua clusterização possibilitou encontrar 4 perfis
+de usuários distintos (QP2). A QP3 também foi respondida através
+da clusterização dos grupos. A utilização das métricas em nível
+agregado de entropia, informação mútua e impacto de curiosidade so-
+cial permitiram a caracterização do comportamento dos grupos em
+termos de curiosidade social. Finalmente, a análise de tópicos junto às métricas de curiosidade social dos grupos permitiram responder a QP4. Dessa forma, foi possível constatar que certos assuntos apelativos abordados nas conversas dos grupos apresentam uma relação direta com o impacto da curiosidade social durante o período de análise. Para esses assuntos foi observada uma variação do impacto da curiosidade no momento em que eles sofreram um aumento de atividade no compartilhamento de mensagens.
+Os resultados deste trabalho permitem uma comparação direta
+com os resultados da análise do WhatsApp de Sousa et al. [9]. Além
+disso, este trabalho abre caminho para diversas possibilidades de
+novos trabalhos futuros na literatura com modelos de curiosidade
+em outros tipos de plataformas de mídias sociais online.

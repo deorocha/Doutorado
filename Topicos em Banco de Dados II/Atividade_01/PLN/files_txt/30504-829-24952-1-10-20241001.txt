@@ -1,0 +1,441 @@
+Avaliação da Experiência do Telespectador na Transição para a TV
+Orientada a Aplicativos
+Li-Chang Shuen
+li.chang@ufma.br
+Universidade Federal do Maranhão
+Carlos de Salles Soares Neto
+carlos.salles@ufma.br
+Universidade Federal do Maranhão
+Marcelo Ferreira Moreno
+marcelo@ice.ufjf.br
+Universidade Federal de Juiz de Fora
+Zefinha Bentivi
+zefinha.bentivi@ufma.br
+Universidade Federal do Maranhão
+João Victor Cruz Gonçalves
+jvc.goncalves@discente.ufma.br
+Universidade Federal do Maranhão
+Iago Victor Silva Costa
+iago.vsc@discente.ufma.br
+Universidade Federal do Maranhão
+2007. A tecnologia brasileira foi reconhecida inter-
+nacionalmente pela ITU-T em 2009 [4] [7] e hoje é adotada em 18
+países. O Ginga continua a ser um componente de referência no
+desenvolvimento da TV 3.0, possibilitando a integração de novas
+funcionalidades. A pesquisa e o desenvolvimento dessa nova gera-
+ção de TV digital envolvem uma colaboração entre universidades, o
+governo e o setor privado, destacando a importância de um esforço
+conjunto para avançar as capacidades tecnológicas e para a manu-
+tenção da posição de vanguarda do Brasil no desenvolvimento da
+televisão digital terrestre.
+Este position paper traz, além da introdução e das considerações
+finais, uma seção de materiais e métodos que descreve a meto-
+dologia empregada; a seção de resultados apresenta os principais
+achados, destacando tanto a recepção positiva quanto dificulda-
+des encontradas por diferentes grupos, com ênfase nas populações
+vulneráveis; a discussão analisa as implicações desses resultados, su-
+gerindo intervenções de políticas públicas necessárias para garantir
+uma transição inclusiva.
+MATERIAIS E MÉTODOS
+Foram realizadas quatro sessões de grupo focal e oito sessões de
+avaliação individual de um protótipo que replica a jornada espe-
+rada para o telespectador da TV 3.0 como plataforma orientada
+a aplicativos. As três primeiras sessões coletivas e as avaliações
+individuais foram feitas com o grupo inicialmente selecionado para
+a fase de levantamento de requisitos, com encontros no laboratório
+TeleMídia da Universidade Federal do Maranhão. A quarta sessão
+de grupo focal foi realizada em uma comunidade remanescente de
+quilombo, a partir da necessidade de empreender um estudo quali-
+tativo baseado nos dados obtidos com a pesquisa de opinião pública,
+que apontou a parcela da população com maior vulnerabilidade
+tecnológica e consequente dificuldade para adoção do novo para-
+digma de TV aberta: pessoas idosas, de baixa escolaridade, menor
+renda e menor índice de televisores conectados. A metodologia com
+grupos focais ensejou a necessidade de submissão do projeto de
+pesquisa à avaliação do comitê de ética da Universidade Federal
+de Juiz de Fora, por meio da Plataforma Brasil, registrada sob o
+número 77032223.7.1001.5147.
+O objetivo da realização de grupos focais foi tanto fornecer sub-
+sídios para o desenvolvimento do protótipo de aplicação da nova
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Shuen et al.
+jornada do telespectador quanto avaliar a recepção e a compreen-
+são dos telespectadores sobre a mudança de paradigma para a TV
+orientada a aplicativos. A pesquisa teve dois tipos de grupo: o grupo
+1, formado por pessoas residentes em São Luís, recrutadas a partir
+da definição de perfis de telespectadores, com idades entre 15 e 73
+anos; e o grupo 2, formado por pessoas idosas residentes em uma
+comunidade quilombola de município distante 22 km da capital,
+recrutadas a partir da necessidade de avaliação qualitativa de um
+conjunto de dados obtidos em pesquisa quantitativa. Neste processo,
+foram realizadas três sessões de grupo e oito sessões individuais
+com os integrantes do grupo 1 e uma sessão com o grupo 2.
+O grupo 1 foi composto por oito perfis de telespectadores, defi-
+nidos de acordo com experiências de consumo tanto de conteúdo
+quanto de tecnologia. São quatro pessoas do sexo feminino e quatro
+do sexo masculino, com idades que variam dos 15 aos 78 anos. As
+experiências de consumo de televisão incluem aqueles que assistem
+e têm acesso somente à TV aberta, sem consumo de streaming até
+pessoas que apenas consomem streaming. Entre os participantes, há
+um profissional de Rádio e TV, uma pessoa com deficiência visual
+(baixa visão), além de estudantes, profissionais da educação e de
+serviços gerais e um aposentado, representando variados níveis de
+escolaridade e de renda.
+Primeira sessão, grupo 1. O grupo focal avaliou a usabilidade e a
+experiência da TV aberta como ela se apresenta hoje nos aparelhos
+padrão do mercado. As pessoas responderam a questões qualitativas
+sobre como elas se relacionam com o conteúdo e a forma de acesso
+a esse conteúdo na televisão e sobre modificações que imaginam
+que melhorariam a experiência do telespectador. Os requisitos le-
+vantados, durante a discussão, foram encaminhados para a equipe
+de P&D e considerados para a implementação do protótipo da nova
+jornada do telespectador da televisão orientada a aplicativos.
+Segunda sessão, grupo 1. O grupo avaliou a primeira versão do
+protótipo, respondendo a questões comparativas entre a experiência
+que eles têm hoje e a experiência que o protótipo proporcionou.
+Ajustes foram apontados e encaminhados para a equipe de P&D.
+Terceira sessão, grupo 1. Após os ajustes feitos pela equipe de
+desenvolvimento, a partir das avaliações e recomendações da sessão
+2, os participantes do grupo focal repetiram a dinâmica da sessão
+anterior, agora avaliando uma versão mais avançada do protótipo.
+Avaliações individuais. Após novos ajustes, os integrantes do
+grupo focal foram convidados para sessões individuais de avaliação
+da nova jornada do telespectador e puderam usar, eles mesmos, o
+controle remoto, simulando todos os passos, desde a conexão do
+televisor à tomada, até o consumo efetivo de conteúdo, com zapea-
+mento de canais e escolha de programas nos aplicativos iniciais e
+secundários disponíveis no protótipo.
+Sessão única, grupo 2. O grupo 2 foi formado por sete idosos,
+seis homens e uma mulher, com idades entre 54 e 75 anos, todos
+residentes em uma agrovila situada em território étnico-quilombola.
+Os homens têm idades entre 54, 55, 62, 69, 73 e 75 anos. A mulher
+tem 72 anos. Seis dos participantes têm renda de até 2 salários
+mínimos e um declarou renda de até 4 salários mínimos. Todos
+assistem à televisão diariamente, sem acesso a serviços de streaming
+pelo televisor. Quatro declararam acessar conteúdo de streaming
+por celular quando conectados a redes disponíveis na comunidade.
+Apenas um idoso possui nível superior de escolaridade. Os demais
+informaram serem alfabetizados com escolaridades que variam
+entre ensino fundamental incompleto a ensino médio completo.
+Pesquisa quantitativa. A pesquisa de opinião pública foi aplicada,
+de forma presencial, durante sete semanas na região metropolitana
+de São Luís/MA, composta por quatro municípios e totalizando
+1.442.952 habitantes. Para esta população, a amostra calculada foi de
+385 questionários, com margem de erro de 5% e índice de confiança
+de 95%, aplicados ponderadamente da seguinte forma: São Luís:
+1,109 milhão de habitantes, 295 questionários; São José de Ribamar:
+179,028 mil habitantes, 48 questionários; Paço do Lumiar: 123,747
+mil habitantes, 33 questionários; Raposa: 31,177 mil habitantes, 9
+questionários. Os resultados foram organizados em dashboards no
+software Microsoft Power BI1 e estão disponíveis em sua totalidade
+no link http://tinyurl.com/TVDI30.
+Protótipo. O protótipo da nova jornada do telespectador da TV
+orientada a aplicativos foi criado utilizando HTML5, executado
+tanto em um hardware Raspberry Pi 4 modelo B quanto em um
+notebook com sistema operacional Windows 11 padrão de mercado,
+incorporando metodologias de design centrado no usuário e de-
+sign thinking, com várias iterações de prototipagem e refinamento
+baseadas em feedbacks quali e quantitativos.
+A TELEVISÃO DE PRÓXIMA GERAÇÃO E O
+TELESPECTADOR MÉDIO
+A proposta de nova jornada do telespectador de TV aberta orientada
+a aplicativos é composta por várias etapas, com objetivo de tornar a
+experiência de consumo audiovisual mais acessível e personalizada.
+Ao ligar a smart TV pela primeira vez, o telespectador seleciona
+um idioma de configuração e define opções de acessibilidade, como
+audiodescrição e tradução para linguagem de sinais. Em seguida,
+há a opção de criar um perfil pessoal ou de grupo, configurando
+controles parentais e preferências de acessibilidade. A criação do
+perfil permite a integração de dados pessoais, utilizados pelos apli-
+cativos das emissoras para fornecer uma experiência personalizada
+(Figura 1).
+Figura 1: Criação de perfis.
+Após a configuração inicial, a TV realiza uma varredura dos
+sinais das emissoras disponíveis e instala, automaticamente, os
+aplicativos iniciais para cada emissora identificada (Figura 2). Esse
+1https://www.microsoft.com/pt-br/power-platform/products/power-bi
+Avaliação da Experiência do Telespectador na Transição para a TV Orientada a Aplicativos
+WTVDI’2024, Juiz de Fora/MG, Brazil
+processo assegura que todas as emissoras de TV aberta estejam
+acessíveis, organizadas por ícones em vez de números de canais
+e permite a personalização da ordem de preferência em que cada
+aplicativo aparecerá para o telespectador (essa personalização será
+refletida na ordem de zapeamento).
+Figura 2: Varredura de sinais.
+No catálogo de apps de TV aberta, o telespectador navega por
+um ambiente dedicado às emissoras de TV aberta, podendo selecio-
+nar os aplicativos iniciais das emissoras para acessar o conteúdo
+disponível, seja via transmissão over-the-air (OTA) ou over-the-top
+(OTT), dependendo da conectividade do aparelho e da disponibiliza-
+ção, por parte dos radiodifusores, de conteúdos adicionais em seus
+aplicativos secundários. A integração broadcast-broadband permite
+o acesso a uma variedade de conteúdo, garante a transparência da
+origem desse conteúdo e amplia as possibilidades de interação e
+personalização da experiência de assistir à TV (Figura 3).
+Figura 3: Catálogo de Aplicativos de TV aberta.
+A realização dos grupos focais forneceu uma base qualitativa
+para identificar e categorizar os principais critérios de avaliação do
+protótipo da nova jornada do telespectador da TV aberta orientada
+a aplicativos. Com base nas sessões coletivas e individuais, foram
+definidos quatro critérios principais: usabilidade, acessibilidade,
+personalização e integração de tecnologia.
+A usabilidade foi o critério mais discutido, destacando-se a im-
+portância de uma navegação fácil e intuitiva pelos menus e opções
+da TV. Os participantes apontaram a clareza e a organização do
+menu como fatores cruciais para uma boa experiência do telespec-
+tador. Enfatizaram, também, a necessidade de o uso do controle
+remoto ser fácil, com uma preferência clara pelo modelo tradicional
+com teclas numéricas, que proporciona uma navegação mais rápida
+e inclusiva pela presença de teclas com marcações táteis.
+Já a acessibilidade emergiu como um critério fundamental, especi-
+almente após as sessões que incluíram participantes com deficiência
+visual. A presença de audiodescrição e tradução em língua de sinais
+foi valorizada mesmo pelos telespectadores que não necessitam
+delas, assim como a inclusão de marcadores táteis no controle re-
+moto para auxiliar na navegação. O contraste e o tamanho da fonte
+também foram destacados como elementos que merecem atenção
+para garantir que a interface seja legível e utilizável por todos os
+telespectadores, independentemente de suas limitações visuais ou
+tamanho de suas telas.
+A possibilidade de personalização foi vista como um avanço
+desejável, permitindo que cada telespectador configure a TV de
+acordo com suas preferências individuais. A configuração de perfis
+personalizados foi bem recebida, especialmente pela capacidade de
+adaptar a interface e o conteúdo às necessidades específicas de cada
+telespectador. Embora a identificação das emissoras por ícones, em
+vez de números, tenha gerado estranhamento e muito debate, foi
+aceita como uma mudança positiva que pode melhorar a navegação
+com o tempo.
+Outro eixo de discussão é a integração de tecnologia, com ên-
+fase na conectividade e na facilidade de uso da internet pela TV.
+A possibilidade de usar dispositivos móveis como segunda tela e
+como controle remoto foi vista como uma funcionalidade desejada,
+embora tenha sido ressaltada a necessidade de incluir recursos de
+acessibilidade, como comandos por voz. Além disso, funcionali-
+dades adicionais, como acesso a serviços governamentais, foram
+mencionadas como desejáveis, evidenciando a TV como um portal
+para oferta de serviços além do entretenimento.
+A Tabela 1 a seguir sintetiza a avaliação qualitativa.
+Tabela 1: Síntese da Avaliação Qualitativa
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Shuen et al.
+Após a fase de prototipação e avaliação qualitativa com grupos
+focais de telespectadores, tornou-se necessário ampliar o escopo da
+avaliação para entender melhor a aceitação e os desafios da nova
+tecnologia em um público mais amplo. A fase seguinte envolveu a
+apresentação do conceito de TV orientada a aplicativos para uma
+amostra aleatória da população que iria ter contato pela primeira
+vez com as novas interfaces fora de um ambiente controlado de la-
+boratório. Essa etapa contribuiu para avaliar como diferentes perfis
+de telespectadores, especialmente aqueles com menor familiaridade
+tecnológica, reagiriam à nova proposta em seus próprios contextos
+de consumo diário da televisão aberta.
+Apesar do crescimento das plataformas de streaming e outras
+formas de entretenimento personalizado, a TV aberta ainda mantém
+uma forte relação com o público. Entre os entrevistados em nosso
+levantamento, 89,35% relataram consumir conteúdo da TV aberta,
+e destes, 26,75% assistem a ela diariamente. A adesão é maior entre
+aqueles com menor renda e escolaridade (ensino fundamental e
+renda de até um salário mínimo), faixa em que 100% da amostra
+consome TV aberta e 56,25% assistem, diariamente.
+Um dos aspectos mais característicos da televisão aberta é a
+grade linear de programação. Este formato posiciona o telespecta-
+dor como um receptor passivo, que espera o horário determinado
+de seu programa de interesse, funcionando como um marcador cul-
+tural de tempo, organizando o dia a dia das pessoas de acordo com
+os horários dos programas e eventos transmitidos. A grade passou
+a ter um caráter nacional a partir da criação da Empresa Brasileira
+de Telecomunicações (Embratel) em 1969, quando foi possível esta-
+belecer uma infraestrutura que permitiu a transmissão simultânea
+de conteúdo para todo o país, solidificando a importância cultural,
+social e política da grade de programação [1].
+A pesquisa indica que a grade ainda é valorizada: 51,17% dos
+entrevistados afirmaram que horários fixos são uma característica
+positiva. Entre os entrevistados de menor escolaridade e renda, o
+percentual sobe para 81,25%.
+Outro elemento enraizado na prática de consumo televisivo bra-
+sileiro é a identificação numérica dos canais. Mesmo quando apre-
+sentados a uma interface estilo catálogo com ícones das emissoras,
+30,39% dos entrevistados relataram sentir falta dos números dos
+canais na tela. Esse sentimento é ainda mais forte entre aqueles com
+renda de até três salários mínimos e ensino fundamental: 58,33%
+afirmaram sentir falta dessa informação, apesar de conseguirem
+identificar suas emissoras favoritas pelos ícones.
+Os dados quantitativos obtidos na pesquisa de opinião pública in-
+dicaram que a população com menor escolaridade, renda mais baixa,
+menor acesso a televisores conectados e de idade mais avançada
+demonstrou um maior apego à grade linear de programação e à
+identificação numérica dos canais. Esses achados sugerem que essa
+faixa da população pode enfrentar dificuldades na compreensão e
+adoção do conceito de TV orientada a aplicativos. Neste sentido,
+a equipe de P&D expandiu a avaliação qualitativa para um novo
+grupo focal, entendendo que possíveis resistências à mudança de
+paradigma na TV aberta não é apenas uma questão de preferência
+ou de hábitos culturais arraigados, mas também de vulnerabilidade
+técnico-informacional, expressa pela exclusão digital. A avaliação
+qualitativa com uma amostra dessa população específica comple-
+menta os dados quantitativos para identificar os pontos de fricção e
+as barreiras que podem dificultar a adoção da televisão de próxima
+geração.
+O TELESPECTADOR IDOSO E OS IMPACTOS
+DA VULNERABILIDADE
+TECNO-INFORMACIONAL
+A avaliação qualitativa conduzida com o grupo de idosos de baixa
+renda e escolaridade, sem acesso a televisores conectados à internet,
+revelou uma vulnerabilidade tecnológica significativa. Este grupo
+enfrenta desafios decorrentes de fatores culturais e socioeconô-
+micos, caracterizados como vulnerabilidade por exclusão ou baixo
+letramento digital. No contexto da exclusão digital [5][6][9][8][3], o
+projeto TV 3.0 possibilitou aos pesquisadores a definição da catego-
+ria vulnerabilidade tecno-informacional. Esta se refere à dificuldade
+no acesso, uso e compreensão das tecnologias da informação e
+comunicação (TICs). Esse fenômeno é influenciado por diversos
+fatores, como a falta de acesso a dispositivos, conexões de internet li-
+mitadas, baixo letramento digital e ausência de habilidades técnicas,
+com consequências sociais, políticas, culturais e econômicas.
+Semelhante à vulnerabilidade social, que se relaciona com a
+exposição a riscos e desvantagens sociais, a vulnerabilidade tecno-
+informacional tem implicações significativas para o exercício da
+cidadania. Indivíduos tecnologicamente vulneráveis encontram-se
+em desvantagem em termos de oportunidades, participação cívica,
+acesso a serviços públicos, educação e emprego, afetando a quali-
+dade de vida e o exercício da cidadania, podendo agravar a exclusão
+social, dada a crescente dependência das tecnologias na vida mo-
+derna [5][8].
+Este tipo de vulnerabilidade não pode ser desconsiderado na
+fase de prototipação de novas tecnologias. Fatores como idade,
+nível de escolaridade, renda e acesso a inovações influenciam a
+capacidade de adaptação [6][8]. Os idosos quilombolas são sujeitos
+a essa vulnerabilidade devido a barreiras materiais, motivacionais,
+de habilidades e de uso. Para entender a resposta dos telespectadores
+vulneráveis à proposta de TV orientada a aplicativos, esta etapa de
+avaliação qualitativa foi acrescentada à pesquisa a partir da análise
+dos dados quantitativos apurados no levantamento, que sugeriu
+maior dificuldade dessa parcela da amostra em compreender o
+conceito de televisão orientada a aplicativos e maior resistência em
+abandonar o paradigma de televisão orientada a canais, vigente há
+mais de sete décadas.
+A sessão foi realizada em uma agrovila distante 14 km da sede
+do município de Alcântara/MA que, por sua vez, está distante 22
+km da capital São Luís. Trata-se de uma comunidade remanescente
+de quilombo, deslocada durante o processo de desapropriação ter-
+ritorial das comunidades tradicionais que habitavam a área hoje
+ocupada pelo Centro de Lançamento de Alcântara. Não existe sinal
+de telefonia celular. Algumas casas possuem internet cabeada por
+fibra óptica. A comunidade é formada por 87 famílias, cerca de 250
+pessoas.
+Os participantes demonstraram interesse e disposição para ado-
+tar a nova tecnologia, desde que as interfaces sejam amigáveis e a
+transição não seja abrupta. A simplicidade e a clareza das interfaces
+apresentadas foram destacadas como fatores positivos para a ado-
+ção do novo paradigma. No entanto, a avaliação revelou que a falta
+de acesso a dispositivos adequados e à infraestrutura tecnológica
+Avaliação da Experiência do Telespectador na Transição para a TV Orientada a Aplicativos
+WTVDI’2024, Juiz de Fora/MG, Brazil
+necessária são barreiras que podem impactar negativamente a ex-
+periência desses telespectadores com a nova geração de TV aberta
+brasileira, além do letramento digital limitado dos indivíduos.
+O grupo não expressou desconfiança em relação à nova tecno-
+logia, mas preocupação com a complexidade das novas funciona-
+lidades. Os idosos insistiram, em todas as suas intervenções, na
+necessidade de interfaces intuitivas e de suporte técnico acessível
+para facilitar a transição para aplicativos, como o desenvolvimento
+de programas de letramento digital e a oferta de dispositivos a
+preços acessíveis para grupos economicamente vulneráveis.
+A avaliação da nova jornada do telespectador, das funcionalida-
+des do catálogo de apps de TV aberta e do acesso ao ambiente de
+aplicativos/canais das emissoras mostrou que os participantes apre-
+sentaram um entendimento variado da proposta, de razoável a bom.
+Eles aprovaram a disposição dos ícones das emissoras, compreen-
+deram e endossaram a necessidade de haver um ícone padronizado
+para acesso ao catálogo de TV aberta, mas demonstraram apego ao
+uso da expressão "canal"em vez de "aplicativo". A identificação das
+emissoras por seus logotipos, e não por números, causou estranha-
+mento para todos os participantes, que expressaram preferência
+pela inclusão dessa informação no catálogo de aplicativos. Quando
+questionados sobre a exclusão definitiva dos números, o grupo focal
+respondeu que o estranhamento seria inevitável, pois é arraigado
+o costume de se referir às emissoras pelos números, e não pelos
+nomes. A pesquisa de opinião já indicava essa preferência nessa
+parcela dos entrevistados, revelando que dois terços dos responden-
+tes de menor escolaridade e renda sentiram falta dos números dos
+canais.
+A proposta de utilizar cores diferenciadas nos botões do controle
+remoto (vermelho, verde, azul e amarelo) para interatividade foi bem
+recebida pelos participantes como um mecanismo de redução do
+sentimento de exclusão e dependência tecnológica. Eles acreditam
+que a associação de cores facilita a navegação, especialmente para
+aqueles com dificuldades visuais ou cognitivas. Os participantes
+ressaltaram que o uso das teclas pode promover a inclusão daqueles
+menos familiarizados com tecnologia, pois é simples associar uma
+cor a um comando sem esforço, sem leitura e de forma a não se
+perder o interesse no programa assistido. Eles desconheciam a
+existência de teclas coloridas virtuais, presentes em controles com
+proposta mais minimalista.
+Nenhum dos participantes tem experiência com uso de internet
+pela televisão e todos relataram dificuldades em usar a internet em
+celulares, com relatos de dependência de familiares, especialmente
+netos, para realizar tarefas online, expressando temerem repetir essa
+dependência em relação à TV aberta de próxima geração. Houve
+consenso de que a TV orientada a aplicativos pode servir como
+uma ferramenta para acessar conteúdos e serviços de forma mais
+intuitiva, desde que os comandos sejam simples, contribuindo para
+a redução da vulnerabilidade tecno-informacional de pessoas idosas.
+Houve manifestação de interesse em utilizar a TV para telemedicina
+e educação a distância, com a sugestão de criação de aplicativos que
+permitam consultas médicas e participação em cursos diretamente
+pela TV.
+Os participantes discutiram sobre como interagir com a TV e
+aplicativos, e como esses aspectos impactam a experiência do teles-
+pectador idoso. Destacaram, ainda, suas experiências individuais e
+preocupações com a usabilidade e funcionalidade da tecnologias,
+mostrando-se dispostos a aprender a usar novas tecnologias, es-
+pecialmente se houver suporte adequado e interfaces amigáveis.
+A facilidade de navegação, incluindo ícones grandes, comando de
+voz e opções de audiodescrição, foi apontada como essencial para
+melhorar a experiência de uso.
+Nenhum idoso expressou preocupação com o uso de dados pes-
+soais e houve o entendimento de que a sua coleta pode melhorar a
+oferta de conteúdo desejado. No entanto, a vulnerabilidade tecno-
+informacional emerge como uma variável crucial que pode afetar
+a adoção da TV orientada a aplicativos por parte desta parcela da
+população. A dependência de familiares para o uso de tecnologias
+digitais e a falta de intimidade com comandos digitais são barreiras
+que precisam ser endereçadas para garantir que a transição para
+o modelo de televisão digital de próxima geração seja inclusiva e
+acessível.
+CONSIDERAÇÕES FINAIS
+A avaliação da proposta de nova jornada do telespectador da TV
+orientada a aplicativos revelou diferenças e semelhanças sobre a
+experiência do telespectador médio e daqueles que sofrem de ex-
+clusão digital, exclusão dimensionada pela vulnerabilidade tecno-
+informacional. Embora os telespectadores tenham demonstrado
+interesse e aceitação pela nova tecnologia, a pesquisa evidenciou
+que populações vulneráveis enfrentam barreiras adicionais rela-
+cionadas à usabilidade, acessibilidade e familiaridade tecnológica.
+Essas descobertas sublinham a importância do desenvolvimento
+de interfaces intuitivas, com oferta de letramento digital adequado
+para garantir uma transição inclusiva, permitindo que todos os
+telespectadores se beneficiem plenamente das vantagens da TV
+digital de próxima geração.
+A pesquisa quantitativa mostrou que a familiaridade com a tec-
+nologia e o acesso a dispositivos conectados são fatores críticos
+para a aceitação e uso eficiente da nova TV aberta orientada a apli-
+cativos. Os dados indicaram que há uma lacuna significativa na
+adaptação tecnológica entre diferentes grupos socioeconômicos. Os
+grupos focais e as avaliações individuais revelaram que os telespec-
+tadores mais jovens e tecnologicamente proficientes adaptaram-se
+rapidamente ao novo formato, apreciando a personalização e a in-
+teratividade oferecidas pela proposta da TV orientada a aplicativos.
+Já os idosos e pessoas de baixa escolaridade apresentaram algumas
+dificuldades em compreender e utilizar as novas funcionalidades.
+Os resultados reforçam a necessidade de intervenções educacionais
+e tecnológicas para mitigar essas dificuldades, como a promoção
+contínua do letramento digital.
+AGRADECIMENTOS
+O projeto TV 3.0 é uma iniciativa do Fórum SBTVD, financiado
+pelo Ministério das Comunicações através da Rede Nacional de
+Ensino e Pesquisa (RNP). A Superintendência de Tecnologia da
+Informação da Universidade Federal do Maranhão forneceu suporte
+técnico e equipamentos necessários para o desenvolvimento e teste
+do protótipo em laboratório.

@@ -1,0 +1,397 @@
+Suporte a Alertas de Emergência na TV 3.0 Brasileira
+Richelieu R. A. Costa *
+richelieu.costa@lavid.ufpb.br
+Derzu Omaia *
+derzu@lavid.ufpb.br
+Tiago M. U. Araújo *
+tiagomaritan@lavid.ufpb.br
+Jóison O. Pereira *
+joison.pereira@lavid.ufpb.br
+Miguel P. S. Cruz *
+miguel.cruz@lavid.ufpb.br
+Matheus M. Barbosa *
+matheus.mendonca@lavid.ufpb.br
+Rafael Toscano *
+rafael.toscano@lavid.ufpb.br
+Guido L. S. Filho *
+guido@lavid.ufpb.br
+* Univ. Federal da Paraíba
+João Pessoa, PB, Brasil
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Costa et al.
+mensagens urgentes sejam recebidas, compreendidas e atendidas
+rapidamente.
+REFERENCIAL TEÓRICO
+Nesta seção são apresentados alguns dos conceitos teóricos que
+fundamentam o presente trabalho.
+2.1
+Coordenação de alertas de emergência no
+Brasil
+A Secretaria Nacional de Proteção e Defesa Civil (SEDEC) é um
+órgão central do Sistema Nacional de Proteção e Defesa Civil (SIN-
+PDEC), e faz parte da estrutura do Ministério da Integração e do
+Desenvolvimento Regional (MIDR). A SEDEC é responsável por
+coordenar as ações de proteção e defesa civil em todo o território na-
+cional. Sua atuação tem o objetivo de reduzir os riscos de desastres.
+Também compreende ações de prevenção, mitigação, preparação,
+resposta e recuperação, e se dá de forma multissetorial e nos três
+níveis de governo federal, estadual e municipal [6].
+O Centro Nacional de Gerenciamento de Riscos e Desastres (CE-
+NAD) é um departamento da SEDEC, e se dedica a elaboração de
+alertas e avisos de emergência, possibilitando à população tomar
+decisões antecipadas na possível ocorrência de desastres. A partir
+dessas informações, é possível adiantar-se aos eventos adversos,
+e tomar medidas de preparação. Quando o desastre acontece, é
+possível organizar e articular vários órgãos do governo federal no
+esforço conjunto e integrado para fazer frente ao desafio e atender
+as populações [6].
+O Centro Nacional de Monitoramento e Alerta de Desastres Nat-
+urais (CEMADEN) é um órgão vinculado ao Ministério da Ciência,
+Tecnologia, Inovações e Comunicações (MCTIC). Ele também real-
+iza o monitoramento e emite alertas de desastres naturais. O Órgão
+opera ininterruptamente em todo o território nacional, monitorando
+as áreas de risco de 1038 municípios classificados como vulneráveis
+a desastres naturais. Entre outras competências, envia os alertas de
+desastres naturais ao (CENAD), para que este o distribua. [8].
+Os alertas gerados, pelas entidades supracitadas, possuem in-
+formações detalhadas sobre o evento, entre elas estão o nível de
+prioridade do alerta, seu tipo, o título, a descrição, arquivos de
+mídias relacionadas (vídeos ou imagens), localização geográfica,
+entre diversos outros campos. O tipo do alerta deve obedecer a
+Codificação Brasileira de Desastres (COBRADE) e podem ser classi-
+ficados nas categorias Naturais ou Tecnológicos. Entre os Naturais,
+tem-se 5 possíveis grupos: Geológico, Hidrológico, Meteorológico,
+Climatológico, Biológico. Já entre os Tecnológicos tem outros 5
+grupos: Relacionados a Substâncias radioativas, Relacionados a Pro-
+dutos Perigosos, Relacionados a Incêndios Urbanos, Relacionados a
+obras civis, Relacionados a transporte de passageiros e cargas não
+perigosas [6].
+Essas informações são essenciais para a prevenção, preparação e
+mitigação dos desastres. Desta forma, deve ser propagado o mais
+rápido possível para os mais diversos sistemas e redes de alerta.
+Esse alerta geralmente é armazenado em formato de arquivo XML
+seguindo o Protocolo de Alerta Comum (CAP).
+2.2
+Protocolo de Alerta Comum (CAP)
+O Protocolo de Alerta Comum (Common Alert Protocol - CAP) [5] é
+um padrão internacional normatizado pelo ITU e amplamente uti-
+lizado como protocolo de troca de mensagens de alerta de emergên-
+cia em diversos tipos de redes. Ele define como mensagens de alerta
+devem ser estruturadas e transmitidas para garantir a interoper-
+abilidade entre diferentes sistemas de alerta. O CAP permite que
+uma mensagem de alerta seja disseminada simultaneamente por
+muitos sistemas de alerta diferentes, aumentando assim a eficácia
+de distribuição [5]. Ele é distribuído em formato XML e é utilizado
+em diversos sistemas, entre eles o Sistema de Alertas públicos do
+Google [3] e também pelo Centro Nacional de Gerenciamento de
+Riscos e Desastres (CENAD) [8].
+2.3
+AEA - ATSC 3.0
+No padrão ATSC 3.0, os alertas de emergência, no padrão ATSC
+3.0 seguem o formato Informações Avançadas de Emergência (Ad-
+vanced Emergency Information - AEA) [1]. Nesse formato, o alerta
+de emergência é configurado através de um arquivo XML no qual
+as características do alerta são definidas como elementos (tags) e
+atributos do XML. Esse arquivo é comprimido no formato gzip [2]
+e transmitido dentro da tabela Low Level Signaling (LLS), a qual é
+transmitida no payload de pacotes IP no ATSC 3.0 [1].
+O AEA é compatível com o protocolo CAP, sendo possível con-
+verter o CAP para o formato AEA. Desta forma, as emissoras podem
+receber um alerta no formato CAP e transmiti-lo no formato AEA
+[5].
+Existem 5 possíveis níveis de prioridade nos alertas. Eles podem
+ser: mínimo, baixo, moderado, alto ou máximo, que possuem difer-
+entes interações com o usuário, desde oferecer a ele uma informação
+útil de forma sutil, até uma informação crítica que necessite de uma
+maior atenção.
+2.4
+Alertas de Emergência TV 3.0 Brasileira
+Na TV 3.0, após um CfP (Call for Proposals), foi definido que o
+formato de alertas de emergência a ser utilizado será o AEA do
+ATSC 3.0. Experimentos estão sendo realizados visando investigar a
+funcionalidade do sistema em situações de emergência como desas-
+tres naturais, inundações, ruptura de barragens entre outros. Para
+atingir o maior público possível esses alertas podem ser transmiti-
+dos com acessibilidade sendo disponibilizados em formato textual,
+gráfico (imagens e vídeos), áudio descrição e em língua de sinais.
+METODOLOGIA
+Este artigo foca na metodologia, propostas e solução desenvolvida
+pelo grupo de pesquisa da Universidade Federal da Paraíba (UFPB)
+em relação aos requisitos do desenvolvimento de aplicações na área
+de alertas de emergência e acessibilidade da TV 3.0. A equipe é com-
+posta por 9 pesquisadores, entre doutores, mestres e graduandos.
+O trabalho, nesta fase 3, começou em Abril de 2023.
+Como forma de colaborar ativamente com a metodologia de in-
+vestigação, os Módulos Técnicos e de Mercado do Fórum SBTVD
+decidiram conjuntamente uma priorização de requisitos para de-
+terminar a sequência de estudos para a equipe de pesquisa e de-
+senvolvimento (P&D). Além disso, o Grupo de Trabalho (GT) de
+Suporte a Alertas de Emergência na TV 3.0 Brasileira
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Codificação de Aplicações do Fórum especificou as diretrizes ini-
+ciais sobre como abordar cada requisito, com base nos resultados
+da avaliação da Fase 2 e na experiência do GT na padronização do
+middleware DTV. Finalmente, o GT especificou um total de 7 casos
+de uso a serem prototipados, com o objetivo de validar as soluções
+de P&D e demonstrar publicamente as novas funcionalidades da
+TV 3.0.
+A equipe de P&D incorporou todas as contribuições do Fórum
+SBTVD na sua metodologia, permitindo um progresso consistente
+em determinados requisitos e apresentando os resultados iniciais
+dos estudos.
+O trabalho desenvolvido na UFPB, atualmente, foca no caso de
+uso 5 (AP-uc-5) especificado pelo GT, o qual trata sobre o geoloca-
+lização e alertas de emergência.
+Desta forma, estão sendo investigadas e propostas soluções para a
+transmissão e recepção de alertas de emergência de forma acessível,
+e, também, formatos de apresentação desses alertas na televisão.
+Para isso, é proposto uma API CCWS onde aplicações podem se
+cadastrar como ouvintes dos alertas, para que quando algum aler-
+tar for recebido pela TV ele também possa ser recebido em uma
+aplicação.
+3.1
+Visão geral da solução
+A solução proposta possibilita que aplicações locais a TV ou não lo-
+cais (externas à TV) se registrem para receber alertas de emergência,
+desde que estejam autenticadas e conectadas a TV. Deste modo, as
+aplicações clientes (locais ou externas) podem requisitar e acessar
+as informações de alerta de emergência. A partir disso, diversos
+cenários podem ser explorados, incluindo os voltados para a aces-
+sibilidade. No caso de telespectadores com deficiência auditiva, o
+alerta recebido, pode ser exibido no formato de Língua de Sinais na
+TV ou no dispositivo do usuário. Para as pessoas com deficiência
+visual, o alerta pode ser exibido com suporte a audiodescrição.
+Na TV 3.0, a recepção dos alertas de emergência é independente
+de Internet, bastando que a TV esteja sintonizada em alguma emis-
+sora para que o alerta seja recebido. Desta forma, em situações
+extremas, onde não há Internet e nem mesmo sinal de celular, mas
+em que o sinal de TV e a energia elétrica ainda estejam presentes,
+será possível receber esses alertas na TV, e, até mesmo no celular,
+caso este esteja conectado a TV por uma rede local.
+Em uma situação em que a TV esteja desligada, mas conectada
+a rede de energia elétrica, quando um alerta de emergência for
+transmitido pela emissora, a TV consegue monitorá-lo, e poderá ser
+automaticamente ligada, assumindo as definições adequadas para o
+tipo de alerta recebido. Para isso, é necessário que, mesmo no estado
+de espera (standby), seja realizado um monitoramento mínimo do
+sinal da emissora. É importante mencionar, inclusive, que esse tipo
+de monitoramento tem baixíssimo impacto no consumo de energia
+elétrica [1].
+A proposta de arquitetura do sistema de alerta está apresentada
+na Figura 1. Conforme indicado, os órgãos de coordenação de alertas
+de emergência, como, por exemplo, o CENAD e o CEMADEM,
+monitoram e emitem os alertas no formato CAP, o qual contém
+dados detalhados sobre as circunstâncias da emergência. Uma vez
+emitidos, os alertas são recebidos pelas as emissoras de TV. Estas,
+por sua vez, inicialmente, traduzem os campos de texto que estão em
+português para glosa1 para possibilitar a acessibilidade em língua
+de sinais do conteúdo do alerta.
+Figure 1: Arquitetura do sistema proposto.
+Os campos do CAP que são traduzidos para glosa são os atributos
+<headline>, <description> e <instruction>; seus equivalentes no
+AEA são <EventDesc> e <AEAText>. Este último é repetido para
+representar os valores de <description> e <instruction>. O AEAText
+possui um subatributo @lang, que indica o idioma do texto [1]. Desta
+forma, recomenda-se que, para uso no Brasil, cada AEAText possua
+uma versão com o valor de @lang "pt" e outro com o valor "bzs"
+(Brazilian Sign Language).
+Após a tradução dos campos de texto, o restante do alerta CAP
+[5] é convertido para o formato AEA [1]. Em seguida , os alertas são
+preparados e filtrados de acordo com as políticas da estação e a área
+geográfica do alerta. Por fim, os alertas são multiplexados transmi-
+tidos pelas emissoras de TV, assegurando a rápida propagação das
+informações de emergência para a população.
+1Glosa é uma representação textual na gramática de língua de sinais
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Costa et al.
+No receptor, quando esse alerta for recebido e processado, o
+alerta em formato AEA é decodificado pelo middleware Ginga,
+confirme indicado na Figura 1. Em seguida, o player de língua de
+sinais da TV 3.0 é acionado para renderizar o conteúdo da glosa
+em uma animação 3D em língua de sinais para pessoas surdas, e o
+player de áudio da TV 3.0 é acionado apresentar a audiodescrição
+do alerta para pessoas cegas. Adicionalmente, o conteúdo do alerta
+de emergência também é acessado pelo servidor webservice que
+pode disponibilizar este alerta para aplicações locais ou externas
+(dispositivo móvel) que estejam conectadas à TV do usuário.
+3.2
+API proposta de Webservice
+Para que as aplicações locais ou externas conectadas a TV 3.0 pos-
+sam acessar os alertas de emergência e personalizar a exibição
+dessas informações de alerta, neste trabalho também é proposta
+API para o servidor Webservice da TV3.0.
+Essa nova API possibilita o encaminhamento do alerta de emergên-
+cia para aplicações que se registrem como ouvintes dos alertas. A
+proposta de rota é definida pela Listagem 1.
+Listagem 1 Rota de alerta de emergência
+http(s)://<host>/dtv/current-service/stream/emerge
+ncy[&protocol=<websocket,udp>]
+De acordo com A Listagem 1, nesta rota, tem-se o parâmetro
+de query opcional protocol, o qual indica se o cliente deseja se
+conectar ao Webservice através de um socket UDP ou através de
+um websocket. Caso omitido é considerado que o socket padrão é
+um socket UDP.
+O retorno da requisição fornece as informações necessárias para
+que o cliente se conecte ao servidor em formato JSON (JavaScript
+Object Notation). A Listagem 2 apresenta o formato retornado pela
+requisição.
+Listagem 2 JSON de retorno da rota de alerta de emergência
+{
+"handle":"<handle>",
+"url":"<streamUrl>
+}
+O parâmetro handle é um identificador da requisição que é uti-
+lizado para a identificação, rastreamento ou gerenciamento de múlti-
+plos alertas de emergência pelo Webservice.
+A URL contém as informações necessárias para que o cliente
+inicie uma conexão de socket ou websocket com o servidor, e fique
+aguardando o recebimento de alertas, caso eles ocorram.
+Quando um alerta é recebido pela televisão, o CCWS repassa
+esse alerta para os clientes que se registraram através da conexão
+de socket criada. O alerta é transmitido no mesmo formato XML
+AEA, contendo todas as informações e mídias do alerta.
+PROVA DE CONCEITO
+Para validar a arquitetura proposta, foram desenvolvidas três apli-
+cações que possibilitam a simulação de um sistema de distribuição,
+recepção e transmissão dos alertas de emergência. Essas aplicações
+e sua comunicações são apresentadas na Figura 2.
+Figure 2: Aplicações da prova de conceito
+A primeira aplicação desenvolvida foi o módulo de Envio de
+Alertas, que simula o envio de alertas pela emissora.
+O segunda aplicação é o Servidor Webservice. Ele implementa
+algumas das rotas que estão sendo especificadas para a TV 3.0,
+dentre as rotas está a apresentada na Seção 3.2. API proposta de
+Webservice. Desta forma, recebe o alerta emitido pelo módulo de
+envio de alertas e possibilita que a aplicação cliente receba esse
+alerta.
+A terceira aplicação é o módulo de Apresentação de Alertas,
+que se registra no CCWS como ouvinte dos alertas de emergência.
+Quando um alerta é recebido servidor Webservice, ele é transmitido
+via websocket para o módulo de Apresentação de Alertas. Quando
+o alerta é recebido, ele é apresentado de acordo com as suas especi-
+ficidades.
+4.1
+Módulo de Envio de alertas
+Para simular o envio de alertas da emissora, foi desenvolvida uma
+aplicação web, na qual é possível cadastrar alertas no formato AEA.
+Estes podem ser configurados e enviados diretamente para o servi-
+dor Webservice da TV. Nesta aplicação, é possível configurar diver-
+sos campos do alerta, como seu título, descrição, seus equivalentes
+em glosa, as mídia de áudio, o tipo do alerta e sua prioridade.
+O título e a descrição do alerta são traduzidos automaticamente
+para glosa utilizando o tradutor do VLibras [9].
+4.2
+Módulo Servidor Webservice
+A implementação parcial do servidor Webservice, para o presente
+trabalho, tem como principal objetivo permitir que aplicações locais,
+ou não locais, possam acessar os alertas de emergência transmitidos
+por uma emissora de TV 3.0.
+A rota proposta na Seção 3.2 foi implementada em um servidor
+Node.js. O cliente ao se registrar como ouvinte recebe as infor-
+mações sobre o socket TCP ou websocket para se conectar. Quando
+um alerta de emergência é recebido, ele é repassado para todos os
+clientes que tiverem se registrado. O alerta é repassado no mesmo
+formato que é recebido, isto é, no formato AEA.
+4.3
+Módulo de Apresentação de Alertas
+A aplicação do módulo de Apresentação de Alertas, se registra
+como ouvinte de alertas no webservice, através da chamada a rota
+proposta na Seção 3.2. Utilizando os dados do retorno da requisição
+Suporte a Alertas de Emergência na TV 3.0 Brasileira
+WTVDI’2024, Juiz de Fora/MG, Brazil
+ao servidor, é iniciado uma conexão via websocket. Quando um
+alerta é recebido, no servidor, ele é encaminhado para a aplicação
+através da conexão que foi iniciada.
+Quando o alerta é recebido ele é apresentado na tela da apli-
+cação de acordo com sua prioridade. As quais são apresentadas nas
+próximas seções.
+4.3.1
+Prioridade Mínima e Prioridade Baixa. Para os alertas de
+menor criticidade, exibimos um alerta textual sem ação necessária,
+garantindo que o foco do conteúdo da TV não seja afetado.
+Esse tipo de alerta pode ser utilizado para mensagens periódicas,
+testes, status, relógio meteorológico ou qualquer contexto que não
+exija leitura ou ação obrigatória por parte de quem está assistindo
+à TV no momento.
+As Figuras 3 e 4 apresentam exemplos desse alertas.
+Figure 3: Prioridade Mínima
+Figure 4: Prioridade Baixa
+4.3.2
+Prioridade Moderada. O alerta moderado traz mais destaque
+à mensagem, podendo ocupar mais espaço e incluir um acionável
+associado para visualizar mais detalhes ou iniciar algum serviço
+ou aplicação. Ao contrário dos alertas anteriores, que se fecham
+automaticamente, esse tipo de alerta precisa ser fechado direta-
+mente por uma ação do usuário, garantindo sua persistência na tela,
+confirme indicado na Figura 5.
+Figure 5: Prioridade Moderada
+A partir do alerta moderado, os recursos de acessibilidade como
+Língua de Sinais e audiodescrição ficam disponíveis. Caso seja trans-
+mitida mídia de áudio dentro do alerta, essa mídia será reproduzida.
+Caso contrário, a aplicação utiliza um sintetizador de voz para
+reproduzir o alerta textual em forma de áudio.
+Se um usuário da aplicação estiver com o recurso de Língua de
+Sinais ativo na TV, o alerta também será reproduzido em Língua de
+Sinais, a partir do texto em glosa transmitido.
+4.3.3
+Prioridade Alta. O alerta alto, tem por objetivo chamar a
+atenção do usuário para uma informação importante, tomando
+grande parte do foco de tela durante sua chamada, apresentando
+informações necessárias ao usuário, mas dando a ele opções de
+interatividade, onde pode ver informações mais detalhadas sobre o
+que lhe foi passado.
+As Figura 6 apresenta a janela inicial do alerta, ao acessar o botão
+"Ver Detalhes", ou clicar no controle remoto no botão ’1’, passa-se
+para a tela de detalhes apresentada na Figura 7. Caso o recurso
+de língua de sinais esteja ativo na TV, um avatar 3D apresenta o
+conteúdo da glosa em formato de língua de sinais, confirme indicado
+na Figura 8.
+Figure 6: Prioridade Alta
+Figure 7: Prioridade Alta Detalhes
+Figure 8: Prioridade Alta com Língua de Sinais.
+4.3.4
+Prioridade Máxima. O alerta máximo por sua vez, representa
+uma mensagem prioritariamente urgente, no qual é necessária in-
+terromper toda a programação que possa estar sendo acessada pelo
+usuário, dando informações críticas, com detalhes e imagens úteis.
+A Figura 9 apresenta um exemplo dessa exibição.
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Costa et al.
+Figure 9: Prioridade Máxima
+PRINCIPAIS DESAFIOS
+Os principais desafios enfrentados durante o desenvolvimento deste
+projeto incluíram:
+Desenvolver uma arquitetura robusta para converter e transmitir
+alertas de sistemas existentes, como CENAD e CEMADEN, para o
+novo padrão de TV 3.0, garantindo compatibilidade com o proto-
+colo CAP e o formato AEA. Além disso, implementar a tradução
+automática de alertas para Língua de Sinais, utilizando tecnologias
+como o tradutor VLibras e avatares 3D, exigiu colaboração entre
+desenvolvedores e especialistas. A disponibilização offline do player
+de língua de sinais e seu dicionário foi implementada e está fun-
+cional. Contudo, ainda estão sendo pesquisadas formas de prover a
+acessibilidade com avatar 3D sem a necessidade de ocupar espaço
+de armazenamento com o dicionário de animações. Outro desafio
+foi o trabalho de criar um sistema que mantivesse os alertas na tela
+até serem manualmente fechados pelo usuário, especialmente para
+alertas de alta prioridade, sem comprometer a usabilidade da TV.
+CONCLUSÕES E TRABALHOS FUTUROS
+O presente trabalho apresentou os requisitos de alertas de emergên-
+cia, no âmbito no projeto TV 3.0. Verificou-se formas de apresen-
+tação com acessibilidade, baseadas em língua de sinais e áudio
+descrição. Foram geradas soluções para sua implementação, uma
+proposta de extensão da API do Webservice, e de uma arquitetura
+de sistema, o qual foi implementado como prova de conceito.
+Como trabalhos futuros, pretende-se realizar testes em larga es-
+cala para validar a eficácia do sistema em diferentes cenários de
+emergência. Também pretende-se criar apps que integrem com a
+API para exibir alertas sincronizados com a TV. Outro trabalho pos-
+sível é de análise de impacto social dos alertas na TV 3.0, medindo
+a eficácia e a satisfação dos usuários, especialmente entre pessoas
+com deficiência.
+Por fim, apesar de se encontrar ainda em fase de desenvolvimento,
+é possível perceber a existência de uma contribuição científica,
+tecnológica e social da proposta apresentada neste trabalho, uma
+vez que essa solução, quando implementada na TV 3.0, pode trazer
+benefícios para aproximadamente 8,8 milhões de deficientes visuais
+e surdos brasileiros [4].
