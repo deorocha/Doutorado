@@ -18,11 +18,11 @@ def load_spacy_model():
     except OSError:
         try:
             # Se falhar, tenta o modelo em inglês
-            st.info("Modelo português não disponível. Usando modelo em inglês...")
+            # st.info("Modelo português não disponível. Usando modelo em inglês...")
             return spacy.load("en_core_web_sm")
         except OSError:
             # Último recurso: modelo mínimo
-            st.warning("Usando modelo básico do spaCy (funcionalidades limitadas)")
+            # st.warning("Usando modelo básico do spaCy (funcionalidades limitadas)")
             return spacy.blank("pt")
 
 nlp = load_spacy_model()
