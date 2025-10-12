@@ -69,13 +69,14 @@ with st.sidebar:
 st.title("Análise LLM dos anais do WebMedia 2024")
 
 try:
-    st.image("images/background.png", use_container_width=True)
+    st.image("./images/background.png", use_container_width=True)
 except:
     st.info("Imagem background.png não encontrada")
 
 st.write("""
 #### Esta aplicação demonstra diversos recursos de Processamento de Linguagem Natural (LLM), tendo como fonte de dados os artigos mostrados durante o evento.
 """)
+
 
 
 
