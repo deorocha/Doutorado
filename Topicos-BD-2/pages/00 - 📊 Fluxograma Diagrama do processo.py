@@ -1,12 +1,14 @@
 import streamlit as st
 from pathlib import Path
 
-# Obtém o diretório atual do script
+# Obtém o diretório raiz do projeto (onde está o app.py)
+# Este script está em uma subpasta, então precisamos subir um nível
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+project_root = current_dir.parent  # Sobe um nível para a pasta raiz
 
-# Constrói caminhos absolutos para os arquivos
-css_path = current_dir / "styles" / "styles.css"
-fluxograma_image_path = current_dir / "images" / "fluxograma.png"
+# Constrói caminhos absolutos para os arquivos na pasta raiz
+css_path = project_root / "styles" / "styles.css"
+fluxograma_image_path = project_root / "images" / "fluxograma.png"
 
 # CSS Global para todas as páginas
 def load_global_css():
