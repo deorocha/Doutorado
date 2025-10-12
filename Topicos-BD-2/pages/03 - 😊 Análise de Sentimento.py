@@ -7,11 +7,51 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import PyPDF2
 import io
+from pathlib import Path
+
+# Obtém o diretório raiz do projeto (onde está o app.py)
+current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+project_root = current_dir.parent  # Sobe um nível para a pasta raiz
+
+# Constrói caminhos absolutos para os arquivos
+css_path = project_root / "styles" / "styles2.css"
+categories_path = project_root / "categories.json"
+
+# Configuração do TextBlob
+@st.cache_resource
+def setup_textblob():
+    """Configura todos os recursos necessários para o TextBlob"""
+    import nltk
+    
+    # Lista de corpora necessários
+    corpora = [
+        'punkt',        # Tokenizer
+        'brown',        # Corpus para treinamento
+        'movie_reviews', # Análise de sentimentos
+        'wordnet',      # Thesaurus
+        'averaged_perceptron_tagger', # POS tagging
+        'stopwords'     # Palavras comuns para remoção
+    ]
+    
+    for corpus in corpora:
+        try:
+            nltk.data.find(f'tokenizers/{corpus}' if corpus == 'punkt' else f'corpora/{corpus}' if corpus in ['brown', 'movie_reviews', 'wordnet', 'stopwords'] else f'taggers/{corpus}')
+        except LookupError:
+            with st.spinner(f'Baixando {corpus}...'):
+                nltk.download(corpus, quiet=True)
+    
+    st.success("TextBlob configurado com sucesso!")
+
+# Executa a configuração do TextBlob
+try:
+    setup_textblob()
+except Exception as e:
+    st.warning(f"Alguns recursos do TextBlob podem não funcionar: {e}")
 
 # Carregar CSS externo com codificação correta
 def load_css():
     try:
-        with open("styles/styles.css", "r", encoding="utf-8") as f:
+        with open(css_path, "r", encoding="utf-8") as f:
             css_content = f.read()
             st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
     except FileNotFoundError:
@@ -24,11 +64,11 @@ load_css()
 @st.cache_data
 def load_categories():
     try:
-        with open('categories.json', 'r', encoding='utf-8') as f:
+        with open(categories_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     except UnicodeDecodeError:
         # Fallback para latin-1 se UTF-8 falhar
-        with open('categories.json', 'r', encoding='latin-1') as f:
+        with open(categories_path, 'r', encoding='latin-1') as f:
             return json.load(f)
     except Exception as e:
         st.error(f"Erro ao carregar categorias: {e}")
