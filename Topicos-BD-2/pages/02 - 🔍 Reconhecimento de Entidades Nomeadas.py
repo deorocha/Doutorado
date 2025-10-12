@@ -18,7 +18,7 @@ def load_spacy_model():
         # Tenta carregar o modelo grande
         return spacy.load("pt_core_news_lg")
     except OSError:
-        st.info("📥 Baixando versão mais leve... Isso pode um pouco.")
+        st.info("📥 Baixando versão mais leve... Pode demorar um pouco.")
         import os
         os.system("python -m spacy download pt_core_news_sm")
         return spacy.load("pt_core_news_sm")
