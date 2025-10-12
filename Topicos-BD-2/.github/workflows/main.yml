@@ -1,1 +1,28 @@
+name: Install Dependencies
 
+on: [push, pull_request]
+
+jobs:
+  install-deps:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+        
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        
+    - name: Download spaCy model
+      run: |
+        python -m spacy download pt_core_news_sm
+        
+    - name: Donload TextBlob Corpora
+      run: |
+        python -m textblob.download_corpora
