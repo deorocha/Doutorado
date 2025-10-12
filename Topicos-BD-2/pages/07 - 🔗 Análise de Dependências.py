@@ -14,18 +14,13 @@ css_path = project_root / "styles" / "styles.css"
 @st.cache_resource
 def load_spacy_model():
     try:
-        # Tenta carregar o modelo grande em português
+        # Tenta carregar o modelo grande
         return spacy.load("pt_core_news_lg")
     except OSError:
-        try:
-            # Se falhar, tenta o modelo pequeno em inglês
-            st.info("Usando modelo en_core_web_sm")
-            return spacy.load("pt_core_news_sm")
-        except OSError:
-            # Último recurso: modelo mínimo
-            st.warning("Usando modelo básico do spaCy")
-            return spacy.blank("pt")
-
+        st.info("📥 Baixando versão mais leve... Pode demorar um pouco.")
+        import os
+        os.system("python -m spacy download pt_core_news_sm")
+        return spacy.load("pt_core_news_sm")
 nlp = load_spacy_model()
 
 # Carregar CSS externo com codificação correta
