@@ -14,7 +14,7 @@ current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
 project_root = current_dir.parent  # Sobe um nível para a pasta raiz
 
 # Constrói caminhos absolutos para os arquivos
-css_path = project_root / "styles" / "styles.css"
+css_path = project_root / "styles" / "styles2.css"
 categories_path = project_root / "categories.json"
 
 # Configuração do TextBlob
