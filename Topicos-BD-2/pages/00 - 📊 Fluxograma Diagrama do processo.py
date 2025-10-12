@@ -1,12 +1,18 @@
 import streamlit as st
 
-# CSS Global para todas as páginas
+# Obtém o diretório atual do script (app.py)
+current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+
+# Constrói caminhos absolutos para os arquivos
+css_path = current_dir / "styles" / "styles.css"
+
+# Função para carregar CSS globalmente
 def load_global_css():
     try:
-        with open("styles/styles.css", "r", encoding="utf-8") as f:
+        with open(css_path, "r", encoding="utf-8") as f:
             css_content = f.read()
             st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
-    except:
+    except Exception as e:
         # Fallback: CSS embutido básico
         st.markdown("""
         <style>
