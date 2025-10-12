@@ -3,7 +3,7 @@
 
 /* Remove todo o padding e margin do container principal */
 .main .block-container {
-    padding-top: 0rem !important;
+    padding-top: 5rem !important;
     padding-bottom: 1rem;
     padding-left: 0rem;
     padding-right: 0rem;
@@ -18,7 +18,7 @@ header {
 
 /* Remove todo o espaco acima do primeiro h1 */
 h1:first-child {
-    margin-top: 0rem !important;
+    margin-top: 3rem !important;
     padding-top: 0rem !important;
 }
 
@@ -641,3 +641,4 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
