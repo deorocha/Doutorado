@@ -1,18 +1,12 @@
 import streamlit as st
 
-# Obtém o diretório atual do script (app.py)
-current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-
-# Constrói caminhos absolutos para os arquivos
-css_path = current_dir / "styles" / "styles.css"
-
-# Função para carregar CSS globalmente
+# CSS Global para todas as páginas
 def load_global_css():
     try:
-        with open(css_path, "r", encoding="utf-8") as f:
+        with open("./styles/styles.css", "r", encoding="utf-8") as f:
             css_content = f.read()
             st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
-    except Exception as e:
+    except:
         # Fallback: CSS embutido básico
         st.markdown("""
         <style>
@@ -45,6 +39,6 @@ st.title("Fluxograma da Atividade")
 st.write("Diagrama do processo completo do WebMedia 2024:")
 
 try:
-    st.image("./images/fluxograma.png", caption="", use_container_width=True)
+    st.image("../images/fluxograma.png", caption="", use_container_width=True)
 except:
     st.info("Imagem fluxograma.png não encontrada")
