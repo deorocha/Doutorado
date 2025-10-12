@@ -1,4 +1,0 @@
-- name: Atualizar pip e instalar dependências
-  run: |
-    pip install --upgrade pip
-    pip install -r requirements.txt
