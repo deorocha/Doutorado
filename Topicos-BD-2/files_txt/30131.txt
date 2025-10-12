@@ -1,0 +1,1152 @@
+Um Framework para Análise Bidimensional de Disseminação de
+Informações em Plataformas de Mídias Sociais
+Geovana S. Oliveira1, Otávio Venâncio3, Vinícius Vieira4, Jussara Almeida3
+Ana P. C. Silva3, Ronan Ferreira2, Carlos H. G. Ferreira1
+geovana.so@aluno.ufop.edu.br,otavio.venancio@dcc.ufmg.br,vinicius@ufsj.edu.br,jussara@dcc.ufmg.br
+ana.coutosilva@dcc.ufmg.br,ronan.ferreira@ufop.edu.br,chgferreira@ufop.edu.br
+1Departamento de Computação e Sistemas, Universidade Federal de Ouro Preto, Brasil
+2Departamento de Ciências Exatas e Aplicadas, Universidade Federal de Ouro Preto, Brasil
+3Departamento de Ciência da Computação, Universidade Federal de Minas Gerais, Brasil
+4Departamento de Ciência da Computação, Universidade Federal de São João Del Rey, Brasil
+WebMedia’2024, Juiz de Fora, Brazil
+Oliveira et al.
+Especificamente, busca-se caracterizar perfis de disseminação de
+informação, explorando uma lacuna deixada por outros trabalhos
+na literatura e avaliando o fenômeno de propagação de conteúdo de
+forma bidimensional. A premissa principal explorada aqui é que os
+usuários que utilizam esses ambientes podem ser classificados com
+base no volume do conteúdo com os quais co-interagem e na veloci-
+dade com a qual isso é feito. A partir dessa classificação, usuários
+de uma mesma classe podem ser caracterizados de forma global
+(distribuição de conectividade) e local (formação de comunidades).
+Considerando a forma como se organizam, acredita-se que seja
+possível revelar padrões de disseminação de informação distintos.
+Para isso, consideramos as seguintes etapas: inicialmente, mode-
+lamos redes de co-interações, uma considerado o volume e outra
+considerando a velocidade dessas interações. Em seguida, aplicamos
+técnicas de extração de backbone para identificar as arestas mais
+salientes nas duas redes, simultaneamente. Após, classificamos as
+arestas de acordo com o julgamento dos métodos de backbone em
+diferentes perfis. Essa abordagem nos permite categorizar as arestas
+que ligam dois dados usuários em quatro perfis de disseminação
+de informações: (1) usuários que disseminam um baixo volume de
+informações e de forma lenta; (2) usuários que disseminam um alto
+volume de informações, mas de forma lenta; (3) usuários que dis-
+seminam um baixo volume, porém de forma rápida; e (4) usuários
+que disseminam um alto volume de informações e de forma rápida.
+Por fim, caracterizamos a topologia observada em sub-redes for-
+madas por usuários desses quatro perfis de interações, investigando
+a estrutura de comunidades delas.
+Aplicamos nosso framework em dois estudos de caso nas platafor-
+mas Twitter/X e Telegram durante períodos que contêm fortes ev-
+idências de coordenação [1, 15, 42]. Nossos principais resultados
+mostram que o framework proporciona um aprofundamento da
+compreensão do fenômeno de disseminação de informações a partir
+de contas de usuários em plataformas de mídias sociais. Observamos
+diferentes perfis de disseminação de informações, caracterizados
+tanto pelo volume quanto pela rapidez das interações. Destacamos
+que no Twitter/X as comunidades são mais coesas e com alto vol-
+ume de retweets, enquanto no Telegram as interações se distribuem
+em comunidades menores, com um volume menor, mas com maior
+rapidez de disseminação durante eventos críticos.
+O restante do trabalho está organizado da seguinte forma: a
+Seção 2 apresenta os trabalhos relacionados. A Seção 3 detalha a
+metodologia, enquanto a Seção 4 descreve os estudos de casos. Em
+seguida, a Seção 5 apresenta os resultados e, por fim, a Seção 6 traz
+as conclusões e direções futuras.
+TRABALHOS RELACIONADOS
+Vários estudos anteriores empregaram modelos de rede para detec-
+tar e analisar a disseminação de informações em plataformas de
+mídias sociais, como Twitter/X, Telegram, WhatsApp, Instagram,
+etc [3, 7, 10, 16, 18, 19, 35, 39, 40, 43]. Ainda, um grande número de
+trabalhos destaca a importância de se identificar e remover arestas
+que possam refletir relações esporádicas e aleatórias que podem
+representar ruído ao modelo de redes. Com essa remoção, o modelo
+concentra-se apenas em arestas relevantes para o fenômeno de
+disseminação de informações [9, 12–14, 27–31, 42]. Dessa forma, as
+arestas salientes revelam o que é chamado de backbone: uma estru-
+tura subjacente à rede inicialmente modelada que busca fornecer
+uma visão mais clara e organizada para identificar padrões topológi-
+cos que auxiliem a compreensão da propagação de conteúdo.
+Por exemplo, Pacheco et al. [30] investigaram campanhas de
+desinformação contra a Defesa Civil Síria no Twitter/X, explorando
+um modelo de rede que conecta usuários que postaram tweets sim-
+ilares. Os autores empregaram a extração de backbone para re-
+mover arestas, cujos pesos estão abaixo de um determinado limiar
+(limiarização). Em outro trabalho, os mesmos autores propuseram
+identificar ações coordenadas nas mídias sociais, notadamente no
+Twitter/X, em diferentes cenários, também empregando a extração
+de backbone por meio de limiarização [31]. Keller et al. [19] explo-
+raram a rede de retweets para estudar a coordenação de anúncios
+durante a eleição presidencial na Coreia do Sul também explorando
+limiarização.
+Linhares et al. [21] e da Rosa et al. [9] investigaram comunidades
+de usuários no Twitter/X que foram, potencialmente, usadas, para
+disseminação coordenada de conteúdos relacionados a alegação de
+fraude durante a eleição dos EUA de 2020, usando métodos como
+Disparity Filter e Tripartite Backbone Extraction (TriBE) [12, 17, 34].
+Na mesma direção, Araujo et al. [1] estudaram a promoção coor-
+denada de campanhas políticas antecipadas no Twitter/X durante
+o período pré-eleitoral brasileiro de 2022, utilizando uma rede de
+co-retweets e o Disparity Filter + Neighborhood Overlapping. No-
+bre et al. [28] investigaram a rede de co-compartilhamento de mí-
+dia, construída conectando usuários que compartilharam o mesmo
+conteúdo, também com o uso do Disparity Filter para estudar co-
+munidades. Também usando o Disparity Filter e Disparity Filter
++ Neighborhood Overlapping para revelar arestas salientes e com
+evidências de coordenação no Telegram, Venâncio et al. [42] investi-
+garam a disseminação de informações políticas durante as eleições
+brasileiras de 2022 e os tumultos de 8 de janeiro.
+Embora esses esforços explorem a extração de backbone para
+compreender a disseminação de informações de forma estruturada
+na rede, um aspecto desconsiderado por esses estudos é a distinção
+das formas como a disseminação pode ocorrer. Especificamente,
+os esforços supramencionados focam em entender a disseminação
+apenas de um ponto de vista, do volume. Dessa forma, há uma
+lacuna na literatura quanto a estratégias para identificar diferentes
+perfis de disseminação de informações por esses grupos de usuários
+potencialmente coordenados e compreender o sincronismo con-
+siderando duas dimensões: o volume e a velocidade da informação
+disseminada, o que é explorado neste trabalho.
+FRAMEWORK PROPOSTO
+O framework proposto neste trabalho consiste em várias etapas,
+conforme ilustrado na Figura 1. Inicialmente, modelamos duas re-
+des, uma que representa o volume de co-interações e outra que
+representa o intervalo de tempo entre essas co-interações. Em
+seguida, aplicamos métodos de extração de backbone para iden-
+tificar as arestas mais relevantes em cada modelo de rede. Então,
+classificamos as arestas em perfis distintos de disseminação de infor-
+mações, com base em sua relevância, usando métodos de extração de
+backbone. Finalmente, caracterizamos e analisamos a topologia das
+redes formada por essas classes incluindo a análise de comunidades.
+Um Framework para Análise Bidimensional de Disseminação de Informações em Plataformas de Mídias Sociais
+WebMedia’2024, Juiz de Fora, Brazil
+Extração do
+backbone
+Dados do
+estudo de
+caso
+Modelagem da
+rede de co-
+interações
+Modelagem da
+rede de tempo
+médio de co-
+interações
+Análise de
+padrões de
+disseminação
+Classificação
+Extração do
+backbone
+Figura 1: Visão geral do framework proposto.
+3.1
+Modelagem das Redes
+A metodologia proposta neste trabalho parte da definição de dois
+modelos de redes: um que representa o volume de co-interações
+e outro que representa o intervalo tempo entre essas interações.
+A primeira rede de co-interações é representada por um grafo
+𝐺volume = (𝑉, 𝐸volume), tal que cada elemento 𝑣𝑖∈𝑉representa um
+usuário, e cada elemento 𝑒𝑖𝑗∈𝐸volume é uma aresta que conecta
+um par de usuários. O peso da aresta 𝑤volume(𝑒𝑖𝑗) representa o
+número de co-interações entre os usuários 𝑣𝑖e 𝑣𝑗.
+Já na rede 𝐺tempo = (𝑉, 𝐸tempo), as arestas 𝑒𝑖𝑗∈𝐸tempo ar-
+mazenam informação sobre o tempo decorrido entre as interações
+dos usuários representados por 𝑣𝑖e 𝑣𝑗. Embora outras funções pos-
+sam ser utilizadas para agregar os tempos de todas as co-interações
+de 𝑣𝑖e 𝑣𝑗, neste trabalho, o peso 𝑤tempo(𝑒𝑖𝑗) de cada aresta 𝑒𝑖𝑗
+refere-se ao tempo médio das interações dos usuários representa-
+dos por 𝑣𝑖e 𝑣𝑗. Assim, 𝑤tempo(𝑒𝑖𝑗) =
+𝑤volume(𝑒𝑖𝑗)
+Í𝑤volume(𝑒𝑖𝑗)
+𝑝=1
+𝑡𝑝
+𝑖𝑗
+,
+em que 𝑝é o tempo decorrido na 𝑝-ésima interação entre 𝑣𝑖e 𝑣𝑗.
+Os algoritmos utilizados neste trabalho (tanto para extração de
+backbone, como para identificação de comunidades) consideram
+a noção de que o peso de uma aresta 𝑒𝑖𝑗deve ser diretamente
+proporcional à importância da relação entre 𝑣𝑖e 𝑣𝑗, o que é contra-
+intuitivo com a definição da função de peso 𝑤tempo apresentada
+anteriormente. Um tempo curto entre as ações de𝑣𝑖e𝑣𝑗de enviarem
+uma mesma mensagem em uma rede social, por exemplo, deveria
+sugerir uma forte relação entre 𝑣𝑖e 𝑣𝑗, e o contrário é definido por
+𝑤tempo. Para que isso seja alcançado, os pesos são normalizados
+de acordo com a Equação 1, garantindo que relações mais fortes
+sejam representadas por valores de peso mais altos. Assim, o peso
+normalizado 𝑤′
+tempo(𝑒𝑖𝑗) é dado por:
+𝑤′
+tempo(𝑒𝑖𝑗) = max(𝑊tempo) −𝑤tempo(𝑒𝑖𝑗) + 1
+(1)
+em que max(𝑊tempo) é o maior peso encontrado na rede 𝐺tempo. O
+termo +1 evita que haja pesos nulos de forma indevida. Para sim-
+plificar, o peso das arestas 𝑤tempo irá referir-se à definição de peso
+normalizado apresentada na Equação 1 no restante deste trabalho.
+3.2
+Extração dos Backbones
+A segunda etapa do framework consiste em extrair os backbones
+de ambas redes modeladas na etapa anterior. Diversos métodos de
+extração de backbone propostos na literatura são aplicados para
+modelar padrões de disseminação, tipicamente explorando a dis-
+crepância e heterogeneidade das redes. Exemplos incluem Threshold
+[30], Disparity Filter [34], Disparity Filter + Neighborhood Overlap
+[21] e Polya Urn [22]. Em resumo, esses métodos são usados para ex-
+plorar a heterogeneidade da rede, identificando quão salientes são as
+arestas com pesos significativamente maiores, com base em padrões
+individuais (locais) ou de rede (globais), como representativas de
+interações persistentes e repetitivas. Com exceção do Thresholding,
+que é um método puramente estrutural e opera de forma global,
+excluindo arestas com base em um limiar da distribuição dos pesos
+das arestas da rede, os demais são métodos probabilísticos que con-
+stroem modelos nulos para cada nó e são capazes de capturar, do
+ponto de vista local, o quão saliente uma aresta é de acordo com o
+peso. Uma revisão do uso destes métodos para este contexto está
+disponível na literatura [17].
+Nosso principal argumento nessa etapa reside na hipótese de que
+algumas arestas representarão co-interações fortes e consistentes
+durante o período observado, enquanto outras serão esporádicas,
+podendo ainda terem sido observadas em um intervalo de tempo
+excepcionalmente curto ou um intervalo grande. Então, vamos anal-
+isar o fenômeno sob a perspectiva do volume de co-interações e do
+intervalo de tempo em que ocorrem. Para isso, considere novamente
+os seguintes cenários em uma plataforma de rede social: (1) uma
+mensagem é disseminada massivamente, compartilhada por muitos
+usuários pouco ativos na plataforma, formando assim arestas de
+co-interações com pesos pequenos; e (2) um outro conjunto de
+mensagens é disseminado de forma consistente e repetitiva por um
+outro conjunto de usuários, nesse caso formando arestas de pesos
+maiores. De maneira análoga, podemos considerar o aspecto tempo-
+ral da disseminação dessas mensagens, buscando compreender se
+isso ocorre de maneira muito rápida ou não. Ambas as perspectivas,
+– pelo volume de co-interações e pelo tempo em que ocorrem – já
+foram mostradas como importantes no processo de disseminação
+de informações de forma coordenada na literatura. Existem fortes
+evidências da alocação de contas temporárias, pagas ou não, para
+disseminarem tweets específicos de forma rápida [4, 11, 20, 41] e da
+atuação de grupos de usuários disseminando informações de forma
+sistemática e consistente [21, 29, 42] em diversas plataformas, como
+o Twitter/X. Porém, a incorporação conjugada dessas duas dimen-
+sões à análise do fenômeno de disseminação de informação não
+é utilizada em outros trabalhos na literatura e pode ser apontada
+como uma novidade trazida pelo framework proposto.
+Neste trabalho, propomos o uso do método de Polya Urn Fil-
+ter [22], devido à sua flexibilidade e capacidade de considerar a
+importância local das arestas na identificação do backbone. No en-
+tanto, vários métodos de extração de backbone para identificação de
+atividades relacionadas à coordenação estão na literatura e podem
+empregados [17]. Em resumo, Polya Urn assume que os pesos das
+arestas surgem do processo agregado das preferências individuais
+dos nós para interagir entre si ao longo do tempo. Ele também
+pressupõe que as interações entre os nós são mantidas e reforçadas,
+de modo que quanto maior o número de interações entre dois nós,
+maior a probabilidade de eles interagirem novamente. Um modelo
+de referência é construído para cada aresta, capaz de capturar o
+reforço das interações existentes, examinando o grau e a força (a
+soma dos pesos de todas as arestas incidentes ao nó) de cada nó
+conectado a essa aresta. Esse mecanismo de reforço pode ser regu-
+lado e estimado por meio de um processo de ajuste fino. Arestas
+salientes são aquelas cujos pesos desviam de forma significativa do
+WebMedia’2024, Juiz de Fora, Brazil
+Oliveira et al.
+modelo de referência com valores maiores, de acordo com um nível
+de confiança definido [22]. Dessa forma, o Polya Urn é aplicado ao
+grafo 𝐺volume, gerando o grafo 𝐵volume que captura os nós e arestas
+com padrões de co-interações mais altos do que o esperado.
+De maneira análoga, o método de backbone também deve ser
+aplicado ao grafo𝐺tempo. É importante apontar que os pesos𝑤tempo
+são normalizados de acordo com a Equação 1, para que o método de
+backbone funcione como foi projetado e capture arestas com pesos
+mais altos do que o esperado [17, 22]. Assim, a aplicação do método
+Polya Urn ao grafo 𝐺tempo, gera o backbone 𝐵tempo, que captura
+as arestas com tempos médios de disseminação que fogem ao es-
+perado. Ao extrair os backbones das duas redes 𝐺volume e 𝐺tempo,
+podemos classificar as arestas mantidas como representativas de
+interações fortes e consistentes, enquanto as arestas removidas
+representam interações esporádicas e menos significativas. Dessa
+forma, é possível extrair da rede os nós e arestas mais significativos
+tanto em volume de informação quanto em tempo de disseminação,
+classificados conforme explicado na próxima seção.
+3.3
+Classificação das Arestas
+Ambos os modelos de redes considerados pela metodologia proposta
+(representados por 𝐺volume e 𝐺tempo) correspondem ao mesmo con-
+junto de arestas, associando cada par de vértices que representam
+usuários que co-interagiram nas redes sociais. É possível, então,
+definir quatro classes de arestas, com base na sua presença ou ausên-
+cia em 𝐵volume e 𝐵tempo, após a identificação dos backbones a partir
+de 𝐺volume e 𝐺tempo, respectivamente. Formalmente, cada classe de
+arestas é definida como:
+• Classe 1 (baixo volume e baixa velocidade):
+𝐶1 =
+
+𝐸volume −𝐸𝐵
+volume
+
+∩
+
+𝐸tempo −𝐸𝐵
+tempo
+
+(2)
+Essas arestas não são mantidas em nenhum dos backbones.
+• Classe 2 (alto volume e baixa velocidade):
+𝐶2 = 𝐸𝐵
+volume ∩
+
+𝐸tempo −𝐸𝐵
+tempo
+
+(3)
+Essas arestas são mantidas em 𝐵volume mas não em 𝐵tempo.
+• Classe 3 (baixo volume e alta velocidade):
+𝐶3 =
+
+𝐸volume −𝐸𝐵
+volume
+
+∩𝐸𝐵
+tempo
+(4)
+Essas arestas são mantidas em 𝐵tempo mas não em 𝐵volume.
+• Classe 4 (alto volume e alta velocidade):
+𝐶4 = 𝐸𝐵
+volume ∩𝐸𝐵
+tempo
+(5)
+Essas arestas são mantidas em ambos os backbones.
+Como ilustração, no contexto do Twitter/X, as arestas classifi-
+cadas podem ser interpretadas da seguinte forma: Classe 1 indica
+que dois usuários não retuitaram um alto volume de tweets e quando
+isso acontece, é feito em um grande intervalo de tempo médio, sug-
+erindo baixo volume e velocidade de disseminação. Classe 2 indica
+que dois usuários retuitaram muitos tweets, mas com um grande
+intervalo de tempo entre eles, sugerindo um volume alto, porém
+pouco veloz de disseminação. Classe 3 indica que dois usuários
+retuitaram poucos tweets e com um intervalo muito curto de tempo
+entre eles, sugerindo alta velocidade de disseminação, mas com
+baixo volume. Classe 4 indica que dois usuários retuitaram muitos
+tweets em um curto intervalo de tempo, sugerindo uma forte coorde-
+nação entre eles. Em resumo, a abordagem proposta aqui difere das
+metodologias aplicadas na literatura por permitir a diferenciação
+de perfis e estruturas além de uma visão unidimensional.
+3.4
+Análise de Padrões de Disseminação
+Considerando a classificação das arestas descrita na seção anterior,
+quatro sub-redes são identificadas, cada uma relacionada a uma das
+classes identificadas com base no volume e na velocidade das inter-
+ações entre os vértices. Assim, podemos definir perfis de dissemi-
+nação tomando como ponto de partida a análise dos padrões obser-
+vados nas diferentes classes, investigando a organização topológica
+que emerge de cada sub-rede, assim como semelhanças e diferenças
+entre elas. Em particular, como se dá a organização dos nós dessas
+sub-redes em estruturas de comunidades, isto é, subconjuntos de
+nós com conexões mais densas entre si do que com o restante da
+rede. A investigação da organização de nós em comunidades tem
+sido aplicada com sucesso no domínio de plataformas de mídias
+sociais para a identificação de ideologias específicas, caracterização
+de campanhas políticas antecipadas, detecção de desinformação ou
+notícias falsas [1, 14, 28, 29]. Embora diferentes métodos possam
+ser empregados para identificação de comunidades de nós em redes
+com as características dos modelos aqui propostos [36], neste tra-
+balho é utilizado o algoritmo de Louvain [5], amplamente utilizado
+em outros trabalhos na literatura.
+O algoritmo de Louvain visa maximizar a modularidade, que
+mede a qualidade da divisão de uma rede em comunidades. Modu-
+laridade avalia o quão densamente conectados os nós estão dentro
+das comunidades, em comparação com uma rede aleatória com a
+mesma distribuição de conexões. O valor da modularidade varia
+de -0,5 a 1, onde valores acima de 0,3 indicam comunidades bem
+definidas. O algoritmo é heurístico e funciona de forma aglomer-
+ativa. Ele começa atribuindo cada nó da rede a uma comunidade
+própria. Em seguida, o algoritmo move nós entre comunidades
+para aumentar a modularidade. Quando não é possível melhorar
+mais a modularidade, as comunidades formadas são tratadas como
+novos nós, e o processo recomeça. O resultado final é a estrutura
+de comunidades com a maior modularidade encontrada.
+Neste trabalho, limitamos o escopo dos experimentos à análise
+topológica da estrutura das redes. Entretanto, encorajamos uma
+compreensão mais profunda do fenômeno de disseminação de infor-
+mação por meio da análise dos conteúdos das mensagens enviadas
+em cada um dos grupos, que pode evidenciar padrões de comporta-
+mento, estratégias de disseminação de desinformação, ou esforços
+coordenados para promover determinadas informações.
+ESTUDOS DE CASO
+Nesta seção, descrevemos os dois estudos de casos explorados à luz
+do framework descrito na seção anterior.
+4.1
+Twitter/X
+Nosso primeiro estudo de caso consiste na análise de disseminação
+de informações no Twitter, recentemente redesenhado como X1. O
+Twitter/X tem sido amplamente usado para disseminação de infor-
+mações, especialmente em eventos políticos [9, 21, 30, 32, 33]. Aqui,
+concentramos nossa análise em torno de eventos relacionados às
+1www.x.com
+Um Framework para Análise Bidimensional de Disseminação de Informações em Plataformas de Mídias Sociais
+WebMedia’2024, Juiz de Fora, Brazil
+eleições brasileiras de 2022, em uma coleção de dados disponibiliza-
+dos em [15]. Essa coleção é composta por dados coletados entre 1o
+de outubro de 2022 e 10 de fevereiro de 2023, período que abrangeu
+eventos-chave das eleições gerais brasileiras de 2022, como os dois
+turnos de votação, apuração dos resultados, pesquisas eleitorais,
+debates e o ataque aos prédios da Câmara dos Deputados, Senado
+e do Superior Tribunal Federal em 8 de janeiro de 2023. Durante
+esse período, já se observava a disseminação de informações de
+conteúdos antidemocráticos no Twitter2.
+Para analisar as interações dos usuários, consideramos os mode-
+los de redes para duas janelas de tempo diárias 𝑇= {01/11/2022,
+08/01/2023}, que correspondem aos dois dias de maior atividade
+observada. Dessa forma, temos os grafos 𝐺01/11/2022
+volume
+e 𝐺01/11/2022
+tempo
+,
+correspondentes aos usuários com atividade na data de 01/11/2022 e
+suas respectivas co-interações nessa data, e os grafos 𝐺08/01/2023
+volume
+e
+𝐺08/01/2023
+tempo
+, correspondentes aos usuários com atividade na data de
+01/11/2023 e suas respectivas co-interações nessa janela de tempo.
+Os pesos 𝑤(𝑒𝑖𝑗) das ligações entre os usuários 𝑣𝑖e 𝑣𝑗são calculados
+de acordo com o modelo definido na Seção 3.1. Os parâmetros do
+método Polya Urn para a extração dos backbones neste estudo de
+caso foram definidos conforme as diretrizes de [17, 22], utilizando o
+parâmetro de reforço 𝑎= 0.5 para 𝐺volume e para 𝐺tempo, e 𝛼= 0.05
+para 𝐺volume e 𝛼= 0.1 para 𝐺tempo.
+4.2
+Telegram
+Nosso segundo estudo de caso diz respeito à disseminação de in-
+formações em grupos de Telegram. A plataforma conecta usuários
+em conversas ponta a ponta e também em grupos, que têm se
+mostrado eficazes para a grande disseminação de informações
+[6, 10, 26, 38, 39]. Neste estudo de caso, utilizamos mensagens de
+grupos politicamente orientados do Telegram no Brasil, publicadas
+entre 1ode setembro de 2022 e 31 de janeiro de 2023, incluindo o
+período das eleições presidenciais e os tumultos de janeiro de 2023,
+em uma coleção de dados disponibilizada em [42]. Para analisar a
+disseminação dos usuários para disseminar conteúdo nos grupos do
+Telegram, utilizamos os modelos de rede originalmente usados pelos
+autores, que conecta usuários que compartilharam o mesmo con-
+teúdo textual entre os grupos observados. Além disso, analisamos
+três janelas de tempo de 15 dias, sendo 7 antes e 7 depois em torno
+dos seguintes eventos para análise: 𝑇= {01/10/2022(1o𝑇𝑢𝑟𝑛𝑜),
+30/10/2022(2o𝑇𝑢𝑟𝑛𝑜), 08/01/2023(𝑇𝑢𝑚𝑢𝑙𝑡𝑜𝑠)}, representativas dos
+dois turnos da eleição e o tumulto de 8 de janeiro de 2023.
+Consideramos, então, os modelos de redes correspondentes às
+janelas de tempo:𝐺1oTurno
+volume e𝐺1oTurno
+tempo ,𝐺2oTurno
+volume e𝐺2oTurno
+tempo , e𝐺Tumultos
+volume
+e 𝐺Tumultos
+tempo
+, correspondentes aos usuários que postaram ao menos
+uma mensagem em um dos grupos do Telegram durante a janela
+especificada. Cada aresta 𝑒𝑖𝑗indica que os usuários 𝑣𝑖e 𝑣𝑗com-
+partilharam a mesma mensagem (conteúdo textual idêntico) pelo
+menos uma vez dentro da mesma janela de tempo. Os parâmetros do
+método Polya Urn para a extração dos backbones foram novamente
+definidos conforme as diretrizes de [17, 22], utilizando o parâmetro
+de reforço 𝑎= 0.5 e 𝛼= 0.05 para 𝐺volume e 𝛼= 0.1 para 𝐺tempo.
+2https://portal.stf.jus.br/noticias/verNoticiaDetalhe.asp?idConteudo=508935&tip=
+UN,https://www.bbc.com/portuguese/brasil-63990040
+Tabela 1: Topologia das redes do Twitter/X e Telegram.
+Rede
+Data
+𝑛
+𝑚
+𝑑
+ˆ𝑘
+𝐶𝑀𝐴
+𝐶𝐶
+# 𝐶𝑜𝑚.
+𝑄
+Twitter/X
+08/01/2023
+28,247
+86,478,838
+0.216
+6123,045
+0.689
+0.232
+Twitter/X
+01/11/2022
+27,920
+72,777,139
+0.186
+5213,262
+0.700
+0.487
+Telegram
+1oTurno
+1,625
+81,236
+0.062
+99,983
+0.641
+0.117
+Telegram
+2oTurno
+3,444
+161,383
+0.027
+93,718
+0.621
+0.123
+Telegram
+Tumultos
+4,772
+71,046
+0.006
+29,776
+0.549
+0.349
+RESULTADOS
+Esta seção apresenta nossos resultados. Primeiro, mostramos a
+análise topológica das redes estudadas. Em seguida, analisamos os
+padrões de disseminação de acordo com o framework proposto.
+5.1
+Análise Topológica das Redes
+A Tabela 1 apresenta as características estruturais em cada rede
+originalmente modelada, isto é, sem a etapa de extração de backbone,
+tanto do Twitter/X como do Telegram. 𝑛é o número de nós em cada
+rede, 𝑚é o número de arestas, 𝑑é a densidade das redes, ˆ𝑘é o grau
+médio dos nós, 𝐶𝑀𝐴é o coeficiente médio de agrupamento dos nós,
+𝐶𝐶é o número de componentes conectadas, # 𝐶𝑜𝑚. é o número de
+comunidades encontradas e 𝑄é a modularidade da partição.
+Ao comparar as redes do Twitter/X e Telegram, observamos
+características distintas em suas topologias, que é resultado da
+própria diferença entre os modelos para a construção das redes.
+Nas redes do Twitter/X, as arestas entre vértices são criadas quando
+seus respectivos usuários retweetam um mesmo conteúdo, o que
+acontece com uma frequência bastante elevada, fazendo com que
+o número de arestas (e, consequentemente, a densidade e o grau
+médio) seja bastante elevado. Nas redes do Telegram, uma aresta só
+é criada quando um par de usuários publica mensagens de conteúdo
+idêntico e, ainda assim, observa-se uma alta quantidade de arestas
+(mesmo que muito menor que o observado nas redes do Twitter/X).
+Essa alta densidade observada nas redes em ambos os estudos de
+caso (e especialmente no Twitter/X) representa um forte indicativo
+da necessidade da aplicação de alguma estratégia para filtragem
+das relações mais importantes para uma melhor compreensão do
+fenômeno de disseminação de informação, o que neste trabalho é
+realizado através da aplicação do método para extração de back-
+bone. A presença de um alto número de arestas e, potencialmente,
+uma grande presença de relações ruidosas, prejudica, inclusive, a
+identificação da organização dos vértices em comunidades, já que
+observa-se valores de modularidade que refletem grupos pouco
+claros. Mesmo nas redes do Telegram, que possuem suas compo-
+nentes bastante fragmentadas, nota-se valores de modularidade
+baixos, correspondentes à divisão dos vértices em grupos no máx-
+imo fracamente evidentes, como no caso da janela de tempo dos
+Tumultos.
+5.2
+Extração dos Padrões de Disseminação
+5.2.1
+Twitter. Movendo para a extração dos perfis de dissemi-
+nação e caracterização das redes, as características topológicas de
+rede, bem como da estrutura de comunidades para cada classe das
+redes do Twitter/X, são apresentadas na Tabela 2.
+De imediato, nota-se que há, para as classes nas duas janelas de
+tempo, um equilíbrio no número de vértices, que não é observado
+para as arestas das redes. A Figura 2 ilustra a distribuição de vértices
+WebMedia’2024, Juiz de Fora, Brazil
+Oliveira et al.
+Tabela 2: Topologia das redes do Twitter/X por classe.
+Classe
+Data
+𝑛
+𝑚
+𝑑
+ˆ𝑘
+𝐶𝑀𝐴
+𝐶𝐶
+# 𝐶𝑜𝑚.
+𝑄
+Classe 1
+01/11/2022
+27,911
+47,173,429
+0.121
+3380,275
+0.467
+0.494
+Classe 2
+01/11/2022
+20,363
+1,373,833
+0.0066
+134,934
+0.586
+0.434
+Classe 3
+01/11/2022
+27,899
+23,980,819
+0.061
+1719,116
+0.356
+0.471
+Classe 4
+01/11/2022
+18,453
+249,058
+0.0014
+26,993
+0.271
+0.623
+Classe 1
+08/01/2023
+28,230
+41,729,887
+0.104
+2956,421
+0.300
+0.257
+Classe 2
+08/01/2023
+27,401
+4,940,636
+0.013
+360,617
+0.397
+0.311
+Classe 3
+08/01/2023
+28,236
+37,192,895
+0.093
+2634,430
+0.389
+0.323
+Classe 4
+08/01/2023
+27,578
+2,615,420
+0.0068
+189,674
+0.350
+0.342
+Classe da aresta
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+Fração
+Variável
+Arestas
+Nós
+(a) Janela de tempo: 01/11/2022
+Classe da aresta
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+Fração
+Variável
+Arestas
+Nós
+(b) Janela de tempo: 08/01/2023
+Figura 2: Fração de nós e arestas por classe nas redes do Twitter/X.
+e arestas entre as classes e nos ajuda a ter uma melhor compreensão
+das características topológicas das redes modeladas para o Twit-
+ter/X. Ademais, existe um desequilíbrio no número de arestas das
+redes de diferentes classes. Enquanto a rede para a Classe 1, que
+representa relações que não são salientes nem para a dimensão vol-
+ume e nem para a dimensão tempo, apresenta um elevado número
+de arestas, a rede para a Classe 4, que representa relações que são
+excepcionalmente relevantes em ambas as dimensões, apresenta
+um número bastante inferior de arestas, especialmente na janela ref-
+erente à data de 01/11/2022. Isso se reflete em algumas informações
+exibidas na Tabela 2, como os graus médios (e, consequentemente as
+densidades), que são substancialmente mais altas para a Classe 1 e
+mais baixas para a Classe 4, mais uma vez revelando a importância
+da identificação das arestas mais relevantes para a compreensão do
+fenômeno de disseminação de informação. É interessante também
+notar uma diferença entre as características das redes da Classe 2,
+que preserva arestas salientes relacionadas ao volume e da Classe
+3, que preserva arestas salientes relacionadas ao tempo. Esses resul-
+tados mostram que a dimensão volume apresenta relações muito
+mais díspares do que a dimensão tempo, fazendo com que as redes
+da Classe 2 sejam substancialmente menos densas que as redes
+da Classe 3.
+A organização dos vértices em comunidades nas redes com difer-
+entes classes de arestas, mais uma vez, reforça a importância da apli-
+cação do backbone de forma bidimensional. Isso fica claro quando
+observamos os valores de modularidade da Classe 4 em compara-
+ção com as outras classes em ambas janelas, mas em especial na rela-
+cionada à data de 01/11/2022. Isso mostra que quando são filtradas as
+arestas ruidosas, provenientes de relações possivelmente esporádi-
+cas ou aleatórias, considerando, simultaneamente, as dimensões
+volume e tempo, uma estrutura de comunidades de usuários pode
+ser mais claramente observada.
+Com o propósito de permitir uma visualização mais aprofundada
+da forma com que a informação é propagada nas redes com arestas
+Tabela 3: Topologia das redes do Telegram por classe.
+Classe
+Data
+𝑛
+𝑚
+𝑑
+ˆ𝑘
+𝐶𝑀𝐴
+𝐶𝐶
+# 𝐶𝑜𝑚.
+𝑄
+Classe 1
+1oTurno
+1,406
+54,467
+0.055
+77.478
+0.449
+0.126
+Classe 2
+1oTurno
+0.025
+1.321
+0.056
+0.883
+Classe 3
+1oTurno
+1,208
+26,446
+0.036
+43.785
+0.419
+0.460
+Classe 4
+1oTurno
+0.040
+4.800
+0.205
+0.379
+Classe 1
+2oTurno
+3,150
+107,218
+0.022
+68.075
+0.488
+0.159
+Classe 2
+2oTurno
+0.018
+1.677
+0.063
+0.844
+Classe 3
+2oTurno
+2,141
+53,743
+0.023
+50.204
+0.443
+0.462
+Classe 4
+2oTurno
+0.037
+5.022
+0.208
+0.414
+Classe 1
+Tumultos
+4,763
+70,313
+0.006
+29.525
+0.528
+0.351
+Classe 2
+Tumultos
+0.013
+3.362
+0.173
+0.549
+Classe 3
+Tumultos
+0.009
+2.304
+0.092
+0.789
+Classe 4
+Tumultos
+0.300
+1.200
+0.000
+0.444
+de diferentes classes, as Figuras 3 apresentam as funções de dis-
+tribuição cumulativas (CDFs) do número de retweets e do tempo
+médio de retweets de acordo com cada classe. O eixo-x indica, em es-
+cala logarítmica, os valores da variável aleatória em questão (seja #
+retweets ou tempo médio), enquanto o eixo-y indica a probabilidade
+acumulada dessa variável.
+É possível observar nas Figuras 3(a) e 3(b), que mostram as cur-
+vas de distribuição do volume de retweets das arestas por classe,
+que as Classes 2 e 4, apresentam distribuições notadamente mais
+à direita no eixo-x, indicando que as interações mais relevantes
+em relação ao volume, identificadas pelo método de backbone, são
+também aquelas que representam um maior número de retweets.
+Nota-se na Figura 3(a), por exemplo, que para a Classe 1(Classe
+3), aproximadamente 65%(80%) das arestas possuem peso 1. Já para
+as Classes 2 e 4, que capturam arestas com pesos representando
+um número maior de co-interações, os valores mínimos observados
+partem de 3. Uma análise análoga pode ser feita tomando como base
+a dimensão tempo, a partir das Figuras 3(c) e 3(d), que exibem as
+CDFs do tempo médio entre retweets em minutos para cada classe.
+Para melhorar o sentido intuitivo da análise, a normalização do
+tempo definida pela Equação 1 (Seção 3) foi desconsiderada neste
+experimento. As Classes 3 e 4 apresentam valores de tempo médio
+entre retweets consideravelmente menores, evidenciando que essas
+arestas mais relevantes em relação à dimensão tempo, capturadas
+nestas classes, representam disseminações mais rápidas, sejam em
+baixo ou alto volume. Por exemplo, na Figura 3(d), aproximada-
+mente 90% das arestas das Classes 3 e 4 foram geradas a partir de
+um tempo médio de co-interação, isto é, co-retweets, de aproximada-
+mente 1 minuto3, indicando uma probabilidade maior de arestas
+com disseminação muito mais rápida do que as Classes 1 e 2, em
+que este número representa cerca de 52%.
+5.2.2
+Telegram. As características topológicas de rede e da es-
+trutura de comunidades para cada classe das redes no Telegram
+são apresentadas na Tabela 3. Diferentemente das redes observadas
+para o estudo de caso do Twitter/X, nas redes do Telegram observa-
+se além do desequilíbrio no número de arestas, observa-se também
+um grande desequilíbrio no número de vértices entre as classes.
+A Figura 4, que ilustra graficamente a distribuição dos vértices e
+arestas entre classes, nos ajuda a compreender melhor as carac-
+terísticas topológicas das redes. Nas redes do Telegram, a Classe
+3A função Ceiling (Teto) foi usada para gerar uma melhor visualização e evitar tempo
+médio igual a zero.
+Um Framework para Análise Bidimensional de Disseminação de Informações em Plataformas de Mídias Sociais
+WebMedia’2024, Juiz de Fora, Brazil
+# retweets (x)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+P(X<=x)
+Classe da aresta
+Classe 1
+Classe 2
+Classe 3
+Classe 4
+(a) Volume - 01/11/2022
+# retweets (x)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+P(X<=x)
+Classe da aresta
+Classe 1
+Classe 2
+Classe 3
+Classe 4
+(b) Volume - 08/01/2023
+Tempo médio entre retweets (x)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+P(X<=x)
+Classe da aresta
+Classe 1
+Classe 2
+Classe 3
+Classe 4
+(c) Velocidade - 01/11/2022
+Tempo médio entre retweets (x)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+P(X<=x)
+Classe da aresta
+Classe 1
+Classe 2
+Classe 3
+Classe 4
+(d) Velocidade - 08/01/2023
+Figura 3: CDF retweets e tempo médio entre retweets para cada classe nas janelas de tempo 01/11/2022 e 08/01/2023.
+Classe da aresta
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+Fração
+Variável
+Arestas
+Nós
+(a) Janela de tempo: 1oTurno
+Classe da aresta
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+Fração
+Variável
+Arestas
+Nós
+(b) Janela de tempo: 2oTurno
+Classe da aresta
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+Fração
+Variável
+Arestas
+Nós
+(c) Janela de tempo: Tumultos
+Figura 4: Fração de nós e arestas por classe no Telegram.
+1, que corresponde às arestas que não são filtradas pelo método
+de backbone em nenhuma das dimensões, concentra um número
+consideravelmente maior de nós e arestas, assim como no estudo
+de caso do Twitter/X. Porém, há outras características topológicas
+que não se repetem neste estudo de caso. As Classe 2 e 4, que
+representam relações salientes em relação à dimensão volume, ap-
+resentam um número notadamente baixo de arestas e também de
+vértices, revelando alguns aspectos interessantes sobre o fenômeno
+de disseminação de informação nessa rede social. Em primeiro lugar,
+há um número baixo de arestas que se destacam por representarem
+o compartilhamento de um grande volume do mesmo conteúdo,
+mostrando que esse tipo de comportamento é bastante concentrado
+em poucos pares de usuários. Esse fato está fortemente relacionado
+não só ao fenômeno de disseminação de informação, mas à forma
+como a rede foi modelada no Telegram, que define como uma aresta
+o compartilhamento de mensagens com conteúdo textual idêntico,
+o que é resultado de uma ação menos intuitiva do que um retweet
+no Twitter/X, por exemplo. Além disso, o resultado para as Classe
+2 e 4 mostra também que os vértices que estão associados a essas
+classes concentram relações apenas com essa característica e, nesse
+sentido, são menos diversos do que aqueles do Twitter/X. Dessa
+forma, as redes dessas classes apresentam, além do baixo número de
+vértices e arestas, uma alta fragmentação, o que pode ser observado
+pelo alto número de componentes conexas observado na Tabela 3.
+A fragmentação observada nas redes das diferentes classes no
+Telegram tem efeito direto na estrutura de comunidades identificada.
+Em muitos casos observa-se valores de modularidade superiores
+a 0.8, como na Classe 2 nas janelas de 1o Turno e 2o Turno. En-
+tretanto, deve-se considerar esse resultado com cautela dentro da
+análise do fenômeno de disseminação de informação, já que a clara
+definição da estrutura de comunidade pode ser decorrente da di-
+visão dos vértices em componentes distintos. Assim, mesmo que
+uma informação seja propagada dentro das comunidades, cada com-
+ponente potencialmente envolverá um baixo número de vértices,
+dificultando o espalhamento de uma mensagem, o que é reforçado
+pela barreira imposta pelas diferentes componentes. Isso mostra que
+considerar arestas no backbone identificado apenas na dimensão vol-
+ume pode não ser uma estratégia adequada para a compreensão do
+fenômeno de espalhamento de informação no Telegram. Por outro
+lado, as redes da Classe 3, que consideram arestas identificadas
+pelo backbone na dimensão tempo, parecem mostrar comunidades
+melhor organizadas, mesmo com valores de modularidade menores.
+Essas redes são notadamente menos fragmentadas, o que pode ser
+visto pelo seu número de componentes conectadas, e podem ser
+estruturadas em comunidades que permitem uma melhor investi-
+gação sobre a disseminação de informação. Quando comparamos
+os resultados observados para o Telegram com aqueles observados
+para o Twitter/X, temos uma noção da complexidade do fenômeno
+de disseminação de informação em suas diferentes dimensões e
+particularidades quanto à plataforma em que acontece. Isso, mais
+uma vez, reforça a ideia central argumentada neste trabalho sobre a
+importância do estudo de relações relevantes em redes sociais, con-
+siderando não apenas uma, mas mais dimensões simultaneamente.
+Para permitir a investigação sobre a forma como ocorre a propa-
+gação nas diferentes classes de arestas, a Figura 3 apresenta as
+distribuições CDF do número de mensagens e o tempo médio de
+compartilhamento, em minutos, por classe e por janela de tempo.
+Analisamento o volume de informações por meio da distribuição
+do número de mensagens (Figuras 5(a) e 5(b)) é possível observar
+que as Classes 2 e 4 apresentam valores muito maiores indicando
+arestas com alto volume de disseminação, mostrando que as arestas
+mais relevantes, presentes no backbone tendem a também repre-
+sentar relações com alta co-interação. Por outro lado, as arestas
+das classes Classes 1 e 3 revelam um volume de disseminação
+bastante baixo, em que em todos os cenários aproximadamente
+pelo menos 95% das arestas possuem peso igual a 1. Isso revela a
+forte presença de co-interações esporádicas, porém rápidas. Em
+termos da velocidade com que a disseminação ocorre na plataforma,
+WebMedia’2024, Juiz de Fora, Brazil
+Oliveira et al.
+# de mensagens (x)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+P(X<=x)
+Classe
+Classe 1
+Classe 2
+Classe 3
+Classe 4
+(a) Volume - 1oTurno
+# de mensagens (x)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+P(X<=x)
+Classe
+Classe 1
+Classe 2
+Classe 3
+Classe 4
+(b) Volume - 2oTurno
+# de mensagens (x)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+P(X<=x)
+Classe
+Classe 1
+Classe 2
+Classe 3
+Classe 4
+(c) Volume - Tumultos
+10000
+15000
+20000
+Tempo médio (min)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+P(X<=x)
+Classe da aresta
+Classe 1
+Classe 2
+Classe 3
+Classe 4
+(d) Velocidade - 1oTurno
+10000
+15000
+20000
+Tempo médio (min)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+P(X<=x)
+Classe da aresta
+Classe 1
+Classe 2
+Classe 3
+Classe 4
+(e) Velocidade - 2oTurno
+10000
+15000
+20000
+Tempo médio (min)
+0.0
+0.2
+0.4
+0.6
+0.8
+1.0
+P(X<=x)
+Classe da aresta
+Classe 1
+Classe 2
+Classe 3
+Classe 4
+(f) Velocidade - Tumultos
+Figura 5: Função de distribuição acumulada do número de mensagens e tempo médio para cada classe nas redes do Telegram.
+as CDFs das Figuras 5(d), 5(e) e 5(f) mostram padrões de dissemi-
+nação diferentes daqueles observados no Twitter/X. As arestas das
+Classes 3 e 4 apresentam, novamente, distribuições de tempo mé-
+dio de compartilhamento de mensagens menores do que as demais,
+principalmente nas Figuras 5(d) e 5(e).
+Entretanto, alguns valores da Classe 2 chamam a atenção, apre-
+sentando tempos médios tão pequenos quanto os das Classes 3 e
+4. Relembre que o método de extração de backbone Polya Urn (Seção
+3) é baseado em um modelo que assume que as arestas salientes
+de um nó são aquelas cujos pesos destoam significativamente das
+demais em relação às arestas incidentes ao próprio nó, isto é, uma
+análise local. Este resultado mostra que, na rede de disseminação
+do Telegram, algumas arestas da Classe 2 possuem pesos tão
+baixos quanto os das Classes 3 e 4, mas ainda assim, não são
+capturadas pelo backbone e, portanto, não são classificadas como
+esses perfis de disseminação. Isso ocorre devido ao fato de essas
+arestas pertencerem a pares de nós que possuem, em seus conjuntos
+exclusivos de arestas, distribuições de pesos de tempo médio de
+compartilhamento majoritariamente baixos em relação à mesma
+distribuição de toda a rede. Nestes casos, os valores ainda mais
+baixos dessas distribuições de pesos das arestas fazem com que
+algumas arestas sejam classificadas como sendo das Classes 3
+ou 4, enquanto os demais, ligeiramente maiores em relação ao nó,
+mas bem menores para o padrão geral da rede, sejam classificados
+como sendo da Classe 2. Em resumo, esses pares de nós possuem
+conjuntos de arestas que apresentam grande potencial de dissemi-
+nação em termos de velocidade se comparados aos demais nós na
+rede. Mesmo as arestas que não são capturadas pelas Classes 3 e 4
+ainda têm tempos de disseminação menores comparados às demais.
+Dessa forma, nossos resultados revelam a existência de nós na rede
+com valores de disseminação predominantemente mais rápidos do
+que aqueles observados na rede como um todo. Por fim, ressalta-se
+que, durante os tumultos, a distribuição dos pesos baseados em
+tempo médio (Figura 5(f)) apresenta, para todas as classes, tempos
+ainda menores de forma geral.
+CONCLUSÕES E TRABALHOS E FUTUROS
+Este estudo abordou a identificação e análise de padrões de dissem-
+inação de informações em redes sociais propondo um framework
+que combina volume e velocidade das interações para caracteri-
+zar diferentes perfis de disseminação de informações. Utilizando
+dois estudos de caso - Twitter/X e Telegram - analisamos períodos
+com evidências de coordenação e características topológicas dis-
+tintas. Nossos principais resultados mostraram que o framework
+proporcionou uma visão mais detalhada dos padrões de coorde-
+nação entre contas de usuários. Identificamos diferentes classes
+de arestas com base no volume e na velocidade de disseminação,
+revelando padrões distintos de coordenação e comportamentos sin-
+cronizados nas plataformas analisadas. Mostramos também que,
+além do alto volume, arestas com outros perfis de disseminação
+formaram comunidades estruturadas, representativas de estratégias
+particulares de disseminação e coordenação.
+Como trabalhos futuros, propomos estender a análise para outros
+cenários e eventos, focando na análise de conteúdo para entender
+como diferentes tipos favorecem cada perfil de disseminação. In-
+vestigaremos como narrativas, temas e formatos de mensagens
+contribuem para a velocidade e o volume de disseminação em cada
+classe de arestas.
+AGRADECIMENTOS
+Este estudo recebeu suporte financeiro da Universidade Federal de
+Ouro Preto por meio do Programa de Bolsas de Iniciação Científica e
+Tecnológica, e do Conselho Nacional de Desenvolvimento Científico
+e Tecnológico (CNPq).
+Um Framework para Análise Bidimensional de Disseminação de Informações em Plataformas de Mídias Sociais
+WebMedia’2024, Juiz de Fora, Brazil

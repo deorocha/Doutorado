@@ -1,0 +1,285 @@
+Ferramenta de Validação NCL: Aprimorando o processo de
+desenvolvimento de aplicações de TV Digital
+Iago Victor Silva Costa
+iago.vsc@discente.ufma.br
+Universidade Federal do Maranhão
+Li-Chang Shuen
+li.chang@ufma.br
+Universidade Federal do Maranhão
+Daniel de Sousa Moraes
+danielmoraes@telemidia.puc-rio.br
+TeleMídia Lab - PUC-Rio
+Joel André Ferreira dos Santos
+jsantos@eic.cefet-rj.br
+CEFET/RJ
+Débora C. Muchaluat-Saade
+debora@midiacom.uff.br
+Lab. MídiaCom
+Universidade Federal Fluminense
+Carlos de Salles Soares Neto
+carlos.salles@ufma.br
+Universidade Federal do Maranhão
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Costa et al.
+A Ferramenta de Validação NCL foi avaliada através da aplicação
+de um roteiro de atividades formatado em um questionário divi-
+dido por tópicos, no qual foram respondidas algumas perguntas de
+múltipla escolha e feitos comentários sobre a ferramenta ao final
+da realização das tarefas de cada uma dessas etapas.
+Tal roteiro de atividades foi criado com base no modelo de ques-
+tionário SUS (System Usability Scale), em que o participante da
+pesquisa responde cada pergunta em uma escala de 1 (discorda
+completamente) a 5 (concorda completamente). No contexto desta
+pesquisa, a escala foi definida no aspecto de o quanto a ferramenta
+ajudou na identificação de erros no código ao longo de sua escrita:
+1 - Nada - a 5 - Completamente.
+Por ter envolvido a participação de seres humanos durante o
+processo de ponderação da ferramenta, foi necessário submeter a
+pesquisa à avaliação pelo Comitê de Ética da Universidade Federal
+de Juiz de Fora, por meio da Plataforma Brasil, registrada sob o
+número 79915024.4.1001.5147.
+Este artigo está dividido da seguinte forma: na Seção 2 são ex-
+ploradas a etapa de levantamento de requisitos e a arquitetura da
+Ferramenta de Validação NCL; já na Seção 3 são discutidos os re-
+sultados obtidos pela aplicação do roteiro de atividades; na Seção 4,
+são feitas as considerações finais sobre os resultados e a utilidade
+da ferramenta desenvolvida.
+FERRAMENTA DE VALIDAÇÃO NCL
+A presente seção fornece uma discussão sobre o processo de le-
+vantamento de requisitos e descreve a arquitetura proposta para a
+ferramenta.
+2.1
+Levantamento de Requisitos
+Uma das metas do projeto de TV 3.0 é a disponibilização de um
+ambiente que facilite o processo de desenvolvimento de aplicações
+interativas para TV Digital. Tal ambiente, além de outras funciona-
+lidades, traz a validação em tempo real de código NCL, realizada
+tanto pelo Schema XML que define a linguagem, quanto por uma
+ferramenta de validação estrutural [1] [11]. A partir de reuniões
+internas da equipe de Pesquisa e Desenvolvimento (P&D), foram
+estabelecidos os seguintes tipos de validação estrutural que este
+módulo deveria executar:
+Validação de Atributos - Verifica se atributos relacionados
+possuem valores corretos
+Validação de Referências - Verifica se elemento referenciado
+é do tipo correto
+Validação de Composicionalidade - Verifica se referências
+são feitas para elementos dentro da composição
+Validação de Aninhamento de Composições - Verifica se
+há loops de aninhamento causados por reúso
+Validação de Reúso de elementos - Verifica se há loops de
+reúso
+A fim de atender a estas validações do ambiente de autoria,
+inicialmente foram levantadas as tags que estão envolvidas em
+cada um desses tipos de validação, bem como as regras e relações
+associadas a tais tags. No decorrer da sondagem por estas tags,
+também fez-se importante entender o funcionamento de algumas
+áreas funcionais da NCL, visando delimitar a abrangência de cada
+Tabela 1: Áreas funcionais da NCL 3.0 (1/3)
+Tabela 2: Áreas funcionais da NCL 3.0 (2/3)
+tipo de validação. Tomou-se como base a tabela apresentada nas
+Tabelas 1, 2 e 3, retiradas do livro Programando em NCL 3.0 [14].
+Durante todo o processo de estudo da linguagem, foi gerada
+uma tabela, acessível a partir do link no apêndice, que consistiu
+em reunir algumas das tags da linguagem NCL e seus respectivos
+atributos para determinar quais estavam envolvidos no que se quis
+verificar.
+Para a primeira versão da ferramenta de validação, apenas os ele-
+mentos utilizados com mais frequência foram considerados, tendo-
+se a intenção de acrescentar mais à medida que o ambiente for
+atualizado. Na tabela A, as células marcadas em cinza indicam ele-
+mentos que possuem atributos relacionados a alguma validação,
+Ferramenta de Validação NCL: Aprimorando o processo de desenvolvimento de aplicações de TV Digital
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Tabela 3: Áreas funcionais da NCL 3.0 (3/3)
+enquanto as marcadas em amarelo apontam os atributos propri-
+amente ditos. Na coluna “VALIDAÇÃO” estão descritas o que foi
+validado com respeito ao atributo correspondente.
+2.2
+Arquitetura da Ferramenta de Validação
+NCL
+A Ferramenta de Validação NCL está sendo desenvolvida como
+uma extensão para o editor de texto Visual Studio Code [7] e é
+compatível com as versões 1.82.0 em diante. Extensões permitem
+adicionar linguagens, depuradores e ferramentas para dar suporte
+ao trabalho executado.
+A ferramenta deve ser instalada no Visual Studio Code como
+uma extensão, que se comunica com a API de extensões disponi-
+bilizada pelo editor para personalizar seu comportamento - neste
+caso, indicar textual e visualmente erros e/ou ações inesperadas
+diretamente no código-fonte. O diagrama de componentes ilustrado
+na Figura 1, descreve a intregação da Ferramenta de Validação NCL
+com a API de extensões fornecida pelo VS Code.
+Visual Studio Code
+Funções para customizar
+o funcionamento do VS
+Code (Mensagens no
+código-fonte, novos
+componentes na UI, etc.)
+Aplicação NCL
+Mensagens
+de alerta/erro
+no código-fonte
+API
+Extensões
+Ferramenta
+de
+Validação
+Arquivo
+NCL
+import
+import
+Arquivo
+NCL
+Arquivo
+NCL
+Figura 1: Diagrama de Componentes
+Conforme mostra a Figura 2, ao abrir um arquivo do tipo NCL
+(“arquivo.ncl”, por exemplo) e/ou realizar alguma forma de edição,
+como apagar e escrever texto ou salvar alterações feitas, a ferra-
+menta guarda uma representação hierárquica de todo o documento
+- a árvore DOM [4] -, contendo cada tag, suas tags “filhas”, atributos
+e outros, a partir dos quais verifica o atendimento do código às
+regras estabelecidas na norma da linguagem NCL.
+Abrir arquivo NCL no VS Code
+onDidOpenTextDocument()
+new domParser().parseFromString()
+Ferramenta de
+Validação
+API Extensões
+[Validação de Documento]
+Iago Victor | August 28, 2024
+Desenvolvedor
+[document.fileName.endsWith('.ncl')] createDiags()
+domParser
+Objeto XMLDocument
+Representação
+Hierárquica
+diagnostics
+Mensagens
+de
+Erro/Alerta
+diagCollection.set(docURI, diagnostics)
+Laço
+[onDidChangeTextDocument()]
+Figura 2: Diagrama de Sequência (Validação de Documento)
+Figura 3: Diagnóstico de Erro
+Na Figura 3, a ferramenta aponta que o identificador referenciado
+pelo atributo component da tag <port> não existe. Neste exemplo,
+o atributo deveria referenciar a tag <media> imediatamente abaixo,
+mas o identificador referenciado está escrito sem a letra “i”. Por-
+tanto, não havendo nenhuma tag com id “vdeo1”, existe um erro
+em <port>.
+RESULTADOS
+Após a criação e testes do roteiro de avaliação da Ferramenta de
+Validação NCL, foi solicitada a realização individual das atividades
+nele presente a alunos de graduação e pós-graduação em cursos da
+área de Computação de diferentes universidades que soubessem
+codificar utilizando a linguagem NCL em um nível ao menos básico
+- criação de aplicações com comportamentos definidos por elos.
+Foram obtidas sete respostas ao roteiro, as quais configuraram o
+quadro de avaliações da Figura 4, onde cada seção é representada
+por uma barra.
+Note que, para o participante 6, a avaliação da seção sobre Reuso
+em NCL é zero, opção referente à impossibilidade de completar
+todos os passos. Tal opção foi adicionada devido à abrangência das
+validações definidas durante o projeto da ferramenta, que levou a
+um certo salto de dificuldade nas tarefas a serem executadas. Uma
+situação semelhante ocorreu com o participante 7, com a diferença
+de que, além da questão de conhecimento da linguagem, também
+há o fato de que ele utilizou o OSS Code, uma versão de código
+aberto do Visual Studio Code sem código proprietário da Microsoft,
+que possivelmente causou erros internos durante a execução da
+extensão da ferramenta.
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Costa et al.
+Avaliação da Ferramenta
+Participante
+Region & Descriptor
+Link & Connector
+Composicionalidade
+Reuso
+Avaliação Geral
+Figura 4: Avaliações em cada Seção por Participante
+Participante
+Média de Avaliação
+Média das Avaliações do Participante
+Avaliação Geral (Seção 5) do Participante
+Figura 5: Média de Avaliação por Participante
+Apesar destes impasses, a maioria das avaliações foi de pontuação
+4 - a ferramenta ajudou muito na identificação de erros (maioria
+deles) - e 5 - todos os erros foram identificados e corrigidos devido
+à ferramenta -, apontando para a satisfação de se ter um validador
+que assinale falhas em tempo real.
+Como se pode observar na Figura 5, não houve disparidade entre
+as médias das avaliações (primeiras 4 seções) de cada participante e
+suas respectivas avaliações gerais (dadas na seção 5 do roteiro) para
+a maioria dos casos, o que demonstra constância tanto do impacto da
+Ferramenta de Validação ao longo das áreas funcionais consideradas
+nesta primeira versão quanto das respostas dos voluntários deste
+estudo, refletindo sua veracidade.
+Em relação ao caso do participante 7, a média de suas avaliações
+foi baixa devido à não completude dos passos em 2 seções, derivando
+daí avaliação 0 em ambas. No entanto, considerando-se apenas as
+outras duas seções, que foram completamente feitas, a média passa
+a ser de 4.5/5, bem mais próxima à classificação geral.
+Segundo a Figura 6, apesar da dificuldade acentuada dos passos
+do roteiro a partir da seção sobre Composicionalidade (seção 3), a
+menor média que a ferramenta atingiu foi de 3.1/5, enquanto as
+outras se aproximaram mais de 4.
+Por fim, apesar das avaliações quantitativas de média alta, dois
+problemas pontuais foram explicitados por meio de comentários
+feitos pelos participantes: (i) É acusado erro na importação de do-
+cumentos caso o valor do atributo documentURI contenha os ca-
+racteres "./", usados comumente para se referir ao diretório onde o
+documento aberto se encontra, o que causa a notificação incorreta
+de erro tanto na importação quanto nas referências aos elementos
+importados, mesmo que estejam corretas; (ii) Os erros marcados
+não são exibidos na aba Problems do VS Code, sendo possível visua-
+lizar suas descrições apenas ao posicionar o cursor em cima de sua
+indicação visual.
+4,7
+3,7
+4,3
+3,1
+4,3
+Seção
+Média de Avaliação
+0,0
+1,0
+2,0
+3,0
+4,0
+5,0
+Figura 6: Média de Avaliação por Seção
+CONSIDERAÇÕES FINAIS
+O objetivo deste trabalho foi avaliar a utilidade de um validador
+para a linguagem NCL, que facilita e acelera a criação de aplicações
+interativas de Televisão. Sendo parte do Ambiente de Autoria, tec-
+nologia proposta a fim de suprir um dos requisitos do projeto TV
+3.0, este validador, referido como Ferramenta de Validação NCL,
+poderá impulsionar o uso da linguagem na produção de software
+voltado à TV Digital brasileira.
+Tanto no decorrer da elaboração deste trabalho, quando outros
+integrantes das equipes de Pesquisa & Desenvolvimento do projeto
+TV 3.0 puderam utilizar a ferramenta, quanto no momento da aná-
+lise das respostas do roteiro, observou-se que ter acesso simples e
+rápido a uma ferramenta que norteie o desenvolvedor durante a
+escrita de cada parte do programa é de grande valia.
+Os resultados apresentados neste trabalho são qualitativos e com-
+postos de uma pequena amostra de voluntários. Não é tão simples
+alcançar um número maior de voluntários, dadas as especificidades
+necessárias para tal. No entanto, como trabalho futuro espera-se
+Ferramenta de Validação NCL: Aprimorando o processo de desenvolvimento de aplicações de TV Digital
+WTVDI’2024, Juiz de Fora/MG, Brazil
+confirmar os resultados preliminares apresentados neste artigo com
+um grupo maior de usuários.
+Outro desdobramento possível é fazer uma avaliação sobre os be-
+nefícios na integração da ferramenta com extensões NCLua e HTML
+da IDE Microsoft Visual Studio. Neste estudo futuro pretende-se
+medir o impacto de se ter uma IDE integrada que permita a criação
+de aplicações de TV digital que sejam tanto declarativas quanto
+imperativas.
+AGRADECIMENTOS
+Os autores agradecem ao Ministério da Comunicações, Fórum
+SBTVD e RNP pelo suporte financeiro para este trabalho.

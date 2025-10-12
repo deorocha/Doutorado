@@ -1,0 +1,963 @@
+Análise de sentimentos de conteúdo compartilhado em
+comunidades brasileiras do Reddit:
+Avaliação de um conjunto de dados rotulados por humanos
+Giovana Piorino
+Universidade Federal de Minas Gerais
+giovana.piorino@dcc.ufmg.br
+Vitor Moreira
+Universidade Federal de Minas Gerais
+vitormoreira@dcc.ufmg.br
+Luiz Henrique Quevedo Lima
+Universidade Federal de Minas Gerais
+luiz.quevedo@dcc.ufmg.br
+Adriana Silvina Pagano
+Universidade Federal de Minas Gerais
+apagano@ufmg.br
+Ana Paula Couto da Silva
+Universidade Federal de Minas Gerais
+ana.coutosilva@dcc.ufmg.br
+WebMedia’2024, Juiz de Fora, Brazil
+Giovana Piorino, Vitor Moreira, Luiz Henrique Quevedo Lima, Adriana Silvina Pagano, and Ana Paula Couto da Silva
+TRABALHOS RELACIONADOS
+Estudos exploraram a análise de sentimentos em textos de redes
+sociais em português brasileiro, tendo alguns deles disponibilizados
+publicamente os conjuntos de dados utilizados nos trabalhos.
+Dentre eles, os autores [36] realizaram análises textuais e de
+sentimento com base em textos em português brasileiro da rede
+social Twitter. O trabalho mostra diferentes metodologias para
+auxiliar análises textuais com enfoque nessa rede social, como o
+Twittómetro e o Amazon Mechanical Turk2.
+Outras análises, como em [14], também exploraram a detecção de
+tópicos e a análise de sentimentos em textos do Twitter no contexto
+brasileiro, com ênfase em temas relacionados à COVID-19. A abor-
+dagem de extração de tópicos utilizada foi a LDA (Latent Dirichlet
+Allocation), e a análise de sentimentos para os textos em português
+obteve auxílio do mUSE(Multilingual Universal Sentence Encoder for
+Semantic Retrieval), e do SemEval 2018. Ainda relativo ao Twitter,
+os autores em [40] coletaram tweets em português brasileiro de
+forma a compor um conjunto de dados 3 de 15.000 tweets, extraídos
+entre janeiro e julho de 2017. Para esse estudo, os tweets também
+foram classificados com os rótulos positivo, negativo e neutro, por
+anotadores cuja anotação obteve métricas de alfa de krippendorf
+de 0,529, considerada uma concordância moderada.
+Dentre os modelos direcionados à língua portuguesa e à análise
+de sentimentos, tem-se o VADER[16](Valence Aware Dictionary for
+Sentiment Reasoning), que apresenta uma extensão para a língua
+portuguesa chamada LeIA [1] (Léxico para Inferência Adaptada),
+a qual rotula textos entre categorias positivo, negativo e neutro,
+podendo se adaptar a diferentes contextos, sem se restringir ao
+escopo de textos de uma rede social específica.
+No que diz respeito a trabalhos relacionados à rede social Red-
+dit, os autores [6] utilizaram o modelo GoEmotions baseado em
+um conjunto de dados com aproximadamente 58.000 comentários
+rotulados manualmente com categorias de emoções, redigidos em
+inglês e traduzidos para o português. O estudo também realizou
+correlações linguísticas entre as emoções identificadas e os comen-
+tários rotulados, e obteve métricas de avaliação das anotações e do
+modelo. No entanto, devido à grande quantidade de categorias de
+emoções presentes na rotulação, as métricas geraram valores, em
+geral, moderados ou fracos para a tarefa de anotação.
+Em [17], os autores utilizaram conjunto de dados de textos extraí-
+dos do Twitter e do Reddit para avaliar distintas configurações de
+pipelines de pré-processamento dos textos em português brasileiro,
+passíveis de serem implementadas antes da aplicação de métodos
+de modelagem de tópicos. As adaptações avaliadas evidenciaram
+melhoras em todas as métricas.
+Apesar do recente crescimento da rede social Reddit, ainda há
+poucas referências na literatura sobre análises textuais e de tarefas
+de anotação de sentimentos em textos dessa rede, principalmente
+em português brasileiro. Assim, nosso estudo busca expandir os
+recursos de PLN em português brasileiro, fornecendo um conjunto
+de dados anotado com sentimentos, juntamente com os resulta-
+dos das métricas centrais de avaliação da anotação humana e a
+caracterização da linguagem dos textos no conjunto de dados.
+2https://www.mturk.com/
+3https://bitbucket.org/HBrum/tweetsentbr/src/master/
+Tabela 1: Subreddits selecionados e total de postagens e co-
+mentários (2022).
+Subreddit
+Postagens
+Comentários
+r/brasil
+115,876
+2,382,928
+r/desabafos
+115,876
+1,487,076
+r/futebol
+35,826
+1,272,009
+r/saopaulo
+7,308
+88,894
+r/eu_nvr
+12,631
+221,348
+r/botecodoreddit
+7,059
+62,999
+r/conversas
+21,967
+355,761
+r/investimentos
+9,756
+156,695
+r/tiodopave
+2,371
+12,106
+r/brasilivre
+67,301
+1,308,441
+Total
+390,924
+7,348,257
+METODOLOGIA
+Nesta seção primeiramente apresentamos a metodologia utilizada
+para coletar o conjunto original de dados. A seguir, descrevemos
+a processo de anotação manual de um conjunto selecionado dos
+dados. Por fim, apresentamos os métodos usados para a análise
+linguística dos comentários anotados.
+3.1
+Conjunto de Dados
+Reddit é uma mídia social online organizada em subcomunida-
+des por áreas de interesse ou subreddits, nas quais usuários discu-
+tem diferentes assuntos, através de interações do tipo postagem-
+comentários, chamadas de threads. Nossa base original de dados
+consiste em atividades de usuários (postagens e comentários)4 entre
+os meses de janeiro e dezembro de 2022 realizadas nas 10 comuni-
+dades brasileiras com maior número de usuários ativos. A Tabela
+1 apresenta as principais estatísticas das 10 comunidades selecio-
+nadas. Os dados foram coletados a partir da plataforma Pushshift,
+que coleta, analisa e arquiva conteúdos do Reddit desde 2015 [4].
+Estes dados foram previamente apresentados em [21] e utilizados
+para a tarefa de classificação de toxicidade dos comentários com-
+partilhados nestes subreddits.
+3.2
+Anotação dos dados
+Para a classificação manual do sentimento associado a cada co-
+mentário, foram selecionados 2,000 comentários da base original
+coletada, seguindo uma amostra estratificada do total de comen-
+tários em cada comunidade analisada. Estes comentários foram
+divididos em 4 grupos, com 500 comentários cada, denominados
+Grupo1, Grupo2, Grupo3, Grupo4. Cada grupo foi anotado por 3
+anotadores distintos.
+Os anotadores são estudantes universitários convidados a partici-
+par de forma anônima e instruídos a ler e classificar cada comentário
+como Positivo, Negativo, Neutro ou Não sei dizer, levando em consi-
+deração o sentimento predominante em cada texto. Caso não fosse
+possível determinar um sentimento, a opção a ser escolhida deve-
+ria ser Não sei dizer. Para auxiliar a identificação do sentimento
+predominante, foi sugerido aos anotadores ter atenção especial a
+dois pontos: (i) os comentários negativos geralmente manifestam
+4O termo ’comentários’ será utilizado abrangendo comentários e postagens.
+Análise de sentimentos de conteúdo compartilhado em comunidades brasileiras do Reddit:
+Avaliação de um conjunto de dados rotulados por humanos
+WebMedia’2024, Juiz de Fora, Brazil
+emoções de medo, culpa, mágoa, tristeza, raiva, angústia, ansiedade
+e depressão; e (ii) os comentários neutros não apresentam nenhuma
+característica que possa levar a sua classificação como negativos
+ou positivos.
+Ao final do processo de anotação, cada comentário recebeu o
+rótulo com o sentimento atribuído pela maioria dos anotadores e
+a concordância entre os avaliadores foi medida por três métricas
+comumente usadas: Kappa de Fleiss [7], Alpha de Krippendorf [20]
+e Concordância Observada [8].
+3.3
+Classificação Automática de Sentimentos
+Para medir a correlação entre a classificação automática e manual
+de sentimentos nos comentários amostrados do Reddit, escolhemos
+o modelo XLM-RoBERTa (Cross Lingual Language Model - Robustly
+Optimized BERT-Pretraining Approach) 5 como nosso baseline, que
+está disponível na biblioteca Hugging Face.
+O modelo utilizado já havia passado por um ajuste fino baseado
+em textos da rede social Twitter em português. A escolha desse
+modelo se deve à sua grande base treinada em aproximadamente
+10 milhões de tweets na língua portuguesa [3] e a o modelo ser
+direcionado à tarefa de análise de sentimentos.
+3.4
+Análise Textual
+Antes de iniciar a análise textual, os 2.000 comentários anotados
+foram submetidos a filtros, utilizando-se expressões regulares [13],
+com o objetivo de detectar o conteúdo dos comentários a serem
+excluídos da análise: endereços de sites, menções a outros usuários,
+hashtags, textos citados, datas ou emojis. Risadas expressas em
+texto foram removidas, assim como comentários contendo palavras
+gramaticais que ocorriam isoladamente e sem valor de informação
+para nossa análise, com base na lista de (stopwords) da biblioteca
+NLTK[26] e em um modelo do spaCy[37]. Assim, 19 comentários
+foram removidos das análises após os filtros.
+3.4.1
+Razão Type-Token Type-Token Ratio (TTR). Com a tokeniza-
+ção dos comentários feita pela biblioteca [25], determinamos a di-
+versidade lexical usando a medida TTR. O resultado do TTR advém
+do número de tokens distintos dividido pelo número total de tokens
+existentes no comentário. Complementamos a análise avaliando o
+tamanho (em número de tokens) dos comentários de cada grupo.
+3.4.2
+Etiquetagem de classe de palavra (Pos Tagging). Para exami-
+nar as classes de palavra predominantes nos comentários rotulados,
+fizemos o POS tagging [28] com um modelo pré-treinado [37], base-
+ado em um treebank anotado de acordo com o padrão das Universal
+Dependencies [11]. Esse treebank tem como principal base o traba-
+lho de [30].
+3.4.3
+Reconhecimento de Entidades Nomeadas (REN). Exploramos
+as entidades nomeadas através do uso de um modelo pré-treinado do
+spaCy. Empregamos novamente o modelo utilizado no Pos Tagging,
+sendo o conjunto de dados utilizado para treinar esse modelo o
+WikiNER [27]. Essa técnica classifica as entidades em 3 categorias:
+PESSOA (PER), LOCALIZAÇÃO (LOC) e ORGANIZAÇÃO (ORG).
+Entidades que não se enquadram nessas categorias são classificadas
+como DIVERSAS (MISC).
+5https://huggingface.co/docs/transformers/model_doc/xlm-roberta
+3.4.4
+Análise de 𝑛-gramas. . Para complementar as análises lin-
+guísticas, realizamos a análise de 𝑛-gramas. Um n-grama é uma
+sequência contígua de 𝑛itens de uma determinada amostra de texto.
+3.4.5
+Classificação de tópicos (BERTopic). Para a extração de tópi-
+cos dos comentários utilizamos o modelo BERTopic [15], a fim de
+caracterizar os conteúdos mais frequentes dos textos, e como eles se
+relacionam com os sentimentos rotulados pelos anotadores e pelo
+modelo automático RobERTa. Os comentários foram convertidos
+em vetores de representação com auxílio do modelo BERTimbau
+[35], no qual há um estágio adicional de ajuste fino direcionado à
+similaridade de semântica textual [9] [23] [31].
+Para garantir uma modelagem mais consistente dos tópicos foi
+realizada a redução da dimensionalidade dos vetores por meio do
+UMAP (Uniform Manifold Approximation and Projection for Dimen-
+sion Reduction), técnica que melhora agrupamentos subsequentes.
+Também foi utilizado o algoritmo HDBSCAN (Hierarchical Density-
+Based Spatial Clustering of Applications with Noise), obtendo-se um
+agrupamento dos vetores de representação a partir de similaridades
+semânticas. Por fim, c-TF-IDF (Class-based Term Frequency-Inverse
+Document Frequency) e MMR (Maximal Marginal Relevance) foram
+aplicados e ajustados para melhorar a definição de palavras-chave
+para os tópicos e para diversificar seu conteúdo semântico, respec-
+tivamente. Foram utilizadas recomendações presentes na documen-
+tação do modelo6 para o ajuste de tais parâmetros, sendo que para
+o UMAP, o número de vizinhos foi ajustado para 10, e o número
+de componentes, para 8. Para o HDBSCAN, o número mínimo do
+tamanho de agrupamentos é de 10, e número mínimo de amostras,
+8. O parâmetro MMR foi atualizado para uma taxa de 0.8.
+3.4.6
+Rotulações semânticas (PyMUSAS). Para a análise semântica
+dos comentários, foi utilizada a ferramenta pyMUSAS, baseada na
+estrutura USAS7 (UCREL Semantic Analysis System) adaptada à lin-
+guagem Python. Essa classificação apresenta modelos em diferentes
+línguas, incluindo o português [29], um dos motivos para seu uso
+neste trabalho.
+Resumidamente, ela apresenta uma estrutura organizada em có-
+digos, que representam categorias semânticas distintas [34]. Cada
+comentário pode ser enquadrado em uma ou mais categorias se-
+mânticas, fornecendo uma visão ampla e abstrata dos conteúdos
+presentes nos comentários e como eles estão relacionados aos sen-
+timentos rotulados.
+RESULTADOS
+Nesta seção, apresentamos os principais resultados obtidos na ava-
+liação e caracterização do conjunto de dados anotados.
+4.1
+Concordância entre anotadores
+As métricas para analisar os resultados de concordância entre os
+anotadores foram aplicadas aos subconjuntos Todas as anotações,
+abrangendo todos os comentários rotulados com as quatro cate-
+gorias disponíveis e Apenas sentimentos, abrangendo comentários
+rotulados desconsiderando o rótulo Não sei dizer, de forma a verifi-
+car o impacto desse rótulo de incerteza nos resultados. A Tabela 2
+apresenta os resultados. O Alfa de Krippendorf e o Kappa de Fleiss
+6https://maartengr.github.io/BERTopic/index.html
+7https://ucrel.lancs.ac.uk/usas/
+WebMedia’2024, Juiz de Fora, Brazil
+Giovana Piorino, Vitor Moreira, Luiz Henrique Quevedo Lima, Adriana Silvina Pagano, and Ana Paula Couto da Silva
+apresentaram valores que podem ser interpretados como concor-
+dância moderada entre os anotadores. Já a concordância observada
+apresenta valores consideravelmente maiores que as outras métri-
+cas, porém não apresenta tanta robustez, por não considerar que
+a concordância entre anotadores possa ter acontecido ao acaso.
+Em geral, observa-se que a qualidade das métricas melhora consi-
+deravelmente ao incluir apenas os comentários rotulados com os
+sentimentos e desconsiderar a categoria Não sei dizer.
+No que diz respeito à concordância total entre anotadores, isto
+é, todos os anotadores indicando o mesmo rótulo, o percentual
+de comentários que obtiveram concordância total foi 44.65% no
+subconjunto que considera todos os rótulos de anotação. Já no
+subconjunto de comentários apenas com rótulos de sentimentos,
+a concordância total aumenta para 57%. Alguns exemplos desses
+comentários se encontram na Tabela 3.
+A fim de estabelecer classificações de sentimentos para análises
+posteriores de comparação com modelos automáticos e caracteriza-
+ção dos textos, atribuímos às ocorrências de concordância parcial o
+sentimento anotado predominante, isto é, a concordância de dois
+ou mais anotadores sobre um mesmo rótulo. A Tabela 4 mostra
+que quase metade do conjunto de comentários foi majoritariamente
+rotulado como negativo, indicando um desbalanceamento de classes
+considerável. Já os rótulos positivo e neutro obtiveram proporções
+semelhantes. 10,55% dos comentários obtiveram discordância total,
+ou seja, cada anotador apontou um rótulo diferente. Este valor de
+discordância pode ser o resultado de diferentes perspectivas que
+cada anotador pode ter do que é algo positivo ou negativo [24], ou
+a presença de conteúdo com teor de sarcasmo ou falta de contexto
+adicional para facilitar a atribuição de um sentimento.
+A Tabela 5 indica o desempenho de cada trio de anotadores e
+suas respectivas métricas, sendo possível observar que a anota-
+ção dos comentários pertencentes ao grupo 4 obteve o melhor e
+aqueles do grupo 3 o pior desempenho. No entanto, em geral, as
+anotações obtiveram métricas de concordância razoavelmente pró-
+ximas, apontando para concordâncias médias e moderadas entre
+seus respectivos anotadores. De forma complementar, a Tabela 6
+apresenta a rotulação de sentimentos para cada anotador, dentro
+de cada grupo de comentários.
+Uma análise interessante a ser realizada está relacionada ao
+grau de incerteza presente na tarefa de rotulação. No total dos
+2,000 comentários rotulados, a opção Não sei dizer foi selecionada
+por pelo menos um dos três anotadores em 23,05% do conjunto
+total. No entanto, apenas em 4,1% dos comentários, dois ou mais
+anotadores rotularam o mesmo comentário com Não sei dizer, uma
+queda significativa que pode indicar que há uma dificuldade maior
+em 2 ou mais anotadores caracterizarem incerteza de sentimento
+para um mesmo texto. Um exemplo de texto em que 2 ou mais
+anotadores apresentaram incerteza na rotulação é: "Curti muito sua
+dupla personalidade, hehe.", o que parece ser uma frase de sarcasmo,
+dificultando ainda mais a tarefa de rotulação, mesmo para humanos.
+Observamos também grande variação nas categorias escolhidas
+pelos anotadores. A Tabela 7 apresenta os resultados das métri-
+cas de avaliação de concordância entre anotadores em cada grupo
+de comentários. Vemos que para um mesmo grupo de textos, o
+anotador 1 assinalou 13,60% dos comentários com Não sei dizer,
+enquanto que o anotador 3 atribuiu esse rótulo a apenas 0,40% dos
+comentários. Tais resultados reafirmam o apontado na literatura
+Tabela 2: Concordância entre anotadores.
+Métrica
+Todas as anotações
+Apenas sentimentos
+Kappa de Fleiss
+0,40
+0,51
+Alfa de Krippendorf
+0,47
+0,53
+Concordância observada
+0,60
+0,70
+Tabela 3: Exemplos de comentários que obtiveram concor-
+dância total entre os anotadores
+Sentimento
+Exemplo de comentário
+Positivo
+Ahh para, eu curto cidadezinha,
+as vezes eu vou pra uns lugares desse,
+fico uns 2 ou 4 dias, acho super legal.
+Negativo
+Intervencionismo externo visando ganho
+próprio e sem estudar a situação complexa
+e possiveis consequencias. Um clássico
+dos estados unidos de m*rda
+Neutro
+Subsidio para quem vender preferencialmente
+para o mercado interno ou o contrario,
+cobrar mais imposto sobre o produto exportado.
+Tabela 4: Porcentagem de comentários para cada agrupa-
+mento de rotulação e para a discordância total.
+Classificação
+Porcentagem
+Negativo
+48,05%
+Neutro
+20,95%
+Positivo
+16,30%
+Discordância total
+10,55%
+Não sei dizer
+4,15%
+Tabela 5: Métricas de avaliação para concordância entre ano-
+tadores para cada grupo desconsiderando o rótulo Não sei
+dizer.
+Métrica
+Grupo1
+Grupo2
+Grupo3
+Grupo4
+Kappa de Fleiss
+0,41
+0,39
+0,34
+0,44
+Alfa de Krippendorf
+0,48
+0,48
+0,40
+0,50
+Concordância observada
+0,60
+0,58
+0,56
+0,64
+sobre a subjetividade nas avaliações de sentimento e a dificuldade
+dessa tarefa. Adicionalmente, analisando os dados correspondentes
+na Tabela 6, observa-se que o grupo 1 apresentou, em geral, maior
+classificação de comentários positivos, e o anotador 3 desse grupo
+foi o que mais rotulou positivamente, por uma grande margem de
+diferença em relação aos demais. Por outro lado, o anotador 2 do
+grupo 4 foi o que mais rotulou negativamente, ainda que, em geral,
+obteve um proporção de anotações consideravelmente constante
+em relação aos outros anotadores de seu grupo, que é o que apresen-
+tou as melhores métricas de concordância. O grupo 3, grupo com
+as mais baixas métricas de concordância, apresentou disparidades
+consideráveis entre as proporções de rotulações, tendo o anotador
+1 desse grupo demonstrado discrepância razoável de proporções de
+rotulações em relação aos anotadores 2 e 3.
+Análise de sentimentos de conteúdo compartilhado em comunidades brasileiras do Reddit:
+Avaliação de um conjunto de dados rotulados por humanos
+WebMedia’2024, Juiz de Fora, Brazil
+Tabela 6: Distribuição de rotulação de sentimentos para cada anotador.
+Grupo1
+Grupo2
+Grupo3
+Grupo4
+Anotador 1
+Anotador 2
+Anotador 3
+Anotador 1
+Anotador 2
+Anotador 3
+Anotador 1
+Anotador 2
+Anotador 3
+Anotador 1
+Anotador 2
+Anotador 3
+Positivo
+22,8%
+16,6%
+35,4%
+19,6%
+18,8%
+19,8%
+17,6%
+24,0%
+10,0%
+15,2%
+15,4%
+14,8%
+Negativo
+47,6%
+46,8%
+38,4%
+45,4%
+50,2%
+44,0%
+55,6%
+43,6%
+48,0%
+42,0%
+57,2%
+46,6%
+Neutro
+16,0%
+28,0%
+25,8%
+24,4%
+21,4%
+14,0%
+19,4%
+27,2%
+25,2%
+25,8%
+27,2%
+38,4%
+Não sei dizer
+13,6%
+0,86%
+0,4%
+10,6%
+9,6%
+22,2%
+7,4%
+5,2%
+16,8%
+17,0%
+0,2%
+0,2%
+Tabela 7: Porcentagem de comentários categorizados como
+Não sei dizer por anotador e grupo.
+Anotadores
+Grupo1
+Grupo2
+Grupo3
+Grupo4
+Anotador 1
+13,60%
+10,60%
+7,40%
+17,00%
+Anotador 2
+8,60%
+9,60%
+5,20%
+0,20%
+Anotador 3
+0,40%
+22,20%
+16,80%
+0,20%
+4.2
+Comparação com XLM-RoBERTa
+O rótulo final de cada comentário foi atribuído com base na con-
+cordância de 2 ou mais anotadores. Feita essa atribuição, a fim de
+ajustar os rótulos aos que estão presentes no modelo XLM-RoBERTa
+(Positivo, Negativo e Neutro), foram removidos comentários em que
+houve discordância total entre anotadores e comentários em que a
+maioria dos anotadores selecionou Não sei dizer, resultando num to-
+tal de 1.706 comentários utilizados para comparação com o modelo
+treinado.
+Após essa etapa, realizamos a comparação entre os anotadores
+e o modelo, que obteve acurácia de 62,37% (porcentagem de co-
+mentários em que o rótulo indicado pelo modelo coincidiu com a
+anotação humana) e Kappa de Cohen de 0,34, considerado razoavel-
+mente fraco [5]. O modelo apresentou as seguintes porcentagens
+de sentimentos: 12,49% de comentários positivos, 60,90% de comen-
+tários negativos e 26,61% de comentários neutros. A taxa de rótulos
+negativos foi consideravelmente superior à da anotação humana,
+que é de 48,05%.
+A distribuição da concordância entre os grupos foi bem simi-
+lar, com variações entre 60% - 65% de concordância do modelo em
+relação aos anotadores. O grupo 3 apresentou a menor taxa de
+concordância com modelo, com 60,66%, e o grupo 4 apresentou a
+melhor taxa, com 65,27%. Tais resultados são análogos aos obtidos
+com as métricas de concordância entre anotadores apresentadas
+anteriormente, em que os grupos 3 e 4 apresentaram o pior e o
+melhor desempenho, respectivamente.
+O modelo apresentou uma taxa de concordância para rótulos
+negativos razoavelmente alta entre os grupos, variando de 75,10%-
+83,33%, enquanto que as taxas de concordância para rótulos posi-
+tivos foram as mais baixas entre os grupos, abrangendo uma por-
+centagem de rótulos indicados corretamente entre 33,01% e 38,24%.
+Isso contrasta com o fato de que sua taxa de rotulações positivas é
+similar à taxa dos anotadores, indício de que o modelo exibe grande
+dificuldade para identificar corretamente um comentário positivo.
+Tal observação se relaciona com os resultados das principais métri-
+cas apresentadas na Tabela 8, em que a classe negativo apresentou
+valores maiores e mais consistentes que as demais, além do des-
+balanceio da amostra citado anteriormente, havendo ocorrências
+significantemente maiores de rótulos negativos. Para rotulações
+Tabela 8: Métricas de comparação entre anotadores e modelo
+XLM-RoBERTa.
+Classe
+Precisão
+Recall
+F1-Score
+Positivo
+0,54
+0,35
+0,42
+Negativo
+0,72
+0,78
+0,75
+Neutro
+0,44
+0,48
+0,46
+Média Macro
+0,57
+0,54
+0,54
+Média Ponderada
+0,62
+0,62
+0,62
+Tabela 9: Quantidade de comentários para cada agrupamento
+de rotulação e para a discordância total.
+Classificação
+Quantidade de Comentários
+Negativo
+Neutro
+Positivo
+Discordância total
+Não sei dizer
+para negativo, o grupo 1 apresentou maior taxa de concordância em
+relação ao modelo, com 83,33%. Para os rótulos positivo e neutro, o
+grupo 4 obteve a maior taxa, com 38,24% e 56,64% respectivamente.
+Também buscamos identificar características dos textos em que
+o modelo fez uma predição do rótulo errado. Um exemplo de co-
+mentário que obteve concordância total entre anotadores, mas que
+o modelo errou em sua predição de rótulo, é: "Dai querem vir opinar
+no nosso jogo. Americano é f*da... bom que não entendem nada", que
+os anotadores indicaram como negativo, mas o modelo considerou
+como positivo. Em geral, para as ocorrências de concordância total
+dos anotadores, o modelo obteve uma taxa de erros de 38%.
+4.3
+Caracterização da Linguagem
+A comparação dos padrões de linguagem foi realizada por meio do
+agrupamento de comentários baseado no rótulo predominante das
+3 rotulações feitas pelos anotadores a cada comentário. Utilizou-se
+um p-valor < 0,5 em todas as análises para garantir a significância
+estatística. A Tabela 9 exibe os dados após a filtragem de textos e,
+consequentemente, de comentários que não continham informações
+úteis. Esses dados foram utilizados nas análises realizadas.
+Razão Type-Token Type-Token Ratio (TTR): Quanto à análise
+do TTR, existem diferenças entre as médias de caracteres por co-
+mentário nos agrupamentos, em especial, entre o agrupamento
+Não sei dizer e os demais. O agrupamento Não sei dizer apresen-
+tou a menor média, com 43,13 [29,08, 60,15]. O agrupamento de
+comentários neutros teve uma média de 81,41 [69,65, 94,45], já os
+agrupamentos de comentários negativos e positivos apresentaram
+WebMedia’2024, Juiz de Fora, Brazil
+Giovana Piorino, Vitor Moreira, Luiz Henrique Quevedo Lima, Adriana Silvina Pagano, and Ana Paula Couto da Silva
+Tabela 10: Porcentagem de etiquetas pos para cada classe
+rotulada.
+Classificação
+NOUN
+VERB
+ADJ
+PROPN
+ADV
+Negativo
+35,51%
+30,54%
+18,28%
+6,28%
+4,17%
+Neutro
+34,97%
+27,83%
+18,08%
+10,07%
+3,92%
+Positivo
+34,49%
+32,19%
+17,82%
+6,31%
+3,66%
+Não sei dizer
+29,84%
+26,16%
+14,15%
+18,41%
+2,71%
+médias de 98,46 [90,57, 106,66] e 99,13 [80,11, 122,28]. Esses resulta-
+dos podem indicar que comentários com sentimentos negativos e
+positivos tendem a ser mais longos do que comentários neutros e
+aqueles que necessitam de mais contexto para serem interpretados,
+categorizados como Não sei dizer. No entanto, ao aplicar o teste es-
+tatístico de Mann-Whitney8[38], não foi encontrada uma diferença
+entre o agrupamento neutro e o agrupamento positivo. Por outro
+lado, ao realizarmos o teste estatístico tanto para compararmos
+o agrupamento negativo com o neutro quanto para compararmos
+o agrupamento negativo com o positivo, foi demonstrado que há
+diferenças significativas entre eles.
+Em relação à média e ao intervalo de confiança TTR, os agrupa-
+mentos apresentaram os seguintes valores: o agrupamento Não sei
+dizer apresenta 0,98 [0,96, 0,99], o agrupamento neutro, 0,97 [0,96,
+0,98], o agrupamento negativo, 0,97 [0,96, 0,97] e o agrupamento
+positivo, 0,97 [0,97, 0,98]. A análise com o teste de Mann-Whitney
+indicou que o único agrupamento com diferença significativa em
+relação aos outros foi o agrupamento Não sei dizer. Nos demais re-
+sultados, o mesmo teste estatístico será utilizado e, portanto, iremos
+omitir o seu nome.
+Etiquetagem de classe de palavra (Pos Tagging): A média e o
+intervalo de confiança da diversidade de etiquetas POS para cada
+agrupamento são os seguintes: o agrupamento Não sei dizer apre-
+senta 0,73 [0,66, 0,79], o agrupamento neutro, 0,57 [0,55, 0,60], o
+agrupamento negativo, 0,50 [0,48, 0,51] e o agrupamento positivo,
+0,56 [0,52, 0,59]. Esses resultados corroboram os obtidos no TTR,
+especialmente na diferença entre o agrupamento Não sei dizer e os
+demais em termos de diversidade. Vale ressaltar que o agrupamento
+negativo possui a menor média.
+A Tabela 10 apresenta a representatividade das principais eti-
+quetas pos em relação ao total de palavras etiquetadas de cada
+agrupamento de comentários. Para um maior aprofundamento, ana-
+lisamos a média de palavras classificadas com etiquetas específicas
+por comentário, começando pelos adjetivos (ADJ). A média e o
+intervalo de confiança para cada agrupamento são os seguintes: o
+agrupamento Não sei dizer apresenta 0,93 [0,62, 1,29], o agrupa-
+mento neutro, 1,94 [1,58, 2,36], o agrupamento negativo, 2,41 [2,21,
+2,62] e o agrupamento positivo, 2,38 [1,90, 2,98]. O agrupamento Não
+sei dizer possui a menor média. Ao aplicar o teste estatístico nos
+demais agrupamentos, observamos que há diferenças significativas
+entre todos eles, a partir de comparações entre negativos e neutros,
+negativos e positivos, e positivos e neutros.
+Para os substantivos (NOUN), a média e o intervalo de confiança
+para cada agrupamento são os seguintes: o agrupamento Não sei
+dizer apresenta 1,96 [1,38, 2,65], o agrupamento neutro, 3,76 [3,24,
+8O teste Mann-Whitney é um teste não paramétrico utilizado para verificar se dois
+grupos de amostras independentes pertencem ou não à mesma população.
+4,33], o agrupamento negativo, 4,681 [4,31, 5,06] e o agrupamento
+positivo, 4,61 [3,74, 5,66]. Como no caso dos adjetivos, o agrupa-
+mento Não sei dizer apresenta a menor média. O teste estatístico
+revela diferenças significativas ao confrontarmos o agrupamento
+negativo com o positivo e o agrupamento negativo com o neutro,
+porém, isso não se prova verdade ao confrontarmos o agrupamento
+neutro com o positivo.
+A média e intervalo de confiança dos agrupamento para os verbos
+(VERB) são os seguintes: o agrupamento Não sei dizer apresenta 1,71
+[1,09, 2,52], o agrupamento neutro, 2,99 [2,58, 3,43], o agrupamento
+negativo, 4,03 [3,68, 4,38] e o agrupamento positivo, 4,30 [3,45, 5,33].
+Observa-se o mesmo padrão para o agrupamento Não sei dizer nas 3
+etiquetas. O teste estatístico indica diferenças significativas ao com-
+pararmos o agrupamento negativo com o positivo e o agrupamento
+negativo com o neutro, mas não mostrou diferenças significativas
+ao compararmos o agrupamento neutro com o positivo.
+Por fim, o agrupamento de comentários classificados como Não
+sei dizer é o único que apresenta mais etiquetas POS de nome
+próprio (PROPN) do que de adjetivos (ADJ), como pode ser visto
+na Tabela 10. Isso também mostra que esse agrupamento é o que
+contém mais nomes próprios.
+Reconhecimento de Entidades Nomeadas (REN): Os comentários
+classificados como Não sei dizer apresentam uma predominância de
+entidades do tipo PER, representando 51% das entidades identifica-
+das, seguido por 19% de entidades do tipo LOC, 16% de ORG e 14%
+de MISC. Os comentários neutros exibem uma distribuição de 43%
+de entidades PER, 25% de LOC, 16% de ORG e 16% de MISC. Já os
+comentários positivos mostram 40% de entidades PER, 24% de LOC,
+11% de ORG e 24% de MISC. Por fim, nos comentários negativos, 44%
+de entidades PER, 35% de LOC, 12% de ORG e 10% de MISC. Esses
+dados destacam a predominância de entidades PER no grupo Não sei
+dizer, a quantidade de entidades LOC nos comentários negativos e a
+presença significativa de entidades MISC nos comentários positivos.
+Adicionalmente, considerando os 2000 comentários, nossas aná-
+lises mostraram um crescimento no número de entidades menciona-
+das de janeiro para fevereiro e de fevereiro para março, em especial,
+possivelmente em decorrência da guerra entre Rússia e Ucrânia.
+Além disso, existem picos próximos de outubro, coincidindo com
+o período eleitoral no Brasil, com exceção do grupo Não sei dizer,
+provavelmente por ter poucos comentários, como demonstrado na
+Tabela 9.
+Análise de 𝑛-gramas: Na análise dos n-gramas, podemos desta-
+car os resultados de bigramas dos comentários classificados como
+positivo, que frequentemente abordam temas relacionados à vida.
+Já para os comentários negativos, evidencia-se lula, bolsonaro. Nos
+trigramas de sentimento positivo, temos palavras relacionadas à
+conselhos sobre relacionamento (por exemplo sociedade, vê, casais).
+os trigramas dos comentários negativos, há a ocorrência da combi-
+nação bandido, bandido, morto, possivelmente relacionada a debates
+políticos e posicionamentos ideológicos.
+Extração de Tópicos (BERTopic): Realizamos a extração de tópicos,
+obtendo 15 tópicos correspondentes, ordenados por sua frequência
+de ocorrência entre os comentários, apresentados na Tabela 11.
+Analisando comentários em que se obteve discordância total entre
+os anotadores, os tópicos proporcionalmente mais relacionados
+são, em ordem decrescente: 14, 3, 1, 9 e 13. Enquanto os tópicos 3
+e 1 são mais genéricos, relacionados a rotina, família e situações
+Análise de sentimentos de conteúdo compartilhado em comunidades brasileiras do Reddit:
+Avaliação de um conjunto de dados rotulados por humanos
+WebMedia’2024, Juiz de Fora, Brazil
+Tópico
+Negativo
+Neutro
+Positivo
+Sentimento
+(a) Sentimentos rotulados por anotadores
+Tópico
+Negativo
+Neutro
+Positivo
+Sentimento
+(b) Sentimentos rotulados pelo modelo
+Figura 1: Comparação de frequência de sentimentos para cada tópico entre anotadores e modelo.
+do cotidiano, os tópicos 14, 9 e 13 são relacionados a política em
+diferentes escopos: o tópico 14 é mais direcionado a ideologias
+políticas, sobretudo o nazismo; o tópico 9 relaciona-se a ideia de
+fake news, resultado de eleições e partidos políticos, e o tópico 13
+relata temas acerca de problemáticas e temas do governo durante a
+presidência de Jair Bolsonaro.
+Já em relação aos comentários em que houve concordância total
+entre anotadores, destacam-se os tópicos 11, 12, 7 e 2. Pelo conjunto
+de palavras, em geral, trata-se de tópicos polarizados e que trans-
+mitem ideias positivas (tópico 11) ou negativas (tópicos 7,2), além
+do tópico 12, que apresenta críticas a governos brasileiros.
+Em relação à análise de tópicos, realizamos uma comparação en-
+tre os dados anotados por humanos e pelo modelo XLM-RoBERTA,
+como pode ser visualizado na Figura 1. Identificamos que os tópicos
+5, 12 e 14, relacionados a questões políticas, foram rotulados como
+negativos mais pelo modelo do que pela anotação humana. Já o tó-
+pico 7, composto por palavrões e palavras que expressam conceitos
+negativos no geral, como odeio, pena, horrível, apresentou maior
+proporção desse rótulo entre anotadores, comparado ao modelo. Os
+tópicos 3 (relacionados a conversas gerais sobre família e rotina)
+e 4 (sobre questões financeiras e mercado de trabalho), são razoa-
+velmente polarizados entre os anotadores, mas o modelo rotulou
+mais como negativos.
+Em relação aos comentários em que ao menos um anotador rotu-
+lou como Não sei dizer, destacam-se os tópicos 10, 14 e 2. O tópico 10
+apresenta 32,6% de seus comentários em que ao menos um anotador
+rotulou como Não sei dizer, e apresenta conteúdos relacionados à
+crimes, xingamentos e conteúdos sexuais. Já o tópico 14, em que
+30,4% de seus comentários apresenta ao menos um rótulo para Não
+sei dizer, relaciona-se à questões ideológicas e políticas. Por fim,
+o tópico 2, que apresenta 28% de seus comentários com ao menos
+um anotador indicando o rótulo, apresenta conteúdos genéricos
+relacionados a gírias e relatos do cotidiano. Em relação à comentá-
+rios em que todos os anotadores assinalaram como Não sei dizer,
+destacam-se 3 comentários nos tópicos 2 e 3, geralmente relaci-
+onados a relatos e fatos do cotidiano e gírias. Possivelmente por
+apresentarem contextos muito específicos dentro de uma postagem,
+são considerados mais difíceis de rotular.
+Rotulações semânticas (PyMUSAS): Para os resultados obtidos a
+partir da categorização semântica dos comentários, obteve-se, no
+total, 163.704 rotulações para níveis semânticos gerais(principais
+categorias semânticas, que excluem pontuações, por exemplo), lem-
+brando que cada palavra de cada comentário apresenta uma ou mais
+rotulações possíveis dentro do domínio das categorias do USAS9.
+9https://ucrel.lancs.ac.uk/usas/Lancaster_visual/Frames_Lancaster.htm
+Tabela 11: Tópicos e termos mais frequentes.
+Tópico
+Termos mais Frequentes
+pessoa, pessoas, ficar, nada, fazer, aí, coisa, ainda, vida, porque
+carro, acho, nunca, vou, uso, desse, lembro, sei, ver, achei
+burro, bozo, ai, and, of, p*ca, vem, comida, pode, comentário
+nome, filho, criança, banho, banheiro, tomar, p*ta, durante, lembro, deve
+dinheiro, pagar, salário, fazer, trabalho, mercado, todos, ganhar, história, sobre
+brasil, país, estado, eua, direita, países, rússia, china, nuclear, esquerda
+time, goleiro, jogo, gol, futebol, palmeiras, jogador, vasco, paulo, passado
+f*da, odeio, mano, tô, p*rra, pqp, tomara, gosto, pena, horrível
+palavras, entender, dia, 11, pois, pessoas, falando, palavra, países, comecei
+falou, entendi, falei, resultado, fake, hoje, disse, pt, pesquisa, dia
+bandido, quer, bunda, p*u, pq, mãos, matar, passou, cima, bola
+obrigado, sorte, entendi, comentários, man, respeito, espero, deus, feliz, boa
+lula, bolsonaro, bolsonarista, governo, auxílio, gastos, mal, época, presidente, contra
+população, política, direito, popular, governo, político, saúde, economia, bolsonaro, passar
+socialismo, amp, x200b, hitler, nacional, comunismo, alemães, contrário, dizem, igreja
+Considerando todos os comentários, as categorias de maior ocor-
+rência são nomes próprios, gírias e palavrões, que compõe 29,64%
+das ocorrências totais, termos abstratos, que abrangem ações gerais,
+afeto, classificação, avaliação, comparação, posse, importância, faci-
+lidade/dificuldade, grau, exclusividade e segurança, que apresenta
+17,6%, e termos sociais, que abrangem ações, estados e processos, reci-
+procidade, participação, merecimento, traços de personalidade, pessoas,
+relacionamentos , família, grupos, obrigação, poder, que apresenta
+9,17% do total das ocorrências categorizadas.
+Considerando apenas as anotações de sentimentos, observa-se
+grande relevância das categorias termos numéricos e julgamentos
+de aparência e atributos físicos, como aparência, cor, forma, textura e
+temperatura na composição de comentários rotulados como positi-
+vos pelos anotadores. Nesse caso, a segunda categoria compõe 6,7%
+de todas as rotulações de classes para comentários positivos, contra
+1,9% em negativos, e 2,8% em neutros.
+Em contrapartida, para os comentários rotulados como negativos,
+destacam-se as categorias conceitos de movimento, localização, via-
+gem e transporte, bem como conceitos de clima e questões ambientais.
+A primeira categoria constitui 9,5% de todas as ocorrências catego-
+rizadas em comentários negativos, contra 3,3% para positivos e 5,0%
+para neutros. Para comentários rotulados como neutros, destacam-se,
+em relação às proporções de comentários negativos e positivos, as
+categorias conceitos de ciência e tecnologia, conceitos de dinheiro, ne-
+gócios, trabalho e indústria, assim como termos abstratos, que abran-
+gem ações gerais, afeto, classificação, avaliação, comparação, posse,
+importância, facilidade/dificuldade, grau, exclusividade e segurança.
+WebMedia’2024, Juiz de Fora, Brazil
+Giovana Piorino, Vitor Moreira, Luiz Henrique Quevedo Lima, Adriana Silvina Pagano, and Ana Paula Couto da Silva
+Além disso, a categoria composta por nomes próprios, gírias e
+palavrões constitui parte considerável tanto de comentários po-
+sitivos(28,65% do total de comentários positivos) quanto para ne-
+gativos(29,9%). Assim, conceitos como gírias, palavrões e nomes
+próprios podem não ser considerados características predominantes
+para determinar o sentimento de um comentário, visto que para am-
+bos sentimentos, tais conceitos apresentam presença similar. Essa
+questão é abordada ao comparar a anotação humana com o modelo,
+que classifica mais tópicos negativamente se forem constituídos
+por alguns palavrões, acima da média da rotulação humana para
+negativos. Logo, tais padrões semânticos podem levar o modelo
+a rotular comentários como negativos excessivamente, devido à
+dificuldade de tratar tais padrões no texto.
+Para comentários em que houve discordância total entre ano-
+tadores, temos as categorias arquitetura, tipos de edifícios e casas,
+construções, residência, móveis e acessórios domésticos, conceitos de
+dinheiro, negócios, trabalho e indústria e entretenimento em geral,
+música, teatro, esportes e jogos. Considerando o total de ocorrências
+da categoria arquitetura, tipos de edifícios e casas,construções, resi-
+dência, móveis e acessórios domésticos para todos os comentários,
+12,38% deles participam da discordância total. Para as categorias
+conceitos de dinheiro, negócios, trabalho e indústria e entretenimento
+em geral, música, teatro, esportes e jogos, as porcentagens são 10,37%
+e 10,10%, respectivamente. Tais categorias compõem as proporções
+mais altas de discordância total entre todas as categorias. Esses
+resultados indicam certa dificuldade de concordância de anotações
+em relação a assuntos específicos que envolvem conhecimento de
+mundo do anotador, como arquitetura, entretenimento e mercado
+financeiro, por exemplo.
+Por fim, a análise de categorias predominantes nos comentários
+que os anotadores rotularam com Não sei dizermostra predominân-
+cia das categorias conceitos artísticos, artes, artesanato, alimentos, be-
+bidas, tabaco e drogas, agricultura e horticultura e educação e estudos.
+CONCLUSÕES E TRABALHOS FUTUROS
+Os achados da nossa pesquisa corroboram apontamentos na litera-
+tura sobre desenvolvimento de conjunto de dados por meio de anota-
+ção humana em tarefas que envolvem grande subjetividade, como é
+a análise de sentimentos. Um deles diz respeito à concordância entre
+anotadores, que, em nosso estudo, se mostrou moderada de acordo
+com os resultados do Alfa de Krippendorf e do Kappa de Fleiss.
+Também em relação à composição do conjunto de dados, nossos
+resultados mostram que quase metade do conjunto de comentários
+foi majoritariamente rotulado como negativo, indicando desbalance-
+amento de classes considerável, podendo evidenciar um ambiente
+mais nocivo de interações.
+Ainda em relação aos resultados das métricas de concordância,
+as anotações obtiveram valores próximos, apontando para concor-
+dâncias médias e moderadas entre seus respectivos anotadores. Em
+relação à incerteza, apenas em 4,1% dos comentários, dois ou mais
+anotadores rotularam o mesmo comentário com Não sei dizer, o que
+revelou dificuldade maior em 2 ou mais anotadores caracterizarem
+incerteza de sentimento para um mesmo texto.
+Na comparação com os anotadores humanos, o modelo obteve
+acurácia de 62,37% e Kappa de Cohen de 0,34, valores considerados
+fracos. O modelo rotulou 60,90% dos comentários como negativos,
+taxa consideravelmente superior à da anotação humana, que foi
+de 48,05%. De fato, determinados tópicos relacionados a questões
+políticas foram rotulados como negativos mais pelo modelo do que
+pela anotação humana. O modelo também mostrou dificuldade para
+identificar corretamente comentários positivos.
+A caracterização da linguagem dos comentários revelou que o
+tamanho dos comentários categorizados como negativos e positivos
+tendeu a ser maior do que o tamanho dos comentários categorizados
+como neutros e aqueles categorizados como Não sei dizer. O tamanho
+do texto pode impactar a rotulação, uma vez que quanto maior o
+contexto, maior a chance de os rotuladores conseguirem fazer uma
+interpretação e atribuir um sentimento.
+No que diz respeito às classes de palavra mais frequentes em
+cada tipo de sentimento, destacam-se os comentários classificados
+como Não sei dizer, que apresentaram, tanto predominância de enti-
+dades do tipo PER, bem como maior número de etiquetas da classe
+nome próprio (PROPN), o que pode sugerir que esses comentários
+demandam reconhecimento dessas entidades e, por consequência,
+conhecimento de mundo, para poder atribuir um sentimento, pro-
+blema que parece ter sido enfrentado pelos anotadores.
+A análise de tópicos revelou que para os comentários em que se
+obteve discordância total entre os anotadores, figura, em primeiro
+lugar, o tópico 14, que é mais direcionado a ideologias políticas.
+Este resultado pode ser interpretado em relação aos achados sobre
+o desempenho do modelo, que rotulou comentários de questões
+políticas como negativos em maior número do que os anotadores
+humanos. No que diz respeito aos comentários em que ao menos
+um anotador rotulou como Não sei dizer, sobressaíram tópicos rela-
+cionados a crimes, xingamentos e conteúdos sexuais e a questões
+ideológicas e políticas.
+Em termos metodológicos, nosso estudo evidenciou que a qua-
+lidade das métricas melhorou consideravelmente ao se separar o
+conjunto de dados em dois subconjuntos e incluir apenas os co-
+mentários rotulados com sentimentos, desconsiderando a categoria
+Não sei dizer. O mesmo aconteceu com o cálculo do percentual de
+concordância total dos anotadores sobre um mesmo rótulo, que foi
+superior quando desconsiderada a categoria Não sei dizer.
+Em consonância com a literatura, nosso estudo corrobora a com-
+plexidade da tarefa de criação de conjunto de dados, dado o desafio
+de se lidar com níveis de concordância moderados entre anotadores.
+Para a consolidação do conjunto de dados, o voto da maioria, ou a
+agregação das distintas respostas, é decisório para o rótulo único de
+referência que será adjudicado. Em tarefas que envolvem alto grau
+de subjetividade, como é o caso da análise de sentimentos, a deci-
+são pela maioria reduz a representatividade das diversas opiniões
+passíveis de existir em uma população ainda maior. Nesse sentido,
+estudos recentes[10, 12] propõem uma mudança em direção a uma
+abordagem mais inclusiva de todas as perspectivas dos anotadores
+como alternativa à maioria enquanto referência ou ground truth.
+Em trabalhos futuros, pretendemos explorar a perspectivização de
+forma a mitigar o problema do nível de concordância entre anota-
+dores.
+Agradecimentos: Este trabalho foi parcialmente financiado pela
+FAPEMIG, CAPES e CNPq.
+Análise de sentimentos de conteúdo compartilhado em comunidades brasileiras do Reddit:
+Avaliação de um conjunto de dados rotulados por humanos
+WebMedia’2024, Juiz de Fora, Brazil

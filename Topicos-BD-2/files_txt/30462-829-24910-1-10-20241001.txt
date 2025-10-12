@@ -1,0 +1,79 @@
+Diretrizes de apoio ao processo de construção de sistemas
+conversacionais de recomendação acessíveis: um estudo com
+usuários idosos
+Lucas Araujo
+padilha.lucas@usp.br
+Universidade de São Paulo
+São Carlos, SP, BR
+Kamila Rodrigues
+kamila.rios@icmc.usp.br
+Universidade de São Paulo
+São Carlos, SP, BR
+Marcelo Manzato
+mmanzato@icmc.usp.br
+Universidade de São Paulo
+São Carlos, SP, BR
+CTD’2024, Juiz de Fora/MG, Brazil
+Araujo, Rodrigues e Manzato
+Figura 1: Usuário em avaliação de usabilidade
+utilizando eletrodos para análise de emoções.
+Meet para uma entrevista sobre as interações ocorridas. Em seguida,
+o segundo estudo utilizou o protótipo de chatbot chamado "Bob",
+projetado para identificar e corrigir problemas de desenvolvimento
+e discutir resultados qualitativos. Os participantes recebiam o con-
+tato do Bob e um código para iniciar o diálogo. Após se apresentar,
+o Bob pedia ao usuário para compartilhar sua localização fixa, con-
+duzindo a interação por smartphone, e então recomendava um
+restaurante, perguntando se a recomendação era útil e poderia ser
+aprimorada. No terceiro estudo, um novo teste foi realizado com 5
+usuários para avaliar a usabilidade do protótipo Bob, focando na
+eficácia do sistema em ajudar com dificuldades de uso, a eficiência
+das recomendações em termos de surpresa, relevância e novidade,
+e os sentimentos dos usuários. Na Figura 1, um participante está
+utilizando o chatbot enquanto suas emoções estão sendo analisadas.
+Os participantes, cinco estudantes da área de design e experiên-
+cia do usuário da Universidade Federal do Ceará, tiveram suas
+emoções avaliadas através de um questionário de autoavaliação
+SAM e sensores de eletrocardiograma. Quarto, foram elaboradas
+as primeiras diretrizes. No quinto estudo, quatro desenvolvedores
+foram convidados a criar chatbots seguindo essas diretrizes, após o
+que foi conduzida uma entrevista individual com cada um. Um dos
+desenvolvedores estava no mesmo projeto que outro, resultando
+em três chatbots distintos. Após as entrevistas, houve uma etapa de
+grupo focal, onde os desenvolvedores discutiram as diretrizes, as
+dificuldades comuns e propuseram melhorias. As entrevistas foram
+gravadas, transcritas e as transcrições analisadas.
+RESULTADOS
+O experimento inicial, utilizando o método Mágico de Oz, revelou
+um conjunto de requisitos funcionais e não funcionais essenciais
+para a construção das diretrizes e o desenvolvimento do chatbot Bob.
+O uso do protótipo Bob foi fundamental para identificar e corrigir
+problemas de desenvolvimento, além de proporcionar uma com-
+preensão mais profunda das preferências dos usuários em sistemas
+de recomendação. O processo envolveu testes de usabilidade e avali-
+ações emocionais, empregando ferramentas como o questionário
+Self-Assessment Manikin (SAM) e sensores de eletrocardiograma.
+Essas ferramentas ajudaram a compreender quais melhorias de-
+veriam ser implementadas no chatbot, e, consequentemente, nas
+diretrizes de desenvolvimento. A partir dessas observações, foram
+elaboradas diretrizes que orientaram a implementação do chatbot
+por desenvolvedores. Os chatbots resultantes foram então avaliados
+através de entrevistas individuais e discutidos em grupos focais.
+Essas etapas não apenas validaram as diretrizes propostas, mas
+também revelaram pontos de melhoria para o aprimoramento dos
+sistemas conversacionais de recomendação.
+CONSIDERAÇÕES FINAIS
+O estudo propôs diretrizes para orientar desenvolvedores sem ex-
+periência em acessibilidade. A possibilidade de adaptar e incorporar
+essas diretrizes em tais ambientes abre caminho para pesquisas
+futuras em sistemas conversacionais. Pesquisas futuras podem ex-
+plorar o uso de Large Language Models para melhorar sistemas de
+recomendação conversacionais, aprimorando a compreensão da lin-
+guagem natural, personalização das recomendações e a integração
+de múltiplas modalidades de entrada.
+AGRADECIMENTOS
+Os autores agradecem o apoio financeiro da Coordenação de Aper-
+feiçoamento de Pessoal de Nível Superior – Brasil (CAPES) – Código
+de Financiamento 001; da Fundação de Amparo à Pesquisa do Estado
+de São Paulo (FAPESP) e do Conselho Nacional de Desenvolvimento
+Científico e Tecnológico (CNPq).

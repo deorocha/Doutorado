@@ -1,0 +1,302 @@
+Nutrilac: Aplicativo para Elaboração de Dietas de Bovinos de Leite
+Deivid Duarte Nascimento
+deivid.nascimento@engenharia.ufjf.br
+Universidade Federal de Juiz de Fora
+Juiz de Fora, Minas Gerais, Brasil
+Marcos Paulo Priamo Ferreira
+marcos.priamo@estudante.ufjf.br
+Universidade Federal de Juiz de Fora
+Juiz de Fora, Minas Gerais, Brasil
+Brian Luís Coimbra Maia
+brianluis@ice.ufjf.br
+Universidade Federal de Juiz de Fora
+Juiz de Fora, Minas Gerais, Brasil
+Maria Carolina da Silva Vita
+mariacarolina.vita@estudante.ufjf.br
+Universidade Federal de Juiz de Fora
+Juiz de Fora, Minas Gerais, Brasil
+Alexandra Calda Cézar de Faria
+alexandra.faria@estudante.ufjf.br
+Universidade Federal de Juiz de Fora
+Juiz de Fora, Minas Gerais, Brasil
+Almira Biazon Franca
+almira.biazon@ufjf.br
+Universidade Federal de Juiz de Fora
+Juiz de Fora, Minas Gerais, Brasil
+Amália Saturnino Chaves
+amalia.chaves@ufjf.br
+Universidade Federal de Juiz de Fora
+Juiz de Fora, Minas Gerais, Brasil
+Luiz Maurílio da Silva Maciel
+luiz.maurilio@ice.ufjf.br
+Universidade Federal de Juiz de Fora
+Juiz de Fora, Minas Gerais, Brasil
+Priscila Vanessa Zabala
+Capriles Goliatt
+capriles@ice.ufjf.br
+Universidade Federal de Juiz de Fora
+Juiz de Fora, Minas Gerais, Brasil
+W4E’2024, Juiz de Fora/MG, Brazil
+Nascimento et al.
+Figura 1: Tela inicial do aplicativo (à esquerda) e menu prin-
+cipal (à direita).
+sem a necessidade de conexão com a internet. Portanto, o aplicativo
+tem o objetivo de trazer uma maior acessibilidade aos pequenos
+e médios produtores, na formulação de dietas personalizadas de
+bovinos leiteiros, a fim de maximizar suas produções, tendo um
+suporte nutricional e de auxílio na gestão.
+METODOLOGIA
+Nesta seção será descrito o processo de desenvolvimento do aplica-
+tivo. A Subseção 2.1 descreve a coleta de dados para compor a base
+de alimentos. A Subseção 2.2 descreve o modelo de otimização em-
+pregado. Finalmente, a Subseção 2.3 descreve o desenvolvimento
+da aplicação final.
+2.1
+Construção da base de alimentos
+Inicialmente foi realizado um levantamento dos principais alimen-
+tos utilizados pelos produtores da região sudeste do Brasil, onde
+se localiza o público alvo da aplicação. Foram escolhidos 103 al-
+imentos e as informações nutricionais (energia líquida, proteína
+bruta, cálcio e fósforo) de cada um foram obtidas do CQBAL 4.0
+[2]. Os alimentos foram divididos nas seguintes categorias, visando
+facilitar a localização pelo produtor: capins, fenos, silagens, con-
+centrados energéticos, concentrados proteicos e minerais. Também
+foi realizada uma pesquisa no mercado para obter o custo de cada
+alimento para o produtor na região da Zona da Mata de Minas
+Gerais. Essas informações foram incluídas no banco de dados do
+aplicativo.
+2.2
+Modelo de otimização
+A partir do NRC 1989 [7], referência na literatura em nutrição de
+bovinos de leite, foram definidas equações para a exigência nutri-
+cional de cada um dos nutrientes considerados no aplicativo. Essas
+equações tomam como base informações de entrada do usuário ref-
+erentes a cada lote de animais, como peso médio, produção média,
+dias de lactação e gestação e número de lactações. Ressalta-se que
+optou-se pela utilização da versão 1989 do NRC, pois essa versão se
+adapta melhor às exigências nutricionais do rebanho de pequenos
+e médios produtores, que compõem o principal público alvo do
+aplicativo.
+Uma vez definidas as restrições, foi construído um modelo de
+programação linear cuja função objetivo consiste em determinar
+a quantidade ideal de cada alimento escolhido pelo usuário para
+compor a dieta, de modo a obter o menor custo total. Dessa forma,
+a função objetivo do modelo é definida como:
+min𝑧=
+𝑛
+∑︁
+𝑖=1
+100(𝑐𝑖𝑥𝑖)
+𝑝𝑖
+,
+(1)
+onde 𝑥𝑖representa a quantidade in kg de matéria seca do alimento
+𝑖, 𝑐𝑖indica o preço por kg de matéria natural, 𝑝𝑖é o percentual de
+matéria seca que compõe o alimento e 𝑛corresponde ao número
+total de alimentos na dieta.
+Em relação às restrições do modelo, considerando 𝑏1, 𝑏2, e 𝑏3
+os valores exigidos de matéria seca, energia e proteína, respec-
+tivamente, e sendo 𝑛1,𝑖, 𝑛2,𝑖e 𝑛3,𝑖a quantidade dos respectivos
+nutrientes no alimento 𝑖, definiu-se as seguintes restrições:
+𝑏𝑗≤
+𝑛
+∑︁
+𝑖=1
+𝑥𝑖𝑛𝑗,𝑖≤1.1𝑏𝑗,
+∀𝑗∈{1, 2, 3}.
+(2)
+Dessa forma, permitiu-se uma certa tolerância para o valor exigido,
+prática comum na formulação de dietas, que facilita a convergên-
+cia do modelo. Em relação ao cálcio e fósforo, estabeleceu-se uma
+restrição que relaciona esses nutrientes:
+𝑏4 ≤
+𝑛
+∑︁
+𝑖=1
+𝑥𝑖𝑛4,𝑖≤2𝑏5
+(3)
+𝑛
+∑︁
+𝑖=1
+𝑥𝑖𝑛5,𝑖≥𝑏5,
+(4)
+onde 𝑛4,𝑖e 𝑛5,𝑖representam a quantidade de cálcio e fósforo no
+alimento, respectivamente, 𝑏4 e 𝑏5 as respectivas exigências.
+Na formulação de dietas para bovinos de leite, também é impor-
+tante relacionar a proporção de alimentos volumosos e concentra-
+dos. Para isso, o modelo conta com a restrição:
+𝑟𝑒𝑙=
+ Í𝑛
+𝑖=1 0.55𝑥𝑖𝑛1,𝑖(1 −𝑦𝑖) −0.45𝑥𝑖𝑛1,𝑖𝑦𝑖≥0
+Í𝑛
+𝑖=1 0.7𝑥𝑖𝑛1,𝑖(1 −𝑦𝑖) −0.3𝑥𝑖𝑛1,𝑖𝑦𝑖≤0
+
+,
+(5)
+onde 𝑦𝑖∈{0, 1} assume o valor 1 para alimento volumoso e 0 para
+alimento concentrado.
+Finalmente, o modelo também restringe o consumo de ureia,
+ingrediente que pode prejudicar a saúde dos animais, se consumido
+em excesso. Seguindo as recomendações da literatura, restringiu-se
+a inclusão de ureia na dieta a 50 g para cada 100 kg de peso corporal.
+2.3
+Desenvolvimento do aplicativo
+O aplicativo foi desenvolvido para dispositivos Android, utilizando
+a linguagem de programação Java. O modelo de programação linear
+foi implementado utilizando a biblioteca SSC [8]. Uma vez que a
+proposta era desenvolver uma aplicação para atender a pequenos
+e médios produtores rurais, tomou-se por base duas premissas
+importantes, o aplicativo deveria ter uma interface simples, de
+Nutrilac: Aplicativo para Elaboração de Dietas de Bovinos de Leite
+W4E’2024, Juiz de Fora/MG, Brazil
+Figura 2: Tela de cadastro de alimentos (à esquerda) e listagem
+de alimentos (à direita).
+modo que a dieta possa ser formulada em poucos passos e deve ser
+possível utilizar a ferramenta mesmo sem conexão com a internet.
+A Figura 1 mostra a tela inicial do aplicativo e o menu princi-
+pal. O aplicativo se divide em 3 módulos principais. O módulo de
+alimentos tem como objetivo a alteração dos dados dos alimentos
+existentes e a inclusão de novos alimentos. Essa funcionalidade é
+importante para permitir que o produtor possa alterar o custo ou
+as informações nutricionais de algum alimento de acordo com a
+realidade da região onde se encontra, assim como incluir algum
+alimento que não esteja previamente cadastrado. A Figura 2 mostra
+as telas de listagem e cadastro de alimentos. O módulo de animais
+permite ao produtor incluir, editar e excluir lotes de animais. A
+inserção dessas informações é essencial para que as dietas possam
+ser calculadas, uma vez que as informações do lote definem as re-
+strições de nutrientes que precisam ser satisfeitas pela dieta criada.
+A Figura 3 mostra as telas de listagem e cadastro de lotes.
+O módulo de dietas é o principal módulo do aplicativo e tem como
+objetivo a criação, visualização e exportação de dietas. A interface
+é simples, após a definição do nome e do lote para o qual a dieta
+será criada, o usuário seleciona, a partir de uma lista, os alimentos
+que gostaria de incluir na dieta. Após a confirmação dos alimentos
+selecionados, o modelo de programação linear é executado. Caso
+o modelo tenha conseguido obter uma solução viável, o aplicativo
+exibe para o produtor uma tela simples indicando a quantidade e
+custos de cada alimento que deve ser oferecido aos animais. Caso
+não tenha sido possível obter uma dieta, o aplicativo informa ao
+usuário a necessidade de incluir novos alimentos na seleção, para
+que as exigências nutricionais sejam atendidas. Adicionalmente, o
+aplicativo também permite que o usuário exporte o relatório técnico
+da dieta em PDF ou planilha. Esse relatório se destina a usuários
+mais avançados, e apresenta, além das quantidades e custos de
+cada alimento, as quantidades fornecida e ideal de cada nutriente,
+assim como um balanço entre essas quantidades. A Figura 4 mostra
+as telas de revisão dos alimentos selecionados e de saída da dieta
+criada.
+Figura 3: Tela de listagem de lotes (à esquerda) e cadastro de
+lotes (à direita).
+A equipe do projeto possui especialistas em nutrição animal,
+os quais realizaram testes no aplicativo, testando a elaboração de
+dietas combinando diferentes alimentos e animais/lotes com car-
+acterísticas diferentes, com o objetivo de verificar a capacidade do
+modelo funcionar em diversos cenários. Os resultados obtidos se
+mostraram coerentes com os esperados na literatura e validaram o
+modelo implementado no aplicativo.
+AÇÕES DE EXTENSÃO REALIZADAS
+A proposta de desenvolvimento do aplicativo Nutrilac surgiu no ano
+de 2019 no desafio de programação Vacathon, dentro da iniciativa
+Ideas for Milk, promovida pela Embrapa Gado de Leite. Tornou-se
+projeto de extensão em 2020 e desde então está em desenvolvi-
+mento. O primeiro protótipo obteve registro do INPI em 2021 sob
+o número BR512022003100-0. Em junho de 2024 o aplicativo foi
+oficialmente lançado ao público na Play Store. Ressalta-se ainda
+que o projeto possui aprovação no comitê de ética sob o número
+CAAE 34339520.4.0000.5147, parecer número 6.667.688.
+Visando a divulgação da ferramenta ao público alvo, algumas
+ações vêm sendo realizadas nos últimos anos. Durante os anos de
+2022 e 2023 foram realizadas visitas técnicas a 4 fazendas. Nessas
+visitas, membros da equipe do projeto apresentaram aos produtores
+o aplicativo a fim de mostrar o funcionamento e familiarizá-los
+com a tecnologia. Também foi possível conhecer a realidade das
+propriedades e levantar novas demandas para atualização da ferra-
+menta.
+Durante as visitas técnicas, os integrantes do projeto tiveram a
+oportunidade de acompanhar o dia-a-dia das propriedades, desde
+a formulação da ração dos animais até os meios de produção e
+manejo da fazenda. Dessa forma, eles presenciaram momentos como
+a ordenha, buscando entender o sistema de produção, formas de
+armazenamento do leite em cada propriedade, o sistema de criação
+do gado de leite, o fornecimento da ração e visitas às capineiras e
+pastos. Além disso, em algumas das fazendas, a ração dos animais
+era produzida na propriedade, permitindo o acompanhamento do
+W4E’2024, Juiz de Fora/MG, Brazil
+Nascimento et al.
+Figura 4: Tela de revisão dos alimentos selecionados (à es-
+querda) e saída da dieta criada (à direita).
+processo de picagem das capineiras, mistura do volumoso com o
+concentrados, o fornecimento desses alimentos para os animais,
+além de buscar entender o acesso dos produtores a esses alimentos
+e como foram feitas as formulações das rações até esse momento.
+Por fim, nas visitas, após a compreensão do sistema como um
+todo, já que todos os fatores são importantes para a produção, os
+participantes do projeto buscavam mostrar o aplicativo, orientar so-
+bre a formulação da ração e também sobre a utilização do programa,
+evidenciando a acessibilidade e integração dos elementos que inter-
+ferem na dieta dos bovinos de leite. Durante as visitas, foram levados
+questionários para nortear as conversas com os produtores, a fim de
+direcionar as perguntas sobre o sistema de produção, destacando-se
+a parte de alimentação dos animais.
+Recentemente, após a publicação do aplicativo na loja da Google,
+foi realizado um evento de lançamento com produtores rurais da
+cidade de Liberdade - MG. O evento contou com a participação
+de produtores rurais da cidade e região, além de estudantes do
+curso Técnico em Agropecuária. Nesse evento a equipe do projeto
+realizou uma exposição sobre nutrição animal, ressaltando a im-
+portância de uma nutrição adequada para que os animais tenham
+melhores condições de saúde e produção de leite. A apresentação
+mostrou como dividir os animais em lotes e os tipos de alimentos
+que precisam ser incluídos na dieta para garantir uma nutrição
+adequada.
+Na segunda parte do evento, a equipe do projeto apresentou
+a ferramenta desenvolvida, mostrando o passo a passo de como
+criar uma dieta, começando pela criação de um lote, passando pela
+seleção dos alimentos e formulação da dieta. O público também foi
+instruído sobre como incluir e editar os alimentos no aplicativo e
+realizar a exportação de relatórios técnicos das dietas criadas.
+Ao final, abriu-se espaço para que o público pudesse tirar dúvi-
+das diretamente com a equipe sobre os assuntos abordados. Esse
+momento foi bastante enriquecedor, com perguntas relacionadas
+à alimentação e dúvidas sobre como utilizar o aplicativo para for-
+mular uma dieta. O público presente recebeu um material impresso
+sobre o aplicativo, com QR codes que permitiam a instalação do
+aplicativo e assistir um vídeo tutorial sobre como utilizá-lo. De
+modo geral, o evento foi um marco importante para a divulgação
+do aplicativo, onde a equipe pode entrar em contato direto com os
+beneficiários e apresentar a ferramenta desenvolvida.
+CONSIDERAÇÕES FINAIS
+A alimentação dos animais é um fator crucial para o sucesso da
+produção de leite e, para isso, o produtor precisa de uma assistência
+para auxiliá-lo a não cometer erros nesse processo. Nesse contexto,
+este trabalho apresentou o Nutrilac, um aplicativo móvel gratuito,
+intuitivo e que pode ser muito útil e vantajoso para produtores
+rurais e profissionais da área de Medicina Veterinária na elaboração
+de dietas de custo mínimo para os animais.
+A equipe efetuou visitas em fazendas, com o objetivo de testar
+e apresentar a ferramenta para produtores rurais e, dessa forma,
+avaliar o funcionamento do aplicativo no próprio ambiente das
+propriedades e colher opiniões de produtores rurais. Foi realizado
+também um evento de divulgação, permitindo o contato direto da
+equipe com os beneficiários da proposta.
+Além do seu importante papel junto a produtores rurais, destaca-
+se ainda a importância do projeto na experiência acadêmica dos
+professores e alunos envolvidos. Por se tratar de uma proposta
+multidisciplinar, o projeto permite uma importante troca de ex-
+periências entre profissionais das áreas de Medicina Veterinária,
+Ciência da Computação e Engenharia. Essa experiência se mostra
+extremamente enriquecedora para a formação acadêmica dos en-
+volvidos.
+Como trabalhos futuros, a equipe buscará realizar aprimoramen-
+tos na interface do aplicativo e permitir que ele seja usado em
+aparelhos com diferentes sistemas operacionais, o que vai facilitar a
+difusão da ferramenta. Os resultados do aplicativo se mostraram sat-
+isfatórios a partir das validações realizadas, mas realizar testes adi-
+cionais para verificar o funcionamento da aplicação em diferentes
+ambientes e obter sugestões dos usuários da ferramenta também
+será importante para entender os pontos que podem ser melhorados
+em versões futuras.
+AGRADECIMENTOS
+Os autores agradecem a Universidade Federal de Juiz de Fora (UFJF)
+pelo suporte financeiro ao projeto.

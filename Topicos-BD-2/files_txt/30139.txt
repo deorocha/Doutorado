@@ -1,0 +1,325 @@
+Caracterizando Polarização em Redes Sociais: Um Estudo de Caso
+das Discussões no Reddit sobre as Eleições Brasileiras de 2018 e
+Gustavo F. Cunha
+Universidade Federal de Minas Gerais (UFMG)
+Belo Horizonte, Minas Gerais, Brasil
+gustavocunha@dcc.ufmg.br
+Ana Paula Couto da Silva
+Universidade Federal de Minas Gerais (UFMG)
+Belo Horizonte, Minas Gerais, Brasil
+ana.coutosilva@dcc.ufmg.br
+WebMedia’2024, Juiz de Fora, Brazil
+Gustavo F. Cunha and Ana Paula Couto da Silva
+ao conteúdo compartilhado e verificaram que tópicos mais polariza-
+dos possuem uma variância maior nos sentimentos dos conteúdos
+quando comparados com tópicos de menor polarização.
+Em [6], os autores apresentaram um modelo quantitativo baseado
+no comportamento do usuário para avaliar o nível de polarização
+em diferentes tópicos de discussões no Reddit em língua inglesa.
+Cada discussão foi modelada como uma árvore de discussão de dois
+lados, na qual a raiz é um comentário inicial de uma discussão e os
+demais vértices são os comentários desta discussão. As arestas da
+árvore foram modeladas com base na cadeia de respostas do debate
+e cada comentário é submetido a uma análise de sentimentos que
+retorna um valor no intervalo [−4, 4]. A discussão é dividida em dois
+lados de posicionamento, gerando uma árvore bipartida. Por fim,
+foi proposta uma medida de polarização que passa por avaliações
+empíricas, cujos resultados indicaram que o modelo é capaz de
+capturar os diferentes níveis de polarização em diferentes assuntos.
+Em direção complementar, o trabalho apresentado em [10] utili-
+zou um conjunto de modelos sintéticos de grafos para representar
+conexões em mídias sociais. Nos grafos gerados, cada usuário (vér-
+tice) possui uma opinião em relação a um tópico em discussão. Esta
+opinião varia no intervalo [−1, 1], sendo −1 um posicionamento
+extremamente contrário e 1 um posicionamento a favor do debate
+estabelecido entre os vizinhos no grafo (que representam os re-
+lacionamentos na rede social). Os usuários são divididos em dois
+grupos: (i) os que possuem posicionamento negativo e (ii) os que
+possuem posicionamento positivo. A partir da definição da métrica
+balance, que é a razão da cardinalidade destes grupos, os autores
+caracterizam diferentes cenários onde a discussão entre os usuários
+é mais aberta a ser realizada por usuários de opiniões diversas e os
+casos onde os usuários se organizam de forma polarizada.
+Considerando o contexto brasileiro, em [18] foi examinado o
+papel do hiperpartidarismo e da polarização no Twitter durante as
+eleições presidenciais de 2018, mostrando que há uma forte conexão
+entre polarização, hiperpartidarismo e desinformação. Em [7], os
+autores quantificaram a polarização política do público no contexto
+da pandemia de COVID-19. Já em [11], os pesquisadores explora-
+ram, com dados do Instagram, se fatores psicológicos poderiam
+contribuir para o apelo de uma figura polarizadora.
+Os resultados apresentados neste trabalho se diferenciam dos
+demais nos aspectos a seguir. Primeiramente, combinamos e adapta-
+mos os modelos de interação apresentados em [6, 10, 12]. Resumida-
+mente, para a detecção de posicionamento, substituímos a análise de
+sentimentos, que segundo alguns trabalhos não é a melhor técnica
+a ser utilizada [4], pelo uso de Large Language Models (LLMs), mais
+precisamente o ChatGPT5, que se mostrou adequado para a tarefa
+no contexto da língua inglesa [24, 25]. Para língua portuguesa, o
+trabalho em [20], utilizou-se desta mesma LLM para uma tarefa
+diferente. Uma vez que a maioria dos trabalhos no contexto brasi-
+leiro utilizam dados do Instagram e Twitter (X), com enfoque nas
+eleições presidenciais de 2018, nossa contribuição é analisar as inte-
+rações no Reddit, comparando os cenários de possível polarização
+nas eleições de 2018 e 2022.
+METODOLOGIA
+A seguir descrevemos a metodologia utilizada neste trabalho.
+5https://platform.openai.com/
+Tabela 1: Estatísticas dos subreddits selecionados.
+Subreddit
+#Postagens
+#Comentários
+#Usuários
+r/brasil
+5.895
+139.651
+16.273
+r/BrasildoB
+3.357
+1.207
+r/brasilivre
+3.855
+61.288
+6.346
+Total
+10.578
+204.296
+23.826
+3.1
+Conjunto de Dados
+O Reddit é uma mídia social on-line multilíngue, fundada em 2005,
+organizada em subcomunidades por áreas de interesse (subreddits).
+Nesta rede, os usuários discutem diferentes assuntos, através de
+interações do tipo postagem-comentários, chamadas de threads.
+Nosso conjunto de dados consiste em atividades de usuários (posta-
+gens e comentários) que ocorreram entre os meses de setembro e
+novembro de 2018 e 2022, período que engloba pré e pós-eleições.
+A seleção dos subreddits mais relevantes, em total de publicações
+para o contexto analisado, foi realizada utilizando a pesquisa por re-
+levância na API Python do Reddit6. A partir dos subreddits de maior
+relevância, foram coletadas 95.933 postagens datadas de setembro
+a novembro de 2018 e 2022 . Um subconjunto destas postagens
+foi selecionado, com a presença pelo menos de uma das palavras-
+chave relacionadas ao contexto das eleições, tendo em vista os
+dois candidatos mais bem votados, tais como eleições, política, Lula,
+Bolsonaro, Haddad, esquerda, direita, PT, PSL, PL, resultando em
+20.515 postagens. Por fim, retiramos também as postagens com
+conteúdo deletado/removido, escritas em outra língua e/ou consti-
+tuídas somente por links. Finalmente, os comentários realizados nas
+10.578 postagens restantes foram coletados. A Tabela 1 apresenta
+a principais características dos subreddits selecionados.
+3.2
+Modelo Matemático
+As discussões realizadas pelos usuários foram modeladas através
+de árvores, adaptando a proposta de [6]. Cada postagem inicial,
+denominada 𝑝𝑗, com 0 ≤𝑗≤𝑃é considerada um contexto de
+discussão e pode receber 𝑅comentários como resposta.
+Cada resposta (comentário) 𝑟𝑖, com 0 ≤𝑖≤𝑅, associada à uma
+postagem 𝑝𝑗, gera uma árvore 𝑇= (𝑉, 𝐸)7, onde 𝑉é o conjunto
+da cadeia de comentários que sucedem 𝑟𝑖(com 𝑟𝑖inclusive) e 𝐸
+é o conjunto de arestas direcionadas (𝑣𝑘, 𝑣𝑙) que conectam um
+comentário 𝑣𝑘(origem) à sua resposta 𝑣𝑙(destino). A cada uma das
+arestas direcionadas, associamos um peso 𝜎𝑘𝑙∈[−1, 1], calculado a
+partir da técnica de detecção de posicionamento descrita na Seção
+3.3. Resumidamente, se 𝑣𝑙é o comentário resposta à 𝑣𝑘, 𝜎𝑘𝑙assume
+valores negativos se 𝑣𝑙possui um posicionamento contra ao de 𝑣𝑘e
+valores positivos, se o posicionamento é a favor ao de 𝑣𝑘. Os casos
+com 𝜎𝑘𝑙= 0 são os de posicionamento neutro.
+Com os pesos definidos, o processo final é a bipartição de cada
+árvore em dois subgrupos distintos de posicionamento 𝐴e 𝐵, con-
+forme os demais trabalhos da literatura, analisando a polarização
+em torno de dois polos de pensamento. A raiz 𝑟𝑖é atribuída a um
+dos lados, que convencionamos, sem perda de generalidade, ser o
+lado 𝐴. Para os vértices 𝑣𝑘de nível 1, e para 𝜎𝑖,𝑘> 0, 𝑣𝑘é assinalado
+ao lado 𝐴. Para 𝜎𝑖,𝑘< 0, 𝑣𝑘é adicionado ao lado 𝐵. Para o caso
+6https://praw.readthedocs.io/
+7Para facilitar a leitura da notação, iremos desconsiderar o índice que identifica cada
+árvore associada a cada resposta.
+Caracterizando Polarização em Redes Sociais: Um Estudo de Caso das Discussões no Reddit sobre as Eleições Brasileiras de 2018 e 2022
+WebMedia’2024, Juiz de Fora, Brazil
+de 𝜎𝑖,𝑘= 0, seguindo trabalhos da literatura [3, 6], 𝑣𝑘é atribuído
+também ao lado 𝐵. Este processo se repete a cada novo nível da
+árvore, considerando pares pai-filho de comentários.
+3.3
+Análise da Polarização
+Um dos pontos mais importantes para a análise da polarização em
+discussões on-line é definir o posicionamento de um usuário com
+base na sua resposta a um comentário. Ou seja, o objetivo é medir
+o quanto uma resposta concorda ou discorda de um comentário. A
+partir dos posicionamentos de todas as respostas, construímos uma
+árvore bipartida, com dois subgrupos distintos de posicionamento.
+Conforme apresentado em [4], o uso de técnicas de análise de
+sentimentos não é a melhor escolha para a detecção de posiciona-
+mento.8 Assim, em consonância com os trabalhos [24, 25], aplica-
+mos o modelo GPT-4 [2] para realizar esta tarefa, a partir do uso
+da API da Open AI. 9 O score (valor) da resposta que representa o
+seu posicionamento em relação ao comentário inicial varia entre
+[−1, 1], com −1 para os casos extremamente discordantes e 1 para
+os casos extremamente concordantes. Este valor é denominado
+Stance Score.10 A Figura 1 apresenta a árvore bipartida a partir da
+definição dos posicionamentos. As arestas são coloridas em três co-
+res: vermelho, amarelo e verde, que representam, respectivamente,
+peso negativo, peso igual à zero e peso positivo. Já a coloração dos
+vértices representa os dois lados da discussão, de acordo com a
+bipartição discutida na Seção 3.2 Após a definição do posiciona-
+mento para um pequeno conjunto inicial de árvores, realizamos
+uma validação manual dos resultados, que mostraram-se adequados
+para a execução da tarefa proposta.
+Levando em conta que o modelo GPT-4 requer o pagamento de
+requisições à sua API e que este trabalho é um estudo inicial da
+metodologia proposta, realizamos uma amostragem dos dados a
+serem anotados pela ferramenta, mantendo a representatividade de
+cada comunidade neste subconjunto. A Tabela 2 apresenta o total
+de dados analisados nesta fase.
+Com a definição das árvores bipartidas de discussão, o próximo
+passo é verificar a existência e medir intensidade da polarização
+nas discussões. Para tal, calculamos as seguintes métricas:
+• Desvio-Padrão e Média do Stance Score. Seguindo [12],
+discursos polarizados possuem maior variância de Stance
+Score das arestas da árvore de discussão. No nosso estudo,
+adaptamos o ponto de corte de desvio-padrão proposto em
+[12]. Assim, árvores com indícios de polarização são as que
+possuem desvio-padrão maior que 0.4375.
+• Balance Score e Balance Side. Estas métricas avaliam o
+quão balanceados estão os dois lados (bipartições) da dis-
+cussão. A primeira, proposta em [10], calcula a razão entre
+o mínimo e o máximo do total dos Stance Scores positivos
+e negativos, ou seja, os pesos das arestas positivas e nega-
+tivas das árvores. Na segunda, proposta neste trabalho, a
+cardinalidade dos conjuntos gerados pela bipartição é o total
+8Realizamos um teste do uso da análise de sentimentos, a partir da biblioteca VADER[5].
+No entanto, após uma análise manual, comentários claramente discordantes eram
+colocados em um mesmo lado da discussão, por serem negativos. O mesmo ocorriam
+para casos para sentimentos positivos.
+9https://platform.openai.com/
+10Optamos por utilizar os nomes das métricas em inglês, para seguir os trabalhos da
+literatura.
+Figura 1: Exemplo de uma árvore bipartida de discussão.
+de comentários em cada lado da discussão. As medidas têm
+intervalo de variação [0, 1], sendo 0 indicativo da predomi-
+nância total de apenas um lado da discussão, indicando pouca
+ou nenhuma polarização e 1 evidenciando uma discussão
+polarizada. A Figura 1, por exemplo, apresenta uma árvore
+de discussão em que o Balance Score é igual a 0.5 (6 arestas
+vermelhas e 3 verdes) e o Balance Side é igual a 0.66 (60%
+azul claro e 40% azul escuro).
+• Controversy Level. Esta métrica, proposta neste trabalho,
+é calculada a partir do Desvio-Padrão do Stance Score das
+arestas de saída de cada comentário. A média é calculada
+considerando todos os comentários da árvore em análise.
+Caso o comentário tenha uma resposta, o Controversy Level
+é igual ao módulo do Stance Score desta resposta. No caso
+de uma folha, o Stance Score é o módulo referente à resposta
+dada ao comentário de nível superior. A métrica varia no
+intervalo [0, 1], onde valores maiores apontam discussões
+controversas, com a presença de polarização.
+ESTUDO DE CASO: DEBATE NO REDDIT
+A seguir apresentamos os resultados preliminares da aplicação
+da metodologia proposta para quantificação da polarização nas
+discussões realizadas no Reddit durante as eleições brasileiras de
+2018 e 2022.
+A primeira análise foi um estudo de correlação entre as métricas
+utilizadas para verificar e quantificar a intensidade de polarização.
+Devido a restrição de espaço, descrevemos brevemente os resultados
+obtidos, omitindo as matrizes de correlação calculadas. As métricas
+Balance Score e Desvio-Padrão do Stance Score apresentam uma corre-
+lação positiva elevada nos dois períodos, acima de 0.7, corroborando
+[12], que afirma que tópicos controversos possuem variância mais
+elevada com relação a tópicos não controversos. Adicionalmente,
+destaca-se a correlação altamente negativa entre o Balance Side e o
+valor médio do Stance Score, evidenciando que, quando a discussão
+atinge teor de maior discordância (Stance Score negativo), os lados
+opostos no debate tendem a estar mais balanceados, indicando a
+presença de polarização na discussão.
+Na segunda análise, calculamos a distribuição de probabilidades
+das diferentes métricas consideradas. Devido a restrição de espaço,
+descrevemos brevemente os resultados obtidos, omitindo os gráficos.
+A média do Stance Score possui maiores densidades de valores mais
+próximos a -1 em 2022 do que em 2018. Adicionalmente, a média do
+Controversy level possui distribuição de maior densidade em valores
+mais elevados do que os valores encontrados em 2018. A maior
+densidade de árvores com Balance Side no intervalo [0.4, 0.6] em
+WebMedia’2024, Juiz de Fora, Brazil
+Gustavo F. Cunha and Ana Paula Couto da Silva
+Tabela 2: Total de submissões, comentários e árvores utilizadas na análise de polarização nos anos de 2018 (18) e 2022 (22).
+Subreddit
+#Postagens (18)
+#Postagens (22)
+#Comentários (18)
+#Comentários (22)
+#Árvores (18)
+#Árvores (22)
+r/brasil
+2.292
+2.447
+r/BrasildoB
+r/brasilivre
+Total
+2.672
+3.089
+2018 aponta para maior presença de debates com caráter moderado,
+onde os comentários estão envolvidos em threads com pontos de
+vista diversos.
+Nossa última análise foca nas opiniões individuais, com o obje-
+tivo de analisar a formação de echo chambers e de maiores evidências
+de polarização. Para tal, apresentamos na Figura 2 o mapa de calor
+da distribuição de densidade do Stance Score de cada usuário (consi-
+derando o posicionamento do comentário-pai, no eixo x) e da média
+do Stance Score dos comentários realizados pelos nós filhos. Nota-se
+uma concentração de densidade mais significativa em torno de zero
+no eixo y em 2018, evidenciando que os indivíduos envolvem-se em
+debates com outros de mesmo posicionamento, mas também estão
+abertos a participar de discussões em assuntos dos quais possuem
+visões discordantes. Adicionalmente, a densidade no primeiro qua-
+drante, representando concentração de discussões em assuntos de
+alta concordância entre os pares, é maior em 2018 do que em 2022.
+Porém, no primeiro ano, a densidade de pontos neste quadrante não
+tem uma separação bem demarcada com a densidade mais central
+(em torno do zero), como ocorre em 2022. Neste caso, podemos
+inferir que as discussões no segundo ano são mais "herméticas"do
+que as realizadas no primeiro, evidenciando uma formação mais
+forte de echo chambers, onde existe uma amplificação de discussões
+que reforçam uma opinião em particular. Mais ainda, o gráfico de
+2022 apresenta uma maior densidade no terceiro quadrante, onde
+os posicionamentos entre os comentários pai e filhos são opostos,
+apontando uma maior polarização em torno de discussões políticas
+em mídias sociais.
+Adicionalmente, realizamos uma análise qualitativa das árvores
+presentes nos quadrantes 1 e 3. Árvores no primeiro quadrante, ou
+seja, relacionadas à formação de echo chambers, são árvores com
+discussão quase ou totalmente unilateral, com Balance Side baixo.
+Mesmo quando debatem assuntos polêmicos, os comentários reali-
+zados compartilham o mesmo ponto de vista. Também verificamos
+árvores com vértices no terceiro quadrante que, por outro lado,
+têm caráter de discussão acalorado, com Balance Side elevado, se
+tratando normalmente de assuntos polêmicos como, por exemplo,
+"Sigilo de 100 anos", "Carona de Lula até a COP27", "Isolamento Político
+de Bolsonaro às vésperas das Eleições 2022", com vários ramos do tipo
+resposta-réplica. Por fim, todas as análises realizadas apresentam
+resultados complementares, fornecendo evidências de aumento de
+polarização e formação de echo chambers nas discussões realizadas
+nas eleições de 2022, considerando a amostra de dados obtidas a
+partir do Reddit.
+CONCLUSÕES
+Neste trabalho apresentamos uma metodologia para caracterização
+de discussões polarizadas em mídias sociais, baseada na modelagem
+matemática de árvores de discussão, stance detection utilizando
+(a) Eleições de 2018.
+(b) Eleições de 2022.
+Figura 2: Densidade de distribuição de Stance Score.
+o GPT-4 e cálculo de métricas matemáticas para aferir o nível de
+polarização nas threads.
+Considerando como caso de estudo a comparação entre as dis-
+cussões realizadas no Reddit, referentes às eleições de 2018 e 2022,
+nossos resultados mostraram uma tendência de aumento da polari-
+zação e diminuição do caráter de diversidade dos debates realizados
+por estes usuários entre os períodos analisados, corroborando dis-
+cussões abordadas em trabalhos de diferentes campos de pesquisa.
+Assim, os resultados iniciais apresentados neste artigo se mostra-
+ram promissores para a aplicação da metodologia de quantificação
+de polarização em um maior conjunto de dados como também em
+diferentes contextos e mídias sociais.
+Agradecimentos: Este trabalho foi parcialmente financiado pela
+FAPEMIG, CAPES e CNPq.
+Caracterizando Polarização em Redes Sociais: Um Estudo de Caso das Discussões no Reddit sobre as Eleições Brasileiras de 2018 e 2022
+WebMedia’2024, Juiz de Fora, Brazil

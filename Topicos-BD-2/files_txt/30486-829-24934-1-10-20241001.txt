@@ -1,0 +1,246 @@
+Jogos Sérios para Auxiliar o Exercício Cognitivo de Idosos
+Utilizando o Robô Social EVA
+Pedro Lucas Pereira da Silva
+pl_silva@id.uff.br
+Laboratório MídiaCom
+Universidade Federal Fluminense
+Niterói, RJ, Brasil
+João Vitor Carvalho Cecim
+joaocecim@id.uff.br
+Laboratório MídiaCom
+Universidade Federal Fluminense
+Niterói, RJ, Brasil
+Marcelo Marques da Rocha
+marcelo_rocha@midiacom.uff.br
+Laboratório MídiaCom
+Universidade Federal Fluminense
+Niterói, RJ, Brasil
+Débora Christina Muchaluat-Saade
+debora@midiacom.uff.br
+Laboratório MídiaCom
+Universidade Federal Fluminense
+Niterói, RJ, Brasil
+WFA’2024, Juiz de Fora/MG, Brazil
+Pereira da Silva et al,
+TRABALHOS RELACIONADOS
+Com o avanço das tecnologias e o crescente interesse em métodos
+inovadores para a estimulação cognitiva, a integração de jogos sé-
+rios no tratamento de condições relacionadas ao envelhecimento
+tem se mostrado promissora. Neste contexto, em [6], foi apresen-
+tada uma proposta de um jogo sério baseado no teste de Stroop,
+uma conhecida técnica de psicologia cognitiva que envolve a leitura
+de palavras que nomeiam cores impressas em cores conflitantes
+(por exemplo, a palavra ’vermelho’ escrita em tinta azul). O jogo
+exige a inibição de respostas automáticas e a resolução de conflitos
+cognitivos, sendo desenvolvido com base na tarefa Stroop clássica
+e adaptado para um formato digital interativo. Este jogo cognitivo,
+voltado para idosos e desenvolvido utilizando o middleware Ginga-
+NCL [1] para a TV digital brasileira, integra efeitos sensoriais de
+luz para aumentar a atratividade e eficácia na estimulação cognitiva
+dos usuários idosos. Estudos anteriores destacam a importância dos
+jogos virtuais na melhoria da saúde mental e cognitiva, especial-
+mente em tratamentos de doenças relacionadas ao envelhecimento.
+Testes realizados com idosos demonstraram boa aceitação do jogo e
+indicaram que os efeitos sensoriais de luz influenciaram a percepção
+dos jogadores, tornando o jogo mais envolvente.
+O trabalho descrito em [15] explora o uso de jogos sérios em SARs
+para terapias de regulação emocional para crianças com Transtorno
+do Espectro Autista (TEA). O artigo descreve o robô EVA, que é
+capaz de falar, ouvir e expressar emoções através do olhar, e destaca
+a melhoria das capacidades do EVA para reconhecer emoções dos
+usuários por meio do reconhecimento facial e criar efeitos sensoriais
+de luz, tornando a terapia mais atraente para as crianças. Esse
+avanço representa um passo significativo na oferta de terapias
+imersivas para crianças autistas, integrando comunicação verbal,
+não-verbal e interação social.
+Ambos os estudos mostram a relevância dos efeitos sensoriais em
+intervenções tecnológicas voltadas para diferentes grupos etários,
+seja para a estimulação cognitiva de idosos ou para a regulação
+emocional de crianças com TEA. A utilização de luzes e outros
+estímulos sensoriais demonstrou ser uma estratégia eficaz para
+aumentar o engajamento em jogos sérios e atividades propostas,
+refletindo o potencial das tecnologias assistivas na área da saúde.
+Este trabalho segue uma abordagem similar, propondo novos jogos
+sérios para o robô EVA voltados para o público idoso.
+LINGUAGEM EVAML E SIMULADOR EVASIM
+A linguagem EvaML é uma linguagem de programação baseada em
+XML, criada para facilitar o desenvolvimento de scripts de interação
+para o robô EVA. Ela oferece abstrações que facilitam a construção
+dos scripts, permitindo que sejam criados utilizando um editor de
+texto simples. Por ser baseada em XML, a EvaML é mais legível
+para não-programadores.
+A EvaML possui elementos que permitem a interação por voz,
+o controle de uma lâmpada inteligente, a execução de arquivos de
+áudio e o controle da movimentação da cabeça e dos braços do
+robô. Além disso, oferece elementos para a criação e manipulação
+de variáveis e para o controle do fluxo de execução do script, entre
+outros.
+Com o objetivo de auxiliar no desenvolvimento e teste de scripts
+para o robô EVA, os autores em [5, 11] propuseram o simulador
+EvaSIM. O simulador busca simular, através de elementos gráficos
+em sua interface, o comportamento do robô físico. Em sua versão
+atual, o EvaSIM possui recursos aprimorados de interação multimo-
+dal, como reconhecimento de expressões faciais, reconhecimento
+de gestos e leitura de QR codes utilizando uma webcam, além da
+interação por voz, utilizando um microfone. Todos os jogos sérios
+propostos neste trabalho utilizaram a linguagem EvaML e o simu-
+lador EvaSIM durante o processo de desenvolvimento e teste dos
+scripts para o robô.
+JOGOS SÉRIOS PROPOSTOS
+Todas as aplicações criadas são jogos sérios interativos que utili-
+zam o robô EVA como plataforma. Os jogos foram projetados para
+engajar o usuário por meio de uma série de interações dinâmicas e
+multimodais.
+Figura 1: Fluxograma do funcionamento geral dos jogos
+No início de cada jogo, o robô EVA dá as boas-vindas ao usuário
+e o convida a participar do jogo. Utilizando efeitos de luz e expres-
+sões emocionais, o robô cria um ambiente imersivo e atraente. Em
+seguida, o robô faz uma pergunta para saber o nome do usuário,
+personalizando a interação conforme o nome fornecido. Na Figura
+1, é possível observar o fluxo principal presente nas aplicações.
+4.1
+Jogo Genius
+Esta proposta de jogo sério foi baseada no brinquedo Genius, um
+jogo eletrônico muito popular na década de 80, lançado pela empresa
+de brinquedos Estrela.
+Assim como no jogo original, o jogo sério proposto tem como ob-
+jetivo estimular a memória utilizando cores e sons. O jogo consiste
+em acertar a sequência de cores que será mostrada através de uma
+lâmpada inteligente. Cada cor tem uma nota musical associada, que
+será reproduzida pelo robô para estimular o raciocínio. Conforme
+o jogador acerta a sequência, uma nova cor é acrescentada a cada
+rodada. A Figura 2 apresenta o jogo original Genius e o robô social
+com a lâmpada inteligente conectados através de uma rede Wi-Fi.
+No início do jogo, o EVA se apresenta ao usuário perguntando
+seu nome. Em seguida, pergunta se o jogador está interessado em
+participar. Se o usuário se recusar a jogar, o EVA se despede e
+encerra a interação. Uma vez confirmada a participação do usuário,
+o robô explica as regras do jogo e mostra as quatro cores que podem
+Jogos Sérios para Auxiliar o Exercício Cognitivo de Idosos Utilizando o Robô Social EVA
+WFA’2024, Juiz de Fora/MG, Brazil
+Figura 2: (a) Brinquedo eletrônico Genius. (b) Robô EVA.
+aparecer durante a interação: amarelo, verde, azul e vermelho. Além
+de mostrar cada cor, o robô também toca a nota musical associada
+a cada uma delas. Quando o EVA termina de apresentar as cores e
+explicar as regras, ele sinaliza que o jogo vai começar.
+O jogo começa com uma sequência pré-definida, que será sorte-
+ada no início de cada sessão. A aplicação disponibiliza sete sequên-
+cias, e cada uma delas pode ter até um máximo de cinco cores. Se o
+jogador acertar a sequência correta de cores cinco vezes seguidas,
+o robô expressa felicidade e parabeniza o jogador por ter vencido
+o jogo. Além disso, o robô diz uma frase de motivação elogiando
+a capacidade de memória do usuário. Se o jogador errar alguma
+cor da sequência em qualquer rodada, o robô demonstra tristeza e
+informa ao usuário que ele errou a sequência.
+Figura 3: Fluxograma do funcionamento lógico do jogo ge-
+nius
+Após o EVA interagir com o jogador, tanto quando ele acerta
+todas as cores quanto quando ele erra alguma cor, o robô sempre
+pergunta se a pessoa tem interesse em jogar novamente. Se a res-
+posta for afirmativa, o robô se mostra feliz e diz que o jogo será
+reiniciado. Nesse momento, uma nova sequência de cores é gerada
+aleatoriamente para uma nova tentativa. Se a resposta for negativa,
+o robô demonstra tristeza e agradece a participação do usuário,
+encerrando o jogo. Os processos presentes na etapa entre o início
+e o fim do jogo Genius podem ser analisados detalhadamente na
+Figura 3.
+Um vídeo de demonstração do jogo sério Genius utilizando o
+robô EVA pode ser assistido a partir deste link.
+4.2
+Jogos Inspirados no Teste MoCA
+Dificuldades cognitivas são comuns em idosos, e a intervenção pre-
+coce pode retardar a progressão para condições mais graves, como
+a demência. Um dos instrumentos utilizados para o diagnóstico de
+comprometimento cognitivo é o teste MoCA (Montreal Cognitive
+Assessment). Os autores em [3] mostram a eficácia do MoCA para o
+diagnóstico de Comprometimento Cognitivo Leve (CCL). Esta seção
+apresenta a proposta de três jogos sérios desenvolvidos com base no
+teste MoCA, utilizando a plataforma de robótica social EVA. Cada
+jogo foi projetado para avaliar diferentes capacidades cognitivas.
+As subseções a seguir descrevem cada um dos jogos.
+4.2.1
+Jogo de Pares de Palavras. No exercício de abstração, o obje-
+tivo é avaliar a capacidade do usuário de pensar de forma abstrata
+e estabelecer analogias. Nesta aplicação, o robô EVA apresenta
+duas palavras ao paciente e solicita que ele identifique o que essas
+palavras têm em comum.
+Figura 4: Fluxograma de funcionamento lógico do jogo de
+pares de palavras
+Por exemplo, se o EVA diz ’maçã’ e ’laranja’, a resposta esperada
+seria ’fruta’. Esse exercício ajuda a testar a habilidade do usuário
+em reconhecer categorias e relações entre conceitos aparentemente
+distintos. A Figura 4 retrata especificamente o estado entre o início
+e o término do jogo de pares de palavras.
+Através do link, pode-se acessar uma demonstração da aplicação
+Jogo de Pares de Palavras no simulador do robô EVA link.
+4.2.2
+Jogo da Repetição de Letras. O jogo de repetição consiste em
+contar quantas vezes a letra ’X’ aparece em uma sequência de letras
+WFA’2024, Juiz de Fora/MG, Brazil
+Pereira da Silva et al,
+falada pelo robô. No início do jogo, são explicadas as regras e, em
+seguida, a sequência é mostrada. A aplicação utiliza quatro macros
+para gerar sequências diferentes e verificar a quantidade de ’X’. O
+robô escuta a resposta do usuário, fornece feedback com base na
+precisão e expressa emoções de felicidade ou tristeza, dependendo
+se houve acerto ou erro.
+Após o jogo, o robô pergunta se o usuário deseja jogar novamente
+e reinicia ou encerra o jogo conforme a resposta. No código, é
+possível configurar o robô com voz, áudio e efeitos de luz, e utilizar
+a macro ’apresentação’ para introduzir o robô e perguntar o nome
+do usuário. Dependendo da resposta do usuário sobre jogar ou não,
+o robô inicia ou encerra a interação, oferecendo uma experiência
+interativa e educativa com feedback ajustado.
+Um vídeo de demonstração do Jogo da Repetição de Letras ro-
+dando no simulador do robô pode ser visto através deste link. Um
+outro vídeo demonstrando o Jogo no simulador antigo, onde ocorre
+o looping da aplicação, pode ser visto através deste link.
+4.2.3
+Jogo de Cálculo. O exercício de cálculo e atenção envolve a
+subtração de 7 em 7 e é outra aplicação baseada no MoCA. Neste
+teste, o robô EVA solicita ao usuário que comece com um número
+aleatório fornecido pelo programa, que deve ser maior que 35 e
+menor ou igual a 100, e diminua esse número em 7 repetidamente
+até um total de 5 subtrações.
+Por exemplo, se o jogo começar com o número 100, o usuário deve
+continuar subtraindo 7 e fornecer a sequência correta (100, 93, 86,
+etc.). Esse exercício visa avaliar a capacidade do usuário de realizar
+cálculos mentais e manter a atenção durante o processo. A tarefa
+ajuda a testar a agilidade mental e a capacidade de concentração
+do usuário.
+Entre no link para visualizar a demonstração da aplicação no
+simulador do robô EVA link.
+CONSIDERAÇÕES FINAIS
+Através deste trabalho, podemos observar que as aplicações desen-
+volvidas para o robô social EVA, utilizando a linguagem EvaML,
+se destacam pela capacidade de criar experiências interativas e
+educativas focadas no aprimoramento cognitivo de idosos. Desde a
+introdução do EVA, o objetivo tem sido usar a robótica para oferecer
+suporte assistivo em atividades cognitivas e sociais. A linguagem
+EvaML, projetada para facilitar a criação e personalização dessas
+atividades, tem sido essencial para desenvolver jogos sérios, como
+o ’Jogo Genius’ e os jogos inspirados no MoCA, que demonstram
+como a tecnologia pode engajar usuários em atividades que estimu-
+lam a memória, a atenção e outras funções cognitivas.
+A integração de elementos sensoriais, como luzes, sons e expres-
+sões emocionais, enriquece a interação do robô com os usuários.
+Este trabalho contribui para a utilização de robôs socialmente assis-
+tivos em contextos terapêuticos, promovendo a saúde mental e o
+bem-estar da população idosa, além de oferecer novas possibilidades
+para o cuidado e a inclusão social de grupos vulneráveis.
+Para trabalhos futuros, serão desenvolvidas novas aplicações que
+aproveitam ao máximo as recentes capacidades do robô, incluindo
+funcionalidades avançadas, como leitura de QR codes e reconhe-
+cimento de expressões faciais. Essas inovações permitirão ao robô
+interpretar uma gama mais ampla de sinais humanos, resultando
+em interações mais naturais.
+Além disso, um importante trabalho futuro é a realização de tes-
+tes com idosos em ambientes geriátricos para coletar dados cruciais
+sobre a aceitação e o impacto emocional dessas tecnologias em
+populações idosas. Um projeto já submetido ao Comitê de Ética em
+Pesquisa com esse foco permitirá a realização desses testes em um
+futuro próximo.
+AGRADECIMENTOS
+Os autores agradecem o apoio recebido do CNPq, FAPERJ, Google
+Research, CAPES, CAPES PRINT, FINEP, INCT-MACC e INCT-
+ICONIoT.

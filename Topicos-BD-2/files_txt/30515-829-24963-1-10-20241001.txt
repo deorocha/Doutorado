@@ -1,0 +1,228 @@
+Uma Ferramenta de Autoria para
+Interação Multimodal em Aplicações NCL 4.0
+Pedro Alves Valentim
+Laboratório MídiaCom
+Universidade Federal Fluminense
+Niterói, Rio de Janeiro, Brasil
+pedroalvesvalentim@midiacom.uff.br
+Débora Christina Muchaluat-Saade
+Laboratório MídiaCom
+Universidade Federal Fluminense
+Niterói, Rio de Janeiro, Brasil
+debora@midiacom.uff.br
+0. The
+tool, implemented as a VSCode extension, automates the process
+of converting remote control interactions into multimodal links,
+thus reducing the authoring effort. By integrating voice, gesture,
+and facial expression interactions, the tool allows developers to
+focus more on enhancing user experience rather than technical
+implementation details. The paper details the functionalities and
+implementation of the tool, demonstrating how it can streamline
+the development process and improve the flexibility and usability of
+NCL 4.0 applications. Future work includes further testing and ex-
+ploration of additional interaction modalities to enhance the tool’s
+adaptability and inclusiveness.
+0.
+O restante do texto se estrutura da seguinte maneira: a Seção 2
+descreve brevemente as novidades da linguagem NCL, como seus
+novos papéis de conectores; a Seção 3 descreve as funcionalidades da
+ferramenta; a Seção 4 descreve como essas funcionalidades foram
+implementadas na extensão; finalmente, a Seção 5 recapitula as
+contribuições do trabalhos e sugere trabalhos futuros.
+INTERAÇÃO MULTIMODAL EM NCL 4.0
+O modelo NCM (Nested Context Model) [4, 9] estrutura a represen-
+tação de documentos multimídia através de entidades como nós,
+conectores hipermídia [6] e elos. Cada nó é um conjunto de infor-
+mações a ser apresentado, enquanto conectores e elos estabelecem
+as relações entre esses nós. A máquina de estados no NCM, que é
+fundamental para o modelo, opera com base em uma sincronização
+de eventos [7, 9]. Esta abordagem permite que documentos hiper-
+mídia incluam ações relacionadas a eventos temporais, espaciais e
+assíncronos, como interações do usuário. À medida que os eventos
+ocorrem, a máquina de estados altera seus estados conforme as con-
+dições associadas aos conectores e elos são atendidas, acionando as
+ações especificadas. A Figura 1 apresenta a máquina de estados dos
+eventos NCM.
+O modelo NCM já inclui diversos tipos de eventos relacionados
+à interação do usuário, com atributos que descrevem características
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Pedro Alves Valentim and Débora Christina Muchaluat-Saade
+Figura 1: Máquina de estados dos eventos NCM.
+específicas desses eventos. Por exemplo, o atributo “key” em um
+evento de seleção define a tecla pressionada. A linguagem NCL, em
+sua versão 4.0, apresenta novos tipos de eventos para ampliar os mo-
+dos de interação. Entre os novos eventos estão “voiceRecognition”,
+“handPoseRecognition” e “faceRecognition” — para interações via
+voz, gestos e expressões faciais, respectivamente —, que utilizam o
+atributo “key” de maneira diferente. Cada evento possui um papel
+associado — por exemplo, o evento “voiceRecognition” é direta-
+mente relacionado ao papel “onVoiceRecognition”. A listagem 1
+apresenta um exemplo de conector e elo para interação por voz.
+No contexto dos eventos multimodais, o atributo “key” funciona
+como uma chave que fornece informações adicionais sobre o evento;
+por exemplo, no evento “handPoseRecognition”, um “key” igual a
+“OPEN” indica o gesto de mão aberta.
+1 <connectorBase>
+<causalConnector id="onVoiceRecognitionStart">
+<connectorParam name="key"/>
+<simpleCondition role="onVoiceRecognition" key=
+"$key"/>
+<simpleAction role="start" />
+</causalConnector>
+7 </connectorBase>
+8 ...
+9 <link xconnector="onVoiceRecognitionStart">
+<bind role="onVoiceRecognition" component="
+botanicalGardenImage">
+<bindParam name="key" value="play"/>
+</bind>
+<bind role="start" component="botanicalGardenVideo"
+/>
+14 </link>
+Listing 1: Exemplo de conector e elo para interação por voz
+É possível configurar múltiplas condições num mesmo conector,
+permitindo, por exemplo, combinar diferentes modos de interação
+em um mesmo conector, com condição composta por operador
+booleano “OR”. A listagem 2 apresenta um exemplo de conector
+com condição composta.
+1 <causalConnector id="
+onKeySelectionOrVoiceRecognitionStart">
+<connectorParam name="key" />
+<connectorParam name="key_voice" />
+<compoundCondition operator="or">
+<simpleCondition role="onSelection" key="$key
+"/>
+<simpleCondition role="onVoiceRecognition"
+key="$key_voice" />
+</compoundCondition>
+<simpleAction role="start" max="unbounded" />
+9 </causalConnector>
+Listing 2: Exemplo de conector que pode ser ativado tanto
+por controle remoto quanto por voz.
+PROPOSTA DE FERRAMENTA DE AUTORIA
+A ferramenta de autoria para integração multimodal apresentada
+neste trabalho visa facilitar a criação de aplicativos NCL 4.0 que
+combina diferentes modos de interação, incluindo voz, gesto e ex-
+pressão facial. Para isso, desenvolvemos uma extensão VSCode
+que automatiza o processo de conversão de elos de interação via
+controle remoto e outros modos de interação em elos multimodais.
+A ferramenta utiliza o recurso Code Actions do VSCode para in-
+dicar ao usuário que é possível adicionar outros modos de interação
+a elos presentes no código. Este recurso tem a aparência de uma
+lâmpada no começo da linha do editor. Ao clicar na lâmpada, é
+aberto um pequeno menu com os modos de interação que podem
+ser adicionados ao elo. A Figura 2 é um recorte de captura de tela
+que apresenta tal recurso.
+Figura 2: Aparência do elemento de Code Action para adição
+de interação multimodal a um elo de interação via controle
+remoto.
+Após a seleção, abre-se uma caixa de entrada de texto para que
+o usuário insira o valor esperado “key” para o novo papel do elo.
+Feita esta atribuição, a extensão verifica se há na base de conectores
+um conector correspondente ao novo elo. Caso não haja, ele é adici-
+onado. Finalmente, é reescrito o elo, mantendo os modos originais
+de interação e o novo, recém-escolhido. Com essa ferramenta, o
+autor de aplicações NCL não precisa mais se preocupar com a im-
+plementação manual da lógica de interação multimodal, reduzindo
+consideravelmente o esforço de autoria.
+Com essa ferramenta, é possível criar aplicativos NCL 4.0 que
+integrem diferentes modos de interação, tornando-os mais flexíveis
+e fáceis de usar. Além disso, a redução do esforço de autoria permite
+que os desenvolvedores se concentrem em melhorar a experiência
+do usuário, ao invés de se preocupar com aspectos técnicos de
+sintaxe e dependências.
+IMPLEMENTAÇÃO NO VSCODE
+A extensão é escrita em TypeScript [3] e utiliza a API do VSCode
+para registrar comandos, fornecer ações de código e manipular o
+Uma Ferramenta de Autoria para Interação Multimodal em Aplicações NCL 4.0
+WTVDI’2024, Juiz de Fora/MG, Brazil
+conteúdo dos documentos abertos no editor. A ativação da extensão
+ocorre por meio da função “activate”, que registra os comandos e
+ações a serem disponibilizados aos usuários.
+O comando principal da extensão, “editor.writeLink”, é registrado
+durante a ativação da extensão. Esse comando é responsável por
+lidar com a escrita de elos multimodais no código NCL. Quando
+acionado, abre uma caixa de entrada de texto para que o usuário que
+insira o valor “key” para a nova interação. Após o usuário fornecer
+o valor, o comando constrói uma nova tag de elo que incorpora o
+novo modo de interação e verifica se o conector correspondente
+já existe no documento. Se o conector não existir, ele é criado e
+inserido na base de conectores.
+A extensão inclui uma função que verifica se um conector es-
+pecífico já está presente no documento. Isso é feito ao comparar
+o conteúdo do documento com uma expressão regular que busca
+pelo identificador do conector. Se o conector necessário não esti-
+ver presente, outra função é responsável por compor o conector e
+inseri-lo na base de conectores. Esta composição inclui a constru-
+ção de uma tag de conector causal que integra a nova ação simples
+correspondente ao tipo de interação adicionada.
+A extensão utiliza o recurso Code Actions do VSCode para forne-
+cer sugestões de interação ao usuário, indicando que é possível adi-
+cionar modos de interação a elos presentes no código. Um provedor
+de ações de código verifica se a seleção atual no editor corresponde
+a um elo de interação. Se corresponder, ele cria ações de código
+que permitem ao usuário adicionar interações de voz, gestos ou
+expressão facial ao elo selecionado.
+A extensão automatiza o processo de adição de interações mul-
+timodais, de modo que o usuário pode simplesmente selecionar e
+definir novos modos de interação para os elos presentes no código.
+Ao fazer isso, a extensão verifica e atualiza automaticamente os co-
+nectores necessários, assegurando coesão sintática no documento.
+A Figura 3 apresenta um diagrama de atividades para o sistema.
+A versão inicial da extensão está disponível em: ncl-multimodal-
+qol-0.0.1.vsix
+CONCLUSÃO
+Neste trabalho, desenvolvemos uma ferramenta de autoria voltada
+para a criação de aplicações NCL 4.0 com interação multimodal,
+visando facilitar a programação e melhorar a experiência do usuário.
+Nossa ferramenta permite a integração de diferentes modos de
+interação, como voz, gestos e expressões faciais, automatizando a
+conversão de elos de interação e simplificando o processo para os
+autores.
+As principais contribuições deste trabalho incluem a implemen-
+tação de uma extensão para o VSCode que utiliza o recurso Code
+Actions para sugerir e adicionar novos modos de interação de ma-
+neira intuitiva. Esta abordagem reduz significativamente o esforço
+necessário para programar aplicações multimodais, permitindo que
+os autores se concentrem em aspectos mais criativos e na melhoria
+da experiência do usuário.
+Além disso, discutimos a estrutura do modelo NCM e como a lin-
+guagem NCL 4.0 foi ampliada para suportar novos tipos de eventos
+multimodais. A ferramenta implementada verifica a presença de co-
+nectores necessários e, caso não existam, os cria automaticamente,
+garantindo a coesão sintática do documento NCL.
+Usuário seleciona linha
+em elo de interação
+Usuário abre opções
+de Code Actions
+Usuário seleciona tipo
+da interação a adicionar
+Usuário digita valor key
+para a nova interação
+Não
+Sim
+Conector
+correspondente
+existe na base
+de conectores?
+Cria conector correspondente
+e adiciona à base de conectores
+Modifica elo original,
+com nova interação
+Figura 3: Diagrama de atividades da extensão.
+Para trabalhos futuros, sugerimos a realização de testes adici-
+onais da ferramenta em diferentes cenários e com um conjunto
+maior de dados para validar sua robustez e versatilidade. Outra
+direção promissora é a exploração de modalidades de interação
+adicionais, como o uso do evento “eyeGaze” (fixação do olhar), que
+pode proporcionar uma experiência de usuário ainda mais inclu-
+siva. A implementação de novos recursos que permitam uma maior
+personalização e adaptabilidade da ferramenta às necessidades es-
+pecíficas dos usuários também é um caminho a ser explorado.
+Acreditamos que esta ferramenta pode trazer contribuições sig-
+nificativas para a comunidade de desenvolvimento de aplicações
+NCL, promovendo uma experiência de TV digital mais interativa e
+personalizada.
+AGRADECIMENTOS
+Os autores agradecem o apoio recebido da FAPERJ, CAPES, CAPES
+PRINT, CNPq, MCOM e RNP.

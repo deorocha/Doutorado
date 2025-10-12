@@ -1,0 +1,222 @@
+CTIC’2024, Juiz de Fora/MG, Brazil
+Santos et al.
+dos usuários por áreas urbanas, visando ainda verificar a validade
+em mais de uma fonte de LBSN.
+DESCRIÇÃO DOS DADOS E METODOLOGIA
+Em uma primeira etapa da pesquisa, foram usadas duas LBSNs
+diferentes, Google Places e Foursquare. Os dados do Google Places
+foram disponibilizado pelos autores de [7] e [13] para pesquisas e
+abrangem o mundo todo. Os dados do Foursquare foram disponi-
+bilizadas pelos autores de [18], englobando o mundo todo. Para a
+nossa análise, fizemos uma seleção para a cidade de Curitiba, que
+resultaram em dois datasets distintos, para os quais foram coletados
+dados da cidade de Curitiba no período de 2010-2013, para o Google
+Places, formado por 8.372 avaliações de 4.909 usuários em 2.213 es-
+tabelecimentos localizados em 69 dos 75 bairros de Curitiba, e 2014,
+sendo composto por 5.116 usuários que fizeram 53.253 check-ins
+em 8.523 pontos diferentes da cidade de Curitiba em 62 dos bairros,
+para o Foursquare.
+Ao analisar as categorias mais frequentadas pelos usuários de
+cada uma das LBSNs, presentes na Figura 1, por exemplo, a presença
+de restaurantes foi maior no Google Places; o Foursquare, por outro
+lado, apresentou uma grande ocorrência de categorias como casa e
+trabalho, categorias não presentes no Google Places. Ademais, os
+usuários do Foursquare apresentaram uma recorrência no uso da
+plataforma superior quando comparados aos do Google Places, os
+quais costumam avaliar em intervalos de tempo bem diferentes dos
+usuários do Foursquare.
+Figura 1: Categorias mais avaliadas no Google Places (es-
+querda) e no Foursquare (direita)
+Como passo metodológico para entender o interesse dos usuários,
+construiu-se um grafo não dirigido ponderado 𝐺= (𝑉, 𝐸), no qual
+o conjunto 𝑉de nós identifica os bairros de Curitiba, e uma aresta
+𝑒𝑖,𝑗∈𝐸conecta o bairro 𝑣𝑖∈𝑉ao bairro 𝑣𝑗∈𝑉, com peso
+𝑤𝑖,𝑗∈N indicando a quantidade de usuários que têm avaliações
+de estabelecimentos localizados em ambos os bairros. Estas arestas
+representam então o interesse de usuários por dois bairros distintos.
+Além disso, essa rede possui self-loops, isso é, uma aresta 𝑒𝑖,𝑖∈𝐸
+conecta um bairro 𝑣𝑖∈𝑉a ele mesmo, nesta aresta o peso 𝑤𝑖,𝑖∈N
+determina a quantidade de usuários que avaliou pelo menos duas
+vezes um mesmo bairro. A rede de interesse formada pelos dados
+do Google Places na cidade de Curitiba pode ser vista na figura 2.
+Nela, arestas de maior largura indicam um peso mais elevado, e o
+tamanho do nó representa o seu grau.
+Na continuidade desta primeira etapa, de forma a analisar os
+fatores que influenciam o comportamento urbano, foram utilizados
+os dados socioeconômicos dos bairros de Curitiba, disponibilizados
+pelo Censo Demográfico Brasileiro de 2010 realizado pelo IBGE.
+Para os dados econômicos, foi coletada a renda média mensal e para
+os aspectos sociais, a composição racial de cada bairro, sendo ela
+Figura 2: Rede de Interesse de Curitiba (Google Places).
+formada pelas categorias: Branca; Preta; Amarela; Parda; Indígena.
+Para investigar o impacto da polarização política, foram coletados
+em Curitiba no ano de 2014, por ser mais próximos dos datasets
+utilizados, dados do Tribunal Regional Eleitoral referentes ao 2°
+turno das eleições para presidente.
+Com o objetivo de examinar o impacto de diferenças econômicas,
+sociais, políticas e espaciais no interesse dos usuários, calculou-se
+a diferença entre os bairros, para esses fatores. Para a renda média
+mensal foi usada a diferença absoluta, bem como para a polarização
+política, na qual usou-se a diferença absoluta entre os percentuais
+que votaram na candidata Dilma Rousseff, de modo similar a [8] e
+[10]. Para quantificar a diferença racial entre dois bairros, usou-se
+a mesma técnica de [8], na qual a diferença entre os bairros 𝐴e 𝐵é
+dada por
+𝑅𝐴,𝐵= 1
+𝑛
+∑︁
+𝑖=1
+𝑃𝑖(𝐴)
+𝑃(𝐴) −𝑃𝑖(𝐵)
+𝑃(𝐵)
+onde 𝑅𝐴,𝐵é a diferença das composições raciais entre os bairros
+𝐴e 𝐵, 𝑃(𝐴) representa o tamanho da população do bairro 𝐴, com
+𝑖= 1, ..,𝑛identificando a i-ésima categoria racial em um bairro, con-
+forme as categorias definidas pelo Censo Demográfico Brasileiro de
+2010: Branca, Preta, Amarela, Parda e Indígena. Para calcular a dis-
+tância geográfica entre os bairros (distância enre seus centroides),
+foi utilizada a biblioteca geopandas [2] do Python, com as coordena-
+das geográficas de latitude e longitude do sistema de coordenadas
+WGS84 projetadas para o sistema de projeção plana UTMS22s que
+traz a projeção mais precisa da região onde se encontra Curitiba.
+Na segunda etapa da pesquisa (ainda em andamento), de modo
+a investigar os fenômenos urbanos em regiões que não possuem
+divisões administrativas acessíveis, assim como compreender o
+fenômenos das cidades em diferentes escalas, foi desenvolvida a h3-
+cities. Essa ferramenta, produto da presente pesquisa e disponível
+publicamente1, utiliza o OpenStreetMap e o "Hexagonal hierarchical
+geospatial indexing system"2 (h3) da Uber que subdivide o mundo
+todo.
+1https://h3-cities.streamlit.app/
+2https://h3geo.org/
+Modelagem do Interesse por Áreas Urbanas Usando Redes Sociais Baseadas em Localização
+CTIC’2024, Juiz de Fora/MG, Brazil
+Considerações éticas: Este trabalho não envolve pesquisas com
+seres humanos. Todas as informações sensíveis, por exemplo, os
+nomes de usuários, foram anonimizadas previamente para garantir
+a privacidade dos usuários. Além disso, são utilizados dados públicos
+disponíveis na Web.
+RESULTADOS
+Etapa 1: Ao construir as redes de Interesse para ambas as LBSNs, na
+cidade de Curitiba, primeiramente analisou-se a similaridade entre
+as duas através da correlação de Pearson. Foram comparados os
+pesos das arestas das duas redes obtendo uma correlação de 0,875,
+observando-se assim uma forte indicação da similaridade dessas
+redes de interesse. Para investigar se os bairros mais importantes
+eram os mesmos para as duas redes de interesse, empregou-se a
+correlação de Kendall’s Tau. Para isso, construiu-se um ranking dos
+bairros, usando a centralidade por autovetor que indica a importân-
+cia do nó na rede, comparou-se esse ranking entre as duas redes
+obtendo uma correlação de 0,646. Essa comparação pode ser vista
+na Figura 3 para os bairros mais importantes de cada rede. Dessa
+forma, observou-se uma conexão moderada entre as características
+de importância dos bairros para as duas LBSNs.
+Figura 3: Comparação dos nós mais importantes de cada rede
+Após calcular a diferença entre os bairros de Curitiba para cada
+um dos fatores (socioeconômicos, políticos e raciais), estas diferen-
+ças foram associadas aos pesos das arestas para ambas as Redes de
+Interesse (Google Places e Foursquare). Esse processo foi feito tanto
+para a rede completa, como para uma rede filtrada, selecionado ape-
+nas as arestas com peso ≥5, de modo a capturar áreas conectadas
+por interesse mais elevado. A correlação de Spearman foi usada
+para entender quais desses fatores estão mais associados com o
+interesse dos usuários. Foi obtida uma correlação inferior a 0,25
+em todos os fatores analisados, exceto a distância geográfica, que
+apresentou correlações entre -0,3 e -0,55 nos cenários considerados,
+ambas com 𝑝≤10−4. Isso indica que os fatores de renda média
+mensal, composição racial e polarização política não ajudam a ex-
+plicar o interesse dos usuários pelas áreas urbanas, logo as pessoas
+não costumam frequentar, necessariamente, lugares que sejam simi-
+lares em renda, raça, ou opiniões políticas, quando seus interesses
+são modelados por essas LBSNs. Entretanto, a distância geográfica
+teve um impacto mais relevante, mesmo que moderado, indicando
+a preferência dos usuários por regiões que são mais próximas entre
+si.
+Etapa 2: Como forma de ampliar a análise da etapa 1 para dife-
+rentes granularidades, foi desenvolvida a h3-cities cujos resultados
+ilustrativos estão na Figura 4. Nela, há uma comparação entre os
+bairros de Curitiba e uma subdivisão feita pela ferramenta, com a
+resolução 8, ou seja, os hexágonos têm uma área média de 0, 737
+km2. Com essa ferramenta, é possível dividir os bairros em regiões
+menores e verificar se as redes de interesse formadas pelas diferen-
+tes LBSNs continuam a apresentar resultados semelhantes. Outra
+questão importante ao trabalhar com uma subdvisão customizada
+de cenários urbanos é que dados de terceiros, como o IBGE, não
+fornecem dados especificamente para essa subdivisão. Isso que pode
+ser resolvido usando uma aproximação com dados dos bairros, ou
+com a exploração de outras características advindas de datasets ge-
+olocalizados, como, por exemplo, as categorias de estabelecimentos
+presentes naquela região, para a análise urbana.
+Figura 4: Comparação da segmentação de Curitiba através de
+bairros e uma subdivisão via h3-cities (resolução 8).
+Em termos de produtos gerados pela pesquisa, além da ferra-
+menta descrita anteriormente, destacam-se os 3 trabalhos aceitos
+para eventos (dois nacionais e um internacional). Os resultados di-
+retos da etapa 1, desenvolvidos pelo aluno de IC, foram publicados
+em [15], cujo impacto foi atestado por um convite para extensão
+no periódico JISA, extensão esta que deverá englobar os resulta-
+dos diretos da etapa 2. Entretanto, a pesquisa resultou também
+em resultados indiretos, através de contribuições na preparação
+de dados, construção de figuras, e desenvolvimento de parte dos
+resultados, que possibilitaram a publicação de outros 2 trabalhos em
+eventos [5, 6], os quais exploram o conceito de assinaturas culturais,
+através da Teoria Scenes, que com dados provenientes de LBSNs,
+pode, por exemplo, tentar expressar as características culturais de
+uma dada região. Em [5], o trabalho explora o processo de agrupa-
+mento de bairros com características culturais (assinatura cultural)
+semelhantes na cidade de Curitiba. Este trabalho foi premiado com
+o 3o lugar no workshop Courb 2024 e, assim como [15], também
+recebeu convite para extensão no JISA. Em [6], o trabalho explora
+a transferência de conhecimento de uma LBSN (Yelps) para outra
+(Google Places) na formação das assinaturas culturais, explorando
+dados de diferentes cidades ao redor do mundo, e também de todos
+CTIC’2024, Juiz de Fora/MG, Brazil
+Santos et al.
+os estados americanos. Como forma de validação dos resultados
+para os EUA, os dados foram comparados com aqueles obtidos via
+American Values Survey (AVS), um resultado desenvolvido pelo
+aluno de IC.
+CONCLUSÃO
+Esse artigo apresentou um resumo do estudo desenvolvido sobre a
+modelagem do interesse de usúarios de redes sociais por diferentes
+áreas urbanas. Para isso, foi realizada na primeira etapa da pesquisa
+uma investigação na cidade de Curitiba usando redes de interesse,
+i.e. Location-Based Social Networks (LBSNs) modeladas em grafos.
+Nos experimentos observou-se similaridade na modelagem do com-
+portamento urbano, a partir de duas fontes de dados diferentes,
+Google Places e Foursquare, em particular quando se consideram
+as arestas, e os nós mais centrais das respectivas redes de interesse.
+Ainda na primeira etapa da pesquisa, investigou-se a possibili-
+dade de entender as escolhas dos usuários de LBSNs, em relação
+ao seu interesse por regiões urbanas, usando características socioe-
+conômicas, de polarização política e distância geográfica das áreas
+frequentadas por esses usuários. Com isso, concluiu-se que a dis-
+tância geográfica foi o único fator associado com o interesse dos
+usuários, mesmo que de forma moderada. Ou seja, regiões próximas
+costumam ser mais frequentadas pelos mesmos usuários do que
+regiões mais distantes.
+Na última etapa que ainda se encontra em andamento, com o de-
+senvolvimento da h3-cities, se torna possível a construção de redes
+de interesse em diversas cidades. Por exemplo, obtendo-se dados
+de uma LBSN, como os datasets públicos usados para este trabalho,
+pode-se investigar o interesse dos usuários, sem precisar buscar
+pelas subdivisões de uma cidade, o que pode ser difícil dependendo
+da região estudada. Ao segmentar qualquer cidade, que tenha dados
+disponíveis no OpenStreetMap, permite-se averiguar como o com-
+portamento dos usuários varia sob diferentes granularidades. Logo,
+essa ferramenta alavanca um estudo padronizado para o cenário
+urbano.
+Para trabalhos futuros, prevê-se a possibilidade de investigar
+outras cidades, datasets de outros períodos, além de explorar os
+efeitos provocados por diferentes granularidadades na definição
+das áreas urbanas e validar os resultados aqui apresentados, desen-
+volvidos com uma quantidade de dados pequena, em datasets de
+maior escala. Dessa forma, seria possível analisar como os dados de
+diferentes LBSNs são influenciados pelo espaço temporal e escalas
+geográficas na modelagem do comportamento urbano, e ainda infe-
+rir quais características ajudam a explicar o interesse dos usuários
+pelas diferentes áreas urbanas.
+AGRADECIMENTOS
+Esta pesquisa foi apoiada pelo trabalho da mestranda Fernanda
+Gubert, pelo projeto FAPESP SocialNet (2023/00148-0) e CNPq
+(313122/2023-7, 314603/2023-9 e 441444/2023-7).

@@ -1,0 +1,103 @@
+Furando a Bolha: Nudges Digitais em Sistemas de Recomendação
+Gabrielle Alves
+gaah.alves@usp.br
+Universidade de São Paulo
+São Carlos, SP
+Marcelo G. Manzato
+Universidade de São Paulo
+São Carlos, SP
+CTD’2024, Juiz de Fora/MG, Brazil
+Alves et al.
+Figura 2: Fluxo do experimento
+RESULTADOS E DISCUSSÃO
+4.1
+Análise Qualitativa e Quantitativa
+A análise qualitativa e quantitativa demonstrou que os nudges
+aumentam a diversidade nas recomendações, sem comprometer a
+qualidade do sistema. Utilizando questionários e a escala Likert,
+avaliamos a percepção dos usuários sobre satisfação, diversidade e
+utilidade. Os resultados mostram que os nudges incentivam maior
+interação com conteúdos diversos, reduzindo vieses (𝑝< 0.001).
+Controle
+Tratamento
+Total
+Pelo menos um item fora do perfil
+407 (74,82 %)
+440 (84,62 %)
+Nenhum item fora do perfil
+137 (25,18 %)
+80 (15,38 %)
+Total
+1.064
+Tabela 1: Número de usuários que colocaram ao menos um
+item fora do perfil na lista de leitura.
+A análise quantitativa confirmou que os nudges aumentam a
+diversidade nas interacoesrecomendações. Utilizando o método de
+análise de clickthrough de Joachims [5], comparou-se as taxas de
+cliques em listas de recomendações diversificadas e não diversifi-
+cadas, demonstrando que os nudges incentivaram maior interação
+com conteúdos diversos. A análise estatística mostrou que os nudges
+reduziram vieses e bolhas de filtro, promovendo uma experiência
+de usuário mais equitativa e diversificada.
+4.2
+Aplicação de um Framework para Avaliação
+da Qualidade do Sistema
+Para medir a qualidade do sistema em relação à experiência do
+usuário e à relevância dos itens recomendados, utilizou-se o frame-
+work ResQue [7]. Este framework mede a qualidade dos itens re-
+comendados, a usabilidade do sistema, a utilidade, a interface e
+a interação do sistema, a satisfação do usuário com o sistema e
+a influência desses fatores no comportamento do usuário. A apli-
+cação do ResQue permitiu uma avaliação sistemática da qualidade
+do sistema de recomendação, identificando áreas de melhoria e
+fornecendo insights sobre a percepção dos usuários em relação à
+diversidade e satisfação.
+4.3
+Aplicação de Nudges em Sistemas de
+Recomendação
+A pesquisa investigou como diferentes mecanismos de nudge po-
+dem aumentar as interações dos usuários com conteúdos diver-
+sos, sem afetar significativamente a satisfação. Observou-se que
+os nudges são eficazes em aumentar a diversidade nas interações
+com sistemas de recomendação. Os experimentos demonstraram
+que usuários expostos a recomendações com nudges interagem
+mais frequentemente com conteúdos diversos em comparação com
+recomendações sem nudges. Esses resultados sugerem que é pos-
+sível aumentar a diversidade nas recomendações sem sacrificar a
+satisfação do usuário.
+4.4
+Conclusão
+A pesquisa demonstrou que a aplicação de nudges em sistemas de
+recomendação pode efetivamente mitigar vieses de popularidade
+e exposição, promovendo uma experiência de usuário mais equi-
+tativa e diversificada. A análise estatística revelou que os nudges
+incentivaram interações mais frequentes com conteúdos diversos e
+menos populares, contribuindo para a redução das bolhas de filtro
+e aumentando a justiça nas recomendações.
+4.5
+Propostas de Melhorias para Sistemas de
+Recomendação
+Com base nos resultados, sugerimos as seguintes melhorias para os
+sistemas de recomendação:
+• Integração de Nudges: Incorporar nudges nas interfaces
+de recomendação para incentivar a exploração de conteúdos
+diversos.
+• Foco na Experiência do Usuário: Refinar a interface e a
+interação do sistema com base no feedback dos usuários para
+aumentar satisfação e confiança.
+• Avaliação Contínua da Qualidade: Utilizar frameworks
+como o ResQue para monitorar e avaliar continuamente a
+qualidade do sistema, garantindo recomendações relevantes
+e diversas.
+• Personalização da Diversidade: Desenvolver métodos que
+personalizem a diversidade nas recomendações conforme as
+preferências dos usuários.
+4.6
+Limitações da pesquisa
+Nudges digitais ampliam a interação com itens fora do perfil, criando
+experiências diversificadas. Contudo, a validade externa pode ser
+limitada devido ao foco em livros e ao ambiente experimental, o
+que pode não refletir totalmente contextos reais.
+AGRADECIMENTOS
+Os autores agradecem CAPES, CNPq e FAPESP pelo apoio finan-
+ceiro.

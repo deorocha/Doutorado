@@ -1,0 +1,521 @@
+Práticas com smartphones para idosos - Um projeto
+de extensão do ICMC/USP
+Kamila R. H. Rodrigues
+ICMC/USP, São Carlos
+kamila.rios@icmc.usp.br
+Suzane S. dos Santos
+ICMC/USP, São Carlos
+suzanesantos@usp.br
+Daniele Gallego
+ICMC/USP, São Carlos
+danielegallego@usp.br
+Ketlen Martins
+ICMC/USP, São Carlos
+ketlen.martins@usp.br
+Katherin F. C.
+Malpartida
+ICMC/USP, São Carlos
+katherincm@usp.br
+Aline E. C. Verhalen
+ICMC/USP, São Carlos
+alineverhalen@usp.br
+João Pedro de Deus
+ICMC/USP, São Carlos
+joao.deus@usp.br
+1.
+De acordo com Zaine et al. [11], a alfabetização digital se refere
+ao estágio inicial de aprender a utilizar dispositivos computacio-
+nais. Já o letramento digital engloba habilidades mais avançadas,
+como compreender, assimilar, reelaborar e adquirir conhecimento
+por meio de práticas de leitura, releitura de informações e escrita,
+visando utilizar as tecnologias para benefício pessoal e coletivo [1].
+1https://prceu.usp.br/usp60/
+In: III WebMedia for Everyone (W4E 2024) (W4E 2024). Anais Estendidos do XXX
+Simpósio Brasileiro de Sistemas Multimídia e Web (W4E’2024). Juiz de Fora/MG, Brazil.
+Porto Alegre: Brazilian Computer Society, 2024.
+© 2024 SBC – Sociedade Brasileira de Computação.
+ISSN 2596-1683
+Para que os idosos possam usufruir de maneira mais ampla dos
+benefícios tecnológicos, Zaine et al. [11] sugerem que a exposição
+aos dispositivos digitais evolua para uma análise crítica dos conteú-
+dos disponíveis. Para Silva e Behar [8], o letramento digital deve
+consistir “na capacidade de usar e compreender informações de vá-
+rios formatos e fontes, incluindo a apropriação da nova tecnologia
+e a prática de leitura e escrita em tela”.
+Este trabalho descreve um curso de letramento digital voltado
+para o público idoso, que faz parte do programa USP 60+, e que,
+ao longo de quase 10 anos, tem ajudado a dar autonomia a uma
+parcela desse grupo de usuários da comunidade local, no entorno
+da universidade.
+O curso é um projeto de extensão que tem acontecido desde
+2015, e que semestralmente oferece em torno de 30 vagas para que
+idosos da cidade de São Carlos e região possam ter um espaço de
+aprendizado sobre smartphones, suas configurações e principais
+aplicativos. O curso é ainda um espaço de convívio social e tem
+sido palco de diversos relatos de apoio na superação de depressão,
+ansiedade, opressão e violência doméstica.
+Ao longo desses anos, a metodologia do curso passou por diversas
+transformações e, atualmente, representa uma forma consolidada
+de realizar o letramento com o referido público, tendo tido sucesso
+inclusive durante a pandemia, em seu formato online [5].
+Este artigo descreve o formato e metodologia do curso, bem como
+traz relatos dos alunos idosos e dos monitores sobre o mesmo.
+O documento está dividido como segue: a Seção 2 descreve a
+estrutura do curso de letramento digital, a Seção 3 discorre sobre a
+metodologia híbrida empregada, a Seção 4 descreve os relatos de
+idosos e monitores do curso, e a Seção 5, por fim, discorre sobre as
+considerações finais.
+ESTRUTURA DO CURSO DE LETRAMENTO
+O curso de extensão universitária intitulado “Práticas com smartpho-
+nes para idosos” tem ocorrido semestralmente, ao longo de 15 se-
+manas, com duas horas aulas por semana, na USP de São Carlos,
+no Instituto de Ciências Matemáticas e de Computação (ICMC). No
+primeiro semestre é oferecido o módulo básico, com aulas sobre as
+principais configurações dos celulares, bem como aulas sobre os
+aplicativos mais comumente usados, como WhatsApp, YouTube e
+Google [11]. No segundo semestre é oferecido o módulo avançado,
+em que uma revisão do módulo básico é inicialmente feita, e, na
+sequência, os idosos aprendem a interagir com aplicativos como
+W4E’2024, Juiz de Fora/MG, Brazil
+Rodrigues et al.
+iFood, Uber, Instagram, entre outros. Houve semestres em que os
+dois módulos foram oferecidos simultaneamente.
+Os idosos se inscrevem por meio do sistema Apolo2, da própria
+universidade. São oferecidas semestralmente 30 vagas. Após o pe-
+ríodo de inscrição, a coordenação inicia um processo de análise
+documental para a seleção dos alunos.
+No primeiro dia de aula os idosos são convidados a responder
+a um questionário em que descrevem seu conhecimento prévio
+sobre tecnologias como tablets, smartphones, rede Wi-Fi, entre ou-
+tras, bem como informam sobre seus interesses no uso do celular e
+expectativas sobre o curso. No semestre do módulo avançado, os
+alunos passam por uma atividade de avaliação do conhecimento,
+em que são solicitados a realizar 10 tarefas relacionadas ao con-
+teúdo ministrado no módulo básico, como: realizar ligações, salvar
+um número na agenda, configurar itens do celular como senha ou
+tamanho da fonte, enviar uma imagem no WhatsApp, compartilhar
+a localização no WhatsApp, entre outras. Após a avaliação, a co-
+ordenação do curso informa sobre o cronograma de aulas e sobre
+os conteúdos a serem ministrados, bem como sobre a dinâmica das
+aulas e as regras básicas de convivência em sala e no grupo do
+WhatsApp da turma.
+As treze aulas seguintes são de teoria e práticas relacionadas
+aos conteúdos do cronograma. Em cada aula a equipe elabora um
+conjunto de slides que são capturas das telas do celular e dos apli-
+cativos, ensinando o passo a passo das tarefas foco do ensino em
+cada aula. O curso é ministrado apenas para usuários de celulares
+da plataforma Android. A Figura 1 ilustra um dos slides sobre o
+conteúdo relacionado a como curtir uma publicação no aplicativo
+Instagram.
+Figura 1: Exemplo de slide de um conteúdo ministrado.
+Nota: A imagem dos artistas é de domínio público e extraída
+do Instagram de um deles, cujo acesso é aberto.
+Após cada sequência de instruções ensinando as funcionalidades
+do celular ou do aplicativo em contexto, há um slide resumo para
+guiar os idosos na execução da funcionalidade. Em seguida, uma
+atividade prática é proposta sobre o mesmo assunto. A Figura 2
+ilustra um exemplo de resumo no contexto da aula do Instagram.
+O curso conta com o apoio de monitores, que são alunos de
+graduação e de pós-graduação da referida universidade. Parte dos
+alunos de graduação são bolsistas de Iniciação Científica, outra parte
+atua de forma voluntária. Os alunos de pós são todos voluntários.
+Antes de ministrar o conteúdo das aulas, os idosos participam
+de um Kahoot3, um jogo de perguntas e respostas relacionadas ao
+2https://uspdigital.usp.br/apolo/
+3https://kahoot.com/
+Figura 2: Exemplo de slide resumindo como comentar publi-
+cações no Instagram. Fonte: Autoria Própria.
+conteúdo da aula ministrada na semana anterior. A Figura 3 ilustra
+um dos Kahoots realizados.
+Figura 3: Exemplo de Kahoot com perguntas sobre uma das
+aulas. Fonte: Autoria Própria.
+Essa parte da aula é aguardada e, os idosos costumam ser com-
+petitivos. A brincadeira permite reforçar o conteúdo ministrado
+de forma lúdica e divertida. Habilidades cognitivas e de destreza
+também são trabalhadas nos idosos nesse momento, uma vez que
+para alcançar o pódio, além de responder de forma correta, é preciso
+responder rápido e tocar com precisão na tela.
+Na última aula do curso os idosos respondem novamente ao
+mesmo questionário da aula 1, para que se possa comparar o co-
+nhecimento no início e no fim do curso. Também passam por uma
+avaliação prática, em que são convidados a realizar 10 tarefas sobre
+práticas conduzidas durante o curso. Eles são avaliados individual-
+mente por um dos monitores. Nesse último dia também há sempre
+uma confraternização e o momento da fotografia do grupo.
+Cada idoso recebe um crachá com seu nome para ser usado
+durante as aulas, e recebem um cartão de acesso ao campus. É
+comum relatos de sentimento de pertencimento ao receberem o
+cartão de acesso. Os idosos recebem ainda a impressão dos slides em
+cada aula, de modo que possam acompanhar e realizar anotações. A
+impressão e entrega de forma gratuita dos crachás, bem como dos
+cartões de acesso e dos slides das aulas só tem sido possível porque
+a coordenação tem submetido o projeto em editais internos da
+Universidade de São Paulo, no contexto da Pró-Reitoria de Cultura
+e Extensão (PRCEU) e da Comissão de Cultura e Extensão (CCEx) do
+ICMC, e recebido aporte financeiro de tais instâncias para o projeto.
+Nos anos iniciais do curso, cada aluno pagava pela impressão do
+material na gráfica do instituto, caso desejasse tê-lo impresso.
+Práticas com smartphones para idosos - Um projeto
+de extensão do ICMC/USP
+W4E’2024, Juiz de Fora/MG, Brazil
+É preciso destacar que a sala de aula do curso é sempre em
+andar térreo para permitir acessibilidade, e tal sala é equipada com
+Internet dedicada apenas ao curso.
+Antes de iniciar o curso os monitores são treinados sobre como
+deve ser a postura durante as aulas. Reforça-se que eles não de-
+vem fazer as atividades pelos idosos durante as práticas, devem
+apenas guiar os alunos. Caso precisem ensinar, devem pedir que o
+aluno faça novamente sozinho na sequência. Os monitores também
+são convidados a ministrar as aulas sempre em voz alta, clara e
+cadenciada.
+Os slides são elaborados com pouco texto, contendo mais ima-
+gens, em fonte grande e com bom contraste de cores, visando mitigar
+problemas de leitura e compreensão por parte dos idosos. Além dos
+slides, o monitor deve também propor 5 atividades sobre o tema da
+aula.
+A sétima aula e a décima quarta aula são revisões do conteúdo.
+Todos os monitores ministram ao menos uma aula no curso e de-
+vem preparar os slides, que passam na sequência pela revisão da
+coordenação do curso. A frequência é semanalmente conferida e
+cada aluno deve ter o mínimo de 75% de presença para receber o
+certificado ao fim do curso.
+Nos dois módulos os alunos têm uma aula dedicada ao ensino
+sobre fake news e responsabilidade no compartilhamento, uma vez
+que esse público é considerado aquele que mais dissemina esse tipo
+de notícia no Brasil [7].
+A Tabela 1 descreve o conteúdo que costuma ser ministrado no
+curso básico e no curso avançado.
+Semanalmente os alunos recebem as 5 atividades para serem rea-
+lizadas em suas casas, de modo a reforçar o conteúdo. Os monitores
+são responsáveis por acompanhar a realização das tarefas e fazer
+as devidas correções com os alunos.
+A seção a seguir descreve a metodologia híbrida adotada, em
+que os alunos têm as aulas em sala na universidade com atividades
+práticas e, em casa, respondem a tarefas relacionadas durante a
+semana, por meio de aplicativo chamado de Ajudante Digital.
+METODOLOGIA HÍBRIDA ADOTADA
+Ao longo dos anos de curso a coordenação observou que apenas as
+atividades práticas em sala de aula não conduzia a uma autonomia
+no uso do celular por parte de alguns idosos, sobretudo aqueles que
+iniciavam o curso sem conhecimento prévio. Destaca-se aqui, que
+esse perfil é mais raro atualmente, após a pandemia. Os idosos do
+curso chegam atualmente com alguma experiência, em razão das
+necessidades impostas pelo período da COVID-19. Antes da pande-
+mia, era comum receber idosos com o celular na caixa ou fornecer
+apoio para que pudessem comprar seu primeiro smartphone.
+Tendo em vista que os idosos realizavam as atividades em sala
+e tinham dificuldades de reter o conteúdo se não treinassem, foi
+adotado (desde 2017) um aplicativo, chamado de Ajudante Digital,
+responsável por enviar tarefas aos idosos de forma remota, ao longo
+da semana, com o intuito de relembrar o conteúdo e estimular o
+exercício [2, 3].
+A metodologia híbrida então é composta de duas etapas: 1) ex-
+posição em sala de aula, com atividades práticas de reforço; 2)
+realização de atividades em casa, por meio do Ajudante Digital,
+com o objetivo de exercitar o conteúdo e reter o conhecimento do
+idoso [2, 3]. Os idosos costumam consultar o material impresso e
+também tiram dúvidas com os monitores por meio do grupo do
+WhatsApp da turma.
+Destaca-se que o objetivo deste trabalho não é descrever deta-
+lhes complementares da construção da metodologia, uma vez que
+a mesma já está disponível em trabalhos prévios [2–4]. O objetivo
+deste artigo é trazer um relato da importância do curso de extensão
+para idosos e monitores, com destaque para a fala dos mesmos, bem
+como trazer o cronograma de conteúdo do curso avançado, dispo-
+nível somente a partir do segundo semestre de 2018 no ICMC/USP.
+Em cada aula, as 5 atividades planejadas pelo monitor sobre o
+tema ministrado em aula são criadas no Ajudante Digital. Os idosos
+podem responder a todas as atividades de uma vez, ou uma a cada
+dia da semana. Um alarme do aplicativo dispara todos os dias, em
+horário acordado com a turma, lembrando sobre a tarefa. A Figura
+4 ilustra a sequência de uma das atividades no Ajudante Digital,
+relacionada ao aplicativo Instagram.
+Na primeira aula do curso os idosos instalam o aplicativo em
+seus celulares, com o apoio dos monitores e, são treinados no uso
+do Ajudante Digital. Eles então têm a possibilidade de interagir com
+os diferentes formatos de respostas que o aplicativo pode pedir ao
+longo do curso.
+A seção a seguir descreve mais detalhes sobre o aplicativo no-
+meando de Ajudante Digital.
+3.1
+Ajudante Digital
+O Ajudante Digital em questão é o sistema ESPIM4 [4, 10], criado
+pelo grupo de pesquisa da coordenação do curso de letramento, que
+disponibiliza duas interfaces de usuário, uma Web para especialistas
+criarem programas de coleta e intervenção (podem ser profissionais
+da Saúde e Educação, por exemplo) e outra para dispositivos móveis
+– apenas plataforma Android, usada pelo público alvo desses espe-
+cialistas para interagir com as intervenções [4]. O sistema permite
+a autoria de intervenções baseadas em dados coletados de maneira
+explícita e pervasiva. Por meio do uso do sistema é possível ampliar
+o alcance da coleta de dados e intervenções realizadas de maneira
+remota, no ambiente natural dos participantes de interesse, e sem a
+presença direta do especialista [4].
+A interface Web do sistema permite a criação de planos individu-
+alizados de intervenções programadas, o cadastro de participantes
+e a visualização dos resultados. Por meio da interface Web podem
+ser criados programas interventivos compostos por questões do
+tipo aberta, múltipla escolha com uma ou mais possibilidades de
+resposta, mensagens instrucionais/informativas, envio de imagens,
+vídeos e áudios, respostas a escalas Likert, escalas de diferencial
+semântico, entre outros formatos (ver Figura 5). O fluxo entre uma
+questão e outra pode ser diferente, conforme a resposta enviada
+pelo participante. Na interface Web, o especialista também define
+um intervalo em que as intervenções ou a coleta de dados deverão
+ficar ativas. Um aplicativo móvel é disponibilizado pelo sistema na
+loja do Google Play5 e esse é um player mobile que replica as tarefas
+configuradas na interface Web pelo especialista (ver Figura 4). O
+sistema também permite que os participantes recebam notificações
+4https://espim.icmc.usp.br/
+5https://play.google.com/store/apps/details?id=br.usp.icmc.intermidia.sensem&hl=
+pt_BR
+W4E’2024, Juiz de Fora/MG, Brazil
+Rodrigues et al.
+Tabela 1: Cronograma dos dois módulos do curso de letramento digital para idosos (módulo básico adaptado de Zaine et al. [11]).
+Aula
+Conteúdo
+Módulo Básico
+Aula 1
+Boas-vindas e Apresentações. Apresentação do Ajudante Digital. Questionários iniciais
+Aula 2
+Linguagem da Internet/Fake News e a Internet (responsabilidades)
+Aula 3
+Gestos / Botões / Telas / Wi-fi / Organização de Apps
+Aula 4
+Ligação / agenda e contatos / câmera do dispositivo(fotos) / alarme
+Aula 5
+Configurações telefone: acessibilidade e segurança
+Aula 6
+Google Play e Google Fotos
+Aula 7
+Revisão
+Aula 8
+WhatsApp - parte 1
+Aula 9
+WhatsApp - parte 2
+Aula 10
+WhatsApp - parte 3
+Aula 11
+Facebook - parte 1
+Aula 12
+Facebook - parte 2
+Aula 13
+Segurança nas compras de Internet
+Aula 14
+Revisão
+Aula 15
+Questionários + Avaliação. Confraternização
+Módulo Avançado
+Aula 1
+Boas-vindas e Apresentações. Apresentação do Ajudante Digital. Questionários iniciais
+Aula 2
+Revisão do módulo básico
+Aula 3
+Linguagem da Internet/Fake News e a Internet (responsabilidades)
+Aula 4
+YouTube
+Aula 5
+Gmail
+Aula 6
+Drive
+Aula 7
+Revisão
+Aula 8
+iFood
+Aula 9
+Spotify
+Aula 10
+Instagram - parte 1
+Aula 11
+Instagram - parte 2
+Aula 12
+Uber
+Aula 13
+Segurança nas compras de Internet
+Aula 14
+Revisão
+Aula 15
+Questionários + Avaliação. Confraternização
+Figura 4: Exemplo de tarefa no Ajudante Digital - interface móvel. Fonte: Autoria Própria.
+sonoras sempre que houver alguma intervenção programada no
+sistema. Deste modo, o especialista pode configurar o horário e o
+tipo de alarme que poderá ser disparado [4, 10].
+No contexto do curso de letramento, as intervenções são deno-
+minadas de tarefas e essas tarefas ficam disponíveis por 7 dias. O
+uso do ajudante digital, em complemento às aulas, ocorre desde o
+primeiro semestre de 2017, fazendo parte das pesquisas do projeto
+Práticas com smartphones para idosos - Um projeto
+de extensão do ICMC/USP
+W4E’2024, Juiz de Fora/MG, Brazil
+FAPESP (processo 2017/19915-0) coordenado pela Profa. Dra. Meire
+Cachioni (EACH/USP), em parceria com o ICMC/USP [2, 3].
+A Figura 5 ilustra um exemplo de telas na interface Web do
+sistema, referente às tarefas ilustradas na interface do aplicativo
+Android da Figura 4.
+A seção a seguir descreve alguns dos relatos dos idosos e dos
+monitores à respeito da última oferta do curso, realizada no primeiro
+semestre de 2024.
+RELATOS DOS ALUNOS E MONITORES
+Ao fim do curso, idosos e monitores são convidados a darem feed-
+back sobre a experiência vivida e sobre as suas percepções à respeito
+do curso. Algumas das falas dos alunos idosos (I) no último dia de
+aula são transcritas abaixo:
+I1: “Nós estamos encerrando mais um curso, que pena que passou
+tão rápido. Foi maravilhoso esse curso. Deu uma base boa para nós,
+além do material que nós levamos para casa. Tenho todos os materiais
+guardados na gaveta da escrivaninha, todas as apostilas. Alguma
+dúvida que eu tiver vou procurar nelas. E a gente aprendeu bastante
+coisa, foi muito muito bom. A equipe é muito atenciosa, os monitores,
+todos eles vêm nos auxiliando direto. ”.
+I2: “Eu gostei muito do curso e pra mim foi de grande aprendizado.
+Espero que não termine por aqui, quero aprender mais.”.
+I3: “Foi muito proveitoso, eu aprendi muito [...] cada vez que eu
+venho aqui eu aprendo muito mais. Nós idosos 60+, precisamos muito
+dessa informação que eles passam para a gente, porque nós, na nossa
+ingenuidade, somos muito vítimas de golpe [...] se a gente não estiver
+a par do que está acontecendo na internet, no nosso celular, a gente
+pode até ser muito prejudicado, e se a gente tiver algum conhecimento,
+a gente vai se ver livre das fraudes [...]”.
+I4: “Quero dizer que gostei muito do curso, para mim foi muito
+produtivo o aprendizado, me sinto motivado e agradeço muito por
+esta oportunidade. E que vocês continuem aprimorando o aprendizado
+dos idosos [...]”.
+Há um grupo de monitores que atuam no curso, alguns há mais
+de 3 anos. Alguns são alunos de graduação, da Computação em sua
+maioria, que têm a oportunidade de exercitar soft skills, como habi-
+lidades como gestão, empatia, e a importância do desenvolvimento
+de soluções mais inclusivas e socialmente responsáveis. Ocorre de
+forma semelhante para os alunos de pós, com a adição de que a
+maioria deles atua com o público idoso em suas pesquisas. Abaixo,
+são destacadas as falas de alguns dos monitores (M) da última oferta
+do curso em 2024/1.
+M1: “É fundamental para o público da terceira idade se conectar
+no mundo tecnológico e não apenas isso como também proporciona
+um ambiente de interação para esse público que não vive isso há
+muito tempo. Além disso, também existem vários benefícios para
+os monitores, como o aprendizado enorme em didática e criação de
+materiais intuitivos, tirando toda a parte humana que é gerada pela
+interação com o público mais velho”.
+M2: “O curso não apenas proporcionou conhecimentos práticos
+sobre o uso de dispositivos móveis e aplicativos populares, mas também
+ajudou os participantes a desenvolverem habilidades importantes,
+como identificar fake news e prevenir golpes online. A metodologia
+adotada, com aulas teóricas e práticas, permitiu uma aprendizagem
+efetiva e personalizada. Além disso, foi gratificante para mim observar
+de perto a evolução dos alunos não apenas em termos técnicos, mas
+também no aumento da autoestima. Muitos idosos expressaram um
+sentimento de realização ao dominar novas habilidades digitais e ao
+se tornarem mais confiantes na utilização de seus smartphones para
+diversas tarefas do dia a dia”.
+M3: “A interação direta com os idosos durante as atividades prá-
+ticas mostrou a importância de adaptar o ensino às características
+e ritmos individuais de aprendizado, garantindo uma experiência
+enriquecedora para todos os envolvidos”.
+M4: “O curso representa uma oportunidade única tanto para os
+alunos quanto para os monitores. Para os alunos, é uma oportunidade
+de aprendizado, bem como um espaço social de convívio e um espaço
+para os idosos exporem sentimentos e problemas. Para os monitores é
+uma oportunidade de exercitar as atividades relacionadas ao ensino e
+de compartilhar com o público externo parte do conhecimento adqui-
+rido dentro da universidade, além de exercitar a empatia e aprender
+com o público idoso, que tem muito a oferecer”.
+M5: “O curso é extremamente essencial como ferramenta social,
+possibilitando ao público 60+ adquirir autonomia sobre os recursos
+digitais, e aos estudantes, aprendizados e troca de experiências, favo-
+recendo o desenvolvimento da empatia, do trabalho em grupo e da
+prática docente. ”.
+CONSIDERAÇÕES FINAIS
+Em tempos de curricularização da extensão, projetos como este
+representam um espaço para alunos da graduação atuarem e rece-
+berem parte de suas horas necessárias para a conclusão do curso.
+Para além de receberem tais horas, a interação com outra geração
+permite uma troca genuína de experiências entre os alunos e ensina
+sobre respeito, superação e autonomia.
+Como produtores de tecnologia, o curso ensina aos alunos da
+universidade sobre a importância do desenvolvimento responsável
+e inclusivo de soluções computacionais.
+Cursos de extensão são uma forma de envolver a comunidade do
+entorno da universidade, torná-la parte do ambiente e é um espaço
+para compartilhar o conhecimento ali produzido.
+Para os idosos do curso de letramento, em especial, o curso é
+um espaço de aprendizado, de superação de medos e receios, de
+encontro com pessoas amigas, um momento de fuga dos problemas
+e dificuldades do cotidiano, um local de troca de cuidados e carinho,
+e um espaço de fala e escuta ativa.
+Durante as aulas, a equipe tem a missão de ensinar os alunos
+idosos a entenderem sobre a iconografia dos aplicativos, para torná-
+los mais autônomos durante a interação. Diversos dos alunos idosos
+chegam com o relato de impaciência de seus familiares no suporte
+ao uso da tecnologia e o receio pessoal de realizar alguma ação
+irreparável. Após passarem pelo curso, a maioria dos idosos se
+torna menos reticente e compreende melhor as ações que podem
+ser realizadas em cada tela. Passam a observar melhor. A metologia
+híbrida usada neste curso apoia nessa missão, uma vez que há
+diversas atividades práticas, incluindo aquelas em que os monitores
+não estão presentes para ajudar e, que ao tentarem fazer sozinhos,
+podem testar seu conhecimento e levar dúvidas para a aula seguinte.
+W4E’2024, Juiz de Fora/MG, Brazil
+Rodrigues et al.
+Figura 5: Exemplo de tarefa criada na interface Web do sistema. Fonte: Autoria Própria.
+Apesar da existência de um cronograma, é importante destacar
+que as aulas são cadenciadas pelo ritmo da turma e não é raro
+que parte do conteúdo deixe de ser ministrado. Nesses casos, há
+um acordo com a turma sobre quais dos conteúdos são de maior
+interesse.
+Ao longo dos quase 10 anos de curso, quatro docentes da USP já
+coordenaram o mesmo, diversos alunos de graduação, pós-graduação
+e pós-doutorado já atuaram como monitores. Profissionais da Geron-
+tologia e Psicologia atuaram no projeto e ajudaram na elaboração e
+aperfeiçoamento da metodologia usada. O curso foi ainda replicado
+em outra unidade da USP, na Escola de Artes, Ciências e Humani-
+dades (EACH) [2, 3], com um grupo parceiro e que moldou com o
+grupo do ICMC parte da metodologia hoje adotada, uma vez que
+na EACH também era oferecido o curso de letramento para idosos,
+no contexto do programa USP 60+. Ao longo dos anos, tal curso
+ofereceu 31 turmas e letrou digitalmente aproximadamente 900
+alunos idosos. Cerca de 150 alunos já participaram como monitores.
+Alguns alunos de pós-graduação, membros do grupo de pesquisa da
+coordenação deste curso, realizaram pesquisa com idosos e usaram
+o projeto de extensão como espaço para interagir com os alunos e
+conhecê-los. Alguns dos idosos foram convidados a participar das
+pesquisas de tais alunos, mas em contextos externos ao projeto de
+extensão, cada pesquisa com sua respectiva aprovação por Comitê
+de Ética em Pesquisa (CEP). Durante o processo de construção da
+metodologia aqui citada, que não é o foco deste artigo, conforme o
+supracitado, houve atividades de pesquisa que podem ser encon-
+tradas em mais detalhes nos trabalhos de Cunha et al. [4], Cliquet
+et al. [3], Zaine et al. [11] e Cachioni et al. [2], por exemplo. Essas
+atividades de pesquisa foram previstas e aprovadas pelo comitê de
+ética da EACH/USP, na ocasião.
+Destaca-se ainda que projeto de extensão aqui citado está em
+consonância com uma das metas da agenda da Organização das
+Nações Unidas (ONU) para 2023: Redução das Desigualdades.
+Os autores deste trabalho esperam que as experiências e con-
+teúdos aqui compartilhados possam inspirar outros pesquisadores,
+docentes e alunos a replicarem tal curso em outras universidades
+e cidades do Brasil, podendo ajudar a reduzir as desigualdades e o
+etarismo, bem como permitir que outras pessoas possam desfrutar
+do retorno imediato de uma abraço de gratidão pela autonomia
+conquistada e o empoderamento sentido.
+AGRADECIMENTOS
+Agradecemos a todos os idosos que foram alunos do curso e ajuda-
+ram a consolidar o mesmo. Agradecemos ainda a todos os alunos, de
+graduação e pós-graduação, que participaram como monitores, vo-
+luntários ou bolsistas do projeto. Deixamos registrado aqui também
+nosso agradecimento especial às professoras Maria da Graça Cam-
+pos Pimentel e Renata Pontin de Mattos Fortes, criadoras do projeto
+no ICMC e coordenadoras do mesmo até 2019. Agradecemos tam-
+bém à Comissão de Cultura e Extensão (CCEx) do ICMC, e à PRCEU
+pelo apoio financeiro fornecido ao longo dos anos, e que viabilizou
+a realização dos cursos de letramento aqui relatados. Destacamos,
+por fim, que o grupo de autores deste trabalho representa um pe-
+queno número de alunos monitores, voluntários e profissionais que
+passaram pelo curso ao longo desses anos. Registramos também que
+parte da metodologia aqui descrita foi construída em conjunto com
+a EACH/USP, em projeto FAPESP com processo número 2017/19915-
+0, coordenado pela professora Dra. Meire Cachioni (EACH/USP).
+Nota: A ferramenta Grammarly foi usada neste texto para ajustes
+ortográficos e o ChatGPT para reestruturação de trechos da Seção 1.
+Práticas com smartphones para idosos - Um projeto
+de extensão do ICMC/USP
+W4E’2024, Juiz de Fora/MG, Brazil

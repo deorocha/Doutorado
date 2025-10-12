@@ -1,0 +1,287 @@
+Campanha Eleitoral Legal: Detecção de Propaganda Eleitoral e
+Ações Coordenadas de Campanha
+Márcio Silva*†, Marcelo M. R. Araújo*, Carlos H. G. Ferreira⋄, Julio C. S. Reis‡,
+Ana P. C. Silva*, Jussara M. Almeida*, Fabrício Benevenuto*
+† Faculdade de Computação, Universidade Federal do Mato Grosso do Sul (UFMS), Brasil
+* Departamento de Ciência da Computação, Universidade Federal de Minas Gerais (UFMG), Brasil
+⋄Departamento de Computação e Sistemas, Universidade Federal de Ouro Preto (UFOP), Brasil
+‡ Departamento de Informática, Universidade Federal de Viçosa (UFV), Brasil
+marcio.inacio@ufms.br,marceloaraujo@dcc.ufmg.br,chgferreira@ufop.edu.br,jreis@ufv.br
+{ana.coutosilva,jussara,fabricio}@dcc.ufmg.br
+2017. Neste novo cenário, novos instrumentos de fiscalização
+In: XXII Workshop de Ferramentas e Aplicações (WFA 2024). Anais Estendidos do
+XXX Simpósio Brasileiro de Sistemas Multimídia e Web (WFA’2024). Juiz de Fora/MG,
+Brazil. Porto Alegre: Brazilian Computer Society, 2024.
+© 2024 SBC – Sociedade Brasileira de Computação.
+ISSN 2596-1683
+devem ser propostos, levando em consideração os diversos desafios
+de monitoramento de informação nas redes sociais.
+Portanto, em um trabalho anterior [16] implementamos uma
+arquitetura que objetiva monitorar, a partir de dados coletados do
+X, a ocorrência de propaganda eleitoral antecipada no contexto
+brasileiro. Neste estudo, utilizamos a abordagem proposta anterior-
+mente e implementamos um novo mecanismo que visa aprimorar
+o processo de classificação de propaganda eleitoral nos textos das
+mensagens postadas nesta plataforma, incorporando-o em um sis-
+tema real. Esse mecanismo consiste na adoção da estratégia de
+Reinforcement Learning from Human Feedback (RLHF), ou seja, a
+utilização da avaliação do usuário final para retreinar e aprimorar
+o modelo de classificação da ferramenta. Assim, esta estratégia per-
+mite ao classificador se adaptar às mudanças que podem ocorrer no
+discurso de cunho eleitoral dentro da rede social, e também apri-
+morar a acurácia de detecção de propaganda eleitoral ao longo do
+tempo [11], o que potencializa a agilidade da investigação de propa-
+gandas eleitorais pelos usuários especialistas. Por fim, adicionamos
+um componente responsável por revelar indícios de promoção de
+conteúdo dentro deste ambiente.
+Dessa forma, nosso sistema possui cinco módulos principais: (i)
+módulo coletor de postagens do X, (ii) módulo de detecção de ações
+coordenadas de promoção de conteúdo, (iii) módulo de classificação
+de propagandas eleitorais, (iv) módulo de interface web e (v) módulo
+de treinamento de modelos de aprendizado de máquina. Os módulos
+(i), (ii), (iii) foram adaptados do modelo proposto em [16] enquanto
+a presença dos módulos (ii e iv) denota a novidade do trabalho.
+O restante do trabalho está organizado da seguinte forma. Na
+próxima seção apresentamos detalhes da arquitetura do Campanha
+Eleitoral Legal, detalhando cada um dos módulos. Em seguida,
+descrevemos os requisitos para execução do sistema. Um link de
+apresentação do sistema é apresentado na seção seguinte. Por fim,
+relacionamos as considerações finais deste artigo.
+ARQUITETURA DO SISTEMA
+Todos os componentes principais do Campanha Eleitoral Legal
+são apresentados na Figura 1 e detalhados a seguir.
+2.1
+Coletor de Dados
+O Campanha Eleitoral Legal tem como entrada de dados um
+conjunto de postagens oriundas do X. Desta forma, implementamos
+WFA’2024, Juiz de Fora/MG, Brazil
+Marcio Silva, et al.
+Figura 1: Arquitetura geral do Campanha Eleitoral Legal.
+um Módulo Coletor de Dados em Python utilizando a X API1.
+Porém, nós estamos interessados em tweets que tenham a intenção
+de impulsionar ou prejudicar candidaturas. A partir desta tarefa,
+construímos um dicionário de palavras-chave que foram sugeridas
+por especialistas de instituições fiscalizadoras das eleições brasilei-
+ras. Em resumo, são termos que indicam o pedido de voto explícito
+ao eleitor, ou pedidos de voto implícitos (ex.: “...conto com você nes-
+tas eleições.”). Após a coleta, observamos que as palavras-chave que
+nos permitem encontrar prováveis propagandas eleitorais, também
+são usadas por conteúdo não político como votações online. Para
+resolver isso, nós criamos uma blacklist2 de termos com o propósito
+de que não fossem retornamos esses tipos de conteúdo.
+Ao iniciar esta coleta no período pré-eleitoral, é possível investi-
+gar casos de campanha eleitoral antecipada, prática vedada pelas
+leis eleitorais brasileiras. Porém, nosso sistema pode funcionar den-
+tro do período eleitoral com o objetivo de ajudar na investigação
+de denúncias de abuso de poder econômico, combater fake news,
+desinformação e “caixa dois” (i.e., gastos de companha não declara-
+dos ou de fontes não permitidas por lei). Portanto, nosso sistema
+mantém a coleta ininterrupta mesmo dentro do período permitido
+para campanha eleitoral.
+2.2
+Classificação Automática de Propaganda
+Eleitoral
+Existem alguns trabalhos na literatura exploraram o uso de mo-
+delos de aprendizado de máquina para a detecção de discurso po-
+lítico [1, 13, 21]. Dentre eles, destacam-se trabalhos focados em
+dados do Facebook [23] e sem foco no idioma Português [9]. Além
+disso, a tarefa de classificação de postagens em propaganda eleitoral
+apresenta grandes desafios como a falta de ferramentas eficazes de
+processamento de linguagem em português, diferença do discurso
+político entre plataformas, a grande quantidade de ruído nos dados
+oriundos das redes sociais que não são de caráter eleitoral (e.g., vo-
+tações online e reality shows), porém que possuem padrões textuais
+muito semelhantes às eleições. Além disso, o discurso eleitoral pode
+mudar com o tempo, sendo influenciado por escândalos, crimes,
+eventos de alcance nacional ou global (e.g., pandemia) e fake news.
+Diante deste cenário, nós contruímos uma base de dados para
+treinar a primeira versão do modelo de aprendizado de máquina
+para ser utilizado no Módulo Classificador. Nós realizamos a
+coleta de dados no X utilizando a API Histórica3 nos períodos pré-
+eleitorais de 2016, 2018 e 2020. Estes períodos estão compreendidos
+1https://developer.x.com/en/docs/twitter-api
+2https://www.facom.ufms.br/~marcio/brasnam2021/blacklist.txt
+3https://developer.twitter.com/en/docs/twitter-api/enterprise/historical-powertrack-
+api/overview
+entre primeiro de janeiro do ano eleitoral em questão e o início da
+campanha eleitoral. Desta forma, os tweets coletados foram postados
+entre 1 de janeiro de 2016 a 15 de agosto de 2016, 1 de janeiro de
+2018 a 15 de agosto de 2018 e 1 de janeiro de 2020 a 25 de setembro
+de 2020, respectivamente.
+Em seguida, três voluntários independentes rotularam os dados
+coletados com um grau de concordância moderado (Fleiss’ Kappa
+𝜅=0.53) [12]. Como reportado por Vera [25], a percepção do que é
+político ou não político pode mudar entre voluntários, até mesmo
+entre especialistas do domínio. Este fato ocorre principalmente
+quando a postagem envolve conteúdo político implícito ou con-
+teúdo sobre questões sociais que dividem a sociedade, como aborto,
+cotas raciais, liberação de armas, religião, entre outros [20]. Após a
+rotulação, nós realizamos experimentos com modelos tradicionais
+de aprendizado de máquina, a saber: SVM, Naive Bayes e Logistic
+Regression), classificadores baseados em árvores (Random Forest
+e Gradient Boosting) além de modelos de aprendizado profundo
+(CNN, LSTM, RNN, and HAN) [8].
+Finalmente, nós avaliamos diversos cenários onde tweets foram
+utilizados como treino e teste, combinando tweets de diversos pe-
+ríodos pré-eleitorais. Com base em nossos experimentos, nós en-
+contramos que o modelo CNN4 foi escolhido para ser utilizado mo
+módulo de classificação.
+2.3
+Interface Web
+O Módulo Web do Campanha Eleitoral Legal é dividido em
+duas partes: frontend e backend. A interface Web (frontend) funciona
+desacoplada do backend do sistema, utilizando o padrão Rest API
+para comunicação e JSON Webtoken para segurança e autenticação.
+Neste trabalho, nós criamos uma interface Web, porém o backend
+do sistema está preprarado para que terceiros possam construir sua
+próprias interfaces ou visualizações (e.g., mobile, desktop, etc.).
+Todo o backend foi implementado em Python utilizando a Fas-
+tAPI5. Por outro lado, o frontend utiliza Javascript, HTML e CSS
+orquestrada pela biblioteca de interface ReactJS6.
+A priori, nós não apresentamos nenhuma postagem na interface
+do sistema, sendo necessário que o usuário realize um filtro inicial
+sobre os dados. Neste filtro, o usuário poderá realizar buscas sobre
+os dados apresentados informando intervalo de datas, palavras-
+chave, hashtags e informando o nome de usuário na plataforma
+do X. De forma geral, o sistema apresenta uma lista ordenada de
+postagens com alta probabilidade de serem propagandas eleitorais.
+Entretanto, o usuário final do nosso sistema tem o conhecimento
+do domínio (legislação eleitoral brasileira) por pertencer a órgãos
+reguladores ou autoridades eleitorais. Logo, ele será peça chave
+para realizar uma “curadoria” das probabilidades fornecidas pelos
+modelos de aprendizado de máquina. Ou seja, nosso sistema fornece
+na opções na interface para que o usuário especialista rotule cada
+postagem em: (1) “Político”, (2) “Não político” e (3) “Em análise”. Em
+resumo, o usuário especialista fará parte de um processo de rotula-
+ção contínua de novos tweets, que posteriormente serão utilizados
+como novas entradas reforçando o treinamento, tornando nosso
+modelo sensível às alterações no discurso de propaganda eleitoral
+4Modelo sequencial usando word2vec word embedding (300 dim.) Treinamento em 10
+épocas e 10-fold cross validation.
+5https://fastapi.tiangolo.com/
+6https://pt-br.reactjs.org/
+Campanha Eleitoral Legal: Detecção de Propaganda Eleitoral e Ações Coordenadas de Campanha
+WFA’2024, Juiz de Fora/MG, Brazil
+Figura 2: Visão geral da estratégia de detecção de campanhas de promoção de conteúdo acomodada no Campanha Eleitoral
+Legal.
+ao longo do tempo. Finalmente, as postagens que por ventura fo-
+rem rotuladas como “Em análise´’ precisarão de uma análise mais
+criteriosa e investigativa pela autoridade competente.
+2.4
+Evolução dos Modelos de Apredizado de
+Máquina
+Dentro do cenário de companhas eleitorais, os candidatos precisam
+decidir se entram em confronto direto com seus oponentes ou se
+compartilham os suas ideias e programas de governo. Diante deste
+dilema, é comum a mudança radical na forma de comunicação
+realizada por candidatos para reverter cenários desfavoráveis, a fim
+de obter mais votos ou retirá-los de seus oponentes [18, 19].
+Portanto, ao trabalharmos com modelos de aprendizado de má-
+quina no contexto eleitoral, nós precisamos mitigar erros de classi-
+ficação devido a evolução de longo prazo ou mudanças repentinas
+no discurso político [11]. Logo, nossa abordagem de treinamento
+não se encerra com a criação da primeira versão do modelo. Nós
+colocamos os usuários especialistas de domínio dentro de um loop
+em nossa arquitetura para a evolução do modelo, onde tal tarefa é
+realizada pelo Módulo de Treinamento.
+Em suma, esse módulo objetiva o aprimoramento progressivo
+do classificador da ferramenta, utilizando os tweets rotulados como
+"Políticos" pelos especialistas durante a interação com a interface
+Web. Nesse sentido, a ferramenta compila os textos dos tweets ro-
+tulados com conteúdo de interesse das autoriades eleitorais, a fim
+de realizar, de maneira periódica, adição de novas instâncias para
+um novo treinamento do modelo. Desta forma, nós realizamos um
+reforço no conjunto de treinamentos adicionando tweets ainda não
+conhecidos pelo Campanha Eleitoral Legal. Consequentemente,
+o modelo poderá evoluir com as novas narrativas e elementos de lin-
+guagem utilizados nas campanhas para driblar a fiscalização contra
+abusos durante o período eleitoral.
+2.5
+Ações Coordenadas de Promoção de
+Conteúdo
+Resumidamente, campanhas de promoção de conteúdo eleitoral são
+grupos de usuários enviando um conjunto de conteúdos similares
+com referência explícita a campanhas eleitorais antecipadas e, con-
+sistentemente, agindo com outros usuários para realizar a promoção
+desse conteúdo em larga escala, sem realizar impulsionamento.
+Estudos demonstram evidências de campanhas de desinformação
+e atividades maliciosas por usuários reais ou automatizados, im-
+pactando seriamente a eficácia de campanhas eleitorais. Matteo et
+al. [5] evidenciaram a presença de contas orquestradas promovendo
+campanhas no X durante as eleições nacionais do Reino Unido em
+2020. Badawy et al. [3] analisaram a interferência russa na campa-
+nha eleitoral de 2016 nos EUA, identificando contas “trolls” russas
+promovendo conteúdo pró-Trump. Marozzo et al. [17] estudaram
+a influência de sites de notícias compartilhados no X durante as
+eleições italianas de 2016, destacando a influência das plataformas
+digitais no processo eleitoral.
+Entretanto, não se encontrou na literatura trabalhos que abor-
+dem a detecção de campanhas de propaganda no contexto político-
+eleitoral brasileiro, possivelmente devido à escassez de estudos
+sobre o tema. As atividades deste estudo exploraram esse nicho,
+propondo, implementando e avaliando uma estratégia para identifi-
+car campanhas de propaganda eleitoral antecipada em um sistema
+real. A Figura 2 apresenta uma visão geral da abordagem proposta.
+Dentro do Módulo de Identificação de Promoção de Con-
+teudo, o processo começa com o pré-processamento dos dados de
+tweets, onde são excluídos aqueles que não foram compartilhados
+por mais de um usuário, eliminando assim informações que não
+evidenciam ações orquestradas. A fase subsequente, denominada
+“Modelagem da Rede”, envolve a criação de um grafo onde vértices
+representam usuários e arestas ponderadas indicam a quantidade
+de vezes que dois usuários retuitaram o mesmo conteúdo. Esta rede
+ajuda a identificar explicitamente a concordância entre usuários ao
+compartilhar tweets, capturando possíveis propagandas antecipa-
+das.
+Devido ao grande volume de dados e à variabilidade no com-
+portamento dos usuários, a rede gerada tende a ser vasta e densa,
+contendo muitas arestas de pouca relevância. Essas arestas podem
+resultar de ações independentes e populares, complicando a identi-
+ficação de grupos coordenados. Portanto, o desafio reside em reter
+apenas as arestas que fornecem evidências significativas de co-
+ordenação, removendo aquelas que representam comportamento
+aleatório ou esporádico, o que também otimiza o uso de recursos
+computacionais.
+Para abordar esse desafio, são utilizados métodos de extração do
+backbone, que resumem a rede mantendo apenas as arestas mais
+relevantes para um dado problema. A solução proposta combina
+WFA’2024, Juiz de Fora/MG, Brazil
+Marcio Silva, et al.
+as técnicas Threshold e Neighborhood Overlapping, que eliminam
+arestas de baixo peso e asseguram que as arestas remanescentes
+conectem usuários com comportamentos anômalos em termos de
+compartilhamento de tuítes [7, 14]. O algoritmo de Louvain [4] é
+então aplicado para identificar comunidades bem conectadas dentro
+da rede. Cada comunidade, assim identificada, representa um grupo
+de usuários que, potencialmente, agiram de forma coordenada para
+promover conteúdos específicos, como propaganda eleitoral.
+REQUISITOS PARA EXECUÇÃO
+Nosso sistema foi inteiramente desenvolvido para ser implantado
+dentro de containers, especificamente utilizando a plataforma Doc-
+ker7. Desta forma, o sistema se torna escalável e multiplataforma,
+preparado para lidar com o volume de dados gerados pelas redes
+sociais. A arquitetura necessita de no mínimo 32GB de memória
+RAM para realizar o treinamento de novos modelos de deep learning
+e aplicação deste modelo no processo de classificação das postagens
+coletadas. Além disso, para a coleta de dados do X será necessário
+a obtenção de uma chave de coleta de dados junto à plataforma.
+APRESENTAÇÃO DO SISTEMA
+Um link para uma captura de tela narrada do sistema em funciona-
+mento está disponível aqui: https://drive.google.com/file/d/1ZrbDwc9lx_
+0391Ujv5dAu-6xZK1--b78/view?usp=sharing.
+CONSIDERAÇÕES FINAIS
+Monitorar as redes sociais com o objetivo de encontrar propaganda
+eleitoral irregular ainda é um problema complexo. Neste trabalho,
+apresentamos um sistema chamado Campanha Eleitoral Legal
+que ajuda autoridades a investigar possíveis propagandas eleitorais
+irregulares. Além disso, o sistema fornece mecanismos para evoluir
+o modelo de aprendizado de máquina a medida que o usuário ro-
+tula novas instâncias. Portanto, nós acreditamos que ao longo do
+tempo nosso modelo se tornará ainda mais preciso na classificação
+de postagens, se tornando uma ferramenta indispensável para as
+autoridades competentes na investigação de mau uso das redes
+sociais para fins eleitorais.
+AGRADECIMENTOS
+Este trabalho foi parcialmente financiado por CAPES, CNPq, FA-
+PEMIG, FAPESP e Ministério Público de Minas Gerais (MPMG),
+projeto Capacidades Analíticas.

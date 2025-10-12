@@ -1,0 +1,140 @@
+Depression Symptoms Identification through Social Media Data
+Applying Design Science Research to Develop a Classification Model
+Silas Lima Filho
+silaslfilho@ppgi.ufrj.br
+Instituto de Computação, UFRJ
+Cidade Universitária, RJ, Brasil
+Monica Ferreira da Silva
+mfsilvamail@gmail.com
+P. Pós-Graduação Informática, UFRJ
+Cidade Universitária, RJ, Brasil
+Jonice Oliveira
+jonice@ic.ufrj.br
+Instituto de Computação, UFRJ
+Cidade Universitária, RJ, Brasil
+791.
+A seguir relatamos parte do estado da arte mapeado na Seção 2,
+seguida pela Seção 3 que descreve a abordagem metodológica apli-
+cada. Em sequência, a Seção 4 dividida em subseções que descrevem
+os resultados dos esforços da pesquisa bem como discussões sobre
+tais resultados, seguida da Seção 5 que conclui o artigo.
+ESTADO DA ARTE
+Para mapear o estado da arte, realizamos uma revisão sistemática
+da literatura (RSL) sobre a detecção de sintomas de depressão nas
+mídias sociais. A RSL foi realizada em duas etapas: primeiro, nos
+repositórios de computação (ACM e IEEE) de 2013 a 2018, total-
+izando 47 trabalhos; segundo, nos repositórios de saúde (Pubmed,
+APA e Scopus) de 2019 a 2021. O protocolo de RSL foi atualizado
+entre as duas etapas, mantendo algumas características em comum.
+O aumento das publicações sobre a identificação de usuários de-
+pressivos nas mídias sociais, especialmente em 2021, reflete a cres-
+cente atenção no campo. Alguns estudos usaram modelos de apren-
+dizado profundo, como transformers, enquanto outros utilizaram
+abordagens de aprendizado de máquina. Alguns também empre-
+garam questionários psicológicos para testar ou filtrar usuários e
+validar dados com profissionais de saúde. No entanto, nem todos os
+trabalhos abordaram aspectos éticos ou incluíram discussões corre-
+latas. Identificamos uma lacuna na utilização de técnicas de apren-
+dizado para alavancar métricas do sistema LIWC. Nossa hipótese é
+a de melhor classificação pela combinação de modelos individuais
+e suas melhores características em um meta-modelo. Uma difer-
+ença ao comparar as duas RSLs é em relação ao envolvimento de
+profissionais de saúde na construção do modelo. Embora o sistema
+LIWC seja amplamente utilizado, apenas um estudo usa métricas
+gerais que abstraem características textuais como tom emocional e
+autenticidade.
+METODOLOGIA DE PESQUISA
+Utilizando a Design Science Research (DSR), obtivemos uma con-
+tribuição significativa para a área de pesquisa. A DSR é focada na
+criação de artefatos para resolver problemas específicos, além de
+preservar a relevância na união entre teoria e prática. Nesta tese, as
+conjecturas teóricas são fundamentadas em teorias computacionais
+CTD’2024, Juiz de Fora/MG, Brazil
+Lima Filho et al.
+e psicológicas. A teoria da computação cobre redes sociais, mídias
+sociais e algoritmos de aprendizado de máquina, enquanto a psi-
+cologia fornece definições de saúde mental, transtornos mentais e
+distúrbios depressivos. O artefato e as conjecturas teóricas da DSR
+devem interagir para validar e orientar sua construção. O estado
+da técnica envolve o processo de design do artefato, que, após ser
+construído, deve ser validado em um contexto específico.
+MÉTODO DE IDENTIFICAÇÃO DE
+SINTOMAS DE DEPRESSÃO
+4.1
+Interação com Comunidade de Saúde
+Um estudo com profissionais da saúde foi realizado após a RSL para
+entender os métodos de tratamento e identificação do transtorno
+depressivo utilizados por psicólogos, além de validar as features
+identificadas. Os desafios incluíram a contatação de profissionais
+e a explicação do vocabulário de computação (análises, tipos de
+dados, features) nas entrevistas e questionários.
+O estudo ocorreu em duas etapas. Primeiro, entrevistamos três
+psicólogos para entender suas abordagens na identificação de sin-
+tomas e determinação do tratamento, além de validar as features
+levantadas na RSL. Em seguida, distribuímos um questionário em
+várias instituições de saúde para coletar dados quantitativos so-
+bre a relevância das diferentes features obtidas em mídias sociais.
+Quarenta e nove participantes classificaram as features, que foram
+organizadas em quatro grupos principais: discurso, perfil do usuário,
+interação e grupos.
+Nesse estudo, o grupo de features discursivas foi o mais relevante
+para identificar a depressão. As features mais importantes de tal
+grupo foram: Autorreferência ao estado físico ou mental e Referência
+explícita a alguma doença ou assunto correlato [5].
+4.2
+Análise de Discurso de Comunidades
+Como as features discursivas foram as mais relevantes para os
+profissionais e exploradas na RSL, analisamos textos de mídias so-
+ciais. Utilizamos a ferramenta Crowdtangle para coletar dados de
+grupos público1. A análise linguística foi realizada com o léxico
+LIWC. O módulo principal de análise do LIWC quantifica quatro
+aspectos: Pensamento Analítico, que mede o uso de palavras in-
+dicando padrões formais e lógicos; Influência, que avalia o status
+social e confiança na escrita; Autenticidade, que reflete a espon-
+taneidade do discurso; e Tom Emocional, onde scores altos indicam
+tom positivo e scores baixos, tom negativo.
+Analisamos a frequência das palavras nas postagens de 4 comu-
+nidades em inglês (835 publicações) e 7 comunidades em português
+(1945 publicações), coletadas em setembro de 2022. As palavras
+anxiety, depression, people e life foram as mais usadas em ambas as
+comunidades, variando apenas na ordem.
+Os resultados mostram comportamentos similares nas comu-
+nidades em ambos os idiomas. Há uma concentração de scores
+baixos em Pensamento Analítico, indicando postagens com baixo
+teor formal. Na métrica de Influência, os valores também são baixos,
+indicando influência social moderada. Autenticidade possui scores
+altos, sugerindo veracidade no vocabulário. A maioria das postagens
+tem scores baixos em Tom Emocional, indicando discurso negativo.
+1www.crowdtangle.com/resources[acessado em 11-08-2024]
+4.3
+Modelo de Classificação
+Nosso modelo de classificação foi treinado com dados científicos
+[4], baseado no modelo de [8], que usa sentimentos de postagens
+em mídias sociais como pesos em aprendizado ativo. Analisamos
+postagens de três subfóruns: depression, fitness e divorce, rotuladas
+como não depressivas (0) e depressivas (1). As postagens foram
+avaliadas em Emotional Tone, Analytical Thinking, Clout e Authentic.
+Usamos o modelo BERT para vetorizar as postagens com a
+biblioteca sentence-transformers [6]. Realizamos o produto de Hada-
+mard entre esses vetores e os vetores LIWC para capturar a influên-
+cia combinada do conteúdo das postagens e das métricas LIWC.
+Após construir os modelos, reaplicamos o modelo para classificar
+dados de fóruns sobre depressão do Facebook buscando identi-
+ficar padrões heurísticos. Observamos que mensagens depressivas
+geralmente tinham baixos escores de influência social , enquanto
+predições negativas apresentavam altos escores de pensamento
+analítico , como mensagens de boas-vindas e apoio.
+De 835 registros, o modelo classificou 23 posts como não de-
+pressivos. Em comunidades em português, de 1760 mensagens, 123
+foram classificadas como não depressivas, muitas buscando orien-
+tação ou discutindo luto e tristeza. Apesar de mais erros devido à
+tradução, os resultados foram similares, com mensagens frequente-
+mente buscando orientação profissional ou discutindo luto e perda.
+CONCLUSÃO
+Este artigo apresentou as principais contribuições da pesquisa de
+doutorado, destacando a interação com a comunidade de saúde e as
+análises de dados de mídias sociais para explorar padrões de saúde
+mental. Pesquisas futuras buscarão dados de alta qualidade sobre
+populações com depressão ou usuários diagnosticados clinicamente.
+A extração de heurísticas de discursos depressivos resultou em um
+modelo de classificação para identificar indicadores de saúde mental em ambientes digitais.

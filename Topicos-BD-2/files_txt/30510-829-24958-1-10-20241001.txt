@@ -1,0 +1,643 @@
+TV 3.0: Integração e Controle de Renderizadores de Efeitos
+Sensoriais
+Marina Ivanov
+marinaivanov@midiacom.uff.br
+Laboratório MídiaCom
+Universidade Federal Fluminense
+Niterói, Rio de Janeiro, Brasil
+Rômulo Vieira
+romulo_vieira@midiacom.uff.br
+Laboratório MídiaCom
+Universidade Federal Fluminense
+Niterói, Rio de Janeiro, Brasil
+Joel A. F. dos Santos
+jsantos@eic.cefet-rj.br
+MultiSenS, Centro Federal de Educação Tecnológica
+Celso Suckow da Fonseca
+Rio de Janeiro, Rio de Janeiro, Brasil
+Débora C. Muchaluat-Saade
+debora@midiacom.uff.br
+Laboratório MídiaCom
+Universidade Federal Fluminense
+Niterói, Rio de Janeiro, Brasil
+0.
+Entretanto, a recepção na TV digital pode se dar por diferentes
+equipamentos, como televisores ou set-top boxes. O mesmo ocorre
+para os atuadores dos efeitos sensoriais, que são dispositivos he-
+torogêneos, desenvolvidos por diversos fabricantes e com as mais
+variadas funcionalidades, protocolos e tecnologias funcionais, o que
+dificulta uma comunicação padronizada com outros equipamentos
+presentes na mesma rede local. Somado a isso, em um ambiente de
+TV imersiva, os atuadores de efeitos podem ser controlados tanto
+por aplicações executadas diretamente na TV, quanto por aplicações
+das emissoras que são executadas em dispositivos de segunda tela.
+A fim de viabilizar essas novas funcionalidades, especialmente o
+suporte a efeitos sensoriais, o presente trabalho propõe mudanças
+arquiteturais no receptor de TV 3.0, bem como um protocolo de
+comunicação entre o mesmo e dispositivos remotos que renderizam
+efeitos sensoriais e uma API para permitir o controle desses efeitos
+e sua sincronização com conteúdo audiovisual. Esta pesquisa segue
+a API genérica proposta em [16], que estabeleceu as diretrizes para
+comunicação entre dispositivos remotos hetoregêneos e o receptor
+de TV 3.0, aqui aplicadas para inclusão e controle de renderizadores
+de efeitos sensoriais.
+O restante do artigo está estruturado da seguinte maneira. A
+Seção 2 examina o estado da arte na integração entre conteúdo mul-
+timídia e efeitos sensoriais, abordando os métodos predominantes
+para combinar esses diferentes tipos de mídia e concentrando-se
+na aplicação desses parâmetros em ambientes de TV imersiva. A
+Seção 3 discute as modificações arquiteturais no receptor de TV
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Josué et al.
+3.0 necessárias para suportar essas novas funcionalidades, além do
+protocolo de comunicação necessário para a descoberta e registro
+de dispositivos remotos, o que culmina na API capaz de controlar
+os efeitos sensoriais. A Seção 4 ilustra um caso de uso de conteúdo
+televisivo que incorpora efeitos de luz, aroma e vento, desenvolvido
+com base nos conceitos expostos neste estudo. Por fim, a Seção
+5 apresenta as conclusões gerais decorrentes da realização deste
+trabalho.
+TRABALHOS RELACIONADOS
+A apresentação de conteúdo audiovisual acompanhada de efeitos
+que estimulam múltiplos sentidos humanos é conhecida como mul-
+semídia (do inglês, Multiple Sensorial Media) [2]. Essa abordagem
+permite a integração de efeitos sensoriais, tais como vento, aroma
+e temperatura, sincronizados com mídias tradicionais, como texto,
+vídeo, imagem e áudio. A renderização desses efeitos pode ser reali-
+zada por meio de dispositivos atuadores, como ventiladores, disper-
+sores de aroma, lâmpadas e aquecedores [14].
+Dada a ubiquidade das aplicações multimídia no cotidiano, di-
+versos estudos foram conduzidos para integrar conteúdo de mídia
+tradicional com efeitos sensoriais em uma aplicação web. Um tipo
+recorrente de trabalho nesta área baseia-se no uso de plug-ins. Por
+exemplo, a proposta de Rainer et al. [12] apresenta uma extensão
+para navegadores web e uma biblioteca denominada Ambient Li-
+brary (AmbientLib), que são responsáveis por extrair quadros de
+vídeo e informações temporais para sincronizar o conteúdo mul-
+timídia com efeitos sensoriais relacionados ao conteúdo do vídeo
+em questão. De forma similar, o trabalho de Waltl et al. [18] faci-
+lita a comunicação entre um navegador web executando conteúdo
+multimídia e o sistema amBX1, formado por dois ventiladores, uma
+pulseira de vibração, duas luzes frontais e aparelhagem sonora. Este
+sistema também recupera quadros de vídeo e exibe uma cor cor-
+respondente no ambiente amBX, além de solicitar descrições de
+metadados dos efeitos sensoriais para ativar os ventiladores e a
+pulseira conforme o conteúdo exibido.
+Além disso, há uma série de estudos focados em desenvolver
+frameworks para capturar, medir, quantificar, julgar e explicar a
+experiência do usuário no consumo de conteúdo mulsemídia. O
+trabalho de Waltl et al. [19] contribui ao realizar testes utilizando o
+padrão ITU-T P.911 e a técnica de (Degradation Category Rating–
+DCR) para avaliar e categorizar o estado de deteriorização dos ren-
+derizadores de efeitos sensoriais. Saleme et al. [15] propõem uma
+estrutura mulsemídia interoperável que acomoda diferentes perfis
+de comunicação e conectividade, além dos mais distintos padrões de
+metadados de efeitos sensoriais conforme as necessidades dos apli-
+cativos e dispositivos disponíveis no ambiente do usuário. Guedes
+et al. [4], por sua vez, apresentam uma estrutura de programação
+de alto nível que suporta interfaces de usuário multimodais em
+aplicações multimídia interativas, integrando elementos de entrada
+e saída, como gestos, reconhecimento de voz, conteúdo audiovi-
+sual, sintetizadores de fala e atuadores para implementar diferentes
+efeitos sensoriais.
+Por outro lado, a proposta de Josué et al. [8] foca na modelagem
+abstrata de efeitos sensoriais em aplicações multimídia, utilizando
+a linguagem NCL (ITU-T H.761/ABNT NBR 15606) [11, 13] para
+1http://www.ambx.com
+tratar os efeitos sensoriais como entidades de primeira classe, permi-
+tindo sua definição independente da instalação física que executará
+a aplicação. Dessa forma, os efeitos sensoriais são modelados como
+entidades multimídia, análogas à representação abstrata de con-
+teúdo multimídia tradicional.
+Especificamente no contexto de sistemas de TV, as aplicações
+de Jalal et al. [5–7] utilizam a pervasividade da Internet das Coisas
+(IoT) para habilitar um cenário de casa inteligente com dispositivos
+reais e consolidados no mercado. Para viabilizar esse cenário, a
+arquitetura do ambiente é dividida em quatro camadas, a saber:
+camada física, implementada na nuvem e composta por objetos
+capazes de acessarem a Internet; camada de virtualização, que desa-
+copla a parte de hardware da representação de software baseada em
+nuvem a partir da criação de uma contraparte digital de qualquer
+entidade no mundo real; camada de agregação, responsável pela
+junção dos dados vindos de diferentes fontes para garantir um alto
+nível de reutilização; e camada de aplicação, onde os aplicativos do
+usuário são responsáveis pelo processamento e apresentação do
+conteúdo final.
+AMPLIANDO AS FUNCIONALIDADES DO
+GINGA PARA RENDERIZAÇÃO DE EFEITOS
+SENSORIAIS
+Esta seção oferece uma visão geral sobre a inserção de efeitos sen-
+soriais no Ginga, abrangendo desde seu comportamento no docu-
+mento de autoria da aplicação até as modificações arquiteturais
+e o protocolo de comunicação necessário para suportar dispositi-
+vos atuadores heterogêneos. Este panorama culmina na API que
+controla um conjunto de funções nesses dispositivos.
+3.1
+Inserindo Efeitos Sensoriais no Ginga
+O middleware Ginga [17] foi desenvolvido para permitir que ser-
+viços de TV operem em diversos modelos de set-top boxes, apre-
+sentando uma arquitetura composta por subsistemas que desem-
+penham funções específicas voltadas para a exibição de aplicações
+declarativas. Tais aplicações são criadas utilizando a linguagem
+NCL, adotada como padrão na autoria de aplicação para o sistema
+de TV brasileiro, capaz de descrever o comportamento espacial
+e temporal entre seus objetos, habilitar interação dos usuários e
+descrever o layout da apresentação em múltiplos dispositivos. Para
+prover suporte a aplicações mulsemídia, a linguagem foi recente-
+mente estendida para a versão 4.0, de modo a permitir interação
+multimodal do usuário por meio de comandos de voz, gestos ou
+movimentos oculares [1], além de representar estímulos sensoriais
+(como luzes RGB/estroboscópicas, estímulos táteis, olfativos e etc.)
+como entidades de primeira ordem [8, 9], independentemente dos
+dispositivos físicos utilizados para sua renderização.
+Dessa forma, o autor da aplicação pode usar os mesmos con-
+ceitos já utilizados para manipular nós de mídia para os nós de
+efeitos sensoriais. O elemento <effect> possui um conjunto de atri-
+butos para identificar e caracterizar a ocorrência do efeito sensorial,
+como o id, que identifica univocamente cada elemento sensorial
+dentro do documento NCL, o type, que especifica o tipo de efeito
+(podendo assumir os valores de efeito de luz, flash, temperatura,
+vento, vibração, spray, aroma e névoa), e o descritor, que dispõe de
+TV 3.0: Integração e Controle de Renderizadores de Efeitos Sensoriais
+WTVDI’2024, Juiz de Fora/MG, Brazil
+propriedades adicionais, como uma especificação de início ou fim
+da apresentação, por exemplo.
+No que tange à localização de tais efeitos, ela pode ser especifi-
+cada de duas maneiras. Primeiro, o autor da aplicação pode usar um
+sistema de coordenadas esféricas, no qual a região dos efeitos co-
+meça no ponto indicado pelos atributos azimutal e polar, enquanto
+que no segundo método são utilizados os atributos de largura e
+altura para indicar o tamanho da área a ser usada para renderizar o
+efeito.
+Por fim, cabe destacar que a unidade de medida para o efeito
+luminoso é definida em lux, enquanto a intensidade de um efeito
+térmico é expressa em graus Celsius. No que concerne ao efeito do
+vento, a mensuração é feita de acordo com a escala Beaufort. Para
+a medição do efeito de vibração, utiliza-se a escala Hertz (Hz). A
+intensidade dos efeitos de spray, aroma e névoa pode ser descrita
+em termos de mililitros por hora (ml/h). Para evitar que o autor de
+uma aplicação NCL tenha que lidar com tantas unidades distintas,
+a intensidade de um efeito sensorial é especificada em uma escala
+relativa de 0 a 10.
+3.2
+Arquitetura do Receptor TV 3.0
+Renderizadores de efeitos sensoriais podem ser desenvolvidos por
+diferentes fabricantes e implementar diferentes protocolos de con-
+trole. Deste modo, torna-se necessário a definição de uma interface
+de comunicação, a fim de permitir que estes diferentes dispositivos
+se comuniquem com o receptor de TV para a execução de aplicações
+mulsemídia.
+A comunicação dos renderizadores de efeito com o middleware
+Ginga pode se dar através de uma API específica para cada renderi-
+zador, permitindo que o mesmo se comunique diretamente com o
+Ginga Common Core, conforme proposto por Josué et al. [9]. Neste
+cenário, os implementadores de middleware devem desenvolver
+suas soluções já acopladas aos fabricantes de renderizador de efeito.
+A fim de possibilitar uma maior independência entre o mid-
+dleware e os fabricantes de renderizadores, este trabalho propõe um
+novo componente, externo ao middleware, que se comunica com o
+Ginga através do Ginga CCWS, denominado Sensory Effect (SE) Pre-
+sentation Engine, e especifica seu próprio protocolo de comunicação
+com os renderizadores de efeitos sensoriais, conforme apresentado
+na Figura 1.
+O middleware Ginga deve manter um registro dos renderizadores
+de efeitos cadastrados, incluindo as configurações necessárias para
+controlá-los, seja via API do dispositivo ou através do Ginga CC
+WebServices. Isso pode ser realizado por meio de um arquivo de
+configuração que contenha informações como o endereço IP de um
+dispositivo conectado diretamente ao Ginga ou o identificador de
+um SE Presentation Engine que controla um conjunto de dispositivos.
+3.3
+Comunicação do SE Presentation Engine com
+o Ginga
+Conforme citado anteriormente, a comunicação entre o SE Presen-
+tation Engine e o middleware Ginga é estabelecida através do Ginga
+CC Webservices. Como o SE Presentation Engine é um elemento
+externo ao receptor, ele deve utilizar o protocolo SSDP para deter-
+minar a existência de um terminal receptor TV 3.0 com suporte ao
+Ginga CC WebServices e obter o ponto de acesso às API fornecidas.
+Figura 1: Arquitetura do middleware Ginga para suporte a
+controle de renderizadores de efeitos via Ginga CCWS .
+Figura 2: Processo de descoberta e registro de dispositivo
+remoto capaz de renderizar efeitos sensoriais [16].
+O Simple Service Discovery Protocol (SSDP) [3] fornece um meca-
+nismo para dispositivos em rede se comunicarem e se descobrirem.
+Para isso, o protocolo SSDP fornece suporte à descoberta multi-
+cast, bem como notificação baseada em servidor e roteamento de
+descoberta. Este processo de descoberta e registro de dispositivos
+remotos junto ao Ginga é descrito por Santos et al. [16] e ilustrado
+na Figura 2.
+Após a descoberta, a comunicação avança para a fase de Auto-
+rização, onde o Remote Device WebService (RDWS), componente
+responsável por intermediar a comunicação entre o Ginga e os dis-
+positivos remotos, obtém o token de acesso do dispositivo que está
+tentando se conectar e estabelece um vínculo com o receptor do
+sinal de TV. Em vista da necessidade de autorização do usuário, a
+etapa de Falha pode ser alcançada caso nenhuma autorização seja
+concedida.
+Por outro lado, se a operação for autorizada, a fase de Registro
+é iniciada com o RDWS fazendo uma solicitação POST à API de
+registro para, em seguida, conectar-se ao ponto de entrada Web-
+Socket, iniciando a fase de Conexão. Se algum erro for detectado,
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Josué et al.
+a comunicação move-se para a fase de Cancelamento de Registro.
+Caso contrário, avança para a fase de Execução.
+Para o registro do SE Presentation Engine no Ginga, o corpo
+da mensagem deve conter um campo que identifica a classe do
+dispositivo que está se registrando como renderizador de efeitos
+sensoriais e os tipos de efeitos suportados por este equipamento,
+que devem estar em conformidade com os efeitos suportados pelo
+middleware. A Listagem 1 apresenta um exemplo de mensagem
+para registro da SE Presentation Engine.
+1 {
+" d e v i c e C l a s s "
+:
+" sensory −e f f e c t " ,
+" supportedTypes "
+:
+[ " LightType " ,
+" ScentType " ,
+"
+WindType " ,
+" TemperatureType " ,
+" VibrationType " ]
+4 }
+Listagem 1: Corpo da mensagem de registro da SE
+Presentation Engine.
+Na fase de Cancelamento de Registro, o RDWS cancela a ope-
+ração no CCWS, liberando o WebSocket previamente criado. Este
+procedimento também pode ser acionado quando o mecanismo
+de apresentação do dispositivo remoto é interrompido. É possível
+mover-se desta fase para a etapa de Pausa, onde o registro pode ser
+reiniciado quando o dispositivo remoto é acionado pelo usuário, ou
+completamente encerrado, caso o mecanismo de apresentação do
+dispositivo remoto pare.
+Na fase de Execução, o middleware pode enviar comandos para
+controlar a apresentação de efeitos sensoriais. A partir deste ponto, é
+possível retornar à fase de Conexão se a comunicação for perdida ou
+alcançar a fase de Pausa se o dispositivo entrar em modo de espera.
+O RDWS deve permanecer nesta fase durante toda a apresentação
+do nó no dispositivo remoto. Além disso, durante este período,
+o RDWS deve trocar mensagens com o Ginga (via WebSocket)
+para que os metadados auxiliem no controle dessa apresentação
+e notifiquem transições de eventos. Se ocorrerem alterações nas
+capacidades do dispositivo remoto durante esse processo, o RDWS
+deve transitar para a fase de Atualização.
+A SE Presentation Engine pode ser invocada pelo Ginga para a
+reprodução de efeitos sensoriais de uma aplicação NCL 4. Neste caso,
+ao iniciar a aplicação NCL4, o Ginga deve enviar uma mensagem
+conforme apresentada na Listagem 2, contendo o identificador do nó
+de efeito sensorial na aplicação NCL, suas propriedades e também
+o identificador da aplicação.
+1 {
+" nodeId "
+:
+< nodeId > ,
+" type "
+:
+" < LightType
+|
+ScentType
+|
+WindType
+|
+TemperatureType
+|
+VibrationType >"
+" appId "
+:
+< appId > ,
+" p r o p e r t i e s "
+:
+[
+{
+" name "
+:
+<propName > ,
+" value "
+:
+< propValue > }
+]
+8 }
+Listagem 2: Mensagem com metadados de efeito sensorial a
+ser renderizado pela SE Presentation Engine.
+Quando a SE Presentation Engine recebe uma solicitação do
+Ginga para realizar uma ação sobre determinado efeito sensorial,
+ela deve enviar uma mensagem de resposta indicando se a ação
+foi bem-sucedida (retornando o código 200), ou se ocorreu alguma
+falha, seja pelo fato do tipo de efeito sensorial não ser suportado
+ou devido a alguma limitação do SE Presentation Engine. Caso
+a renderização do efeito sensorial seja interrompida por alguma
+interação externa ao Ginga, a SE Presentation Engine deve notificar
+o middleware sobre uma ação de abort no evento de apresentação
+do efeito em questão.
+Como os dispositivos de renderização podem possuir capacidades
+e características diferentes, este trabalho também propõe uma API
+para que o Ginga possa solicitar tais informações à SE Presentation
+Engine, conforme descrito na Listagem 3
+1 {
+" type "
+:
+< e f f e c t T y p e > ,
+" c a p a b i l i t i e s "
+:
+[ {
+" name "
+:
+< capName >
+} ]
+4 }
+Listagem 3: Mensagem de solicitação de capacidades da SE
+Presentation Engine realizada pelo Ginga.
+3.4
+API CCWS para Suporte a Efeitos Sensoriais
+via Ginga-HTML5
+O middleware Ginga oferece suporte à execução de aplicações es-
+pecificadas tanto na linguagem NCL quanto em HTML5. Embora
+NCL4 contemple, de forma nativa, a especificação de efeitos sen-
+soriais, o HTML5 permite a especificação apenas de nós de mídia
+tradicionais, como vídeo e áudio. Assim, com o intuito de viabilizar a
+especificação de aplicações multimídia também para esta linguagem,
+este trabalho propõe uma API, denominada sensory-effect-renderers,
+para o controle de renderizadores de efeitos sensoriais por meio do
+Ginga CCWS.
+A aplicação HTML5 pode consultar os renderizadores de efei-
+tos disponíveis no receptor por meio de uma requisição GET na rota
+http(s)://<host>/dtv/sensory-effect-renderers. Em caso de
+sucesso, o Ginga CCWS responde à requisição com informações
+sobre os renderizadores disponíveis, como localização, efeitos supor-
+tados e também seu estado (isto é, se estão em uso por alguma apli-
+cação, preparados, ou disponíveis, por exemplo). Caso a aplicação
+queira obter a informação de um renderizador específico, ela deve
+utilizar a requisição GET na rota http(s)://<host>/dtv/sensory
+-effect-renderers/<renderer-id>, onde renderer-id define o
+identificador do renderizador desejado.
+O controle de um renderizador pela aplicação HTML5 se dá pela
+requisição POST na rota http(s)://<host>/dtv/sensory-effect
+-renderers/<renderer-id> com o corpo da mensagem especifi-
+cando o tipo de ação a ser aplicada sobre o efeito sensorial, conforme
+descrito na Listagem 4.
+1 {
+" e f f e c t T y p e " :
+" < e f f e c t T y p e > " ,
+" a c t i o n " :
+< p r e p a r e | s t a r t | pause | resume | s t o p | s e t
+> ,
+" p r o p e r t i e s " :
+[
+{ " name " :
+<propName > ,
+" value " :
+< propValue > }
+]
+7 }
+Listagem 4: Mensagem de controle de um renderizador de
+efeito específico.
+TV 3.0: Integração e Controle de Renderizadores de Efeitos Sensoriais
+WTVDI’2024, Juiz de Fora/MG, Brazil
+CASO DE USO
+Esta seção apresenta um novo caso de uso viabilizado pelas APIs
+propostas neste trabalho: uma aplicação multimídia em HTML5
+que abrange os requisitos da TV 3.0, especificamente relacionados
+ao suporte para TV imersiva (AP-req-14.1, 14.4 e 14.6).
+Considere uma aplicação mulsemídia composta de três conteúdos
+de vídeo, efeito de luz e efeito de aroma. Inicialmente, é apresentado
+um efeito de luz laranja, refletindo a cor predominante no conteúdo
+audiovisual sendo exibido na tela. Durante a execução da aplicação,
+o efeito de luz deve ter a sua propriedade “color” alterada, sincroni-
+zada com a troca entre os conteúdos de vídeo que são apresentados
+na tela. Além do efeito de luz, a aplicação apresenta um efeito de
+aroma sincronizado com o terceiro vídeo. O efeito de aroma é rende-
+rizado pelo dispositivo no momento em que este vídeo começa a ser
+exibido. A Figura 3 exibe a visão temporal da aplicação, ilustrando
+a sincronização entre os vídeos e os efeitos de luz e aroma.
+Figura 3: Linha do tempo correspondente ao plano de apre-
+sentação da aplicação de exemplo.
+Para este caso de uso, será utilizada a rota de controle de rende-
+rizador de efeito apresentado na Seção 3.4 para disparar os efeitos
+sensoriais sincronizados com a apresentação dos elementos de vídeo.
+A Listagem 5 descreve a aplicação proposta.
+1 < !DOCTYPE html>
+2 <html lang= " pt −BR" >
+3 <head>
+. . .
+5 < / head>
+6 <body>
+<video
+id= " myVideo "
+c o n t r o l s >
+<source
+src= " media / video1 . mp4"
+type= " video
+/mp4" >
+< / video >
+< script >
+const
+videos = [
+' media / video1 . mp4 ' ,
+' media / video2 . mp4 ' ,
+' media / video3 . mp4 '
+] ;
+l e t
+currentVideoIndex = 0 ;
+const
+videoElement = document .
+getElementById ( ' myVideo ' ) ;
+videoElement . addEventListener ( ' ended ' ,
+f u n c ti o n ( )
+{
+currentVideoIndex ++;
+i f
+( currentVideoIndex < videos . length )
+{
+videoElement . src = videos [
+currentVideoIndex ] ;
+videoElement . play ( ) ;
+}
+} ) ;
+videoElement . addEventListener ( ' play ' ,
+f u n c ti o n ( )
+{
+switch
+( currentVideoIndex ) {
+case
+0 :
+s t a r t L i g h t E f f e c t ( " orange " ) ;
+break ;
+case
+1 :
+s e t L i g h t C o l o r ( " green " ) ;
+break ;
+case
+2 :
+s e t L i g h t C o l o r ( " blue " ) ;
+s t a r t S c e n t E f f e c t ( " sea " ) ;
+break ;
+}
+} ) ;
+videoElement . src = videos [
+currentVideoIndex ] ;
+videoElement . play ( ) ;
+</ script >
+48 < / body>
+49 < / html>
+Listagem 5: Aplicação HTML5 mulsemídia.
+A função startLightEffect recebe a cor do efeito de luz como
+parâmetro, e implementa a requisição do tipo POST na rota
+https://<host>/dtv/sensory-effect-renderers/<renderer
+-id> com a mensagem de corpo descrita na Listagem 6.
+1 {
+" e f f e c t T y p e " :
+" LightType " ,
+" a c t i o n " :
+" s t a r t " ,
+" p r o p e r t i e s " :
+[
+{ " name " :
+" c o l o r " ,
+" value " :
+" orange " }
+]
+7 }
+Listagem 6: Mensagem enviada pela função startLightEffect.
+Por fim, as funções setLightColor e startScentEffect tam-
+bém utilizam a mesma rota da função startLightEffect porém
+com o corpo da mensagem contendo informações diferentes, con-
+forme descrito nas Listagens 7 e 8, respectivamente.
+1 {
+" e f f e c t T y p e " :
+" LightType " ,
+" a c t i o n " :
+" s e t " ,
+" p r o p e r t i e s " :
+[
+{ " name " :
+" c o l o r " ,
+" value " :
+" green " }
+]
+7 }
+WTVDI’2024, Juiz de Fora/MG, Brazil
+Josué et al.
+Listagem 7: Mensagem enviada pela função setLightColor.
+1 {
+" e f f e c t T y p e " :
+" ScentType " ,
+" a c t i o n " :
+" s t a r t " ,
+" p r o p e r t i e s " :
+[
+{ " name " :
+" s c e n t " ,
+" value " :
+" sea " }
+]
+7 }
+Listagem 8: Mensagem enviada pela função startScentEffect.
+CONSIDERAÇÕES FINAIS
+A evolução constante do setor televisivo brasileiro, impulsionada
+por inovações tecnológicas, continua a moldar a forma como o
+conteúdo é recebido pelos telespectadores. Este artigo apresentou
+uma proposta de adaptação do middleware Ginga para suportar
+a próxima geração de TV digital no Brasil, conhecida como TV
+3.0, com foco na integração de renderizadores de efeitos sensori-
+ais. Através de mudanças arquiteturais e a implementação de uma
+API específica, demonstramos como o Ginga pode se comunicar e
+controlar dispositivos remotos responsáveis pela renderização de
+efeitos como luz, aroma e vento, proporcionando uma experiência
+mais imersiva e interativa.
+Os resultados obtidos a partir do caso de uso validaram a apli-
+cabilidade das modificações propostas, evidenciando a viabilidade
+técnica e os benefícios proporcionados por uma experiência de TV
+sensorial, que além de aprimorar a imersão, abre novas possibilida-
+des para o desenvolvimento de aplicações inovadoras no contexto
+da TV digital, como conteúdos publicitários mais impactantes e
+ambientes domésticos transformados em experiências 4D.
+No entanto, a implementação completa e a adoção massiva desse
+novo padrão dependem de um ecossistema robusto que inclua fa-
+bricantes de dispositivos, emissoras e desenvolvedores de conteúdo.
+Futuras pesquisas irão focar em otimizações de desempenho, segu-
+rança da comunicação entre dispositivos e a criação de ferramentas
+que facilitem o desenvolvimento de aplicações sensoriais.
+A TV 3.0 representa um salto significativo na experiência televi-
+siva, trazendo novas formas de interatividade e imersão. Outrossim,
+este trabalho contribui para esse avanço, estabelecendo as bases
+tecnológicas para a integração de efeitos sensoriais no ecossistema
+de TV digital do Brasil.
+AGRADECIMENTOS
+Os autores agradecem o suporte das agências CAPES, Capes-Print,
+RNP, CNPq e FAPERJ, bem como ao Ministério das Comunicações
+(MCOM) e ao Fórum SBTVD.
+REFERÊNCIAS
+[1] Fábio Barreto, Raphael Abreu, Marina Josué, Eyre Montevecchi, Pedro Valentim,
+and Débora Muchaluat-Saade. 2023. Providing multimodal and multi-user inte-
+ractions for digital tv applications. Multimedia Tools and Applications 82 (2023),
+4821–4846. https://doi.org/10.1007/s11042-021-11847-3
+[2] Gheorghita Ghinea, Christian Timmerer, Weisi Lin, and Stephen R Gulliver. 2014.
+Mulsemedia: State of the art, perspectives, and challenges. ACM Transactions on
+Multimedia Computing, Communications, and Applications (TOMM) 11, 1s (2014),
+1–23.
+[3] Y. Y. Goland, T. Cai, P. Leach, and Y. Gu. 1999. Simple service discovery proto-
+col/1.0 operating without on arbiter. IETF INTERNET-DRAFT draft-cai-ssdp-v1-03.
+txt (1999). https://datatracker.ietf.org/doc/html/draft-cai-ssdp-v1-03
+[4] Álan Lívio Vasconcelos Guedes, Roberto Gerson de Albuquerque Azevedo, and
+Simone Diniz Junqueira Barbosa. 2017. Extending multimedia languages to
+support multimodal user interactions. Multimedia tools and applications 76
+(2017), 5691–5720.
+[5] Lana Jalal, Matteo Anedda, Vlad Popescu, and Maurizio Murroni. 2018. Internet
+of Things for enabling multi sensorial TV in smart home. In 2018 IEEE Broadcast
+Symposium (BTS). IEEE, 1–5.
+[6] Lana Jalal, Matteo Anedda, Vlad Popescu, and Maurizio Murroni. 2018. Qoe
+assessment for broadcasting multi sensorial media in smart home scenario. In 2018
+IEEE International Symposium on Broadband Multimedia Systems and Broadcasting
+(BMSB). IEEE, 1–5.
+[7] Lana Jalal, Matteo Anedda, Vlad Popescu, and Maurizio Murroni. 2018. QoE
+assessment for IoT-based multi sensorial media broadcasting. IEEE Transactions
+on Broadcasting 64, 2 (2018), 552–560.
+[8] Marina Josué, Raphael Abreu, Fábio Barreto, Douglas Mattos, Glauco Amorim,
+Joel dos Santos, and Débora Muchaluat-Saade. 2018. Modeling sensory effects
+as first-class entities in multimedia applications. In Proceedings of the 9th ACM
+Multimedia Systems Conference. 225–236.
+[9] Marina Josué, Marcelo F. Moreno, and Débora Muchaluat-Saade. 2024. Automatic
+Preparation of Sensory Effects. In Proceedings of MMSys ’24: ACM Multimedia
+Systems Conference 2024 (Bari). 35–40.
+[10] ABNT NBR. 2023. ABNT NBR 15606-1, Codificação de dados e especificações
+de transmissão para radiodifusão digital, Parte 1: Codificação de dados. ABNT
+(2023).
+[11] ABNT NBR. 2023. ABNT NBR 15606-2. Televisão digital terrestre–Codificação de
+dados e especificações de transmissão para radiodifusão digital–Parte 2: Ginga-
+NCL para receptores fixos e móveis–Linguagem de aplicação XML para codifica-
+ção de aplicações. ABNT (2023).
+[12] Benjamin Rainer, Markus Waltl, Eva Cheng, Muawiyath Shujau, Christian Tim-
+merer, Stephen Davis, Ian Burnett, Christian Ritz, and Hermann Hellwagner.
+2012. Investigating the impact of sensory effects on the quality of experience
+and emotional response in web videos. In 2012 Fourth International Workshop on
+Quality of multimedia experience. IEEE, 278–283.
+[13] ITU-T Recommendation. 2014. Nested Context Language (NCL) and Ginga-NCL.
+(2014). https://www.itu.int/itu-t/recommendations/rec.aspx?rec=H.761
+[14] Renato O Rodrigues, Marina IP Josué, Raphael S Abreu, Glauco F Amorim, Dé-
+bora C Muchaluat-Saade, and Joel AF dos Santos. 2019. A proposal for supporting
+sensory effect rendering in ginga-ncl. In Proceedings of the 25th Brazillian Sym-
+posium on Multimedia and the Web. 273–280.
+[15] Estêvão Bissoli Saleme, Celso AS Santos, and Gheorghita Ghinea. 2019. A mul-
+semedia framework for delivering sensory effects to heterogeneous systems.
+Multimedia Systems 25 (2019), 421–447.
+[16] Joel Santos, Rômulo Vieira, , Marina Josué, Karen Oliveira, and Débora C.
+Muchaluat-Saade. 2024. Multidevice Support in the Next Generation of the
+Brazilian Terrestrial TV System. In Proceedings of the 2024 ACM Internatio-
+nal Conference on Interactive Media Experiences (Stockholm, Sweden) (IMX
+’24). Association for Computing Machinery, New York, NY, USA, 1–9.
+https:
+//doi.org/10.1145/3639701.3656304
+[17] Luiz Fernando Gomes Soares, Marcio Ferreira Moreno, Carlos de Salles Soares
+Neto, and Marcelo Ferreira Moreno. 2010. Ginga-NCL: Declarative middleware
+for multimedia IPTV services. IEEE Communications Magazine 48, 6 (2010),
+74–81.
+[18] Markus Waltl, Benjamin Rainer, Christian Timmerer, and Hermann Hellwagner.
+2011. Sensory Experience for Videos on the Web. In 2011 Workshop on Multimedia
+on the Web. 49–51. https://doi.org/10.1109/MMWeb.2011.12
+[19] Markus Waltl, Christian Timmerer, and Hermann Hellwagner. 2010. Increasing
+the user experience of multimedia presentations with sensory effects. In 11th
+International Workshop on Image Analysis for Multimedia Interactive Services
+WIAMIS 10. IEEE, 1–4.
