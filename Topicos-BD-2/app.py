@@ -7,6 +7,7 @@
 # python -m spacy download pt_core_news_sm
 # python -m textblob.download_corpora
 
+import nltk
 import streamlit as st
 import base64
 from pathlib import Path
@@ -86,3 +87,4 @@ except Exception as e:
 st.write("""
 #### Esta aplicação demonstra diversos recursos de Processamento de Linguagem Natural (LLM), tendo como fonte de dados os artigos mostrados durante o evento.
 """)
+
