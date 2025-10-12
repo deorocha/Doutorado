@@ -24,7 +24,7 @@ h1:first-child {
 
 /* Remove margin-top de todos os h1 */
 h1 {
-    margin-top: 0rem !important;
+    margin-top: 3rem !important;
     padding-top: 0rem !important;
     font-size: 2rem !important;
     font-weight: 700 !important;
@@ -639,4 +639,5 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
         margin: 0 !important;
         max-width: 100% !important;
     }
+
 }
