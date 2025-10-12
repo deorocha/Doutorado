@@ -9,6 +9,8 @@
 
 import streamlit as st
 import base64
+from pathlib import Path
+import os
 
 # Configuração da página - DEVE SER A PRIMEIRA COISA
 st.set_page_config(
@@ -18,10 +20,18 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Obtém o diretório atual do script (app.py)
+current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+
+# Constrói caminhos absolutos para os arquivos
+css_path = current_dir / "styles" / "styles.css"
+webmedia_image_path = current_dir / "images" / "webmedia2024.png"
+background_image_path = current_dir / "images" / "background.png"
+
 # Função para carregar CSS globalmente
 def load_global_css():
     try:
-        with open("/styles/styles.css", "r", encoding="utf-8") as f:
+        with open(css_path, "r", encoding="utf-8") as f:
             css_content = f.read()
             # Injeta o CSS globalmente em todas as páginas
             st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
@@ -43,7 +53,7 @@ def get_base64_image(image_path):
 with st.sidebar:
     # Imagem no topo fixo
     try:
-        with open("images/webmedia2024.png", "rb") as f:
+        with open(webmedia_image_path, "rb") as f:
             image_base64 = base64.b64encode(f.read()).decode()
         
         st.markdown(
@@ -55,7 +65,7 @@ with st.sidebar:
             ''',
             unsafe_allow_html=True
         )
-    except:
+    except Exception as e:
         st.markdown(
             '''
             <div class="sidebar-header" style="background:linear-gradient(135deg, #4CAF50, #2E7D32); color:white; padding:1rem; text-align:center;">
@@ -69,12 +79,10 @@ with st.sidebar:
 st.title("Análise LLM dos anais do WebMedia 2024")
 
 try:
-    st.image("images/background.png", use_container_width=True)
-except:
+    st.image(background_image_path, use_container_width=True)
+except Exception as e:
     st.info("Imagem background.png não encontrada")
 
 st.write("""
 #### Esta aplicação demonstra diversos recursos de Processamento de Linguagem Natural (LLM), tendo como fonte de dados os artigos mostrados durante o evento.
 """)
-
-
