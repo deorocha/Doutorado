@@ -13,10 +13,16 @@ project_root = current_dir.parent  # Sobe um nível para a pasta raiz
 css_path = project_root / "styles" / "styles.css"
 
 @st.cache_resource
-def load_spacy_model(model_name):
-    return spacy.load(model_name)
-
-nlp = load_spacy_model("pt_core_news_lg")
+def load_spacy_model():
+    try:
+        # Tenta carregar o modelo grande
+        return spacy.load("pt_core_news_lg")
+    except OSError:
+        st.info("📥 Baixando modelo spaCy em português... Isso pode demorar alguns minutos.")
+        import os
+        os.system("python -m spacy download pt_core_news_lg")
+        return spacy.load("pt_core_news_lg")
+nlp = load_spacy_model()
 
 # Carregar CSS externo com codificação correta
 def load_css():
