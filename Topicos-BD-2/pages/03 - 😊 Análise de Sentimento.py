@@ -40,8 +40,6 @@ def setup_textblob():
             with st.spinner(f'Baixando {corpus}...'):
                 nltk.download(corpus, quiet=True)
     
-    st.success("TextBlob configurado com sucesso!")
-
 # Executa a configuração do TextBlob
 try:
     setup_textblob()
