@@ -18,10 +18,10 @@ def load_spacy_model():
         # Tenta carregar o modelo grande
         return spacy.load("pt_core_news_lg")
     except OSError:
-        st.info("📥 Baixando modelo spaCy em português... Isso pode demorar alguns minutos.")
+        st.info("📥 Baixando versão mais leve... Isso pode um pouco.")
         import os
-        os.system("python -m spacy download pt_core_news_lg")
-        return spacy.load("pt_core_news_lg")
+        os.system("python -m spacy download pt_core_news_sm")
+        return spacy.load("pt_core_news_sm")
 nlp = load_spacy_model()
 
 # Carregar CSS externo com codificação correta
