@@ -3,7 +3,7 @@
 
 /* Remove todo o padding e margin do container principal */
 .main .block-container {
-    padding-top: 5rem !important;
+    padding-top: 0rem !important;
     padding-bottom: 1rem;
     padding-left: 0rem;
     padding-right: 0rem;
@@ -18,13 +18,13 @@ header {
 
 /* Remove todo o espaco acima do primeiro h1 */
 h1:first-child {
-    margin-top: 3rem !important;
+    margin-top: 0rem !important;
     padding-top: 0rem !important;
 }
 
 /* Remove margin-top de todos os h1 */
 h1 {
-    margin-top: 3rem !important;
+    margin-top: 0rem !important;
     padding-top: 0rem !important;
     font-size: 2rem !important;
     font-weight: 700 !important;
@@ -359,24 +359,24 @@ a:hover {
 }
 
 /* Botoes */
-/*
 .stButton button {
-    background-color: #4CAF50 !important;
+    background-color: #92bfff !important;
     color: white !important;
     border: none !important;
     padding: 0.5rem 1rem !important;
     border-radius: 5px !important;
     font-weight: 500 !important;
     transition: background-color 0.3s ease !important;
+    height: 30px !important;
+    padding-top: 25px !important; /* Adjust padding if necessary */
+    padding-bottom: 5px !important; /* Adjust padding if necessary */
 }
-*/
-/*
+
 .stButton button:hover {
-    background-color: #45a049 !important;
+    background-color: #72d376 !important;
     transform: translateY(-1px) !important;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
 }
-*/
 
 /* Selectbox e inputs */
 .stSelectbox, .stTextInput, .stTextArea {
@@ -639,6 +639,4 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
         margin: 0 !important;
         max-width: 100% !important;
     }
-
 }
-
