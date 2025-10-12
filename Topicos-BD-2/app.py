@@ -21,7 +21,7 @@ st.set_page_config(
 # Função para carregar CSS globalmente
 def load_global_css():
     try:
-        with open("./styles/styles.css", "r", encoding="utf-8") as f:
+        with open("/styles/styles.css", "r", encoding="utf-8") as f:
             css_content = f.read()
             # Injeta o CSS globalmente em todas as páginas
             st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
@@ -76,4 +76,5 @@ except:
 st.write("""
 #### Esta aplicação demonstra diversos recursos de Processamento de Linguagem Natural (LLM), tendo como fonte de dados os artigos mostrados durante o evento.
 """)
+
 
