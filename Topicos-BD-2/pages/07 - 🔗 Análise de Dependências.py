@@ -2,31 +2,17 @@ import streamlit as st
 import spacy
 from spacy import displacy
 import pandas as pd
-from pathlib import Path
-
-# Obtém o diretório raiz do projeto (onde está o app.py)
-current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-project_root = current_dir.parent  # Sobe um nível para a pasta raiz
-
-# Constrói caminhos absolutos para os arquivos
-css_path = project_root / "styles" / "styles.css"
 
 @st.cache_resource
-def load_spacy_model():
-    try:
-        # Tenta carregar o modelo grande
-        return spacy.load("pt_core_news_lg")
-    except OSError:
-        st.info("📥 Baixando versão mais leve... Pode demorar um pouco.")
-        import os
-        os.system("python -m spacy download pt_core_news_sm")
-        return spacy.load("pt_core_news_sm")
-nlp = load_spacy_model()
+def load_spacy_model(model_name):
+    return spacy.load(model_name)
+
+nlp = load_spacy_model("pt_core_news_lg")
 
 # Carregar CSS externo com codificação correta
 def load_css():
     try:
-        with open(css_path, "r", encoding="utf-8") as f:
+        with open("styles/styles.css", "r", encoding="utf-8") as f:
             css_content = f.read()
             st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
     except FileNotFoundError:
@@ -128,36 +114,34 @@ pos_descriptions = {
 
 text = "No Brasil, investigamos os comentários para compreender a opinião pública no Youtube."
 text_input = st.text_input("Digite algum texto 👇", text)
+doc = nlp(text_input)
 
-if text_input:
-    doc = nlp(text_input)
+# Render Dependency Parse
+dep_html = displacy.render(doc, style="dep", jupyter=False)
+
+if st.button('Analisar dependências', type="primary"):
+    st.header("")
+    st.write(dep_html, unsafe_allow_html=True)
     
-    # Render Dependency Parse
-    dep_html = displacy.render(doc, style="dep", jupyter=False)
-
-    if st.button('Analisar dependências', type="primary"):
-        st.header("")
-        st.write(dep_html, unsafe_allow_html=True)
+    # Adicionar as tabelas de legenda
+    st.header("Legenda das Dependências")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.write("### Relações de Dependência")
+        dependency_data = []
+        for dep, description in dependency_descriptions.items():
+            dependency_data.append({"Tag": dep, "Descrição": description})
         
-        # Adicionar as tabelas de legenda
-        st.header("Legenda das Dependências")
+        dependency_df = pd.DataFrame(dependency_data)
+        st.dataframe(dependency_df, use_container_width=True, hide_index=True)
+    
+    with col2:
+        st.write("### Partes do Discurso")
+        pos_data = []
+        for pos, description in pos_descriptions.items():
+            pos_data.append({"Tag": pos, "Descrição": description})
         
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.write("### Relações de Dependência")
-            dependency_data = []
-            for dep, description in dependency_descriptions.items():
-                dependency_data.append({"Tag": dep, "Descrição": description})
-            
-            dependency_df = pd.DataFrame(dependency_data)
-            st.dataframe(dependency_df, use_container_width=True, hide_index=True)
-        
-        with col2:
-            st.write("### Partes do Discurso")
-            pos_data = []
-            for pos, description in pos_descriptions.items():
-                pos_data.append({"Tag": pos, "Descrição": description})
-            
-            pos_df = pd.DataFrame(pos_data)
-            st.dataframe(pos_df, use_container_width=True, hide_index=True)
+        pos_df = pd.DataFrame(pos_data)
+        st.dataframe(pos_df, use_container_width=True, hide_index=True)

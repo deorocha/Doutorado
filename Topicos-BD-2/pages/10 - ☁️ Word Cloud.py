@@ -9,17 +9,17 @@ from wordcloud import WordCloud
 import numpy as np
 from PIL import Image
 import io
-from pathlib import Path
 
-# Obtém o diretório raiz do projeto (onde está o app.py)
-current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-project_root = current_dir.parent  # Sobe um nível para a pasta raiz
-
-# Constrói caminhos absolutos para os arquivos
-css_path = project_root / "styles" / "styles.css"
-stopwords_path = project_root / "files_txt" / "stopwords.txt"
-pasta_pdf = project_root / "files_pdf"
-mascara_path = project_root / "images" / "shape.png"
+# Função para carregar CSS globalmente
+def load_global_css():
+    try:
+        with open("styles/styles.css", "r", encoding="utf-8") as f:
+            css_content = f.read()
+            # Injeta o CSS globalmente em todas as páginas
+            st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
+    except Exception as e:
+        st.error(f"Erro ao carregar CSS: {e}")
+load_global_css()
 
 def remover_acentos(texto):
     """Remove acentuações e cedilha do texto"""
@@ -110,19 +110,20 @@ def is_sigla(palavra):
     return False
 
 def carregar_stopwords_padrao():
-    """Carrega as stopwords padrão do arquivo de stopwords"""
+    """Carrega as stopwords padrão do arquivo ./files_txt/stopwords.txt"""
+    caminho_stopwords = "./files_txt/stopwords.txt"
     stopwords_padrao = set()
     
     try:
-        if stopwords_path.exists():
-            with open(stopwords_path, 'r', encoding='utf-8') as arquivo:
+        if os.path.exists(caminho_stopwords):
+            with open(caminho_stopwords, 'r', encoding='utf-8') as arquivo:
                 for linha in arquivo:
                     palavra = linha.strip().lower()
                     if palavra:
                         palavra_sem_acento = remover_acentos(palavra)
                         stopwords_padrao.add(palavra_sem_acento)
         else:
-            st.warning(f"Arquivo {stopwords_path} não encontrado. Será criado um conjunto vazio de stopwords.")
+            st.warning(f"Arquivo {caminho_stopwords} não encontrado. Será criado um conjunto vazio de stopwords.")
     except Exception as e:
         st.error(f"Erro ao carregar stopwords: {e}")
     
@@ -140,7 +141,7 @@ def gerar_wordcloud(palavras_ocorrencias, quantidade_palavras, fonte_min, fonte_
         
         # Carrega a máscara se existir
         mascara = None
-        if mascara_path.exists():
+        if os.path.exists(mascara_path):
             try:
                 mascara = np.array(Image.open(mascara_path))
             except Exception as e:
@@ -175,19 +176,6 @@ def gerar_wordcloud(palavras_ocorrencias, quantidade_palavras, fonte_min, fonte_
         return None
 
 def main():
-    # Carregar CSS externo com codificação correta
-    def load_css():
-        try:
-            with open(css_path, "r", encoding="utf-8") as f:
-                css_content = f.read()
-                st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
-        except FileNotFoundError:
-            st.error("Arquivo CSS não encontrado na pasta 'styles/'")
-        except Exception as e:
-            st.error(f"Erro ao carregar CSS: {e}")
-
-    load_css()
-    
     st.title("☁️ Gerador de Word Clouds")
     
     # Inicializa o detector de idioma
@@ -195,7 +183,8 @@ def main():
         detector_idioma = inicializar_detector_idioma()
     
     # Verifica se a pasta existe
-    if not pasta_pdf.exists():
+    pasta_pdf = "./files_pdf"
+    if not os.path.exists(pasta_pdf):
         st.error(f"A pasta '{pasta_pdf}' não foi encontrada!")
         return
     
@@ -253,7 +242,7 @@ def main():
             total_arquivos = len(arquivos_pdf)
             
             for indice, arquivo_pdf in enumerate(arquivos_pdf):
-                caminho_completo = pasta_pdf / arquivo_pdf
+                caminho_completo = os.path.join(pasta_pdf, arquivo_pdf)
                 
                 # Atualiza a barra de progresso (0-100%)
                 percentual = int((indice / total_arquivos) * 100)
@@ -415,7 +404,7 @@ def main():
                 import pandas as pd
                 df = pd.DataFrame(palavras_ocorrencias, columns=['Palavra', 'Ocorrências'])
                 
-                st.dataframe(df, use_container_width=True)
+                st.dataframe(df, use_container_width=True)  # CORREÇÃO AQUI
                 
                 # Opção de download - botões na mesma linha
                 st.subheader("💾 Download dos Resultados")
@@ -491,6 +480,7 @@ def main():
             # Botão para gerar Word Cloud
             if st.button("✨ Gerar Nuvem de Palavras", type="primary"):
                 with st.spinner("Gerando nuvem de palavras..."):
+                    mascara_path = "./images/shape.png"
                     wordcloud_image = gerar_wordcloud(
                         st.session_state.palavras_ocorrencias,
                         quantidade_palavras, 
@@ -502,7 +492,7 @@ def main():
                     if wordcloud_image:
                         # Exibe a word cloud
                         st.image(wordcloud_image, caption=f'Nuvem de Palavras - Top {quantidade_palavras} Palavras', 
-                                use_container_width=True)
+                                use_container_width=True)  # CORREÇÃO AQUI
                         st.success("✅ Nuvem de palavras gerada com sucesso!")
                         
                         # Botão para salvar a Word Cloud
