@@ -43,7 +43,7 @@ def get_base64_image(image_path):
 with st.sidebar:
     # Imagem no topo fixo
     try:
-        with open("./images/webmedia2024.png", "rb") as f:
+        with open("images/webmedia2024.png", "rb") as f:
             image_base64 = base64.b64encode(f.read()).decode()
         
         st.markdown(
@@ -76,3 +76,4 @@ except:
 st.write("""
 #### Esta aplicação demonstra diversos recursos de Processamento de Linguagem Natural (LLM), tendo como fonte de dados os artigos mostrados durante o evento.
 """)
+
