@@ -247,17 +247,23 @@ Técnica que identifica e extrai opiniões, emoções e sentimentos expressos em
 - Pesquisa de mercado
 """)
 
-# Botões de upload e limpar texto
-col1, col2, col3 = st.columns([1, 1, 1])
+col_upload, col_buttons = st.columns([2, 1])
 
-with col1:
-    uploaded_file = st.file_uploader("📁 Upload texto", type=['txt', 'pdf'], 
-                                   help="Carregue arquivos .txt ou .pdf")
+with col_upload:
+    uploaded_file = st.file_uploader("📁 Upload texto", type=['txt', 'pdf'],
+    help="Carregue arquivos .txt ou .pdf")
 
-with col2:
-    if st.button("🗑️ Limpar texto"):
+with col_buttons:
+    # Botão Limpar texto
+    if st.button("🗑️ Limpar texto", use_container_width=True):
         st.session_state.texto_analise = ""
         st.rerun()
+    
+    # Espaçamento entre os botões
+    st.write("")  # Linha vazia para espaçamento
+    
+    # Botão Analisar texto
+    analyze_button = st.button("🔍 Analisar Texto", use_container_width=True)
 
 # Processar arquivo carregado
 if uploaded_file is not None:
@@ -276,12 +282,9 @@ if 'texto_analise' not in st.session_state:
 
 # Entrada do usuário
 texto = st.text_area("Digite o texto para análise:", 
-                     value=st.session_state.texto_analise,
-                     height=200, 
-                     placeholder="Cole ou digite aqui qualquer texto (artigos, discursos, redações, relatórios, etc.)...")
-
-with col3:
-    analyze_button = st.button("🔍 Analisar Texto")
+    value=st.session_state.texto_analise,
+    height=200, 
+    placeholder="Cole ou digite aqui qualquer texto (artigos, discursos, redações, relatórios, etc.)...")
 
 if analyze_button:
     if not texto:

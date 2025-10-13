@@ -5,18 +5,36 @@ import pandas as pd
 from pathlib import Path
 
 # Obtém o diretório raiz do projeto (onde está o app.py)
-# Este script está em uma subpasta, então precisamos subir um nível
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-project_root = current_dir.parent  # Sobe um nível para a pasta raiz
-
-# Constrói caminhos absolutos para os arquivos na pasta raiz
+project_root = current_dir.parent
 css_path = project_root / "styles" / "styles.css"
 
 @st.cache_resource
 def load_spacy_model(model_name):
-    return spacy.load(model_name)
+    try:
+        return spacy.load(model_name)
+    except OSError:
+        st.error(f"Modelo {model_name} não encontrado. Instale com: python -m spacy download {model_name}")
+        return None
+    except Exception as e:
+        st.error(f"Erro ao carregar modelo: {e}")
+        return None
 
 nlp = load_spacy_model("pt_core_news_lg")
+
+# Verificar se o modelo foi carregado com sucesso
+if nlp is None:
+    st.warning("""
+    ⚠️ **Modelo não carregado**
+    
+    Para usar esta funcionalidade, você precisa:
+    1. Instalar o modelo em português do spaCy:
+    ```bash
+    python -m spacy download pt_core_news_lg
+    ```
+    2. Reiniciar o aplicativo
+    """)
+    st.stop()
 
 # Carregar CSS externo com codificação correta
 def load_css():
@@ -76,39 +94,42 @@ entity_descriptions = {
 
 text = "No Brasil, a Anatel investiga os comentários feitos no Twitter e no Youtube sobre o Papa."
 text_input = st.text_input("Digite algum texto 👇", text)
-doc = nlp(text_input)
 
-# Render NER
-ner_html = displacy.render(doc, style="ent", jupyter=False)
-
-if st.button('Analisar Entidades', type="primary"):
-    st.header("")
-    st.write(ner_html, unsafe_allow_html=True)
+# Processar texto apenas se o modelo estiver carregado
+if nlp is not None:
+    doc = nlp(text_input)
     
-    # Adicionar a tabela de legenda
-    st.header("Legenda das Entidades")
-    
-    # Criar DataFrame com as legendas
-    entity_data = []
-    for entity, description in entity_descriptions.items():
-        entity_data.append({"Tag": entity, "Descrição": description})
-    
-    entity_df = pd.DataFrame(entity_data)
-    st.dataframe(entity_df, use_container_width=True, hide_index=True)
-    
-    # Adicionar informações extras sobre as entidades encontradas
-    if doc.ents:
-        st.subheader("Entidades Encontradas no Texto")
-        found_entities = []
-        for ent in doc.ents:
-            found_entities.append({
-                "Texto": ent.text,
-                "Tag": ent.label_,
-                "Descrição": entity_descriptions.get(ent.label_, "Desconhecida"),
-                "Posição": f"{ent.start_char}-{ent.end_char}"
-            })
+    if st.button('Analisar Entidades', type="primary"):
+        # Render NER
+        ner_html = displacy.render(doc, style="ent", jupyter=False)
         
-        found_df = pd.DataFrame(found_entities)
-        st.dataframe(found_df, use_container_width=True, hide_index=True)
-    else:
-        st.info("Nenhuma entidade nomeada foi encontrada no texto.")
+        st.header("")
+        st.write(ner_html, unsafe_allow_html=True)
+        
+        # Adicionar a tabela de legenda
+        st.header("Legenda das Entidades")
+        
+        # Criar DataFrame com as legendas
+        entity_data = []
+        for entity, description in entity_descriptions.items():
+            entity_data.append({"Tag": entity, "Descrição": description})
+        
+        entity_df = pd.DataFrame(entity_data)
+        st.dataframe(entity_df, use_container_width=True, hide_index=True)
+        
+        # Adicionar informações extras sobre as entidades encontradas
+        if doc.ents:
+            st.subheader("Entidades Encontradas no Texto")
+            found_entities = []
+            for ent in doc.ents:
+                found_entities.append({
+                    "Texto": ent.text,
+                    "Tag": ent.label_,
+                    "Descrição": entity_descriptions.get(ent.label_, "Desconhecida"),
+                    "Posição": f"{ent.start_char}-{ent.end_char}"
+                })
+            
+            found_df = pd.DataFrame(found_entities)
+            st.dataframe(found_df, use_container_width=True, hide_index=True)
+        else:
+            st.info("Nenhuma entidade nomeada foi encontrada no texto.")
