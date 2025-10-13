@@ -11,23 +11,16 @@ Abordagens e desafios na colaboração em tempo real de modo geral, e na constru
 
 Diante da relevância e da atualidade desse tema, o presente trabalho se propõe a realizar uma revisão sistemática da literatura, com o objetivo de elucidar aspectos cruciais no desenvolvimento de editores colaborativos em tempo real (RCE). Esse esforço está alinhado a vários tópicos de interesse do WebMedia, inclusive “autoria e anotação” e “interação multiusuário.”
 Assim, apresentamos uma Revisão Rápida (RR) para identificar, de maneira objetiva, sistemática e reprodutível, os trabalhos relevantes sobre o tema. As Revisões Rápidas utilizam métodos abreviados em comparação com as revisões sistemáticas padrão para acelerar o processo de tomada de decisão [57], mas mantêm um caráter sistemático [50]. Seguindo as melhores práticas para RR [16], inicialmente foi definido um protocolo PRISMA2 para especificar os passos e os resultados esperados da pesquisa.
-Um dos motivos de classificarmos nosso trabalho como uma Revisão Rápida é o fato de utilizarmos a indexação realizada pela
-ACM Digital Library para acessar os registros de trabalhos da área de computação disponibilizados em outras bases de dados. O outro motivo é que aplicamos a string de busca para a seleção dos artigos nos títulos e nos resumos dos registros, e não no texto do artigo como um todo.
+Um dos motivos de classificarmos nosso trabalho como uma Revisão Rápida é o fato de utilizarmos a indexação realizada pela ACM Digital Library para acessar os registros de trabalhos da área de computação disponibilizados em outras bases de dados. O outro motivo é que aplicamos a string de busca para a seleção dos artigos nos títulos e nos resumos dos registros, e não no texto do artigo como um todo.
 
-O restante deste texto está organizado como segue. A Seção 2 apresenta uma compilação de conceitos importantes para o desenvolvimento de editores colaborativos em tempo real. A Seção 3 detalha o protocolo adotado na revisão bem como o processo de
-seleção dos estudos. A Seção 4 apresenta os resultados obtidos relativamente às questões de pesquisa e um resumo dos estudos
-analisados relativamente às questões. A Seção 5 identifica riscos à validade dos resultados da revisão. A Seção 6 discute desafios de pesquisa associados aos resultados obtidos. A Seção 7 sumariza o trabalho reportado neste estudo.
+O restante deste texto está organizado como segue. A Seção 2 apresenta uma compilação de conceitos importantes para o desenvolvimento de editores colaborativos em tempo real. A Seção 3 detalha o protocolo adotado na revisão bem como o processo de seleção dos estudos. A Seção 4 apresenta os resultados obtidos relativamente às questões de pesquisa e um resumo dos estudos analisados relativamente às questões. A Seção 5 identifica riscos à validade dos resultados da revisão. A Seção 6 discute desafios de pesquisa associados aos resultados obtidos. A Seção 7 sumariza o trabalho reportado neste estudo.
 
 EDITORES COLABORATIVOS EM TEMPO REAL (RCE)
 Editores colaborativos em tempo real, ou Real-Time Collaborative
 
-Editors (RCEs), são ferramentas de software que permitem a múltiplos usuários trabalharem simultaneamente em um mesmo documento, independentemente de suas localizações geográficas. Esses editores oferecem uma interface onde um grupo de usuários pode
-visualizar e editar o mesmo documento em tempo real, com todas as alterações sendo propagadas e exibidas instantaneamente para
-todos os participantes [5].
+Editors (RCEs), são ferramentas de software que permitem a múltiplos usuários trabalharem simultaneamente em um mesmo documento, independentemente de suas localizações geográficas. Esses editores oferecem uma interface onde um grupo de usuários pode visualizar e editar o mesmo documento em tempo real, com todas as alterações sendo propagadas e exibidas instantaneamente para todos os participantes [5].
 O processo de edição colaborativa é complexo e envolve múltiplas considerações [22, 36]. A principal delas é a manutenção da
-sincronização entre diversas cópias do documento editadas simultaneamente por usuários distintos. É essencial que os sistemas de RCE
-integrem camadas de controle de acesso para garantir responsividade e consistência, sem introduzir cargas excessivas. Além disso, deve-se assegurar que todos os usuários vejam a versão atualizada
-do documento compartilhado [7].
+sincronização entre diversas cópias do documento editadas simultaneamente por usuários distintos. É essencial que os sistemas de RCE integrem camadas de controle de acesso para garantir responsividade e consistência, sem introduzir cargas excessivas. Além disso, deve-se assegurar que todos os usuários vejam a versão atualizada do documento compartilhado [7].
 Os RCEs são amplamente utilizados em ambientes como desenvolvimento de software, educação e colaboração em documentos.
 Eles suportam a edição de uma variedade de tipos de conteúdo, 2https://www.prisma-statement.org/prisma-2020-statement
 incluindo texto, imagens [5], objetos JSON [27], documentos PDF
@@ -36,13 +29,10 @@ Para funcionar eficazmente, um RCE deve atender a vários requisitos comuns, de 
 • Alta responsividade local: O sistema deve ter uma performance comparável àquelas de editores de usuário único [14, 61, 63];
 • Alta concorrência: O sistema deve permitir que os usuários modifiquem simultaneamente qualquer parte do documento [14, 61];
 • Consistência: Todos os usuários devem eventualmente visualizar uma versão convergente do documento [14, 61];
-• Coordenação descentralizada: Atualizações concorrentes devem ser sincronizadas de forma descentralizada para evitar
-pontos únicos de falha [14, 61];
-• Escalabilidade do número de usuários: O sistema deve suportar um número dinâmico de usuários, permitindo que se juntem
-ou saiam do grupo a qualquer momento [23]. Os algoritmos de RCE que suportam esses requisitos são geralmente classificados em dois grupos [2]:
+• Coordenação descentralizada: Atualizações concorrentes devem ser sincronizadas de forma descentralizada para evitar pontos únicos de falha [14, 61];
+• Escalabilidade do número de usuários: O sistema deve suportar um número dinâmico de usuários, permitindo que se juntem ou saiam do grupo a qualquer momento [23]. Os algoritmos de RCE que suportam esses requisitos são geralmente classificados em dois grupos [2]:
 • Algoritmos centralizados: Esses algoritmos exigem um servidor central para coordenar as atualizações do documento, gerenciando a concorrência e a ordem das operações. Exemplos incluem SOCT4 [69], GOT [61], e Jupiter [40].
-• Algoritmos descentralizados: Esses algoritmos permitem que as atualizações sejam executadas em qualquer ordem, sem
-a necessidade de um servidor central. Exemplos incluem adOPTed [48] e SOCT2 [59].
+• Algoritmos descentralizados: Esses algoritmos permitem que as atualizações sejam executadas em qualquer ordem, sem a necessidade de um servidor central. Exemplos incluem adOPTed [48] e SOCT2 [59].
 Além de permitir a edição simultânea e visualização em tempo real das alterações, muitos RCEs oferecem recursos adicionais, e.g.:
 • Histórico de alterações: Registra a sequência de operações e os usuários envolvidos [17];
 • Comunicação em tempo real: Inclui recursos como chat para facilitar a comunicação durante a edição [17];
@@ -90,24 +80,16 @@ QP5. Quais trabalhos discutem técnicas de undo/redo? Investigamos quais artigos
 QP6. Quais trabalhos discutem a utilização dos comentários, chat ou histórico como ferramentas de apoio ao trabalho colaborativo?
 Analisamos artigos que discutem a integração de funcionalidades WRSL+’2024, Juiz de Fora/MG, Brasil Dantas et al.
 como comentários, chat e histórico nos editores colaborativos, avaliando como essas ferramentas contribuem para a eficácia do trabalho colaborativo.
-Essas questões de pesquisa nos orientaram a focar nos aspectos mais relevantes e recorrentes do desenvolvimento de editores
-colaborativos em tempo real, garantindo uma análise abrangente e detalhada das práticas, algoritmos e inovações documentadas
-na literatura. Através dessas perguntas, buscamos compreender as metodologias e tecnologias envolvidas no desenvolvimento de
-sistemas RTCE.
-Além disso, este estudo também se interessa em entender como se dá o processo de desfazer e refazer em sistemas colaborativos
-em tempo real, assim como em examinar como a literatura aborda os recursos de histórico, comentários e chat nesses sistemas, que
-muitas vezes são utilizados como suporte ao trabalho colaborativo.
+Essas questões de pesquisa nos orientaram a focar nos aspectos mais relevantes e recorrentes do desenvolvimento de editores colaborativos em tempo real, garantindo uma análise abrangente e detalhada das práticas, algoritmos e inovações documentadas na literatura. Através dessas perguntas, buscamos compreender as metodologias e tecnologias envolvidas no desenvolvimento de sistemas RTCE.
+Além disso, este estudo também se interessa em entender como se dá o processo de desfazer e refazer em sistemas colaborativos em tempo real, assim como em examinar como a literatura aborda os recursos de histórico, comentários e chat nesses sistemas, que muitas vezes são utilizados como suporte ao trabalho colaborativo.
 3.1.3 - Critérios de elegibilidade.
 Apresentamos os critérios de inclusão dos estudos com base nos fatores PICO utilizados na definição da questão de pesquisa.
 Population (P): Devem ser incluídos artigos que reportam modelos, algoritmos, técnicas ou formas de desenvolver editores colaborativos em tempo real, bem como aqueles que discutem formas originais ou customizadas para implementar recursos como histórico, desfazer/refazer, chat, comentários, etc.
-Intervention (I): Devem ser incluídos artigos que apresentam novos editores colaborativos em tempo real, novas formas de implementação desses editores, ou novos recursos que possam ser aplicados aos mesmos, além de formas inovadoras de implementar
-esses recursos.
-Comparison (C): Devem ser incluídos artigos que explicitam o desenvolvimento de editores colaborativos em tempo real, algoritmos e técnicas utilizados, implementação de novos recursos e novas formas de implementá-los. Preferencialmente, artigos que
-apresentam as avaliações realizadas e os dispositivos empregados.
+Intervention (I): Devem ser incluídos artigos que apresentam novos editores colaborativos em tempo real, novas formas de implementação desses editores, ou novos recursos que possam ser aplicados aos mesmos, além de formas inovadoras de implementar esses recursos.
+Comparison (C): Devem ser incluídos artigos que explicitam o desenvolvimento de editores colaborativos em tempo real, algoritmos e técnicas utilizados, implementação de novos recursos e novas formas de implementá-los. Preferencialmente, artigos que apresentam as avaliações realizadas e os dispositivos empregados.
 Outcome (O): Devem ser incluídos artigos que explicitam técnicas, algoritmos, arquiteturas ou modelos empregados no desenvolvimento de editores colaborativos em tempo real, dando preferência àqueles que apresentam testes e resultados obtidos.
 3.1.4 - String de busca.
-Considerando que as palavras necessárias ao estudo são comuns e utilizadas com frequência no texto acadêmico, restringimos a
-consulta ao resumo e ao título dos trabalhos. Portanto, a string de busca foi criada a identificar, no 2024. Como resultado, foram obtidos 370 registros, dos quais 5 (cinco) foram identificados como duplicados e removidos.
+Considerando que as palavras necessárias ao estudo são comuns e utilizadas com frequência no texto acadêmico, restringimos a consulta ao resumo e ao título dos trabalhos. Portanto, a string de busca foi criada a identificar, no 2024. Como resultado, foram obtidos 370 registros, dos quais 5 (cinco) foram identificados como duplicados e removidos.
 Uma verificação dos 365 registros obtidos depois da eliminação das duplicatas permitiu identificar as editoras responsáveis pela publicação dos trabalhos: ACM (162), IEEE (64), Springer-Verlag (41), Elsevier (12), Kluwer (7), Addison-Wesley (5), e os 74 trabalhos restantes foram publicados por outras editoras como Microsoft Press e Australian Computer Society.
 A Figura 2 mostra a distribuição do ano de publicação dos 365 artigos.
 Nota-se que o período de maior ocorrência foi entre 2010 e 2017 e que, nos últimos cinco anos, o número de registros está entre quatro e dez por ano.
@@ -115,8 +97,7 @@ Utilizamos a ferramenta Rayyan5 para apoiar a triagem de artigos e a extração 
 3.2.2 - Seleção. Considerando os critérios de elegibilidade enumerados na Seção 3.1.3, a triagem correspondente à leitura dos títulos e dos resumos foi realizada paralelamente por dois pesquisadores, que avaliaram todos os registros.
 A análise foi conduzida em modo cego, de forma que cada pesquisador realizou sua análise sem tomar conhecimento da decisão do outro. Ao final dessa etapa, o modo cego foi desativado. As divergências entre as classificações dos revisores foram arbitradas por uma terceira pessoa revisora. Do total de 365 trabalhos, foram selecionados 65 artigos completos.
 Embora todos os tipos de materiais tenham sido analisados, a fase de análise resultou na seleção exclusivamente de artigos completos.
-3.2.3 - Elegibilidade. Na etapa de elegibilidade, dois pesquisadores fizeram a leitura completa de cada artigo e os classificaram de acordo com os critérios de elegibilidade. A seguir, as divergências foram sanadas pela terceira pessoa
-revisora. Além disso, nesta etapa foi possível identificar a língua utilizada nos artigos, e foram considerados artigos em inglês ou português.
+3.2.3 - Elegibilidade. Na etapa de elegibilidade, dois pesquisadores fizeram a leitura completa de cada artigo e os classificaram de acordo com os critérios de elegibilidade. A seguir, as divergências foram sanadas pela terceira pessoa revisora. Além disso, nesta etapa foi possível identificar a língua utilizada nos artigos, e foram considerados artigos em inglês ou português.
 3.2.4 - Inclusão. Ao final foram identificados 23 artigos que atendiam aos critérios de elegibilidade. A Figura 3 apresenta a distribuição dos estudos ao longo do período entre 2002 e 2021, sendo que 2012 apresenta o maior número de publicações (4).
 Uma síntese da análise desses 23 artigos, relativamente às questões de pesquisa, é apresentada na Seção 4.1. O resumo de cada um dos artigos é apresentado na Seção 4.2.
 https://libraries.acm.org/digital-library/acm-guide-to-computing-literature
