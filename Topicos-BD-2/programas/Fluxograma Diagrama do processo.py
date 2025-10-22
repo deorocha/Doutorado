@@ -8,7 +8,7 @@ project_root = current_dir.parent  # Sobe um nível para a pasta raiz
 
 # Constrói caminhos absolutos para os arquivos na pasta raiz
 # css_path = project_root / "styles" / "styles.css"
-fluxograma_image_path = project_root / "images/fluxograma.png"
+fluxograma_image_path = project_root / "../images/fluxograma.png"
 """
 def load_css(css_path):
     try:
