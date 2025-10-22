@@ -9,4 +9,6 @@ MAS domestic_robot {
     agents: robot;
             owner;
             supermarket;
+    aslSourcePath: "src/asl"
 }
+
