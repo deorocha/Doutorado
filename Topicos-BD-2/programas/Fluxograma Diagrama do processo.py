@@ -2,23 +2,15 @@ import streamlit as st
 from pathlib import Path
 import sys
 
-# Adiciona o diretório raiz ao path do Python
-current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-project_root = current_dir.parent
+PROJECT_ROOT = Path(__file__).parent
+with st.sidebar:
+    st.write(PROJECT_ROOT)
+    
+CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
+IMAGES_PATH = PROJECT_ROOT / "images"
+PROGRAMS_PATH = PROJECT_ROOT / "programas"
 
-# Tenta importar a configuração
-try:
-    sys.path.append(str(project_root))
-    from config import PROJECT_ROOT, CSS_PATH, IMAGES_PATH
-except ImportError:
-    # Fallback se o config não existir
-    PROJECT_ROOT = project_root
-    CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
-    IMAGES_PATH = PROJECT_ROOT / "images"
-
-# Constrói caminhos absolutos para os arquivos
-css_path = PROJECT_ROOT / "styles" / "styles.css"
-fluxograma_image_path = PROJECT_ROOT / "images" / "fluxograma.png"
+fluxograma_image_path = IMAGES_PATH / "fluxograma.png"
 
 def load_css(css_path):
     try:
