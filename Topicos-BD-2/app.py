@@ -26,8 +26,8 @@ CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
 IMAGES_PATH = PROJECT_ROOT / "images"
 PROGRAMS_PATH = PROJECT_ROOT / "programas"
 
-webmedia_image_path = current_dir / "images" / "webmedia2024.png"
-background_image_path = current_dir / "images" / "background.png"
+webmedia_image_path = IMAGES_PATH / "webmedia2024.png"
+background_image_path = IMAGES_PATH / "background.png"
 
 # Função para carregar CSS globalmente - CORRIGIDA
 def load_global_css(css_path):
@@ -195,6 +195,7 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
 
 
 
