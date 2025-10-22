@@ -107,7 +107,7 @@ PAGE_MAPPING = {
 def run_external_page(page_file):
     try:
         # Caminho corrigido para funcionar no Streamlit Cloud
-        page_path = current_dir / "programas" / page_file
+        page_path = PROGRAMS_PATH # current_dir / "programas" / page_file
         
         if page_path.exists():
             # Lê o conteúdo do arquivo
@@ -194,6 +194,7 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
 
 
 
