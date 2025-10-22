@@ -1,0 +1,882 @@
+Jogos Digitais Sérios usados para o Exercício de Habilidades do
+Pensamento Computacional em Crianças
+com Transtorno do Espectro Autista
+Katherin Felipa Carhuaz Malpartida
+Instituto de Ciências Matemáticas e de Computação
+Universidade de São Paulo (USP)
+São Carlos, São Paulo, Brasil
+katherincm@usp.br
+Kamila Rios da Hora Rodrigues
+Instituto de Ciências Matemáticas e de Computação
+Universidade de São Paulo (USP)
+São Carlos, São Paulo, Brasil
+kamila.rios@icmc.usp.br
+WebMedia’2024, Juiz de Fora, Brazil
+Katherin Felipa Carhuaz Malpartida and Kamila Rios da Hora Rodrigues
+processo de design do JDS e a primeira avaliação desse e, por fim, a
+Seção 5 discorre sobre as considerações finais e os trabalhos futuros.
+REFERENCIAL TEÓRICO
+Esta seção descreve os principais conceitos que fundamentam este
+trabalho, entre eles: Pensamento Computacional; Deficiência Int-
+electual e Transtorno do Espectro Autista; End-User Development
+– EUD (ou Desenvolvimento pelo Usuário Final). A compreensão
+da inter-relação entre esses conceitos é essencial para o desenvolvi-
+mento de ferramentas educacionais inclusivas, permitindo que o PC
+seja exercitado por crianças com TEA ou DI, por meio de jogos cri-
+ados e personalizados pelos próprios profissionais (e.g. professores,
+pedagogos, etc.), utilizando plataformas de EUD.
+2.1
+Pensamento Computacional (PC)
+Jeannette Wing popularizou o termo PC em 2006, descrevendo-o
+como um processo que envolve desde a estruturação do raciocínio
+até o comportamento humano reflexivo para a resolução de proble-
+mas. O PC pode ser ainda observado em processos como a leitura,
+escrita e aprendizado da matemática, sendo parte da capacidade
+analítica desde a infância do indivíduo. Wing destaca que o PC pode
+ser aprendido por todos e não apenas por profissionais da área da
+Computação [38].
+2.1.1
+Pilares do Pensamento Computacional. Diversos autores, como
+Wing e Brackmann [4, 22, 38] e instituições, como Learning [3] e o
+Centro de Inovação para a Educação Brasileira (CIEB) 2, propõem
+que o PC pode ser ensinado a partir de quatro pilares fundamentais
+[29], os quais são:
+• Decomposição: envolve a divisão de problemas complexos
+em partes menores e gerenciáveis para facilitar sua solução.
+• Reconhecimento de Padrões: identifica semelhanças entre
+problemas e soluções para obter resultados mais eficiente.
+• Abstração: consiste na análise e categorização de dados para
+destacar informações relevantes e organizar estruturas que
+simplifiquem a solução de problemas.
+• Algoritmo: engloba os pilares anteriores, definindo um
+plano ou conjunto de instruções necessárias de forma clara
+e organizada para alcançar um objetivo específico.
+Vale destacar que a comunidade científica ainda não estabele-
+ceu uma definição formal para o PC, visto que é uma disciplina
+emergente e em desenvolvimento. Apesar disso, é amplamente re-
+conhecido como um campo em constante evolução e com um futuro
+promissor [16, 36].
+2.2
+Deficiência Intelectual (DI)
+A DI é caracterizada por limitações significativas no funcionamento
+cognitivo e na adaptação comportamental, abrangendo áreas como
+habilidades práticas, interpessoais e conceituais. Essa condição
+geralmente se manifesta nos primeiros estágios de desenvolvimento,
+antes dos 18 anos [1]. A DI implica uma limitação no desenvolvi-
+mento das funções essenciais para compreender e interagir com o
+ambiente, como é observado em condições como o TEA, a Síndrome
+de Down e outros [24].
+2https://cieb.net.br
+O Transtorno do Espectro Autista (TEA), é descrito como um
+distúrbio do neurodesenvolvimento complexo e geneticamente het-
+erogêneo, cujas características se dão por dificuldades na interação
+social, dificuldades no reconhecimento de expressões faciais e pelos
+padrões de comportamentos repetitivos e/ou estereotipados [2].
+Pessoas com TEA podem exibir uma variedade de sintomas que
+não são específicos ao transtorno, incluindo diferenças nas habili-
+dades cognitivas, na linguagem expressiva, nos padrões iniciais e
+nas comorbidades psicopatológicas. Essas variações podem ajudar
+na identificação de subtipos dentro do TEA [2]. Assim, há uma
+ampla gama de sintomas e comportamentos entre indivíduos com
+TEA, tanto específicos, quanto não específicos ao transtorno, o que
+demanda uma abordagem personalizada para cada caso.
+Nesse contexto, a proposta de incorporar o PC nas práticas
+pedagógicas assume um papel fundamental, requisitando, em primeiro
+lugar, um entendimento aprofundado das características individu-
+ais da pessoa com deficiência. Essa abordagem permite avaliar a
+pertinência da aplicação de cada pilar do PC, buscando ampliar as
+opções e os níveis de complexidade progressivamente. A prática
+pedagógica deve envolver a resolução de problemas cotidianos,
+caso contrário, não será possível o alcance de níveis elevados de
+desenvolvimento pela pessoa com deficiência [30].
+2.3
+End-User Development (EUD)
+O EUD, é uma abordagem que pode ser definida como um conjunto
+de métodos, técnicas e ferramentas que têm como objetivo permitir
+que usuários finais, que não possuem experiência em programação
+ou que não sejam especialistas em Computação, por exemplo, de-
+senvolvam e adaptem sistemas conforme suas necessidades, sejam
+elas profissionais, educacionais ou de lazer [17]. O EUD se refere
+geralmente à “participação ativa dos usuários finais no processo de
+desenvolvimento de software” [7].
+Podem ser identificados dois tipos de atividades do usuário final
+a partir de uma perspectiva de Design Centrado no Usuário (DCU):
+1) Customização ou Parametrização, são atividades em que os
+usuários escolhem entre comportamentos alternativos ou opções
+de interação já presentes na aplicação. Em sistemas adaptativos,
+essa personalização é realizada automaticamente pelo sistema com
+base no comportamento do usuário; 2) Criação e modificação
+de programa, inclui atividades que envolvem criar ou alterar um
+artefato de software existente [17].
+O jogo experimental descrito neste trabalho será incluído em uma
+plataforma de autoria de jogos, idealizada para que profissionais de
+domínio que não a Computação, tais como a Educação e a Saúde,
+possam criar e personalizar seus jogos digitais a partir de templates
+pré-definidos. É fundamental que esses profissionais (mesmo sem
+ter experiência técnica avançada) possam criar e personalizar os
+jogos de maneira fácil e intuitiva. Essa adaptação permitirá que
+os jogadores (população de interesse dos profissionais) recebam
+desafios adequados ao seu nível de conhecimento e habilidade.
+TRABALHOS RELACIONADOS
+A fim de contextualizar este trabalho no cenário atual, foi realizada
+uma pesquisa bibliográfica em bases de dados como ACM Digital
+Library, Engineering Village, IEEE Xplore, entre outras. Inicialmente,
+foram considerados três tópicos principais para a realização da
+Jogos Digitais Sérios usados para o Exercício de Habilidades do Pensamento Computacional em Crianças
+com Transtorno do Espectro Autista
+WebMedia’2024, Juiz de Fora, Brazil
+pesquisa: Pensamento Computacional, Jogos Digitais Sérios e TEA.
+No entanto, foram escassos os estudos que abordaram especifi-
+camente a intersecção dos três temas supracitados. Desta forma,
+optou-se por focar nos temas Pensamento Computacional e Jogos
+Digitais Sérios, a fim de identificar um maior número de estudos e,
+posteriormente, classificar aqueles voltados para o público infantil
+com TEA. Astring de busca utilizada foi (("computational thinking")
+AND ("digital games" OR "educational games" OR "serious games"
+OR "learning games" OR gamification OR "game based learning")).
+Como resultado, foram identificados estudos relevantes; no entanto,
+dois deles foram selecionados com base em critérios de qualidade.
+Esses estudos se destacam por abordar de forma abrangente todas
+as fases do desenvolvimento de jogos sérios para o aprimoramento
+do PC em criancas com TEA, desde o design e a implementação até
+a avaliação com o público-alvo. Esses estudos são descritos a seguir.
+3.1
+CodaRoutine
+O trabalho apresenta o processo de design e implementação de um
+jogo sério para crianças no espectro autista. O objetivo do jogo é de-
+senvolver habilidades de resolução de problemas e ensinar conceitos
+básicos de programação (e.g. sequência, condicional e interação)
+[13]. O jogo é constituído por três níveis de dificuldade e cada um
+tem três etapas. Ao longo do jogo, são apresentadas tarefas rela-
+cionadas às atividades cotidianas das crianças, tais como preparar
+a lancheira para a escola, preparar a mochila para o próximo dia
+de aula e decorar uma árvore de natal. Os cenários onde o jogador
+interage são a cozinha, o quarto e a sala de estar.
+Os resultados evidenciaram que a maioria das crianças teve con-
+trole do jogo, compreendendo as tarefas e considerando o jogo
+divertido e interessante. A partir dessas conclusões, os autores
+afirmaram que, com a exposição adequada, o jogo pode se tornar
+uma ferramenta efetiva no ensino de conceitos de programação e
+habilidades de resolução de problemas para crianças com TEA [13].
+No entanto, é fundamental identificar algumas limitações iner-
+entes à implementação do jogo. Primeiro, o jogo foi desenvolvido
+apenas em versão Web e não oferece suporte para plataformas
+móveis, o que pode restringir seu acesso e uso, considerando a
+crescente preferência por dispositivos móveis em contextos educa-
+cionais. Além disso, a falta de opções de personalização em relação à
+configuração dos cenários, fases e níveis pode limitar a capacidade
+de adaptação do jogo a diferentes contextos de aprendizado e a
+diversidade de públicos-alvo.
+3.2
+Pensar e Lavar
+Trata-se de um jogo digital educacional que visa desenvolver, de
+forma intrínseca, o PC em crianças neurotípicas e com deficiência
+intelectual. O jogo tem como foco o processo de lavagem de roupas
+e ao longo das três fases o jogador deve realizar tarefas como a
+separação das peças de roupas, em seguida o processo de lavagem
+e, por fim, guardar as peças já lavadas. Cada fase trata os pilares
+do PC e permite que o jogador desenvolva habilidades como o
+raciocínio lógico e crítico, resolução de problemas, abstração, entre
+outras [11]. O jogo também considera um conjunto de diretrizes de
+acessibilidade que incluem: interface de fácil entendimento, textos
+claros, linguagem simples, feedback, progressão gradual dos níveis,
+elementos motivadores entre outros [12].
+Uma das limitações identificadas no jogo é que esse requer insta-
+lação individual em cada computador em que se deseja utilizá-lo.
+Não há versões Web e móvel, limitando a flexibilidade de acesso,
+considerando especialmente a diversidade de dispositivos utilizados
+em ambientes educacionais. Embora o jogo permita a configuração
+das fases e níveis, esse não é flexível em relação à configuração
+dos cenários, podendo não atender plenamente às necessidades de
+personalização e adaptação para diferentes contextos de ensino e
+especificidades de cada jogador.
+As pesquisas descritas mostram resultados promissores indi-
+cando que crianças com deficiência intelectual podem desenvolver
+habilidades relacionadas ao PC por meio de jogos sérios. Sendo
+assim, este trabalho visa o design e a avaliação de um jogo digi-
+tal sério focado no exercício das habilidades do PC. Um aspecto
+diferenciador é a adoção da plataforma RUFUS, que possibilitará
+aos profissionais da Educação usar o jogo aqui projetado, ou ainda
+criarem seus próprios jogos de forma personalizada, conforme os
+objetivos de aprendizagem de cada criança, sendo assim um re-
+curso generalizável. A próxima seção detalha o processo de design
+e avaliação do jogo experimental projetado neste trabalho.
+PLATAFORMA DE AUTORIA PARA JOGOS
+DIGITAIS
+A plataforma de autoria RUFUS viabiliza a criação de jogos digitais
+sérios por parte de profissionais de áreas como a Saúde e Educação.
+Essa plataforma é composta por uma interface Web de autoria,
+voltada para o planejamento e criação dos jogos por parte dos
+profissionais, usando templates pré-definidos, aliada a um aplica-
+tivo móvel, destinado à interação direta dos jogadores, usuários
+alvo dos profissionais da Saúde e/ou Educação. Na interface Web, os
+profissionais podem: cadastrar pacientes/alunos e seus familiares,
+criar jogos e ajustar elementos como conteúdo visual ou feedback a
+ser fornecido durante o jogo. A plataforma oferece atualmente cinco
+mecânicas (também denominadas de templates) de jogo: perguntas e
+respostas (quiz), encaixe (puzzle), coleta de itens (plataforma), narra-
+tivas (storytelling) e narrativa invertida. Por meio da interface Web,
+os profissionais são orientados durante o processo da criação dos
+jogos e os jogadores acessam o jogo criado utilizando o aplicativo
+móvel da plataforma, mediante credenciais. Suas interações durante
+o jogo são registradas e transmitidas ao sistema Web, o qual gera
+relatórios sobre o desempenho do jogador. Tais relatórios podem ser
+analisados pelos profissionais, permitindo intervenções pontuais e
+otimização do tratamento ou prática pedagógica. [8, 9, 31]
+A plataforma de autoria será usada no contexto deste trabalho
+para materializar o jogo experimental aqui proposto. Portanto, uma
+nova mecânica deverá ser criada e avaliada com os usuários alvo
+aqui definidos (profissionais da Educação Especial de uma insti-
+tuição parceira e sua população de interesse). A seção a seguir
+descreve o processo de criação e avaliação do novo jogo.
+4.1
+Jogo para Pensamento Computacional
+Para guiar o processo de design e avaliação do protótipo de jogo ide-
+alizado nesta pesquisa, foi empregada a abordagem SemTh [10], que
+visa garantir a ativa contribuição de partes interessadas, sobretudo
+de especialistas de diferentes áreas que não apenas a Computação,
+no processo de criação da solução no contexto de jogos sérios. Além
+WebMedia’2024, Juiz de Fora, Brazil
+Katherin Felipa Carhuaz Malpartida and Kamila Rios da Hora Rodrigues
+disso, a SemTh busca viabilizar a comunicação entre as partes in-
+teressadas por meio da definição de etapas e atividades/artefatos a
+serem desenvolvidas. A abordagem propõe quatro etapas fundamen-
+tais: Clarificação do problema de design, Modelagem da Interação,
+Materialização do Design e Avaliação. Em cada etapa a abordagem
+disponibiliza um conjunto de atividades a serem conduzidas e é
+possível realizar ciclos de iteração entre as etapas.
+Este projeto empregou as etapas da SemTh, que respaldou o
+avanço em duas frentes do projeto: 1) no design de um jogo especí-
+fico para o contexto e público aqui tratados, 2) na identificação de
+elementos generalizáveis, a partir do jogo específico, para projetar
+uma mecânica de jogo que deverá ser implementada na plataforma
+de autoria de jogos do grupo de pesquisa do laboratório Intermídia
+ICMC/USP, permitindo que outros jogos possam ser criados na
+mesma mecânica, para contextos distintos e por outros profission-
+ais [19]. Essa última frente avança os projetos na área de End-User
+Development [25] do grupo de pesquisa.
+A seção a seguir descreve as atividades realizadas em cada etapa
+da SemTh instanciada neste projeto para a criação do jogo para o
+contexto supracitado.
+4.2
+Etapa 1 - Clarificação do problema de design
+Esta etapa se concentra na compreensão do cenário de aplicação do
+jogo e na formulação de uma abordagem adequada para a sua con-
+cepção. Inicialmente, foi realizado um estudo da literatura comple-
+mentado por achados de recursos disponíveis em outros repositórios,
+tais como plataformas e lojas de jogos digitais. Os trabalhos encon-
+trados evidenciaram plataformas e ferramentas como Scratch 3 ,
+Blocly Games 4 entre outras, através das quais foi promovido o
+desenvolvimento de competências ligadas ao PC [15, 20, 28, 37].
+O estudo buscou identificar jogos que promovem o desenvolvi-
+mento do PC e habilidades de aprendizagem em crianças neurotípi-
+cas e com DI. Os principais jogos identificados e considerados neste
+trabalho foram aqueles descritos na Seção 3. Posteriormente, foram
+selecionados elementos que passariam a compor a estrutura do jogo
+digital experimental aqui nomeado de “Nossa Rotina”. Diretrizes
+de acessibilidade também foram consideradas para a elaboração do
+protótipo [11, 26].
+O objetivo educacional do jogo proposto neste projeto está rela-
+cionado ao conceito do PC e à resolução de problemas, incluindo o
+desenvolvimento das competências e habilidades que englobam a
+Decomposição, Reconhecimento de Padrões, Abstração e Algorit-
+mos. Esses pilares foram considerados nas pesquisas de criação de
+jogos digitais encontrados na revisão da literatura e supracitados
+[11, 13]. Em relação às competências e habilidades que serão exerci-
+tadas por meio do jogo, está sendo considerada como referência
+o currículo apresentado pelo Centro de Inovação para a Educação
+Brasileira (CIEB)5 [29]. Para o desenvolvimento dessas habilidades,
+o jogo deverá apresentar atividades relacionadas à rotina diária do
+público-alvo.
+As atividades da vida diária foram selecionadas a partir de uma
+pesquisa exploratória em estudos e recursos disponíveis na Web.
+Foram encontradas lojas digitais com brinquedos educacionais
+3https://scratch.mit.edu/
+4https://blockly.games/
+5https://cieb.net.br/
+voltados ao treinamento da rotina com crianças. Os dois jogos
+selecionados foram: Quadro Educativo 6 Infantil e Jogo Magnético
+Minha Rotina 7. Esses jogos consideram que as atividades da rotina
+são metas (ex.: acordar, tomar banho, escovar os dentes) compostas
+de elementos ou peças (ex.: pente, sabonete, creme dental) que a
+criança deve organizar segundo o seu dia a dia. Os jogos são utiliza-
+dos por profissionais, como terapeutas e professores, para auxiliar
+na organização da rotina das crianças com a família e em espaços
+de educação e consultórios.
+Em relação aos requisitos de acessibilidade, incluindo aqueles
+específicos para pessoas com DI, foram considerados os trabalhos
+de Dutra [12] e Pagani [26].
+O trabalho de Dutra apresenta 16 diretrizes para DI e o de Pagani
+traz 10 categorias com diretrizes específicas para projetar interfaces
+com o foco em pessoas com TEA.
+Entre os requisitos elicitados para o jogo "Nossa Rotina", destaca-
+se aqueles relacionados à EUD e acessibilidade. A lista completa
+está disponível no trabalho de Malpartida e Rodrigues [19]:
+1. Fornecer diferentes graus de dificuldade. Os desafios devem
+avançar conforme o aumento das habilidades do jogador;
+2. Incorporar elementos engajadores como pontuação e vidas;
+3. Permitir a personalização do jogo (ex.: escolha de person-
+agens, fases e níveis de dificuldade);
+4. Ter uma interface simples, facilitando a compreensão e min-
+imizando a inclusão de muitos elementos na tela;
+5. Apresentar uma interface padronizada (ex.: cores, ícones,
+símbolos, etc.);
+6. Empregar botões de controle como: Ajuda, Pausa, Voltar e
+Cancelar – Evitar direcionamentos automáticos.
+Os requisitos identificados na literatura, e a partir de outros jogos,
+deverão ser validados por profissionais da Educação da instituição
+parceira deste projeto, por meio de oficinas participativas e sessões
+de brainstorming.
+É importante destacar que este projeto tem aprovação de comitê
+de ética em pesquisa, com número de protocolo 76853723.3. 0000.5504.
+Todas as etapas em que estava prevista a participação de pessoas,
+foram aprovadas por tal comitê.
+4.3
+Etapa 2 - Modelagem da Interação
+Nesta etapa, a abordagem SemTh sugere o uso de uma Linguagem
+de Modelagem de Domínio Específico para Aplicações Terapêuticas
+[14]. Essa linguagem emprega representações gráficas para objetos
+multimídia (ex.: imagem de fundo, efeito sonoro, texto); selos (ex.: F
+para opções de flexibilidade, P para pontuação, OT para definir os
+objetivos terapêuticos, entre outros) e agrupamentos (ex.: cenários e
+sub-cenários). O uso desses elementos facilita a comunicação entre
+profissionais multidisciplinares. Esses elementos podem usados
+durante uma atividade de brainstorming ou práticas de Design
+Participativo [34].
+Para a primeira versão do jogo experimental foram consideradas
+atividades da vida diária das crianças, tais como escovar os dentes
+e tomar banho. Os itens de cada atividade são os componentes
+necessários para desenvolver tais atividades, sendo eles: escova
+de dente, creme dental, sabão, etc. Em cada fase do jogo, serão
+6https://brinquedosbabebi.com.br
+7https://nigbrinquedos.com.br
+Jogos Digitais Sérios usados para o Exercício de Habilidades do Pensamento Computacional em Crianças
+com Transtorno do Espectro Autista
+WebMedia’2024, Juiz de Fora, Brazil
+desenvolvidos os pilares do PC (abstração, decomposição, recon-
+hecimento de padrões e algoritmo); um pilar primário por cada
+fase, sendo os outros complementares para a resolução das tarefas
+estabelecidas.
+Uma primeira modelagem das telas do jogo proposto foi real-
+izada [19]. A Figura 1 ilustra a modelagem da primeira fase para
+o desenvolvimento do PC, relacionado ao pilar primário - Recon-
+hecimento de padrões. Nessa tela, o jogador deve identificar os
+itens e colocá-los no lugar correto (ação D). O selo de flexibilidade
+(selo F) corresponde à escolha que jogador fará, as possibilidades
+foram configuradas pelo profissional mediando a interação com o
+jogo, e considerando a quantidade de itens que serão visualizados
+pelo jogador (podendo ser 2, 4 ou 6 itens). A quantidade de itens
+está vinculado ao objetivo terapêutico (selo OT!), pois indicará a
+habilidade do jogador para identificar tais itens. É possível notar
+ainda que esta tela do jogo prevê uma imagem de fundo. Ao final
+de cada fase é apresentada uma mensagem de feedback positivo
+(visual e auditivo), previamente configurada pelo profissional. Sobre
+o feedback negativo (visual e auditivo), o jogador terá cinco tentati-
+vas para resolver o jogo, caso não consiga, uma mensagem poderá
+ser exibida sugerindo jogar novamente (caso o profissional julgue
+pertinente ao objetivo do jogo). As ações devem ser salvas para
+geração de relatórios (selo R). A pontuação do jogador é coletada,
+tanto para itens colocados em locais corretos, como não (selo P) e
+estão associados a uma ação do jogador (A).
+Figura 1: Modelagem da tela do jogo - Fase 1. Fonte: Malpar-
+tida and da Hora Rodrigues [19]
+Todas as ações do jogador serão armazenadas para gerar re-
+latórios (selo R), e estarão disponíveis a posteriori para o profissional
+mediador, a fim de que os mesmos analisem o tempo, a pontuação,
+os erros e as escolhas das crianças durante o jogo.
+De modo similar, as fase dois e três foram modeladas. Tais mod-
+elagens são ilustradas no trabalho de Malpartida e Rodrigues [19].
+Na fase dois, o pilar trabalhado é a Decomposição e o jogador deve
+identificar e selecionar os itens que correspondem a cada atividade
+exibida. Na fase três é trabalhado o pilar Algoritmo e o jogador deve
+identificar a ordem dos itens para cada atividade, estabelecendo
+uma sequência organizada. O pilar de Abstração é desenvolvido
+implicitamente durante todas as fases do jogo.
+4.4
+Etapa 3 - Materialização do Design
+Seguindo as etapas da SemTh, e considerando os resultados das
+etapas anteriores, uma primeira materialização do jogo foi realizada.
+Trata-se de um protótipo de média fidelidade feito na ferramenta
+Figma. Nesta etapa é recomendada ainda a criação do Game Design
+Document (GDD), em que se descreve as características do jogo,
+baseadas nos resultados do levantamento dos requisitos.
+As subseções a seguir descrevem os aspectos fundamentais do
+jogo, bem como suas fases e como o mesmo deverá ser implemen-
+tado na plataforma de autoria de jogos do grupo de pesquisa em
+sua versão final, a ser disponibilizada aos jogadores e profissionais
+envolvidos.
+4.4.1
+Aspectos fundamentais do jogo. O jogo digital sério deste
+projeto visa auxiliar no desenvolvimento de habilidades de com-
+preensão de conceitos, generalização e abstração em crianças no
+espectro autista, por meio do emprego dos pilares do PC. Os itens
+e atividades do jogo correspondentes à rotina diária das crianças,
+deverão ser configurados na plataforma Web de autoria do grupo
+de pesquisa. Seguindo as diretrizes de acessibilidade e requisitos
+coletados, o jogo foi desenhado para ter uma interface simples e
+padronizada, incluindo botões de controle, como ajuda e pausa.
+O jogo é composto por 3 fases, com 3 níveis de dificuldade, os
+quais incorporam elementos engajadores como a pontuação, um
+número determinado de vidas e feedback imediato. O jogador tem a
+possibilidade de escolher seu personagem, as fases e os níveis que
+deseja jogar (opções previamente configuradas pelo profissional
+mediador). As configurações mencionadas serão realizadas pelo
+profissional mediador, por meio da interface Web, viabilizando
+a personalização para atender necessidades específicas de cada
+jogador [19].
+4.4.2
+Fases do jogo. Cada uma das três fases do jogo representa
+itens e atividades que são parte da rotina diária das crianças. Na
+Fase 1 (Reconhecimento de padrões), o jogador deve relacionar os
+itens de higiene pessoal com suas sombras correspondentes. A Fase
+2 (Decomposição) mostra itens de higiene pessoal e atividades da
+rotina, e o jogador deve analisar quais são os itens correspondem à
+atividade exibida. Na Fase 3 (Algoritmo), o jogador deve observar a
+atividade apresentada, escolher os itens que correspondem a essa
+atividade e colocá-los por ordem lógica de aplicação. A Figura 2
+ilustra a tela da Fase 1 do jogo, materializada em um primeiro
+protótipo de média fidelidade, seguindo a modelagem criada na
+segunda etapa da SemTh (ver Figura 1). As telas de materialização
+das fases 2 e 3 são ilustradas no trabalho de Malpartida e Rodrigues
+[19].
+4.5
+Etapa 4 - Avaliação
+Essa etapa da SemTh visa identificar e corrigir eventuais problemas
+ou erros antes da implementação do jogo, assim, a equipe pode
+retroceder às etapas anteriores com o intuito de promover correções
+ou inclusões de novos requisitos, até a conclusão do fluxo delineado
+pela abordagem [10].
+A SemTh sugere o uso de um conjunto de instrumentos que
+podem ser usados para avaliar os jogos. Para este trabalho, foi
+utilizado o método Cognitive Walkthrough (CW) [27], um método
+de inspeção que avalia a usabilidade analisando o percurso que
+WebMedia’2024, Juiz de Fora, Brazil
+Katherin Felipa Carhuaz Malpartida and Kamila Rios da Hora Rodrigues
+Figura 2: Tela prototipada da Fase 1 - Reconhecimento de
+Padrão. Fonte: Malpartida and da Hora Rodrigues [19]
+um usuário supostamente faria para alcançar seu objetivo quando
+interagindo com a interface de um sistema interativo. Foi utilizada
+uma variante do CW, chamada de Cognitive Barriers Walkthrough
+(CBW), voltada a verificar a facilidade de aprendizado de jogos
+digitais [32].
+Além disso, entrevistas semiestruturadas e dois questionários
+(de usabilidade e de resposta emocional) foram utilizados na etapa
+de avaliação. Os questionários são: 1) SUS - System Usability Scale
+– um instrumento que mede a percepção dos usuários em relação
+à facilidade e eficácia da interação com um sistema específico [6];
+2) SAM - Self-Assessment Manikin – um instrumento de resposta
+emocional que utiliza imagens pictográficas e avalia três dimensões:
+Satisfação, Motivação e Sentimento de controle [5] do usuário.
+A avaliação do Protótipo do Jogo na Interface Móvel foi realizada
+na instituição parceira ACORDE 8. Essa instituição oferece assistên-
+cia especializada a crianças e adolescentes no espectro autista. É
+importante novamente destacar que o projeto foi aprovado pelo
+comitê de ética em pesquisa, com a inclusão e ciência de tal institu-
+ição, garantindo a conformidade com os padrões éticos e legais de
+uma pesquisa responsável.
+A seguir, são descritas as atividades realizadas durante a avali-
+ação do protótipo, conforme sugere o CBW [32].
+1. Preparação. Foram definidas tarefas e ações necessárias
+para a avaliação com profissionais da instituição, bem como
+todos os documentos e termos necessários para a condução.
+A tarefa atribuída aos participantes foi jogar o jogo prototi-
+pado no Figma nos níveis fácil, médio e avançado; verificar
+a pontuação alcançada e as vidas obtidas. Buscou-se definir
+tarefas que permitissem aos profissionais explorar as princi-
+pais ações disponíveis ao jogador no jogo — versão mobile
+(exemplo na Figura 2);
+2. Participantes. Participaram da avaliação duas professoras
+(aqui chamadas de P) da instituição. As professoras foram
+convidadas pela coordenadora pedagógica da instituição.
+Eram duas mulheres, especialistas em Pedagogia, com exper-
+iência mínima de cinco anos em atividades pedagógicas com
+crianças no espectro autista. Uma tem experiencia no uso de
+tecnologias para esse público-alvo e nenhuma das duas tem
+experiência no uso de jogos digitais para fins educacionais;
+3. Condução e Coleta de Feedback. Foi coordenada uma re-
+união presencial com as participantes na instituição. Du-
+rante a reunião, foram descritos o contexto da pesquisa,
+8https://institutoacorde.org.br/
+seus objetivos e como seria realizada a avaliação. As par-
+ticipantes leram e assinaram formulários de consentimento,
+questionários de perfil e autorização de uso de imagens e
+dados. Em seguida, foram convidadas a interagir com o jogo
+por meio da ferramenta Figma. A avaliação ocorreu individ-
+ualmente com cada participante. Durante a interação, elas
+foram incentivadas a compartilhar suas impressões, e respon-
+deram às questões do método CBW (ver Tabela 1) durante a
+execução da tarefa pré-definida. A ferramenta Google Meet
+foi utilizada para observar e registrar a interação de cada par-
+ticipante com o protótipo. Após a interação com o protótipo,
+as participantes responderam aos questionários SAM e SUS
+e, por fim, foi realizada uma entrevista semiestruturada. As
+avaliações duraram aproximadamente 40 minutos. A Figura 3
+ilustra as participantes interagindo com o protótipo do jogo;
+Tabela 1: Questões do CBW [32].
+Inicial-Q: O usuário conseguiria expressar a tarefa
+a ser realizada?
+Perguntas: (repita para cada ação.)
+Q1: O usuário tentaria atingir o efeito correto?
+Q2: O usuário se manteria focado na tarefa?
+Q3: O usuário perceberia que a ação correta está
+disponível?
+Q4: O usuário conseguiria associar a ação correta
+com o efeito que está tentando atingir?
+Q5: Caso a ação correta seja realizada, o usuário
+perceberia que está progredindo para concluir a
+tarefa?
+Final-Q: O usuário perceberia incentivo para
+continuar a tarefa?
+Figura 3: Participantes avaliando o protótipo do jogo.
+4. Consolidação dos resultados. Durante a avaliação foram
+encontrados alguns problemas no protótipo, tais como: 1) A
+ação de pontuar o jogador era muito sutil (apontou P1); 2) O
+feedback deveria ter som (apontaram P1 e P2) para melhor
+percepção e inclusão do jogador; 3) As instruções da tarefa
+do jogo deveriam ter áudio (apontaram P1 e P2) para fins de
+inclusão. As participantes também indicaram: “Não é evidente
+a ordem dos elementos na tela” (por P1), “A disposição dos
+elementos para colocar uma sequência precisa ficar mais clara”
+(por P1) ou “Os elementos como o sabonete devem estar o mais
+próximo possível do que as crianças usam” (por P2) [uma
+referência à questão estética do sabonete]. Para esses tipos
+de questões apontadas, foi explicado às participantes que na
+versão configurável do jogo na plataforma Web de autoria,
+Jogos Digitais Sérios usados para o Exercício de Habilidades do Pensamento Computacional em Crianças
+com Transtorno do Espectro Autista
+WebMedia’2024, Juiz de Fora, Brazil
+Tabela 2: Resultados do questionário SUS.
+Participante
+Pontuação
+Resultado
+P1
+Excelente
+P2
+72.5
+Bom
+elas poderão personalizar todos esses aspectos, uma vez que
+em tal plataforma o profissional quem faz upload de imagens,
+textos, áudios e mensagens de feedback ao usuário.
+Os resultados do questionário SUS, disponíveis na Tabela 2,
+apontaram que as duas participantes avaliaram a usabili-
+dade como Aceitável, definindo uma pontuação acima da
+média sugerida pelo questionário SUS de 68 pontos. Para o
+questionário SAM (ver Tabela 3), os domínios de Satisfação,
+Motivação e Sentimento de Controle, tiveram resultados pos-
+itivos em ambas as participantes.
+Tabela 3: Resultados do questionário SAM.
+Domínio
+P1
+P2
+Satisfação
+Motivação
+Sentimento de Controle
+Durante as entrevistas semiestruturadas, as participantes
+expressaram opiniões positivas, mas também sugeriram al-
+gumas correções para os problemas encontrados, como: 1)
+Adicionar som de palmas ou parabéns quando o jogador
+ganha um ponto, para deixar mais claro (por P1); 2) Ao final
+de cada nível, mostrar os pontos ganhos (por P1); 3) Caso o
+jogador tenha problemas de frustração, as vidas podem ser
+substituídas por outros elementos motivacionais. Por exem-
+plo, ao completar um nível, o jogador poderá receber 4 pontos
+e três estrelas como reforço positivo (por P2); 4) Adicionar
+áudio às instruções ajudaria jogadores não alfabetizados ou
+disléxicos (por P1 e P2);
+5. Relatório dos resultados. Durante a avaliação do pro-
+tótipo foram identificados alguns problemas significativos,
+descritos acima, que podem impactar a experiência do usuário.
+Abaixo, estão listados de forma sintetizada, os principais
+problemas encontrados, bem como as sugestões de melho-
+rias e correções propostas pelos participantes:
+– Pontuação sutil: As participantes observaram que a pontu-
+ação do jogador é muito sutil, dificultando a compreensão
+do progresso durante o jogo. A sugestão de melhoria é au-
+mentar a visibilidade da pontuação por meio de elementos
+visuais e auditivos mais claros e destacados;
+– Feedback sem som: As participantes indicaram que o feed-
+back no jogo não possui som (na versão prototipada), o
+que pode afetar a percepção do jogador em relação aos
+acertos e erros durante as atividades. A sugestão de mel-
+horia na versão implementada é incluir sons de feedback,
+como palmas ou parabéns, para indicar o desempenho do
+jogador de forma mais clara e motivadora;
+– Instruções sem áudio: As instruções no jogo não tinham
+áudio no protótipo, o que pode dificultar a compreensão
+e a participação de jogadores não alfabetizados ou com
+dislexia, segundo as participantes. Para melhorar esse as-
+pecto, na versão implementada, pode ser adicionado áudio
+às instruções para auxiliar na compreensão e na partici-
+pação de jogadores com diferentes habilidades de leitura;
+– Motivação e reforço positivo: Diante da possibilidade de
+um jogador se sentir frustrado devido à limitação de vidas
+no jogo, podem ser implementados elementos adicionais
+de motivação e reforço positivo, como a inclusão de es-
+trelas ou outro elemento motivador ao finalizar um nível.
+Isso pode ajudar a reforçar comportamentos desejáveis e
+manter o interesse dos jogadores.
+É importante destacar que as professoras validaram os requisi-
+tos do jogo relacionados, por exemplo, a apresentar atividades de
+vida diária de forma lúdica e por meio dos pilares do pensamento
+computacional, fornecer diferentes graus de dificuldade, incorporar
+elementos engajadores como pontuação e vidas, e permitir a per-
+sonalização do jogo (ex.: escolha de personagens, fases e níveis de
+dificuldade).
+Destaca-se ainda, que as mesmas participantes também avaliaram
+os protótipos da interface Web de criação dos jogos na plataforma
+Web de autoria. Os resultados das avaliações das profissionais estão
+sendo analisadas junto à equipe de desenvolvimento da plataforma.
+Essa análise levou a ajustes na proposta, na modelagem e na mate-
+rialização do jogo.
+Uma versão preliminar do jogo já está implementada para as
+fases 1 e 2. A Figura 4 ilustra o jogo atualmente para essas fases.
+O jogo também avalia a experiência do jogador de forma lúdica e
+simples, conforme ilustrado na Figura 5.
+A estética dos elementos de interface é escolhida pelo profis-
+sional criando tal jogo na interface Web. Atualmente a plataforma
+dispõe de 8 famílias de assets [21]. A família usada nas imagens
+das Figuras 4 e 5 é denominada de "céu" e traz elementos lúdicos
+sobre unicórnios. A Figura 6 ilustra mais detalhes dessa família,
+bem como a paleta de cores adotada nela.
+Após a conclusão da implementação do jogo, serão conduzidas
+novas avaliações com os profissionais da instituição parceira, bem
+como estudos de caso longitudinais com crianças e adolescentes
+de tal instituição, a fim de verificar a efetividade do jogo para o
+objetivo pedagógico ao qual foi criado.
+Destaca-se que o protótipo da interface Web da plataforma de
+autoria, local em que os profissionais irão criar o jogo do pensa-
+mento computacional – com as imagens de seu interesse e para os
+jogadores de seu interesse, também foi modelada, materializada e
+avaliada pelos profissionais da instituição parceira. Tal interface
+também está em fase de implementação, mas, este conteúdo não é o
+foco deste artigo. Entretanto, para fins de entendimento, a Figura 7
+ilustra o protótipo de duas das telas de criação do jogo na interface
+Web da plataforma.
+CONSIDERAÇÕES FINAIS
+Este artigo descreveu parte das atividades de um projeto mais amplo,
+que visa disponibilizar um jogo digital sério de apoio a profissionais
+da Educação no exercício de habilidades relacionadas aos pilares do
+PC em crianças no espectro autista. Estão sendo adotadas práticas
+do Design Participativo [34], de modo que partes interessadas no
+projeto possam participar do processo de construção da solução.
+WebMedia’2024, Juiz de Fora, Brazil
+Katherin Felipa Carhuaz Malpartida and Kamila Rios da Hora Rodrigues
+[a]
+[b]
+Figura 4: Versão preliminar do jogo funcional - Fase 1[a],
+Fase 2[b].
+Figura 5: Versão preliminar da avaliação da experiência do
+jogo.
+Figura 6: Elementos da família de elementos gráficos usados
+no jogo ilustrado nas Figuras 4 e 5.
+A literatura apresenta outros jogos similares, no entanto, o difer-
+encial desta proposta é permitir que o profissional personalize o
+Figura 7: Exemplos da tela de configuração de Níveis do
+jogo na interface Web de autoria. Fonte: Malpartida and
+da Hora Rodrigues [19]
+jogo para adequar às necessidades específicas de cada jogador. Além
+disso, os dados de interação com o jogo são enviados aos profission-
+ais para que os mesmos possam analisar e conduzir intervenções
+que julgarem necessárias, por exemplo.
+Quanto às limitações e desafios da pesquisa, é possível consid-
+erar que residem principalmente no público-alvo dos profissionais
+e também desta pesquisa, cuja participação requer atenção especial
+em termos de suporte, comunicação e adaptação às necessidades
+individuais. Além disso, a participação das crianças deve ser con-
+sentida pelas mesmas e há um desafio em conquistar a confiança
+desse público, bem como em mantê-lo engajado. Além disso, a etapa
+de avaliação se concentrará especificamente na interação das cri-
+anças com o jogo e no exercício de habilidades do PC, sem avaliar
+diretamente o desenvolvimento dessas habilidades ao longo do
+tempo. Essas limitações, embora desafiadoras, representam uma
+oportunidade de pesquisa mais profunda, com uma abordagem
+interdisciplinar e centrada no usuário.
+Como trabalho em andamento, o grupo está aperfeiçoando a im-
+plementação do jogo prototipado que já traz mudanças agregadas a
+partir da avaliação das interfaces, uma delas é a possibilidade de
+inserir feedback sonoro nas instruções do jogo. Uma vez concluída
+a implementação, serão realizados estudos de caso longitudinais
+(médio prazo) com crianças no espectro do autismo da mesma insti-
+tuição, para avaliar o exercício de habilidades de PC, especialmente
+no contexto das atividades de vida diária.
+AGRADECIMENTOS
+Este trabalho foi financiado pela Coordenação de Aperfeiçoamento
+de Pessoal de Nível Superior – Brasil (CAPES) – Código de Finan-
+ciamento 001. Os autores agradecem aos profissionais e alunos dos
+grupos de pesquisa e equipe de desenvolvimento do projeto RUFUS
+durante o processo de design deste estudo, bem como pelos comen-
+tários e sugestões de melhoria. Da mesma forma, agradecem aos
+professores da instituição parceira que avaliaram o protótipo do
+jogo para dispositivos móveis. Agradecem também à Comissão de
+Cultura e Extensão (CCEx) do Instituto de Ciências Matemáticas e
+de Computação (ICMC) da USP, pelo apoio financeiro por meio de
+editais de projetos de extensão.
+Jogos Digitais Sérios usados para o Exercício de Habilidades do Pensamento Computacional em Crianças
+com Transtorno do Espectro Autista
+WebMedia’2024, Juiz de Fora, Brazil
+REFERÊNCIAS
+[1] AAIDD. 2021. Defining Criteria for Intellectual Disability. Available at: https:
+//www.aaidd.org/intellectual-disability/definition.
+[2] American Psychiatric Association. [n. d.]. Manual diagnóstico e estatístico de
+transtornos mentais: DSM-5 - 5ª Edição. ([n. d.]).
+[3] Learning BBC. 2015. What is Computational Thinking?
+Available at: https:
+//www.bbc.co.uk/bitesize/guides/zp92mp3/revision/1.
+[4] Christian Puhlmann Brackmann. 2017. Desenvolvimento do Pensamento Computa-
+cional Através de Atividades Desplugadas na Educação Básica. Ph. D. Dissertation.
+Universidade Federal do Rio Grande do Sul.
+[5] Margaret M Bradley and Peter J Lang. 1994.
+Measuring emotion: the self-
+assessment manikin and the semantic differential. Journal of behavior therapy
+and experimental psychiatry 25, 1 (1994), 49–59.
+[6] John Brooke. 2013. SUS: a retrospective. Journal of usability studies 8, 2 (2013),
+29–40.
+[7] M.F. Costabile, D. Fogli, P. Mussio, and A. Piccinno. 2005. A meta-design ap-
+proach to end-user development. In 2005 IEEE Symposium on Visual Languages
+and Human-Centric Computing (VL/HCC’05). 308–310. https://doi.org/10.1109/
+VLHCC.2005.7
+[8] Kamila Rios da Hora Rodrigues, Ticianne de Gois Ribeiro Darin, and Vânia Paula
+de Almeida Neris. 2022. Building your own games: A platform for authoring
+digital games. In 2022 21st Brazilian Symposium on Computer Games and Digital
+Entertainment (SBGames). IEEE, 1–6. https://doi.org/10.1109/SBGAMES56371.
+2022.9961073
+[9] Kamila Rios da Hora Rodrigues, Aline Elias Cardoso Verhalen, Jonattan
+Willian da Silva, Tiago Marino Silva, Rodrigo Geurgas Zavarizz, Vânia Paula de
+Almeida Neris, and Paula Maia de Souza. 2023. Design and Evaluation of an
+Authoring Platform for Therapeutic Digital Games. Interacting with Computers
+35, 2 (2023), 118–141. https://doi.org/10.1093/iwc/iwac045
+[10] Paula Maia de Souza, Kamila Rios da Hora Rodrigues, and Vânia Paula de
+Almeida Neris. 2019. SemTh: An Approach to the Design of Therapeutic Dig-
+ital Games. In Proceedings of the 18th Brazilian Symposium on Human Fac-
+tors in Computing Systems (Vitória, Espírito Santo, Brazil) (IHC ’19). Associ-
+ation for Computing Machinery, New York, NY, USA, Article 45, 11 pages.
+https://doi.org/10.1145/3357155.3358440
+[11] Taynara Dutra, André Ferreira, Isabela Gasparini, and Eleandro Maschio. 2022.
+Jogo digital educacional para desenvolvimento do Pensamento Computacional
+para crianças com Deficiência Intelectual. In Anais do II Simpósio Brasileiro de
+Educação em Computação (Online). SBC, Porto Alegre, RS, Brasil, 251–260. https:
+//doi.org/10.5753/educomp.2022.19220
+[12] Taynara Cerigueli Dutra, Daniel Felipe, Isabela Gasparini, and Eleandro Maschio.
+2021. A Systematic Mapping of Guidelines for the Development of Accessible
+Digital Games to People with Disabilities. In Universal Access in Human-Computer
+Interaction. Design Methods and User Experience, Margherita Antona and Con-
+stantine Stephanidis (Eds.). Springer International Publishing, Cham, 53–70.
+https://doi.org/10.1007/978-3-030-78092-0_4
+[13] Menna Elshahawy, Mariam Bakhaty, and Nada Sharaf. 2020. Developing Com-
+putational Thinking for Children with Autism using a Serious Game. In 2020
+24th International Conference Information Visualisation (IV). 761–766.
+https:
+//doi.org/10.1109/IV51561.2020.00135
+[14] Franco Eusébio Garcia, Kamila Rios da Hora Rodrigues, and Vânia Paula de
+Almeida Neris. 2016. An Interaction Modeling Language for Therapeutic Applica-
+tions. In Proceedings of the 15th Brazilian Symposium on Human Factors in Comput-
+ing Systems (São Paulo, Brazil) (IHC ’16). Association for Computing Machinery,
+New York, NY, USA, Article 32, 10 pages. https://doi.org/10.1145/3033701.3033733
+[15] Maya Israel, Quentin M. Wherfel, Jamie Pearson, Saadeddine Shehab, and
+Tanya Tapia. 2015.
+Empowering K–12 Students With Disabilities to Learn
+Computational Thinking and Computer Programming.
+TEACHING Excep-
+tional Children 48, 1 (2015), 45–53. https://doi.org/10.1177/0040059915594790
+arXiv:https://doi.org/10.1177/0040059915594790
+[16] Filiz Kalelioglu, Yasemin Gulbahar, and Volkan Kukul. 2016.
+A Frame-
+work for Computational Thinking Based on a Systematic Research Re-
+view.
+Baltic Journal of Modern Computing 4 (05 2016), 583–596.
+Avail-
+able at: https://www.bjmc.lu.lv/fileadmin/user_upload/lu_portal/projekti/bjmc/
+Contents/4_3_15_Kalelioglu.pdf.
+[17] Henry Lieberman, Fabio Paternò, Markus Klann, and Volker Wulf. 2006. End-User
+Development: An Emerging Paradigm. Vol. 9. 1–8. https://doi.org/10.1007/1-4020-
+5386-X_1
+[18] Fernanda Malaquias, Edgard Lamounier Jr, Alexandre Cardoso, Cleusa Santos,
+and Márcia Pacheco. 2012. VirtualMat: um ambiente virtual de apoio ao ensino de
+matemática para alunos com Deficiência Mental. Revista Brasileira de Informática
+na Educação 20 (08 2012). https://doi.org/10.5753/RBIE.2012.20.2.17
+[19] Katherin Felipa Carhuaz Malpartida and Kamila Rios da Hora Rodrigues. 2023.
+Design de Jogos Digitais Sérios usados para o Exercício de Habilidades do Pen-
+samento Computacional em Crianças com Transtorno do Espectro Autista. In
+Anais do II Workshop sobre Interação e Pesquisa de Usuários no Desenvolvimento de
+Jogos. SBC, 28–42. Available at: https://sol.sbc.org.br/index.php/wiplay/article/
+view/26853/26671.
+[20] Roberto Munoz, Thiago Schumacher Barcelos, and Rodolfo Villarroel. 2018.
+CT4All: Enhancing Computational Thinking Skills in Adolescents with Autism
+Spectrum Disorders. IEEE Latin America Transactions 16, 3 (2018), 909–917.
+https://doi.org/10.1109/TLA.2018.8358673
+[21] Mariana Muri, Kamila Rodrigues, and Ticianne Darin. 2024. Beauty is in the eye
+of the beholder - An Experience Report on Evaluating Aesthetics of a Design
+System for HUDs in EUD Serious Games. In Proceedings of the XXII Brazilian
+Symposium on Human Factors in Computing Systems (Maceió, Brazil) (IHC ’23).
+Association for Computing Machinery, New York, NY, USA, Article 2, 11 pages.
+https://doi.org/10.1145/3638067.3638093
+[22] Ayodele Abosede Ogegbo and Umesh Ramnarain. 2022.
+A systematic re-
+view of computational thinking in science classrooms. Studies in Science Ed-
+ucation 58, 2 (2022), 203–230.
+https://doi.org/10.1080/03057267.2021.1963580
+arXiv:https://doi.org/10.1080/03057267.2021.1963580
+[23] Aimi Tanikawa de Oliveira, Barbara S. Saddy, Daniel C. Mograbi, and Cristina
+LÃ Maia Coelho. 2015. Jogos eletronicos na perspectiva da avaliacao interativa,
+ferramenta de aprendizagem com alunos com deficiência intelectuall. Neuropsi-
+cologia Latinoamericana 7 (00 2015), 28 – 35. https://doi.org/10.5579/rnl.2015.0269
+[24] World Health Organization et al. 1992. The ICD-10 classification of mental
+and behavioral disorders. Clinical descriptions and diagnostic guidelines (1992).
+Available at: https://www.who.int/publications/i/item/9241544228.
+[25] Fabio Paternò and Volker Wulf. 2017. New perspectives in end-user development.
+Springer. https://doi.org/10.1007/978-3-319-60291-2
+[26] Talita Cristina Pagani Britto Pichiliani. 2020. Gaia: Um Guia de Recomendações
+Sobre Design Digital Inclusivo para Pessoas com Autismo. (1ª edição ed.). Appris.
+[27] Peter G. Polson, Clayton Lewis, John Rieman, and Cathleen Wharton. 1992.
+Cognitive walkthroughs: a method for theory-based evaluation of user interfaces.
+International Journal of Man-Machine Studies 36, 5 (1992), 741–773. https://doi.
+org/10.1016/0020-7373(92)90039-N
+[28] G. Puttick, M. Cassidy, E. Tucker-Raymond, G. M. Troiano, and C. Harteveld.
+2024.
+“So, we kind of started from scratch, no pun intended”: What
+can students learn from designing games?
+Journal of Research in Sci-
+ence Teaching 61, 4 (2024), 772–808.
+https://doi.org/10.1002/tea.21918
+arXiv:https://onlinelibrary.wiley.com/doi/pdf/10.1002/tea.21918
+[29] André Raabe, Christian Brackmann, and Flávio Campos. 2018. Currículo de Refer-
+ência em Tecnologia e Computação: Da Educação Infantil ao Ensino Fundamental.
+CIEB, São Paulo. Available at: https://curriculo.cieb.net.br/.
+[30] Claudiane Figueiredo Ribeiro, Luciana da Silva Goudinho, Sandro Miranda de
+Rezende, Ruth Maria Mariani Braz, Roberta Carvalho de Souza, Maria Cristina Bar-
+bosa Mendes, Sandra Mello de Menezes Felix de Souza, Ilma Rodrigues de Souza
+Fausto, Elaine Alves Leite, João Henrique Lopes Spies, Alessandra Furtado de
+Oliveira, Sandro Medeiros Portella, Michele Joia da Silva, Mírian Renata Medeiros
+dos Santos Valei, and Sérgio Crespo Coelho da Silva Pinto. 2021. Resignifying
+computational thinking from an inclusive perspective. Research, Society and
+Development 10, 14 (Nov. 2021), e400101421789. https://doi.org/10.33448/rsd-
+v10i14.21789
+[31] Kamila Rios da Hora Rodrigues, Vania Paula de Almeida Neris, Paula Maia
+Souza, Rodrigo Geurgas Zavarizz, Jonattan Willian da Silva, Tiago Marino Silva,
+and Aline Elias Cardoso Verhalen. 2021. Rufus - Uma Plataforma de Autoria
+Para Jogos Digitais Terapêuticos. In X Latin American Conference on Human
+Computer Interaction (Valparaiso, Chile) (CLIHC 2021). Association for Computing
+Machinery, New York, NY, USA, Article 15, 5 pages.
+https://doi.org/10.1145/
+3488392.3488407
+[32] Flávia de Souza Santos, André de Lima Salgado, Débora Maria Barroso Paiva,
+Renata Pontin De Mattos Fortes, and Sandra Pereira Gama. 2023. A specialized
+cognitive walkthrough to evaluate digital games for the elderly. In Proceedings
+of the 10th International Conference on Software Development and Technologies
+for Enhancing Accessibility and Fighting Info-Exclusion (Lisbon, Portugal) (DSAI
+’22). Association for Computing Machinery, New York, NY, USA, 166–171. https:
+//doi.org/10.1145/3563137.3563162
+[33] SBC. 2017. Referenciais de Formação em Computação: Educação Básica. Avail-
+able at: https://www.sbc.org.br/images/ComputacaoEducacaoBasica-versaofinal-
+julho2017.pdf.
+[34] Douglas Schuler and Aki Namioka. 1993. Participatory design: Principles and
+practices. CRC Press.
+[35] Susan Stainback and William Stainback. 1999. Inclusão. Um Guia Para Educadores
+(artmed ed.). Vol. 1.
+[36] M. Tekdal. 2021. Trends and development in research on computational thinking.
+Education and Information Technologies 26, 5 (2021), 6499–6529. https://doi.org/
+10.1007/s10639-021-10617-w
+[37] Charlotte Weitze. 2017. Reflective, Creative and Computational Thinking Strate-
+gies Used When Students Learn Through Making Games.
+[38] Jeannette M. Wing. 2006. Computational Thinking. Commun. ACM 49, 3 (mar
+2006), 33–35. https://doi.org/10.1145/1118178.1118215

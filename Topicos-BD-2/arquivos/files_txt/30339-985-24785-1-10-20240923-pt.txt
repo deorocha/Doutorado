@@ -1,0 +1,544 @@
+Interpolação e Previsão de Precipitação por Redes Neurais
+Convolucionais para Grafos
+Augusto Fonseca
+augusto.fonseca@aluno.cefet-rj.br
+CEFET/RJ
+Ronaldo Goldschimidt
+IME/RJ
+ronaldo.rgold@ime.eb.br
+Eduardo Ogasawara
+CEFET/RJ
+eogasawara@ieee.org
+Mariza Ferro
+IC/UFF
+mariza@ic.uff.br
+Fábio Porto
+LNCC
+fporto@lncc.br
+Eduardo Bezerra
+CEFET/RJ
+ebezerra@cefet-rj.br
+WebMedia’2024, Juiz de Fora, Brazil
+Fonseca et al.
+Além desta introdução, a Seção 2 aborda a metodologia utilizada
+neste trabalho e detalhada as fontes dos dados meteorológicos utili-
+zados e os procedimentos de pré-processamento aplicados. A Seção
+3 detalha a configuração do experimento e apresenta os resultados
+obtidos. Finalmente, a Seção 4 destaca as principais conclusões e
+apresenta as direções de trabalhos futuros.
+METODOLOGIA
+Na Figura 1 é apresentada uma visão geral da técnica de interpola-
+ção proposta neste trabalho. Os dados coletados pelos instrumentos
+meteorológicos são introduzidos na rede na forma de séries tem-
+porais de grafos. As camadas da GCN têm a tarefa de aprender
+a interpolar os dados. Os dados interpolados são então passados
+como entrada para uma CNN que aprende os padrões espaciais e
+temporais processando a tarefa de regressão. Como saída, a rede
+gera as previsões da variável meteorológica de interesse para passos
+de tempo futuros.
+Figura 1: Visão geral da arquitetura. As séries temporais de
+grafos são passadas como entrada para a GCN que interpola
+os dados. Os dados interpolados são passados para a CNN que
+aprende os padrões espacias e temporais dos dados e gera as
+predições.
+O problema aqui abordado consiste em uma tarefa de aprendi-
+zado semi-supervisionado, uma vez que não conhecemos o valor
+de precipitação para toda a área de interesse. Cada instrumento
+meteorológico coleta diferentes subconjuntos de variáveis. Além
+disso, decisões estratégicas ou falhas nos equipamentos podem in-
+terromper o monitoramento por horas, ou até mesmo dias. Dado
+esse cenário, poderíamos modelar o problema para aprendizado so-
+bre grafos heterogêneos e dinâmicos, i.e., grafos em que os vértices
+possuem diferentes atributos e que variam sua topologia ao longo
+do tempo. No entanto, para fins de simplificação, modelamos o pro-
+blema como aprendizado sobre grafos homogêneos e estáticos. Para
+viabilizar tal modelagem, aplicamos técnicas sobre o processamento
+dos dados abordadas na Seção 2.2.
+Formalmente, o problema é definido como segue. Considere que
+G(𝑡) =
+
+V, E, X(𝑡)
+represente um grafo homogêneo no passo
+de tempo 𝑡∈{1, 2, ...,𝑇}. V representa as coordenadas (latitude,
+longitude) que é definido pela união de coordenadas de uma grade
+regular de aproximadamente 3 km de resolução e as coordenadas
+associadas às ETs. E é definido por um limiar de distância entre
+as coordenadas empregando a distância Haversine. X ∈R|V|×𝑑
+representa a matriz de características (variáveis meteorológicas)
+associadas aos vértices. O modelo de interpolação é treinado para
+aproximar uma função 𝑓(·) que mapeia uma sequência de variá-
+veis meteorológicas observadas para uma grade regular de valores
+de precipitação: Z(𝑡) = 𝑓(G(𝑡), G(𝑡−1), . . . , G(𝑡−𝑇−1)), em que 𝑇
+representa o tamanho da série temporal de entrada e Z representa
+a matriz de valores de precipitação interpolados.
+2.1
+Dados Meteorológicos
+O experimento empregou duas fontes de dados. A primeira é relativa
+ao radar meteorológico do INEA instalado na coordenada (lat: -
+22.99325, lon: -43.58794). A segunda corresponde a ETs do INMET
+e do Sistema Alerta Rio. A Figura 2 apresenta a localização dos
+instrumentos. O radar do INEA é do tipo banda S, dupla polarização,
+em operação desde 2015 e fornece, dentre outras variáveis, dados de
+refletividade1 na atmosfera com resolução espacial de 500 metros. A
+cada 5 min o radar escaneia a atmosfera em 360º de azimute, em sete
+níveis de altitude, em um raio de abrangência de 250 km. Dentre as
+33 ETs do Alerta Rio, dois são estações meteorológicas completas,
+cinco são estações meteorológicas parciais, i.e., não observam todas
+as variáveis meteorológicas e 26 são pluviômetros, com resolução
+temporal de 15 minutos. As variáveis meteorológicas observadas
+são pressão atmosférica (mB), temperatura (°C), ponto de orvalho
+(°C), umidade relativa do ar (%), direção do vento (°(gr)), velocidade
+do vento (m/s) e precipitação (mm). As quatro estações do INMET
+são meteorológicas completas, com resolução temporal de uma
+hora. Usamos as seguintes categorias de precipitação definidas pela
+equipe do sistema Alerta Rio, conforme a quantidade de precipitação
+observada em mm/h, a seguir: i) fraca: [0, 5); ii) moderada: [5, 25);
+iii) forte: [25, 50) e; iv) extrema: [50,𝑖𝑛𝑓).
+Figura 2: Localização dos instrumentos de observação. Pon-
+tos em verde representam os pluviômetros do Alerta Rio. Os
+ícones de informação nas cores verde, laranja e azul represen-
+tam, respectivamente, as estações meteorológicas do Alerta
+Rio, as estações meteorológicas do INMET e o radar mete-
+orológico do INEA. O ícone de estrela representa a estação
+tijuca_muda.
+2.2
+Pré-processamento dos Dados
+Dados de precipitação têm por característica serem significativa-
+mente desbalanceados, i.e., muitos dias sem chuva. Além disso, o
+1A refletividade é uma das variáveis registradas a partir do eco gerado pelas ondas ele-
+tromagnéticas irradiadas pelo radar. Essa variável detecta a presença de hidrometeoros
+na atmosfera, tais como água, gelo e neve.
+Interpolação e Previsão de Precipitação por Redes Neurais Convolucionais para Grafos
+WebMedia’2024, Juiz de Fora, Brazil
+volume de dados gerados pelo radar do INEA é de cerca de 1,3 GB
+por dia. Por conta disso, foram selecionados somente os dias em
+que ocorreu chuva acumulada em uma hora acima de 25 milíme-
+tros. Para cada dia selecionado, o dia anterior também foi incluído,
+totalizando 224 datas entre 2016 e 2023. Os dados de radar foram
+agregados espacialmente para cada vértice em G com base nas ob-
+servações em um raio de 1,5 km a partir do vértice, em resolução
+temporal horária, limitado às observações até 2 km de altitude de-
+vido ao efeito conhecido como cone do silêncio2. No processo de
+agregação foram geradas as features média, mínimo, máximo, 1º
+quartil, mediana e 3º quartil em relação à refletividade observada
+dentro do raio.
+Os dados das estações do Alerta Rio e INMET passaram por um
+processo de curadoria em que foram tratadas as seguintes questões:
+i) duplicatas temporais, i.e., dois ou mais registros para a mesma
+tupla (coordenada, horário) com valores distintos observados;
+ii) período de operação da estação e quantidade de registros espe-
+rada por intervalo de tempo;
+iii) dados faltantes;
+iv) dados espúrios, i.e., valores fora do intervalo esperado para a
+variável e;
+v) outras questões de qualidade encontradas durante a análise.
+Os dados foram filtrados conforme as datas disponíveis para
+os dados de radar. Um ponto a ser ressaltado são os falsos nulos
+para a variável direção do vento, quando uma estação meteoroló-
+gica registra velocidade 0.0 para a variável velocidade do vento. No
+processo de imputação, os falsos nulos receberam valor arbitrário
+0.0. As variáveis associadas à direção e velocidade do vento foram
+transformadas para componentes cíclicas3. A data/hora também foi
+empregada como feature pelo método de transformação usando o
+seno e cosseno4. Os dados anteriores a 01/fev/22 foram selecionados
+para compor o conjunto de treino e igual ou superior como con-
+junto de teste. Os parâmetros de normalização e imputação foram
+ajustados somente sobre o conjunto de treino para evitar vazamento
+de dados. Foram empregados, respectivamente, a função Min-max
+e o algoritmo k-NN Imputer disponíveis na biblioteca scikit-learn5.
+Os dados de radar e de ETs foram integrados por junção outer
+join. Variáveis não observadas em uma determinada coordenada
+receberam valor 0.0. Para distinguir os valores 0.0 verdadeiros, foi
+adicionada uma variável binária marcadora de preenchimento para
+cada variável meteorológica. Por fim, os dados foram processados
+em séries temporais de grafos, em que os vértices representam as
+coordenadas e as arestas uma relação entre coordenadas definida
+por um limiar de distância de 3,4 km. Cuidados especiais foram
+tomados para evitar gerar séries temporais não contíguas, uma vez
+que não tínhamos a série histórica completa. Ao final foram gerados
+3.644 exemplos de treino ( 78%) e 1.012 exemplos de teste ( 22%).
+EXPERIMENTOS E RESULTADOS
+Nesta seção, descrevemos os experimentos realizados. Na Seção 3.1
+descrevemos aspectos de configuração, e na Seção 3.2 apresentamos
+os resultados, junto com uma análise sobre os mesmos.
+2Cone do silêncio. Uma porção da área acima e em torno do radar não é observada. O
+tamanho da porção varia conforme o ângulo de elevação do radar.
+3https://bit.ly/metpy-wind-vector-components
+4https://bit.ly/kaggle-encoding-cyclical-features
+5https://scikit-learn.org/stable/index.html
+3.1
+Configuração do Experimento
+Neste primeiro experimento buscamos investigar duas questões: i) o
+impacto sobre a acurácia quando empregada a feature refletividade e;
+ii) a influência dos dados de estações vizinhas em uma determinada
+coordenada de interesse. Para tal, escolhemos a estação tijuca_muda
+como estação de interesse (EI) por apresentar a maior quantidade
+de exemplos em duas das quatro categorias de precipitação, sendo
+elas moderada e forte. Em seguida foram identificadas as 11 esta-
+ções vizinhas (EV) mais próximas da EI (Apêndice A). A análise
+gradativa consistiu em processar 11 conjuntos distintos de datasets
+(conjuntos de treino e teste), conforme detalhado na Seção 2.2. Em
+cada conjunto, identificados e ordenados como {𝑣1, 𝑣2, ..., 𝑣11}, um
+novo vizinho é adicionado ao dataset, do mais próximo para o mais
+distante, cumulativamente aos já adicionados no conjunto anterior,
+de forma que o conjunto 𝑣1 possui apenas uma EV e o conjunto 𝑣11
+possui as 11 EVs. Importante ressaltar que os dados da EI não são
+empregados em nenhuma fase do pré-processamento, treinamento
+e inferência, simulando portanto uma coordenada sem informação
+à qual desejamos inferir por interpolação.
+A GCN empregada para treinar o modelo foi a desenvolvida por
+Bai et al. [1] e se encontra implementada no framework PyTorch
+Geometric Temporal6. Comparando a arquitetura implementada no
+framework com a apresentada no artigo, identificamos um provável
+erro de implementação nas camadas que operam a convolução tem-
+poral. De fato, a nossa versão corrigida obteve melhores resultados
+nos testes preliminares. A GCN foi definida com uma camada de
+convolução espaço-temporal conforme Bai et al. [1] e duas camadas
+fully connected para operar, respectivamente, as embeddings e a
+correlação entre os vértices. Como função de custo foi empregada
+a Mean Squared Error. A taxa de aprendizado foi configurada para
+1 × 10−3 e a rede foi treinada com batchs de tamanho 32. Foram
+treinados dois modelos para cada dataset: o modelo gcn_r treinado
+com todas as features e o modelo gcn em que a feature refletividade
+é removida.
+3.2
+Resultados e Análise
+A Tabela 1 apresenta valores de RMSE por modelo e categoria para
+cada dataset. Para eventos de precipitação forte e extrema, os mo-
+delos gcn e gcn_r apresentam melhores resultados em todos os
+datasets, com erros significativamente menores em diversos casos,
+chegando a um erro aproximadamente 82% menor para chuva ex-
+trema no conjunto 𝑣6 em relação ao IDW. Outros destaques ocorrem
+na categoria extrema para os conjuntos 𝑣5 e 𝑣10 e na categoria forte
+para os conjuntos 𝑣3 e 𝑣4 que apresentam erros relativos entre 40%
+e 50% abaixo do método IDW. Na categoria moderada o método
+IDW obtém melhores resultados em todas os conjuntos, exceto o
+conjunto 𝑣1 e na categoria fraca ocorrem seis resultados a favor
+do IDW contra cinco das GCN. Apesar disso, a diferença de erro
+entre os métodos nas categorias fraca e moderada é relativamente
+pequena em quase todos os datasets.
+Quanto ao emprego da feature refletividade, a Tabela 1 apresenta
+que o modelo treinado com a inclusão dessa feature retorna oito
+melhores resultados para a categoria forte e seis para a categoria
+extrema. A maioria dos resultados em todas as categorias apresen-
+tam resultados próximos quando comparados os modelos gcn e
+6https://pytorch-geometric-temporal.readthedocs.io/en/latest/index.html
+WebMedia’2024, Juiz de Fora, Brazil
+Fonseca et al.
+Tabela 1: Resultados da análise gradativa para a estação tijuca_muda (RMSE).
+Categoria
+Modelo
+𝑣1
+𝑣2
+𝑣3
+𝑣4
+𝑣5
+𝑣6
+𝑣7
+𝑣8
+𝑣9
+𝑣10
+𝑣11
+fraca
+gcn
+0.773
+1.053
+0.688
+0.655
+0.666
+0.615
+0.538
+0.568
+0.641
+0.677
+0.610
+gcn_r
+0.807
+0.930
+0.778
+0.684
+0.644
+0.675
+0.570
+0.623
+0.649
+0.651
+0.630
+idw
+0.799
+0.544
+0.521
+0.522
+0.614
+0.608
+0.621
+0.599
+0.626
+0.663
+0.658
+moderada
+gcn
+4.839
+5.512
+4.521
+4.688
+3.807
+3.834
+3.720
+3.941
+3.930
+4.771
+3.733
+gcn_r
+4.890
+5.681
+4.593
+4.285
+3.875
+3.881
+4.065
+3.836
+4.133
+4.059
+3.887
+idw
+4.989
+3.296
+3.164
+3.061
+2.975
+3.077
+3.169
+3.115
+3.109
+3.144
+3.150
+forte
+gcn
+9.843
+6.078
+6.285
+6.862
+9.639
+10.450
+9.756
+11.997
+11.599
+8.304
+12.903
+gcn_r
+9.417
+6.606
+5.663
+6.947
+7.196
+9.426
+8.976
+10.617
+9.908
+11.624
+11.134
+idw
+11.307
+10.598
+11.385
+12.006
+11.732
+10.351
+10.725
+11.274
+11.533
+11.748
+12.154
+extrema
+gcn
+18.941
+17.570
+11.752
+13.891
+11.255
+3.692
+11.345
+18.451
+15.373
+5.334
+14.368
+gcn_r
+18.341
+25.899
+12.979
+15.192
+6.657
+2.624
+13.661
+14.528
+9.837
+10.586
+12.701
+idw
+18.400
+18.241
+16.403
+17.477
+16.069
+14.881
+15.166
+17.400
+18.250
+19.052
+18.293
+gcn_r. No entanto, algumas exceções chamam a atenção. Por exem-
+plo, na categoria extrema os resultados para os datasets 𝑣2 e 𝑣10
+apresentam erro significativamente maior para o modelo treinado
+com refletividade. Por outro lado, para os datasets 𝑣5 e 𝑣9 ocorre o
+inverso, em que o modelo treinado com refletividade apresenta erro
+significativamente menor.
+A Figura 3 apresenta a variação na acurácia dos modelos a me-
+dida que adicionamos informações de EVs. Nas categorias fraca
+e moderada, o erro tende a diminuir com a adição de EVs, estabi-
+lizando a partir da 5𝑎EV adicionada. Na categoria forte, ocorre
+um efeito não esperado, em que a partir da 3𝑎EV o erro tende a
+crescer. Na categoria extrema, o erro diminui significativamente
+até a adição da 6𝑎EV, momento em que o erro começa a aumentar
+novamente. Já para o método IDW, o erro tende a permanecer cons-
+tante conforme a adição de EVs mais distantes, o que é esperado
+dada a formulação matemática do próprio método, que pondera
+inversamente as informações de EVs mais distantes.
+Figura 3: Impacto da acurácia para o ponto de interesse a
+medida que são adicionados dados de vizinhos mais distantes.
+CONCLUSÃO
+Neste trabalho, nosso objetivo foi empregar GCNs na tarefa de
+interpolação e previsão de precipitação. Para tal, treinamos GCNs
+de forma semi-supervisionada empregando dados de radar mete-
+orológico e ETs. Por ser um trabalho em progresso, inicialmente
+avaliamos a acurácia da interpolação estimada por uma GCN em
+comparação ao método estatístico IDW. Avaliamos os modelos com
+foco em duas questões: i) impacto sobre a acurácia quando empre-
+gados dados de radar e; ii) influência dos dados de estações vizinhas
+em uma determinada coordenada de interesse.
+Foi observado que as GCNs obtêm melhor acurácia em eventos
+mais extremos de precipitação e alcançam resultados promissores
+em eventos de menor magnitude. Para eventos mais extremos, a
+GCN chega a alcançar resultados até 80% superiores em relação
+ao método IDW. Além disso, nos experimentos em que o método
+IDW obteve melhor resultado, a diferença para o resultado alcan-
+çado pela GCN foi relativamente pequena, mostrando o potencial
+da abordagem. O emprego dos dados de radar aumentou frequen-
+temente a acurácia para eventos mais extremos. De forma geral,
+a adição de mais informações vizinhas à coordenada de interesse
+aumentou a acurácia da interpolação no caso das GCNs. Também
+observou-se que, aumentar em demasia a quantidade de vizinhos
+pode diminuir a acurácia. Conforme esperado, o método IDW tende
+a estabilizar conforme são adicionados vizinhos mais distantes.
+Como trabalhos futuros, pretendemos entender o motivo da di-
+minuição da acurácia das abordagens por GCN quando da adição de
+certas EVs. Para tal, faremos análises separadas para cada evento em
+que a GCN apresentou erro alto. Pretendemos também investigar
+o motivo para a inclusão de dados de radar diminuir significativa-
+mente a acurácia em casos específicos. Também realizaremos os
+mesmos experimentos com outras EI, explorando distribuições es-
+paciais distintas de vizinhança. Além disso, avaliaremos o impacto
+com outras fontes de dados meteorológicos (e.g. satélite).
+ACKNOWLEDGMENTS
+Agradecemos à CAPES, ao CNPq, à Faperj (Proc. E-26/210.242/2024)
+e Instituto Serrapilheira (N Processo Serra – 2211-41897), pelo finan-
+ciamento parcial desta pesquisa; ao LNCC e ao Instituto de IA, por
+ceder os recursos computacionais e apoio à missões de pesquisa; e
+ao COR, à GeoRio e ao INEA, pelo fornecimento dos dados usados
+nos experimentos.
+Interpolação e Previsão de Precipitação por Redes Neurais Convolucionais para Grafos
+WebMedia’2024, Juiz de Fora, Brazil
+REFERÊNCIAS
+[1] Jiandong Bai, Jiawei Zhu, Yujiao Song, Ling Zhao, Zhixiang Hou, Ronghua Du,
+and Haifeng Li. 2021. A3T-GCN: Attention Temporal Graph Convolutional
+Network for Traffic Forecasting. ISPRS International Journal of Geo-Information
+10, 7 (2021). https://doi.org/10.3390/ijgi10070485
+[2] Rafaela Castro, Yania M Souto, Eduardo Ogasawara, Fabio Porto, and Eduardo
+Bezerra. 2021. STconvS2S: Spatiotemporal convolutional sequence to sequence
+network for weather forecasting. Neurocomputing 426 (2021), 285–298.
+[3] ECMWF. 2024. Coupled Earth-system reanalysis. European Centre for Medium-
+Range Weather Forecasts. Retrieved June 22, 2024 from https://www.ecmwf.int/
+en/research/climate-reanalysis/coupled-earth-system-reanalysis
+[4] Porto et al. 2022. Machine Learning Approaches to Extreme Weather Events
+Forecast in Urban Areas: Challenges and Initial Results. Supercomputing Frontiers
+and Innovations 9 (2022), 49–73. https://doi.org/10.14529/jsfi220104
+[5] Chris Funk, Pete Peterson, Martin Landsfeld, Diego Pedreros, James Verdin,
+Shraddhanand Shukla, Gregory Husak, James Rowland, Laura Harrison, Andrew
+Hoell, et al. 2015. The climate hazards infrared precipitation with stations—a
+new environmental record for monitoring extremes. Scientific data 2, 1 (2015),
+1–21.
+[6] Gabriela Lewenfus, Wallace Alves Martins, Symeon Chatzinotas, and Björn Ot-
+tersten. 2020. Joint Forecasting and Interpolation of Graph Signals Using Deep
+Learning. arXiv preprint arXiv:2006.01536 (2020).
+[7] Brant Liebmann and Dave Allured. 2005. Daily precipitation grids for South
+America. Bulletin of the American Meteorological Society 86, 11 (2005), 1567–1570.
+[8] Xiaoli Ren, Xiaoyong Li, Kaijun Ren, Junqiang Song, Zichen Xu, Kefeng Deng,
+and Xiang Wang. 2021. Deep Learning-Based Weather Prediction: A Survey. Big
+Data Research 54 (2021), 100178. https://doi.org/10.1016/j.bdr.2020.100178
+[9] Donald Shepard. 1968. A two-dimensional interpolation function for irregularly-
+spaced data. In Proceedings of the 1968 23rd ACM National Conference (ACM ’68).
+Association for Computing Machinery, New York, NY, USA, 517–524.
+https:
+//doi.org/10.1145/800186.810616
+[10] Selim Furkan Tekin, Oguzhan Karaahmetoglu, Fatih Ilhan, Ismail Balaban, and
+Suleyman Serdar Kozat. 2021. Spatio-temporal Weather Forecasting and Attention
+Mechanism on Convolutional LSTMs. arXiv preprint arXiv:2102.00696 (2021).
+[11] Hongye Zhou, Feng Zhang, Zhenhong Du, and Renyi Liu. 2021. Forecasting PM2.
+5 using hybrid graph convolution-based model considering dynamic wind-field
+to offer the benefit of spatial interpretability. Environmental Pollution 273 (2021),
+116473.
+A
+ESTAÇÕES VIZINHAS
+A Tabela 2 apresenta as informações das estações vizinhas emprega-
+das no experimento, conforme detalhado na Seção 3.1. A informação
+Distância (Km) é em relação à estação tijuca_muda.
+Tabela 2: Informações das estações vizinhas empregadas no
+experimento
+Tipo
+Distância (km)
+Latitude
+Longitude
+Pluviômetro
+2.220095
+-22.931940
+-43.221670
+Pluviômetro
+2.739652
+-22.922220
+-43.267500
+Meteorológica
+4.587330
+-22.896670
+-43.221670
+Pluviômetro
+4.808559
+-22.931670
+-43.196390
+Meteorológica
+4.872877
+-22.972780
+-43.223890
+Meteorológica
+5.133136
+-22.965830
+-43.278330
+Pluviômetro
+5.782264
+-22.940560
+-43.187500
+Pluviômetro
+5.890067
+-22.890560
+-43.278060
+Pluviômetro
+5.901368
+-22.985830
+-43.245000
+Meteorológica
+6.723293
+-22.992500
+-43.233060
+Pluviômetro
+6.996295
+-22.896060
+-43.187860
