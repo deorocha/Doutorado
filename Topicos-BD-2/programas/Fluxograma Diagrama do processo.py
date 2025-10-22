@@ -3,9 +3,6 @@ from pathlib import Path
 import sys
 
 PROJECT_ROOT = Path(__file__).parent
-with st.sidebar:
-    st.write(PROJECT_ROOT)
-    
 CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
 IMAGES_PATH = PROJECT_ROOT / "images"
 PROGRAMS_PATH = PROJECT_ROOT / "programas"
