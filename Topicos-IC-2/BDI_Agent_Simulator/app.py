@@ -3,195 +3,22 @@ import os
 import re
 import time
 import datetime
+import glob
 from queue import Queue, Empty
 
-# CSS personalizado - corrigindo o sidebar
-st.markdown("""
-<style>
-    /* Remover TODAS as margens e paddings de TODOS os elementos */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    
-    /* Container principal do Streamlit */
-    .main .block-container {
-        padding-top: 0px !important;
-        padding-bottom: 0px !important;
-        padding-left: 0px !important;
-        padding-right: 0px !important;
-        max-width: 100% !important;
-    }
-    
-    /* MANTER o header visível para o botão do sidebar */
-    /* header {
-        display: none !important;
-    } */
-    
-    /* Remover margens do título */
-    h1, h2, h3, h4, h5, h6 {
-        margin-top: 15px !important;
-        margin-bottom: 15px !important;
-        padding: 5px !important;
-    }
+# Função para carregar CSS externo
+def load_external_css(css_file_path):
+    try:
+        with open(css_file_path, 'r', encoding='utf-8') as f:
+            css_content = f.read()
+        st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
+    except FileNotFoundError:
+        st.error(f"Arquivo CSS não encontrado: {css_file_path}")
+    except Exception as e:
+        st.error(f"Erro ao carregar CSS: {str(e)}")
 
-    /* Remover margens de todos os elementos do Streamlit */
-    .stApp {
-        margin: 0px !important;
-        padding: 0px !important;
-    }
-    
-    /* Ajustar file uploader */
-    .stFileUploader {
-        margin: 0px !important;
-        padding: 0px !important;
-    }
-    
-    /* Ajustar botões */
-    .stButton button {
-        margin: 10px !important;
-        padding: 5px 10px !important;
-    }
-    
-    /* Ajustar colunas */
-    .stColumns {
-        margin: 0px !important;
-        padding: 0px !important;
-    }
-    
-    /* Ajustar expanders */
-    .streamlit-expander {
-        margin: 0px !important;
-        padding: 0px !important;
-    }
-
-    /* Espaço ANTES do primeiro expander (acima) */
-    div[data-testid="stExpander"]:first-child {
-        margin-top: 0.5rem !important;  /* ← AJUSTE AQUI: espaço acima do primeiro expander */
-    }
-
-    /* Espaço ENTRE expanders */
-    div[data-testid="stExpander"] {
-        margin-top: 0.3rem !important;    /* ← AJUSTE AQUI: espaço acima de cada expander */
-        margin-bottom: 0.3rem !important;  /* ← AJUSTE AQUI: espaço abaixo de cada expander */
-    }
-    
-    /* Espaço DEPOIS do último expander (abaixo) */
-    div[data-testid="stExpander"]:last-child {
-        margin-bottom: 0.5rem !important; /* ← AJUSTE AQUI: espaço abaixo do último expander */
-    }
-    
-    div[data-testid="stExpander"] details {
-        margin: 0px !important;
-        padding: 0px !important;
-    }
-    
-    div[data-testid="stExpander"] details summary {
-        margin: 0px !important;
-        padding: 5px !important;
-    }
-    
-    div[data-testid="stExpander"] details summary p {
-        font-family: 'Courier New' !important;
-        font-size: 14px !important;
-        font-weight: bold !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-    
-    div[data-testid="stExpander"] details div {
-        margin: 0px !important;
-        padding: 0px !important;
-    }
-    
-    div[data-testid="stExpander"] pre {
-        font-size: 10px !important;
-        max-height: 350px !important;
-        overflow-y: auto !important;
-        margin: 0 !important;
-        padding: 5px !important;
-    }
-    
-    /* Containers de log */
-    .log-container {
-        background-color: #f8f9fa;
-        border: 1px solid #e9ecef;
-        border-radius: 5px;
-        padding: 5px;
-        max-height: 400px;
-        overflow-y: auto;
-        font-family: 'Courier New', monospace;
-        font-size: 12px;
-        white-space: pre-wrap;
-        margin: 0 !important;
-    }
-    
-    /* Histórico dos agentes */
-    .agent-history {
-        font-family: 'Courier New', monospace;
-        font-size: 11px;
-        background-color: white;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 5px;
-        max-height: 500px;
-        overflow-y: auto;
-        white-space: pre;
-        margin: 0 !important;
-    }
-    
-    /* Sidebar - manter visível e ajustar */
-    section[data-testid="stSidebar"] {
-        background-color: #f8f9fa;
-        border-right: 1px solid #dee2e6;
-    }
-    
-    .css-1d391kg, .css-1lcbmhc, .css-1outpf7 {
-        padding: 5px !important;
-        margin: 0px !important;
-    }
-    
-    /* Botão do sidebar */
-    .css-1v0mbdj {
-        margin: 0px !important;
-        padding: 0px !important;
-    }
-    
-    /* Alertas e mensagens */
-    .stAlert, .stSuccess, .stInfo, .stWarning, .stError {
-        margin: 2px 0 !important;
-        padding: 5px !important;
-    }
-    
-    /* Espaçamento entre seções */
-    .element-container {
-        margin: 0px !important;
-        padding: 0px !important;
-    }
-    
-    /* Remover qualquer padding residual */
-    div[data-testid="stVerticalBlock"] {
-        gap: 0rem !important;
-    }
-    
-    /* Ajustar o header para ser mínimo */
-    header .decoration {
-        display: none;
-    }
-    
-    /* Manter o botão do sidebar visível */
-    .css-1vq4p4l {
-        padding: 0px !important;
-        margin: 0px !important;
-    }
-    
-    /* Ajustar o conteúdo principal para compensar a barra lateral */
-    .main .block-container {
-        padding-left: 1rem !important;
-    }
-</style>
-""", unsafe_allow_html=True)
+# Carregar CSS externo
+load_external_css("./styles/styles.css")
 
 # Configuração da página para layout wide
 st.set_page_config(
@@ -200,8 +27,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
-# [O resto do código permanece exatamente igual...]
 
 # Inicializar estado da aplicação
 if 'simulation_running' not in st.session_state:
@@ -527,30 +352,75 @@ def render_agent_history(agent_name, asl_file):
 # Interface principal
 st.title("🤖 Simulador de Sistemas Multiagentes")
 
-# Upload do arquivo .mas2j
-arquivo = st.file_uploader("Selecione o arquivo .mas2j", type=['mas2j'])
+# Buscar arquivos .mas2j no diretório atual
+st.subheader("📁 Seletor de Arquivo MAS2J")
+
+# Listar arquivos .mas2j disponíveis
+mas2j_files = glob.glob("*.mas2j") + glob.glob("**/*.mas2j", recursive=True)
 
 mas2j_content = None
-if arquivo:
-    mas2j_content = arquivo.read().decode('utf-8')
+if mas2j_files:
+    selected_file = st.selectbox(
+        "Selecione o arquivo .mas2j:",
+        mas2j_files,
+        index=0
+    )
     
-    # Mostrar agentes detectados
-    agentes = re.findall(r'agents:\s*((?:\s*\w+;)+)', mas2j_content)
-    if agentes:
-        nomes = re.findall(r'(\w+);', agentes[0])
-        st.success(f"✅ {len(nomes)} agentes detectados: {', '.join(nomes)}")
+    try:
+        with open(selected_file, 'r', encoding='utf-8') as f:
+            mas2j_content = f.read()
+        st.success(f"✅ Arquivo {selected_file} carregado com sucesso!")
         
-        # Mostrar conteúdo dos arquivos ASL
-        for nome in nomes:
-            with st.expander(f"Agente: {nome}", expanded=False):
-                try:
-                    with open(f"./src/asl/{nome}.asl", 'r', encoding='utf-8') as f:
-                        content = f.read()
-                        st.code(content, language='python')
-                except FileNotFoundError:
-                    st.error(f"Arquivo ./src/asl/{nome}.asl não encontrado")
-                except Exception as e:
-                    st.error(f"Erro: {str(e)}")
+        # Mostrar agentes detectados
+        agentes = re.findall(r'agents:\s*((?:\s*\w+;)+)', mas2j_content)
+        if agentes:
+            nomes = re.findall(r'(\w+);', agentes[0])
+            st.success(f"✅ {len(nomes)} agentes detectados: {', '.join(nomes)}")
+            
+            # Mostrar conteúdo dos arquivos ASL
+            for nome in nomes:
+                with st.expander(f"Agente: {nome}", expanded=False):
+                    try:
+                        asl_path = f"./src/asl/{nome}.asl"
+                        if os.path.exists(asl_path):
+                            with open(asl_path, 'r', encoding='utf-8') as f:
+                                content = f.read()
+                                st.code(content, language='python')
+                        else:
+                            st.error(f"Arquivo {asl_path} não encontrado")
+                    except Exception as e:
+                        st.error(f"Erro ao ler arquivo ASL: {str(e)}")
+        
+    except Exception as e:
+        st.error(f"Erro ao ler o arquivo {selected_file}: {str(e)}")
+        mas2j_content = None
+else:
+    st.warning("⚠️ Nenhum arquivo .mas2j encontrado no diretório do projeto.")
+    
+    # Fallback: ainda permite upload manual
+    arquivo = st.file_uploader("Ou faça upload manual de um arquivo .mas2j", type=['mas2j'])
+    if arquivo:
+        mas2j_content = arquivo.read().decode('utf-8')
+        
+        # Mostrar agentes detectados (para upload manual)
+        agentes = re.findall(r'agents:\s*((?:\s*\w+;)+)', mas2j_content)
+        if agentes:
+            nomes = re.findall(r'(\w+);', agentes[0])
+            st.success(f"✅ {len(nomes)} agentes detectados: {', '.join(nomes)}")
+            
+            # Mostrar conteúdo dos arquivos ASL
+            for nome in nomes:
+                with st.expander(f"Agente: {nome}", expanded=False):
+                    try:
+                        asl_path = f"./src/asl/{nome}.asl"
+                        if os.path.exists(asl_path):
+                            with open(asl_path, 'r', encoding='utf-8') as f:
+                                content = f.read()
+                                st.code(content, language='python')
+                        else:
+                            st.error(f"Arquivo {asl_path} não encontrado")
+                    except Exception as e:
+                        st.error(f"Erro ao ler arquivo ASL: {str(e)}")
 
 # Controles de execução
 col1, col2, col3 = st.columns(3)
@@ -636,3 +506,7 @@ if st.session_state.agents_history:
 st.sidebar.subheader("🔧 Configuração")
 st.sidebar.write("Modo: Simulação")
 st.sidebar.write("Diretório ASL: `./src/asl/`")
+
+# Mostrar arquivos encontrados para debug
+st.sidebar.subheader("🔍 Debug")
+st.sidebar.write(f"Arquivos .mas2j encontrados: {mas2j_files}")
