@@ -92,11 +92,11 @@ section[data-testid="stSidebar"] > div:first-child {
 
 /* Força o tamanho da fonte APENAS para botões do menu do sidebar */
 section[data-testid="stSidebar"] .stButton button {
-    font-size: 0.5rem !important;
+    font-size: 20px !important;
     padding-top: 0.3rem !important;
     padding-bottom: 0.3rem !important;
-    height: auto !important;
-    min-height: 35px !important;
+    height: 300px !important;
+    min-height: 25px !important;
 }
 
 /* Imagem fixa no topo - CORRIGIDA para largura do sidebar */
@@ -715,6 +715,7 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
 
 
