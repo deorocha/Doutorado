@@ -28,6 +28,7 @@ PROGRAMS_PATH = PROJECT_ROOT / "programas"
 
 webmedia_image_path = IMAGES_PATH / "webmedia2024.png"
 background_image_path = IMAGES_PATH / "background.png"
+current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
 
 # Função para carregar CSS globalmente - CORRIGIDA
 def load_global_css(css_path):
@@ -107,7 +108,7 @@ PAGE_MAPPING = {
 def run_external_page(page_file):
     try:
         # Caminho corrigido para funcionar no Streamlit Cloud
-        page_path = PROGRAMS_PATH # current_dir / "programas" / page_file
+        page_path = current_dir / "programas" / page_file
         
         if page_path.exists():
             # Lê o conteúdo do arquivo
@@ -194,6 +195,7 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
 
 
 
