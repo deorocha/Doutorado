@@ -91,13 +91,13 @@ section[data-testid="stSidebar"] > div:first-child {
 }
 
 section[data-testid="stSidebar"] .stButton button p {
-    font-size: 1rem !important;
+    font-size: 0.8rem !important;
     margin: 0 !important;
     padding: 0 !important;
-    padding-top: 0.2rem !important;
-    padding-bottom: 0.2rem !important;
-    width: 290px !important;
-    height: 30px !important;
+    padding-top: 0.1rem !important;
+    padding-bottom: 0.1rem !important;
+    width: 280px !important;
+    height: 25px !important;
 }
 
 /* Imagem fixa no topo - CORRIGIDA para largura do sidebar */
@@ -716,6 +716,7 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
 
 
