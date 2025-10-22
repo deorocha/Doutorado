@@ -1,5 +1,6 @@
 import streamlit as st
 from pathlib import Path
+import sys
 
 # Adiciona o diretório raiz ao path do Python
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
