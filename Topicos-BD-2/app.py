@@ -36,7 +36,6 @@ def load_global_css(css_path):
             with open(css_path, "r", encoding="utf-8") as f:
                 css_content = f.read()
                 st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
-            st.success("✅ CSS carregado com sucesso")
         else:
             st.warning(f"⚠️ Arquivo CSS não encontrado em: {css_path}")
             # CSS fallback básico
@@ -195,6 +194,7 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
 
 
 
