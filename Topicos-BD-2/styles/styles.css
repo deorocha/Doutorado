@@ -152,12 +152,13 @@ section[data-testid="stSidebar"] {
 /* Imagem no topo do sidebar - CORRIGIDA */
 section[data-testid="stSidebar"] img {
     width: 100% !important;
-    max-width: 80% !important;
+    max-width: 100% !important;
     margin: 0rem !important;
     padding: 0rem !important;
     display: block !important;
     border-radius: 0rem !important;
     box-shadow: none !important;
+    margin-right: 2rem !important;
 }
 
 /* Remove qualquer margem do container da imagem no sidebar */
@@ -639,6 +640,7 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
 
 
