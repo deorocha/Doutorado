@@ -363,12 +363,12 @@ a:hover {
     border: none !important;
     padding: 0.4rem 1rem !important;
     border-radius: 5px !important;
-    font-weight: 500 !important;
+    font-weight: 400 !important;
     transition: background-color 0.3s ease !important;
     height: 30px !important;
     padding-top: 20px !important; /* Adjust padding if necessary */
     padding-bottom: 4px !important; /* Adjust padding if necessary */
-    font-size: 0.5rem !important;    
+    font-size: 0.4rem !important;    
 }
 
 .stButton button:hover {
@@ -479,7 +479,7 @@ a:hover {
 
 /* Sidebar */
 .sidebar .sidebar-content {
-    font-size: 0.5rem !important;
+    font-size: 0.4rem !important;
     background-color: var(--sidebar-color);
     background-image: linear-gradient(180deg, var(--sidebar-color) 0%, #ffffff 100%);
 }
@@ -707,6 +707,7 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
 
 
