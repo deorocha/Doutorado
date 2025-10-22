@@ -8,9 +8,17 @@ from collections import Counter
 import tempfile
 import os
 
-# Obtém o diretório raiz do projeto (onde está o app.py)
+# Tenta encontrar a raiz do projeto: sobe até encontrar a pasta 'styles' ou 'images'
+def find_project_root(current_path):
+    # Sobe até encontrar a raiz (onde estão as pastas styles e images)
+    for parent in [current_path] + list(current_path.parents):
+        if (parent / "styles").exists() and (parent / "images").exists():
+            return parent
+    return current_path  # fallback
+
+# Obtém o diretório atual do script
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-project_root = current_dir.parent  # Sobe um nível para a pasta raiz
+project_root = find_project_root(current_dir)
 
 # Constrói caminhos absolutos para os arquivos
 css_path = project_root / "styles" / "styles.css"
