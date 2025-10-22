@@ -13,10 +13,6 @@ PROJECT_ROOT = Path(__file__).parent
 CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
 IMAGES_PATH = PROJECT_ROOT / "images"
 
-# Log para debug
-st.sidebar.text(f"CSS_PATH: {CSS_PATH}")
-st.sidebar.text(f"CSS exists: {CSS_PATH.exists()}")
-
 @st.cache_resource
 def load_spacy_model():
     try:
