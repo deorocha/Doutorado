@@ -23,7 +23,7 @@ def load_external_css(css_file_path):
     except Exception as e:
         st.error(f"Erro ao carregar CSS: {str(e)}")
 # Carregar CSS externo
-load_external_css("CSS_PATH")
+load_external_css(CSS_PATH)
 
 # Configuração da página para layout wide
 st.set_page_config(
@@ -515,5 +515,6 @@ st.sidebar.write("Diretório ASL: `./src/asl/`")
 # Mostrar arquivos encontrados para debug
 st.sidebar.subheader("🔍 Debug")
 st.sidebar.write(f"Arquivos .mas2j encontrados: {mas2j_files}")
+
 
 
