@@ -143,22 +143,38 @@ def create_visualizations(pos_counts):
             "Quantidade": list(pos_counts.values())
         })
         
+        # Calcular porcentagens para o gráfico de proporção
+        total = df["Quantidade"].sum()
+        df["Porcentagem"] = (df["Quantidade"] / total * 100).round(2)
+        
+        # Gráfico de distribuição (barras com valores absolutos)
         fig_bar = px.bar(
             df,
             x="Classe Gramatical",
             y="Quantidade",
             title="Distribuição de Classes Gramaticais",
-            color="Classe Gramatical"
+            color="Classe Gramatical",
+            text="Quantidade"  # Adiciona os valores sobre as barras
         )
+        fig_bar.update_traces(textposition='outside')
+        fig_bar.update_layout(showlegend=False)
         
-        fig_pie = px.pie(
+        # Gráfico de proporção (barras com porcentagens)
+        fig_bar_percent = px.bar(
             df,
-            values="Quantidade",
-            names="Classe Gramatical",
-            title="Proporção de Classes Gramaticais"
+            x="Classe Gramatical",
+            y="Porcentagem",
+            title="Proporção de Classes Gramaticais (%)",
+            color="Classe Gramatical",
+            text="Porcentagem"  # Adiciona os valores sobre as barras
         )
+        fig_bar_percent.update_traces(
+            texttemplate='%{text:.2f}%', 
+            textposition='outside'
+        )
+        fig_bar_percent.update_layout(showlegend=False)
         
-        return fig_bar, fig_pie
+        return fig_bar, fig_bar_percent
     
     return None, None
 
