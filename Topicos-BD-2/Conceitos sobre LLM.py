@@ -8,7 +8,6 @@ def find_project_root(current_path):
         if (parent / "styles").exists() and (parent / "images").exists():
             return parent
     return current_path  # fallback
-
 # Obtém o diretório atual do script
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
 project_root = find_project_root(current_dir)
