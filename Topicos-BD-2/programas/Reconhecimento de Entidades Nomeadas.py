@@ -4,10 +4,22 @@ from spacy import displacy
 import pandas as pd
 from pathlib import Path
 
-# Obtém o diretório raiz do projeto (onde está o app.py)
+# Adiciona o diretório raiz ao path do Python
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
 project_root = current_dir.parent
-css_path = project_root / "styles" / "styles.css"
+
+# Tenta importar a configuração
+try:
+    sys.path.append(str(project_root))
+    from config import PROJECT_ROOT, CSS_PATH, IMAGES_PATH
+except ImportError:
+    # Fallback se o config não existir
+    PROJECT_ROOT = project_root
+    CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
+    IMAGES_PATH = PROJECT_ROOT / "images"
+
+# Constrói caminhos absolutos para os arquivos
+css_path = PROJECT_ROOT / "styles" / "styles.css"
 
 @st.cache_resource
 def load_spacy_model(model_name):
@@ -20,7 +32,7 @@ def load_spacy_model(model_name):
         st.error(f"Erro ao carregar modelo: {e}")
         return None
 
-nlp = load_spacy_model("pt_core_news_lg")
+nlp = load_spacy_model("pt_core_news_sm")
 
 # Verificar se o modelo foi carregado com sucesso
 if nlp is None:
