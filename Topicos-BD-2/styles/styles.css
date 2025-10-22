@@ -368,11 +368,7 @@ a:hover {
     height: 30px !important;
     padding-top: 25px !important; /* Adjust padding if necessary */
     padding-bottom: 5px !important; /* Adjust padding if necessary */
-    
-    font-size: 0.8rem !important;
-    padding: 0.2rem 0.6rem !important;
-    min-height: 28px !important;
-    margin: 0.05rem 0 !important;
+    font-size: 0.6rem !important;    
 }
 
 .stButton button:hover {
@@ -710,4 +706,5 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
