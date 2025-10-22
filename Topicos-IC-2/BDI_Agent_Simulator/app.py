@@ -1,10 +1,12 @@
 import streamlit as st
 import os
+import sys
 import re
 import time
 import datetime
 import glob
 from queue import Queue, Empty
+from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent
 CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
@@ -513,4 +515,5 @@ st.sidebar.write("Diretório ASL: `./src/asl/`")
 # Mostrar arquivos encontrados para debug
 st.sidebar.subheader("🔍 Debug")
 st.sidebar.write(f"Arquivos .mas2j encontrados: {mas2j_files}")
+
 
