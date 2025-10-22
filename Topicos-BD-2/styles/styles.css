@@ -95,7 +95,7 @@ section[data-testid="stSidebar"] .stButton button {
     font-size: 0.3rem !important;
     padding-top: 0.3rem !important;
     padding-bottom: 0.3rem !important;
-    width: 200px !important;
+    width: 250px !important;
     height: 30px !important;
     min-height: 30px !important;
 }
@@ -716,6 +716,7 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
 
 
