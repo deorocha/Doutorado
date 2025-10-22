@@ -4,9 +4,13 @@ import re
 import os
 from pathlib import Path
 
+PROJECT_ROOT = Path(__file__).parent
+# CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
+
 def get_project_files():
     """Obtém a lista de arquivos .mas2j da pasta projects"""
-    project_dir = Path("./projects")
+    project_dir = PROJECT_ROOT / "projects"
+
     if project_dir.exists():
         mas2j_files = list(project_dir.glob("*.mas2j"))
         mas3j_files = list(project_dir.glob("*.mas3j"))
