@@ -90,6 +90,15 @@ section[data-testid="stSidebar"] > div:first-child {
     padding-top: 0px !important; /* Ajuste conforme a altura da sua imagem */
 }
 
+/* Força o tamanho da fonte APENAS para botões do menu do sidebar */
+section[data-testid="stSidebar"] .stButton button {
+    font-size: 0.5rem !important;
+    padding-top: 0.3rem !important;
+    padding-bottom: 0.3rem !important;
+    height: auto !important;
+    min-height: 35px !important;
+}
+
 /* Imagem fixa no topo - CORRIGIDA para largura do sidebar */
 .sidebar-header {
     position: fixed !important;
@@ -706,6 +715,7 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
 
 
