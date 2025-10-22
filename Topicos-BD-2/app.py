@@ -21,10 +21,22 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+def get_project_root():
+    """Retorna o caminho raiz do projeto funcionando localmente e no Streamlit Cloud"""
+    current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+    
+    # No Streamlit Cloud, o diretório de trabalho é a raiz do repositório
+    if "streamlit" in str(current_dir).lower():
+        return current_dir
+    else:
+        return current_dir
+
+project_root = get_project_root()
+
 # Tenta importar a configuração
 try:
     from config import PROJECT_ROOT, CSS_PATH, IMAGES_PATH
-    sys.path.append(str(PROJECT_ROOT))
+    sys.path.append(str(project_root))
 except ImportError:
     # Fallback se o config não existir
     PROJECT_ROOT = project_root
@@ -197,5 +209,6 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
 
 
