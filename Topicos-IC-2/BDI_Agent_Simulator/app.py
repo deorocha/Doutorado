@@ -185,23 +185,6 @@ if project_files:
 
 else:
     st.error("📂 Nenhum projeto encontrado na pasta './projects'")
-    
-    st.info("""
-    **Como adicionar projetos:**
-    
-    1. Crie uma pasta chamada `projects` no mesmo diretório do app
-    2. Adicione arquivos `.mas2j` ou `.mas3j` nesta pasta
-    3. Estruture seu repositório assim:
-    ```
-    seu-repositorio/
-    ├── app.py
-    ├── requirements.txt
-    └── projects/
-        ├── projeto1.mas2j
-        ├── projeto2.mas2j
-        └── projeto3.mas3j
-    ```
-    """)
 
 # Footer
 st.markdown("---")
