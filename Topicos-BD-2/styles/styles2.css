@@ -1,0 +1,311 @@
+/* style.css - Estilos personalizados para o Analisador de Texto */
+/* Referência Teórica: Russell, S. J., & Norvig, P. (2020). Artificial Intelligence: A Modern Approach */
+
+/* REMOVER TODOS OS ESPAÇOS EXTERNOS */
+div.stApp {
+    margin-top: 0px !important;
+    padding-top: 0 !important;
+}
+
+.main .block-container {
+    padding-top: 0.5rem !important;
+    padding-bottom: 1rem !important;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+    min-height: 100vh;
+}
+
+/* Título principal da página - SEM ESPAÇO */
+.css-1d391kg {
+    font-size: 3.2rem !important;
+    font-weight: 800 !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    text-align: center !important;
+    margin-bottom: 0.5rem !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+/* Subheader principal */
+.css-1d391kg + .css-1d391kg {
+    margin-top: -10px !important;
+    margin-bottom: 1.5rem !important;
+}
+
+/* Headers h1 - ESPAÇO MÍNIMO */
+h1 {
+    font-size: 2.4rem !important;
+    font-weight: 700 !important;
+    color: #2d3748 !important;
+    padding-bottom: 0.5rem !important;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+    position: relative !important;
+}
+
+h1::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100px !important;
+    height: 4px !important;
+    background: linear-gradient(90deg, #667eea, #764ba2) !important;
+    border-radius: 2px !important;
+}
+
+/* Subheaders h2 */
+h2 {
+    font-size: 1.9rem !important;
+    font-weight: 600 !important;
+    color: #4a5568 !important;
+    margin-top: 1rem !important;
+    margin-bottom: 0.8rem !important;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    padding-left: 0.5rem !important;
+}
+
+/* Headers h3 */
+h3 {
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    color: #718096 !important;
+    margin-top: 0.8rem !important;
+    margin-bottom: 0.5rem !important;
+    border-left: 4px solid #667eea !important;
+    padding-left: 1rem !important;
+}
+
+/* SIDEBAR - ESPAÇO MÍNIMO */
+section[data-testid="stSidebar"] {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+}
+
+section[data-testid="stSidebar"] > div {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+}
+
+/* Header do sidebar - SEM ESPAÇO */
+section[data-testid="stSidebar"] h1 {
+    font-size: 1.6rem !important;
+    color: #2c3e50 !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid #667eea !important;
+    padding-bottom: 0.5rem !important;
+    margin-top: 0 !important;
+    margin-bottom: 1rem !important;
+    padding-top: 0 !important;
+}
+
+/* Conteúdo do sidebar */
+section[data-testid="stSidebar"] .css-1lcbmhc {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* REMOVER ESPAÇO DO MARKDOWN NO SIDEBAR */
+section[data-testid="stSidebar"] .stMarkdown {
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Botões com gradiente */
+.stButton button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 0.7rem 2rem !important;
+    font-size: 1.1rem !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3) !important;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.stButton button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4) !important;
+}
+
+/* Text area - MENOS ESPAÇO */
+.stTextArea textarea {
+    border-radius: 10px !important;
+    border: 2px solid #e2e8f0 !important;
+    padding: 1rem !important;
+    font-size: 1rem !important;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.stTextArea textarea:focus {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2) !important;
+}
+
+/* Métricas com cards */
+[data-testid="stMetric"] {
+    background: white !important;
+    border-radius: 12px !important;
+    padding: 1rem !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid #e2e8f0 !important;
+    margin: 0.5rem 0 !important;
+}
+
+[data-testid="stMetricValue"] {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+/* Expanders */
+.streamlit-expanderHeader {
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+    color: #2d3748 !important;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+    border-radius: 8px !important;
+    padding: 0.8rem !important;
+    margin: 0.5rem 0 !important;
+}
+
+/* Barras de progresso */
+.stProgress > div > div > div {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+/* Barra de sentimento */
+.sentiment-bar {
+    background: #ecf0f1 !important;
+    border-radius: 10px !important;
+    padding: 5px !important;
+    margin: 0.5rem 0 !important;
+}
+
+.sentiment-fill {
+    background: linear-gradient(90deg, #e74c3c 0%, #f39c12 50%, #2ecc71 100%) !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+    text-align: center !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+
+/* Matriz conceitual */
+.concept-matrix {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 15px !important;
+    margin: 1rem 0 !important;
+}
+
+.matrix-cell {
+    padding: 15px !important;
+    border-radius: 10px !important;
+    text-align: center !important;
+    border: 2px solid !important;
+    margin: 0.2rem 0 !important;
+}
+
+.matrix-cell-subjective {
+    background: linear-gradient(135deg, #e8f4fd, #b3d9ff) !important;
+    border-color: #3498db !important;
+}
+
+.matrix-cell-objective {
+    background: linear-gradient(135deg, #e6f7e9, #99e699) !important;
+    border-color: #2ecc71 !important;
+}
+
+.matrix-cell-behavioral {
+    background: linear-gradient(135deg, #fff0f0, #ffb3b3) !important;
+    border-color: #e74c3c !important;
+}
+
+.matrix-cell-practical {
+    background: linear-gradient(135deg, #fcf8e3, #ffe680) !important;
+    border-color: #f39c12 !important;
+}
+
+.matrix-value {
+    font-size: 24px !important;
+    font-weight: bold !important;
+    margin: 5px 0 !important;
+}
+
+.matrix-cell-subjective .matrix-value { color: #3498db !important; }
+.matrix-cell-objective .matrix-value { color: #2ecc71 !important; }
+.matrix-cell-behavioral .matrix-value { color: #e74c3c !important; }
+.matrix-cell-practical .matrix-value { color: #f39c12 !important; }
+
+/* Alertas e informações */
+.stAlert {
+    border-radius: 10px !important;
+    border-left: 5px solid !important;
+    margin: 0.3rem 0 !important;
+    padding: 0.8rem !important;
+}
+
+/* Sidebar info */
+.sidebar-info {
+    border-left: 4px solid #667eea !important;
+    padding-left: 15px !important;
+    margin: 0.5rem 0 !important;
+}
+
+/* REMOVER ESPAÇO DAS COLUNAS */
+[data-testid="column"] {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* Ajuste para gráficos */
+.stPyplot {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Ajuste para expanders no sidebar */
+section[data-testid="stSidebar"] .streamlit-expander {
+    margin: 0.3rem 0 !important;
+}
+
+section[data-testid="stSidebar"] .streamlit-expanderHeader {
+    margin: 0.2rem 0 !important;
+    padding: 0.6rem !important;
+}
+
+/* Ajuste para código no sidebar */
+section[data-testid="stSidebar"] .stCode {
+    margin: 0.3rem 0 !important;
+}
+
+/* Ajuste para separadores */
+.stHorizontalBlock {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Ajuste específico para o primeiro elemento do sidebar */
+section[data-testid="stSidebar"] > div > div:first-child {
+    padding-top: 0 !important;
+}
+
+/* Ajuste específico para o título principal do sidebar */
+section[data-testid="stSidebar"] h1:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
