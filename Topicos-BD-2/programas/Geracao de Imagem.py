@@ -5,22 +5,8 @@ from PIL import Image
 import io
 import time
 
-# Adiciona o diretório raiz ao path do Python
-current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-project_root = current_dir.parent
-
-# Tenta importar a configuração
-try:
-    sys.path.append(str(project_root))
-    from config import PROJECT_ROOT, CSS_PATH, IMAGES_PATH
-except ImportError:
-    # Fallback se o config não existir
-    PROJECT_ROOT = project_root
-    CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
-    IMAGES_PATH = PROJECT_ROOT / "images"
-
-# Constrói caminhos absolutos para os arquivos
-css_path = PROJECT_ROOT / "styles" / "styles.css"
+PROJECT_ROOT = Path(__file__).parent
+CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
 
 # Carregar CSS externo com codificação correta
 def load_css(css_path):
@@ -32,7 +18,7 @@ def load_css(css_path):
         st.error("Arquivo CSS não encontrado na pasta 'styles/'")
     except Exception as e:
         st.error(f"Erro ao carregar CSS: {e}")
-load_css(css_path)
+load_css(CSS_PATH)
 
 st.title("🎨 Geração de Imagens")
 
