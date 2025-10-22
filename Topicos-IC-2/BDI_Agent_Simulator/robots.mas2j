@@ -1,0 +1,12 @@
+MAS incinerator_robot_pathfinding {
+
+    infrastructure: Centralised
+
+    environment: IncineratorRobotEnvironment
+    agents:
+        r1;
+        r2;
+
+    aslSourcePath: "src/asl"
+    classPath: "src/java"
+}
