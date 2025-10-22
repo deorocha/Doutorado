@@ -8,13 +8,23 @@ import PyPDF2
 import io
 from pathlib import Path
 
-# Obtém o diretório raiz do projeto (onde está o app.py)
+# Adiciona o diretório raiz ao path do Python
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-project_root = current_dir.parent  # Sobe um nível para a pasta raiz
+project_root = current_dir.parent
+
+# Tenta importar a configuração
+try:
+    sys.path.append(str(project_root))
+    from config import PROJECT_ROOT, CSS_PATH, IMAGES_PATH
+except ImportError:
+    # Fallback se o config não existir
+    PROJECT_ROOT = project_root
+    CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
+    IMAGES_PATH = PROJECT_ROOT / "images"
 
 # Constrói caminhos absolutos para os arquivos
-css_path = project_root / "styles" / "styles.css"
-categories_path = project_root / "categories.json"
+css_path = PROJECT_ROOT / "styles" / "styles.css"
+categories_path = PROJECT_ROOT / "categories.json"
 
 # Carregar CSS externo com codificação correta
 def load_css(css_path):
