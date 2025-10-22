@@ -1,19 +1,20 @@
 import streamlit as st
 from pathlib import Path
 
-# Tenta encontrar a raiz do projeto: sobe até encontrar a pasta 'styles' ou 'images'
-def find_project_root(current_path):
-    # Sobe até encontrar a raiz (onde estão as pastas styles e images)
-    for parent in [current_path] + list(current_path.parents):
-        if (parent / "styles").exists() and (parent / "images").exists():
-            return parent
-    return current_path  # fallback
-# Obtém o diretório atual do script
-current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-project_root = find_project_root(current_dir)
+## Tenta encontrar a raiz do projeto: sobe até encontrar a pasta 'styles' ou 'images'
+#def find_project_root(current_path):
+#    # Sobe até encontrar a raiz (onde estão as pastas styles e images)
+#    for parent in [current_path] + list(current_path.parents):
+#        if (parent / "styles").exists() and (parent / "images").exists():
+#            return parent
+#    return current_path  # fallback
+## Obtém o diretório atual do script
+#current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+#project_root = find_project_root(current_dir)
 
 #css_path = project_root / "styles" / "styles.css"
 #fluxograma_image_path = project_root / "images" / "fluxograma.png"
+
 css_path = "styles/styles.css"
 fluxograma_image_path = "images/fluxograma.png"
 
