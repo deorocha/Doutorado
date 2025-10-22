@@ -30,6 +30,9 @@ webmedia_image_path = IMAGES_PATH / "webmedia2024.png"
 background_image_path = IMAGES_PATH / "background.png"
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
 
+with st.sidebar:
+    st.write(current_dir)
+    
 # Função para carregar CSS globalmente - CORRIGIDA
 def load_global_css(css_path):
     try:
@@ -195,6 +198,7 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
 
 
 
