@@ -151,8 +151,8 @@ section[data-testid="stSidebar"] {
 
 /* Imagem no topo do sidebar - CORRIGIDA */
 section[data-testid="stSidebar"] img {
-    width: 100% !important;
-    max-width: 100% !important;
+    width: 80% !important;
+    max-width: 80% !important;
     margin: 0rem !important;
     padding: 0rem !important;
     display: block !important;
@@ -172,8 +172,8 @@ section[data-testid="stSidebar"] .stImage img {
     border-radius: 0rem !important;
     box-shadow: none !important;
     border: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
+    width: 80% !important;
+    max-width: 80% !important;
 }
 
 /* Garante que a imagem seja o primeiro elemento */
@@ -251,7 +251,7 @@ section[data-testid="stSidebar"] img {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
-    width: 100% !important;
+    width: 80% !important;
     height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -394,7 +394,7 @@ a:hover {
 .stImage img {
     border-radius: 8px !important;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
-    max-width: 100% !important;
+    max-width: 80% !important;
     height: auto !important;
 }
 
@@ -639,4 +639,5 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
