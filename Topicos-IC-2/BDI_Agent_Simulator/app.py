@@ -10,7 +10,6 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent
 CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
-ASL_PATH = PROJECT_ROOT / "src" / "asl"
 
 # Função para carregar CSS externo
 def load_external_css(css_file_path):
@@ -417,7 +416,11 @@ else:
             for nome in nomes:
                 with st.expander(f"Agente: {nome}", expanded=False):
                     try:
-                        asl_path = f"./src/asl/{nome}.asl"
+                        asl_path = PROJECT_ROOT / f"src/asl/{nome}.asl"
+                        with st.sidebar:
+                            st.write(asl_path)
+                        # asl_path = f"./src/asl/{nome}.asl"
+                        
                         if os.path.exists(asl_path):
                             with open(asl_path, 'r', encoding='utf-8') as f:
                                 content = f.read()
@@ -515,6 +518,7 @@ st.sidebar.write("Diretório ASL: `./src/asl/`")
 # Mostrar arquivos encontrados para debug
 st.sidebar.subheader("🔍 Debug")
 st.sidebar.write(f"Arquivos .mas2j encontrados: {mas2j_files}")
+
 
 
 
