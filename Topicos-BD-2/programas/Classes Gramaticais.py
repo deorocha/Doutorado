@@ -9,18 +9,9 @@ import tempfile
 import os
 import sys
 
-# ===== CONFIGURAÇÃO DE CAMINHOS CORRIGIDA =====
-try:
-    # Tenta importar do path_config na raiz
-    current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-    sys.path.append(str(current_dir.parent))
-    from path_config import PROJECT_ROOT, CSS_PATH, IMAGES_PATH
-except ImportError:
-    # Fallback se não conseguir importar
-    current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-    PROJECT_ROOT = current_dir.parent
-    CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
-    IMAGES_PATH = PROJECT_ROOT / "images"
+PROJECT_ROOT = Path(__file__).parent
+CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
+IMAGES_PATH = PROJECT_ROOT / "images"
 
 # Log para debug
 st.sidebar.text(f"CSS_PATH: {CSS_PATH}")
