@@ -106,12 +106,12 @@ section[data-testid="stSidebar"] > div:first-child {
 
 /* Remove qualquer margem da imagem - CORRIGIDA */
 .sidebar-header img {
-    width: 100% !important;
+    width: 80% !important;
     height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     display: block !important;
-    max-width: 100% !important;
+    max-width: 80% !important;
 }
 
 /* Garante que o sidebar tenha scroll correto */
@@ -639,3 +639,4 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
