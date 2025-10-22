@@ -21,12 +21,13 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Importa configuração de caminhos
+# Tenta importar a configuração
 try:
-    from path_config import PROJECT_ROOT, CSS_PATH, IMAGES_PATH
+    sys.path.append(str(project_root))
+    from config import PROJECT_ROOT, CSS_PATH, IMAGES_PATH
 except ImportError:
-    # Fallback se o arquivo não existir
-    PROJECT_ROOT = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+    # Fallback se o config não existir
+    PROJECT_ROOT = project_root
     CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
     IMAGES_PATH = PROJECT_ROOT / "images"
 
@@ -196,3 +197,4 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
