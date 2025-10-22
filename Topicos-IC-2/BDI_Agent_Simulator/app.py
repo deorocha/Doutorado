@@ -6,6 +6,10 @@ import datetime
 import glob
 from queue import Queue, Empty
 
+PROJECT_ROOT = Path(__file__).parent
+CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
+#IMAGES_PATH = PROJECT_ROOT / "images"
+
 # Função para carregar CSS externo
 def load_external_css(css_file_path):
     try:
@@ -16,9 +20,8 @@ def load_external_css(css_file_path):
         st.error(f"Arquivo CSS não encontrado: {css_file_path}")
     except Exception as e:
         st.error(f"Erro ao carregar CSS: {str(e)}")
-
 # Carregar CSS externo
-load_external_css("./styles/styles.css")
+load_external_css("CSS_PATH")
 
 # Configuração da página para layout wide
 st.set_page_config(
@@ -510,3 +513,4 @@ st.sidebar.write("Diretório ASL: `./src/asl/`")
 # Mostrar arquivos encontrados para debug
 st.sidebar.subheader("🔍 Debug")
 st.sidebar.write(f"Arquivos .mas2j encontrados: {mas2j_files}")
+
