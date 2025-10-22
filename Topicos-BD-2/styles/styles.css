@@ -112,13 +112,13 @@ section[data-testid="stSidebar"] > div:first-child {
     padding: 0 !important;
     display: block !important;
     max-width: 100% !important;
-    margin-right: 5rem !important;
 }
 
 /* Garante que o sidebar tenha scroll correto */
 section[data-testid="stSidebar"] > div {
     overflow-y: auto !important;
     height: 100vh !important;
+    margin-right: 5rem !important;
 }
 
 /* Ajusta o conteúdo para não ficar atrás da imagem fixa */
@@ -640,6 +640,7 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
 
 
