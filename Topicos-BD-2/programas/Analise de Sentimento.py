@@ -12,7 +12,7 @@ from pathlib import Path
 # PROJECT_ROOT = Path(__file__).parent.parent
 #PROJECT_ROOT = Path(os.getcwd())
 PROJECT_ROOT = Path(__file__).parent
-CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
+CSS_PATH = PROJECT_ROOT / "styles" / "styles2.css"
 categories_path = PROJECT_ROOT / "categories.json"
 
 # CORREÇÃO: Carregar CSS com caminho absoluto correto
