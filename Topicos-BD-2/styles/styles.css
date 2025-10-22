@@ -101,7 +101,7 @@ section[data-testid="stSidebar"] > div:first-child {
     margin: 0 !important;
     padding: 0 !important;
     border-bottom: 1px solid #e0e0e0 !important;
-    max-width: 340px !important; /* Largura máxima do sidebar */
+    max-width: 350px !important; /* Largura máxima do sidebar */
 }
 
 /* Remove qualquer margem da imagem - CORRIGIDA */
@@ -194,6 +194,7 @@ section[data-testid="stSidebar"] {
 section[data-testid="stSidebar"] > div {
     margin-left: 0rem !important;
     padding-left: 0rem !important;
+    margin-right: 5rem !important;
 }
 
 /* Remove padding do conteúdo do sidebar */
@@ -639,3 +640,4 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
