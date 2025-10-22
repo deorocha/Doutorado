@@ -10,7 +10,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent
 CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
-#IMAGES_PATH = PROJECT_ROOT / "images"
+ASL_PATH = PROJECT_ROOT / "src" / "asl"
 
 # Função para carregar CSS externo
 def load_external_css(css_file_path):
@@ -237,7 +237,7 @@ def initialize_simulation(mas2j_content):
         st.session_state.agents_history = {}  # Resetar histórico
         
         for nome in nomes_agentes:
-            asl_path = f"./src/asl/{nome}.asl"
+            asl_path = f"ASL_PATH/{nome}.asl"
             if os.path.exists(asl_path):
                 st.session_state.simulators[nome] = AgentSimulator(nome, asl_path)
                 st.session_state.agents_state[nome] = {
@@ -515,6 +515,7 @@ st.sidebar.write("Diretório ASL: `./src/asl/`")
 # Mostrar arquivos encontrados para debug
 st.sidebar.subheader("🔍 Debug")
 st.sidebar.write(f"Arquivos .mas2j encontrados: {mas2j_files}")
+
 
 
 
