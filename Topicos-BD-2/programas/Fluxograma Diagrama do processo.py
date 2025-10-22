@@ -8,9 +8,10 @@ project_root = current_dir.parent  # Sobe um nível para a pasta raiz
 
 # Constrói caminhos absolutos para os arquivos na pasta raiz
 # css_path = project_root / "styles" / "styles.css"
+css_path = "../styles/styles.css"
 #fluxograma_image_path = project_root "images/fluxograma.png"
 fluxograma_image_path = "../images/fluxograma.png"
-"""
+
 def load_css(css_path):
     try:
         with open(css_path, "r", encoding="utf-8") as f:
@@ -21,7 +22,6 @@ def load_css(css_path):
     except Exception as e:
         st.error(f"Erro ao carregar CSS: {e}")
 load_css(css_path)
-"""
 
 st.title("📊 Fluxograma da Atividade")
 
