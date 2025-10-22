@@ -34,5 +34,6 @@ MAS miners {
                agentArchClass arch.LocalMinerArch
                #6;
 
-    aslSourcePath: "asl";
+    aslSourcePath: "src/asl";
 }
+
