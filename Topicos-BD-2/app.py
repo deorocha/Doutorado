@@ -21,29 +21,11 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-def get_project_root():
-    """Retorna o caminho raiz do projeto funcionando localmente e no Streamlit Cloud"""
-    current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-    
-    # No Streamlit Cloud, o diretório de trabalho é a raiz do repositório
-    if "streamlit" in str(current_dir).lower():
-        return current_dir
-    else:
-        return current_dir
-
 project_root = Path(__file__).parent
-with st.sidebar:
-    st.write(project_root)
 
-# Tenta importar a configuração
-try:
-    from config import PROJECT_ROOT, CSS_PATH, IMAGES_PATH
-    sys.path.append(str(project_root))
-except ImportError:
-    # Fallback se o config não existir
-    PROJECT_ROOT = project_root
-    CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
-    IMAGES_PATH = PROJECT_ROOT / "images"
+PROJECT_ROOT = project_root
+CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
+IMAGES_PATH = PROJECT_ROOT / "images"
 
 # Função para carregar CSS globalmente - CORRIGIDA
 def load_global_css(css_path):
@@ -94,9 +76,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Função para carregar imagem como base64
-def get_base64_image(image_path):
+def get_base64_image(IMAGES_PATH):
     try:
-        with open(image_path, "rb") as img_file:
+        with open(IMAGES_PATH, "rb") as img_file:
             return base64.b64encode(img_file.read()).decode()
     except:
         return None
@@ -211,6 +193,7 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
 
 
 
