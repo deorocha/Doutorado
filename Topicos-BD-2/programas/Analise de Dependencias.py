@@ -142,7 +142,24 @@ if text_input:
 
     if st.button('Analisar dependências', type="primary"):
         st.header("")
-        st.write(dep_html, unsafe_allow_html=True)
+        
+        # Container com scroll horizontal para o parse de dependências
+        st.markdown(
+            f"""
+            <div style="
+                width: 100%;
+                overflow-x: auto;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                padding: 10px;
+                background-color: white;
+                margin-bottom: 20px;
+            ">
+                {dep_html}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
         
         # Adicionar as tabelas de legenda
         st.header("Legenda das Dependências")
