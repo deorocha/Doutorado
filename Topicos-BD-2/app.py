@@ -20,17 +20,8 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Tenta encontrar a raiz do projeto: sobe até encontrar a pasta 'styles' ou 'images'
-def find_project_root(current_path):
-    # Sobe até encontrar a raiz (onde estão as pastas styles e images)
-    for parent in [current_path] + list(current_path.parents):
-        if (parent / "styles").exists() and (parent / "images").exists():
-            return parent
-    return current_path  # fallback
-
-# Obtém o diretório atual do script
+# Obtém o diretório atual do script (app.py)
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-project_root = find_project_root(current_dir)
 
 # Constrói caminhos absolutos para os arquivos
 css_path = current_dir / "styles" / "styles.css"
@@ -142,7 +133,7 @@ with st.sidebar:
             image_base64 = base64.b64encode(f.read()).decode()
         
         st.markdown(
-            f'<img src="data:image/png;base64,{image_base64}" alt="WebMedia 2024" style="width:250px; max-width:250px; margin:0 auto; display:block;">',
+            f'<img src="data:image/png;base64,{image_base64}" alt="WebMedia 2024" style="width:100%; max-width:250px; margin:0 auto; display:block;">',
             unsafe_allow_html=True
         )
     except Exception as e:
@@ -183,7 +174,7 @@ if st.session_state.current_page == "Home":
     show_home()
 else:
     # Executa a página externa correspondente
-    page_file = PAGE_MAPPING.get(st.session_state.current_page)
+    page_file = "programas/" + PAGE_MAPPING.get(st.session_state.current_page)
     if page_file:
         run_external_page(page_file)
     else:
@@ -191,9 +182,3 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
-
-
-
-
-
-
