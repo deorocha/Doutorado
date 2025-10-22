@@ -186,7 +186,7 @@ if st.session_state.current_page == "Home":
     show_home()
 else:
     # Executa a página externa correspondente
-    page_file = PROGRAMS_PATH + PAGE_MAPPING.get(st.session_state.current_page)
+    page_file = PROGRAMS_PATH / PAGE_MAPPING.get(st.session_state.current_page)
     if page_file:
         run_external_page(page_file)
     else:
@@ -194,3 +194,4 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
