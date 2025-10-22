@@ -11,6 +11,7 @@ import streamlit as st
 import base64
 from pathlib import Path
 import os
+import sys
 
 # Configuração da página - DEVE SER A PRIMEIRA COISA
 st.set_page_config(
@@ -20,26 +21,37 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Obtém o diretório atual do script (app.py)
-current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+# Importa configuração de caminhos
+try:
+    from path_config import PROJECT_ROOT, CSS_PATH, IMAGES_PATH
+except ImportError:
+    # Fallback se o arquivo não existir
+    PROJECT_ROOT = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+    CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
+    IMAGES_PATH = PROJECT_ROOT / "images"
 
-# Constrói caminhos absolutos para os arquivos
-css_path = current_dir / "styles" / "styles.css"
-webmedia_image_path = current_dir / "images" / "webmedia2024.png"
-background_image_path = current_dir / "images" / "background.png"
-
-# Função para carregar CSS globalmente
+# Função para carregar CSS globalmente - CORRIGIDA
 def load_global_css(css_path):
     try:
-        with open(css_path, "r", encoding="utf-8") as f:
-            css_content = f.read()
-            # Injeta o CSS globalmente em todas as páginas
-            st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
+        if css_path.exists():
+            with open(css_path, "r", encoding="utf-8") as f:
+                css_content = f.read()
+                st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
+            st.success("✅ CSS carregado com sucesso")
+        else:
+            st.warning(f"⚠️ Arquivo CSS não encontrado em: {css_path}")
+            # CSS fallback básico
+            st.markdown("""
+            <style>
+                h1 { color: #1f3a2d; }
+                .stButton button { background-color: #4CAF50; color: white; }
+            </style>
+            """, unsafe_allow_html=True)
     except Exception as e:
-        st.error(f"Erro ao carregar CSS: {e}")
+        st.error(f"❌ Erro ao carregar CSS: {e}")
 
 # Carrega o CSS global
-load_global_css(css_path)
+load_global_css(CSS_PATH)
 
 # CSS adicional para correções específicas
 st.markdown("""
@@ -184,5 +196,6 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
 
 
