@@ -358,6 +358,7 @@ a:hover {
 
 /* Botoes */
 .stButton button {
+    font-size: 10px !important;
     background-color: #92bfff !important;
     color: white !important;
     border: none !important;
@@ -368,7 +369,6 @@ a:hover {
     height: 30px !important;
     padding-top: 20px !important; /* Adjust padding if necessary */
     padding-bottom: 4px !important; /* Adjust padding if necessary */
-    font-size: 0.4rem !important;    
 }
 
 .stButton button:hover {
@@ -479,13 +479,8 @@ a:hover {
 
 /* Sidebar */
 .sidebar .sidebar-content {
-    font-size: 0.4rem !important;
     background-color: var(--sidebar-color);
     background-image: linear-gradient(180deg, var(--sidebar-color) 0%, #ffffff 100%);
-}
-
-.sidebar-content .stButton button {
-    font-size: 6px !important;
 }
 
 /* Badges e tags */
@@ -711,6 +706,7 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
 
 
