@@ -96,8 +96,8 @@ section[data-testid="stSidebar"] .stButton button {
     padding-top: 0.3rem !important;
     padding-bottom: 0.3rem !important;
     width: 300px !important;
-    height: 25px !important;
-    min-height: 25px !important;
+    height: 30px !important;
+    min-height: 30px !important;
 }
 
 /* Imagem fixa no topo - CORRIGIDA para largura do sidebar */
@@ -716,6 +716,7 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
 
 
