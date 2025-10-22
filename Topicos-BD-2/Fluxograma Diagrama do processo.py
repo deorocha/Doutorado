@@ -12,8 +12,10 @@ def find_project_root(current_path):
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
 project_root = find_project_root(current_dir)
 
-css_path = project_root / "styles" / "styles.css"
-fluxograma_image_path = project_root / "images" / "fluxograma.png"
+#css_path = project_root / "styles" / "styles.css"
+#fluxograma_image_path = project_root / "images" / "fluxograma.png"
+css_path = "styles/styles.css"
+fluxograma_image_path = "images/fluxograma.png"
 
 def load_css(css_path):
     try:
