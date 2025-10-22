@@ -5,8 +5,6 @@ import sys
 PROJECT_ROOT = Path(__file__).parent
 CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
 IMAGES_PATH = PROJECT_ROOT / "images"
-PROGRAMS_PATH = PROJECT_ROOT / "programas"
-
 fluxograma_image_path = IMAGES_PATH / "fluxograma.png"
 
 def load_css(css_path):
