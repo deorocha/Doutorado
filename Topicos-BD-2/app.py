@@ -96,7 +96,9 @@ PAGE_MAPPING = {
 # Função para executar páginas externas
 def run_external_page(page_file):
     try:
-        page_path = current_dir / page_file
+        # Caminho corrigido para funcionar no Streamlit Cloud
+        page_path = current_dir / "programas" / page_file
+        
         if page_path.exists():
             # Lê o conteúdo do arquivo
             with open(page_path, 'r', encoding='utf-8') as f:
@@ -105,7 +107,7 @@ def run_external_page(page_file):
             # Executa o código da página
             exec(page_content, globals())
         else:
-            st.error(f"Arquivo {page_file} não encontrado")
+            st.error(f"Arquivo {page_file} não encontrado em: {page_path}")
     except Exception as e:
         st.error(f"Erro ao carregar a página: {e}")
         st.info("A página pode estar em desenvolvimento")
@@ -182,3 +184,4 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
