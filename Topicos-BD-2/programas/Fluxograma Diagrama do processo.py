@@ -21,7 +21,7 @@ def load_css(css_path):
         st.error("Arquivo CSS não encontrado na pasta 'styles/'")
     except Exception as e:
         st.error(f"Erro ao carregar CSS: {e}")
-load_css(css_path)
+load_css(CSS_PATH)
 
 st.title("📊 Fluxograma da Atividade")
 
