@@ -97,7 +97,7 @@ PAGE_MAPPING = {
     "😊 Análise de Sentimento": "Analise de Sentimento.py",
     "🖼 Geração de Imagem": "Geracao de Imagem.py",
     "✂️ Tokenização": "Tokenizacao.py",
-    "📝 Classes Gramaticais": "Classes Gramaticais.py",
+    "📝 Marcação de Classes Gramaticais": "Classes Gramaticais.py",
     "🔗 Análise de Dependências": "Analise de Dependencias.py",
     "📏 Detecção de Limites de Frases": "Deteccao de Limites de Frases.py",
     "📐 Análise de Similaridade": "Analise de Similaridade.py",
@@ -196,3 +196,4 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
