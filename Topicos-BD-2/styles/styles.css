@@ -140,7 +140,7 @@ section[data-testid="stSidebar"] > div {
 section[data-testid="stSidebar"] {
     padding: 0rem !important;
     margin: 0rem !important;
-    width: auto !important;
+    width: 500px !important;
 }
 
 /* Remove padding do conteudo do sidebar */
@@ -639,3 +639,4 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
