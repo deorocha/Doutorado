@@ -10,7 +10,7 @@ project_root = current_dir.parent  # Sobe um nível para a pasta raiz
 
 # Constrói caminhos absolutos para os arquivos
 #css_path = project_root / "styles" / "styles.css"
-css_path = "./styles/styles.css"
+css_path = "styles/styles.css"
 
 # Carregar CSS externo com codificação correta
 def load_css(css_path):
