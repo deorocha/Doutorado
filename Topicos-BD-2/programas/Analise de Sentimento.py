@@ -13,19 +13,42 @@ PROJECT_ROOT = Path(__file__).parent.parent  # Volta um nível para a raiz do pr
 CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
 categories_path = PROJECT_ROOT / "categories.json"  # Agora na raiz do projeto
 
-with st.sidebar:
-    st.write(f"Procurando categories.json em: {categories_path}")
-
-# Carregar CSS externo com codificação correta
+# CORREÇÃO: Carregar CSS com caminho absoluto correto
 def load_css(css_path):
     try:
-        with open(css_path, "r", encoding="utf-8") as f:
-            css_content = f.read()
-            st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
-    except FileNotFoundError:
-        st.error("Arquivo CSS não encontrado na pasta 'styles/'")
+        if css_path.exists():
+            with open(css_path, "r", encoding="utf-8") as f:
+                css_content = f.read()
+                st.markdown(f"<style>{css_content}</style>", unsafe_allow_html=True)
+        else:
+            st.warning(f"⚠️ Arquivo CSS não encontrado em: {css_path}")
+            # CSS fallback básico
+            st.markdown("""
+            <style>
+                .concept-matrix {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 10px;
+                    margin: 20px 0;
+                }
+                .matrix-cell {
+                    padding: 15px;
+                    border-radius: 10px;
+                    text-align: center;
+                    color: white;
+                }
+                .matrix-cell-subjective { background-color: #9b59b6; }
+                .matrix-cell-objective { background-color: #2ecc71; }
+                .matrix-cell-behavioral { background-color: #e74c3c; }
+                .matrix-cell-practical { background-color: #3498db; }
+                .matrix-value {
+                    font-size: 24px;
+                    font-weight: bold;
+                }
+            </style>
+            """, unsafe_allow_html=True)
     except Exception as e:
-        st.error(f"Erro ao carregar CSS: {e}")
+        st.error(f"❌ Erro ao carregar CSS: {e}")
 
 load_css(CSS_PATH)
 
@@ -34,44 +57,73 @@ load_css(CSS_PATH)
 def load_categories():
     try:
         # Tenta carregar da raiz do projeto
-        with open(categories_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        st.error(f"Arquivo categories.json não encontrado em: {categories_path}")
-        st.info("Criando estrutura básica de categorias...")
-        
-        # Cria categorias básicas se o arquivo não existir
-        categorias_basicas = {
-            "Pensamento Subjetivo": ["acho", "acredito", "sinto", "penso", "opinião", "sentimento", "emoção", "intuição"],
-            "Pensamento Objetivo": ["dados", "fatos", "estatística", "evidência", "prova", "análise", "pesquisa", "estudo"],
-            "Ação Comportamental": ["comportamento", "atitude", "ação", "decisão", "escolha", "reação", "resposta"],
-            "Ação Prática": ["implementar", "executar", "aplicar", "praticar", "realizar", "fazer", "produzir"]
-        }
-        
-        # Tenta salvar o arquivo de categorias
-        try:
-            with open(categories_path, 'w', encoding='utf-8') as f:
-                json.dump(categorias_basicas, f, indent=2, ensure_ascii=False)
-            st.success("Arquivo categories.json criado com categorias básicas!")
-            return categorias_basicas
-        except Exception as e:
-            st.warning(f"Não foi possível criar categories.json: {e}")
-            return categorias_basicas
+        if categories_path.exists():
+            with open(categories_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        else:
+            st.warning(f"Arquivo categories.json não encontrado em: {categories_path}")
+            st.info("Criando estrutura básica de categorias...")
+            
+            # Cria categorias básicas se o arquivo não existir
+            categorias_basicas = {
+                "Pensamento Subjetivo": ["acho", "acredito", "sinto", "penso", "opinião", "sentimento", "emoção", "intuição"],
+                "Pensamento Objetivo": ["dados", "fatos", "estatística", "evidência", "prova", "análise", "pesquisa", "estudo"],
+                "Ação Comportamental": ["comportamento", "atitude", "ação", "decisão", "escolha", "reação", "resposta"],
+                "Ação Prática": ["implementar", "executar", "aplicar", "praticar", "realizar", "fazer", "produzir"]
+            }
+            
+            # Tenta salvar o arquivo de categorias
+            try:
+                with open(categories_path, 'w', encoding='utf-8') as f:
+                    json.dump(categorias_basicas, f, indent=2, ensure_ascii=False)
+                st.success("✅ Arquivo categories.json criado com categorias básicas!")
+                return categorias_basicas
+            except Exception as e:
+                st.warning(f"⚠️ Não foi possível criar categories.json: {e}")
+                return categorias_basicas
     except UnicodeDecodeError:
         # Fallback para latin-1 se UTF-8 falhar
         try:
             with open(categories_path, 'r', encoding='latin-1') as f:
                 return json.load(f)
         except Exception as e:
-            st.error(f"Erro ao carregar categorias com latin-1: {e}")
+            st.error(f"❌ Erro ao carregar categorias com latin-1: {e}")
             return {}
     except Exception as e:
-        st.error(f"Erro ao carregar categorias: {e}")
+        st.error(f"❌ Erro ao carregar categorias: {e}")
         return {}
 
 categories = load_categories()
 
-# Resto do código permanece igual...
+# Configuração do TextBlob
+@st.cache_resource
+def setup_textblob():
+    """Configura todos os recursos necessários para o TextBlob"""
+    import nltk
+    
+    # Lista de corpora necessários
+    corpora = [
+        'punkt',        # Tokenizer
+        'brown',        # Corpus para treinamento
+        'movie_reviews', # Análise de sentimentos
+        'wordnet',      # Thesaurus
+        'averaged_perceptron_tagger', # POS tagging
+        'stopwords'     # Palavras comuns para remoção
+    ]
+    
+    for corpus in corpora:
+        try:
+            nltk.data.find(f'tokenizers/{corpus}' if corpus == 'punkt' else f'corpora/{corpus}' if corpus in ['brown', 'movie_reviews', 'wordnet', 'stopwords'] else f'taggers/{corpus}')
+        except LookupError:
+            with st.spinner(f'Baixando {corpus}...'):
+                nltk.download(corpus, quiet=True)
+
+# Executa a configuração do TextBlob
+try:
+    setup_textblob()
+except Exception as e:
+    st.warning(f"Alguns recursos do TextBlob podem não funcionar: {e}")
+
 def extract_text_from_pdf(uploaded_file):
     """Extrai texto de arquivo PDF"""
     try:
@@ -189,7 +241,6 @@ def calculate_axes(percentuais):
         'subjetivo': subjetivo_percent,
         'objetivo': objetivo_percent
     }
-
 
 def generate_insights(sentiment_info, axes):
     """Gera insights baseados na análise"""
