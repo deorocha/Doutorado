@@ -146,7 +146,7 @@ with st.sidebar:
             image_base64 = base64.b64encode(f.read()).decode()
         
         st.markdown(
-            f'<img src="data:image/png;base64,{image_base64}" alt="WebMedia 2024" style="width:90%; max-width:200px; margin:0 auto; display:block;">',
+            f'<img src="data:image/png;base64,{image_base64}" alt="WebMedia 2024" style="width:100%; max-width:250px; margin:0 auto; display:block;">',
             unsafe_allow_html=True
         )
     except Exception as e:
@@ -196,5 +196,3 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
-
-
