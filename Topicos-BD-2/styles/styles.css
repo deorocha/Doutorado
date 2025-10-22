@@ -104,6 +104,11 @@ section[data-testid="stSidebar"] .sidebar-content .stButton button {
     font-size: 0.4rem !important;
 }
 
+/* Regra alternativa - ainda mais específica */
+div[data-testid="stSidebar"] .stButton button {
+    font-size: 0.4rem !important;
+}
+
 /* Imagem fixa no topo - CORRIGIDA para largura do sidebar */
 .sidebar-header {
     position: fixed !important;
@@ -720,6 +725,7 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
 
 
