@@ -12,7 +12,9 @@ PROJECT_ROOT = Path(__file__).parent
 CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
 
 categories_path = PROJECT_ROOT / "categories.json"
-
+with st.sidebar:
+    st.write(categories_path)
+    
 # Carregar CSS externo com codificação correta
 def load_css(css_path):
     try:
