@@ -361,14 +361,14 @@ a:hover {
     background-color: #92bfff !important;
     color: white !important;
     border: none !important;
-    padding: 0.5rem 1rem !important;
+    padding: 0.4rem 1rem !important;
     border-radius: 5px !important;
     font-weight: 500 !important;
     transition: background-color 0.3s ease !important;
     height: 30px !important;
-    padding-top: 25px !important; /* Adjust padding if necessary */
-    padding-bottom: 5px !important; /* Adjust padding if necessary */
-    font-size: 0.6rem !important;    
+    padding-top: 20px !important; /* Adjust padding if necessary */
+    padding-bottom: 4px !important; /* Adjust padding if necessary */
+    font-size: 0.4rem !important;    
 }
 
 .stButton button:hover {
@@ -706,5 +706,6 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
 
