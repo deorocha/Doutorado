@@ -165,21 +165,35 @@ def create_visualizations(analysis):
     # Gráfico de distribuição de tamanho de frases
     sentence_lengths = [sent["Palavras"] for sent in analysis["sentence_data"]]
     
-    fig_length = px.histogram(
-        x=sentence_lengths,
+    # Criar DataFrame para contar frequências
+    length_counts = pd.Series(sentence_lengths).value_counts().sort_index()
+    
+    fig_length = px.bar(
+        x=length_counts.index,
+        y=length_counts.values,
         title="Distribuição de Palavras por Frase",
         labels={"x": "Número de Palavras", "y": "Quantidade de Frases"},
-        nbins=10
+        text=length_counts.values
     )
-    
-    # Gráfico de terminadores de frases
+    fig_length.update_traces(textposition='outside', 
+                            hovertemplate="<b>%{x} palavras</b><br>Frases: %{y}")
+    fig_length.update_layout(showlegend=False)
+
+    # Gráfico de terminadores de frases (agora em barras)
     endings_data = analysis["stats"]["sentence_endings"]
     if endings_data:
-        fig_endings = px.pie(
-            values=list(endings_data.values()),
-            names=list(endings_data.keys()),
-            title="Tipos de Terminadores de Frases"
+        fig_endings = px.bar(
+            x=list(endings_data.keys()),
+            y=list(endings_data.values()),
+            title="Tipos de Terminadores de Frases",
+            labels={"x": "Terminador", "y": "Quantidade"},
+            text=list(endings_data.values()),
+            color=list(endings_data.keys())
         )
+        fig_endings.update_traces(textposition='outside',
+                                 hovertemplate="<b>Terminador: %{x}</b><br>Frases: %{y}")
+        fig_endings.update_layout(showlegend=True, 
+                                 legend_title="Terminadores")
     else:
         fig_endings = None
     
