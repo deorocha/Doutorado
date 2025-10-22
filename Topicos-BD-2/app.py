@@ -23,8 +23,8 @@ st.set_page_config(
 
 # Tenta importar a configuração
 try:
-    sys.path.append(str(project_root))
     from config import PROJECT_ROOT, CSS_PATH, IMAGES_PATH
+    sys.path.append(str(PROJECT_ROOT))
 except ImportError:
     # Fallback se o config não existir
     PROJECT_ROOT = project_root
@@ -197,4 +197,5 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
 
