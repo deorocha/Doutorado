@@ -31,9 +31,9 @@ def get_project_root():
     else:
         return current_dir
 
-project_root = get_project_root()
+project_root = Path(__file__).parent
 with st.sidebar:
-    st.write(Path(__file__).parent)
+    st.write(project_root)
 
 # Tenta importar a configuração
 try:
@@ -211,6 +211,7 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
 
 
 
