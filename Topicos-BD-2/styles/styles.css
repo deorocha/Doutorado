@@ -492,6 +492,72 @@ a:hover {
     background-color: var(--primary-color) !important;
 }
 
+/* Barra de sentimento */
+.sentiment-bar {
+    background: #ecf0f1 !important;
+    border-radius: 10px !important;
+    padding: 5px !important;
+    margin: 0.5rem 0 !important;
+}
+
+.sentiment-fill {
+    background: linear-gradient(90deg, #e74c3c 0%, #f39c12 50%, #2ecc71 100%) !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+    text-align: center !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+
+/* Matriz conceitual */
+.concept-matrix {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 15px !important;
+    margin: 1rem 0 !important;
+}
+
+.matrix-cell {
+    padding: 15px !important;
+    border-radius: 10px !important;
+    text-align: center !important;
+    border: 2px solid !important;
+    margin: 0.2rem 0 !important;
+}
+
+.matrix-cell-subjective {
+    background: linear-gradient(135deg, #e8f4fd, #b3d9ff) !important;
+    border-color: #3498db !important;
+}
+
+.matrix-cell-objective {
+    background: linear-gradient(135deg, #e6f7e9, #99e699) !important;
+    border-color: #2ecc71 !important;
+}
+
+.matrix-cell-behavioral {
+    background: linear-gradient(135deg, #fff0f0, #ffb3b3) !important;
+    border-color: #e74c3c !important;
+}
+
+.matrix-cell-practical {
+    background: linear-gradient(135deg, #fcf8e3, #ffe680) !important;
+    border-color: #f39c12 !important;
+}
+
+.matrix-value {
+    font-size: 24px !important;
+    font-weight: bold !important;
+    margin: 5px 0 !important;
+}
+
+.matrix-cell-subjective .matrix-value { color: #3498db !important; }
+.matrix-cell-objective .matrix-value { color: #2ecc71 !important; }
+.matrix-cell-behavioral .matrix-value { color: #e74c3c !important; }
+.matrix-cell-practical .matrix-value { color: #f39c12 !important; }
+
+
+
 /* Metric cards */
 [data-testid="stMetricValue"] {
     font-size: 1.5rem !important;
