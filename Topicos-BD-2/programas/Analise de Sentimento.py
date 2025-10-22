@@ -10,7 +10,8 @@ from pathlib import Path
 
 # CORREÇÃO: Definir o PROJECT_ROOT corretamente
 # PROJECT_ROOT = Path(__file__).parent.parent
-PROJECT_ROOT = Path(os.getcwd())
+#PROJECT_ROOT = Path(os.getcwd())
+PROJECT_ROOT = Path(__file__).parent
 CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
 categories_path = PROJECT_ROOT / "categories.json"
 
