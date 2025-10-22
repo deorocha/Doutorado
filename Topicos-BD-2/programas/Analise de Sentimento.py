@@ -9,9 +9,10 @@ import io
 from pathlib import Path
 
 # CORREÇÃO: Definir o PROJECT_ROOT corretamente
-PROJECT_ROOT = Path(__file__).parent.parent  # Volta um nível para a raiz do projeto
+# PROJECT_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = Path(os.getcwd())
 CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
-categories_path = PROJECT_ROOT / "categories.json"  # Agora na raiz do projeto
+categories_path = PROJECT_ROOT / "categories.json"
 
 # CORREÇÃO: Carregar CSS com caminho absoluto correto
 def load_css(css_path):
