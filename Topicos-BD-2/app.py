@@ -107,8 +107,8 @@ PAGE_MAPPING = {
 # Função para executar páginas externas
 def run_external_page(page_file):
     try:
-        # Caminho corrigido para funcionar no Streamlit Cloud
-        page_path = current_dir / "programas" / page_file
+        # Caminho direto para o arquivo na pasta programas
+        page_path = PROGRAMS_PATH / page_file
         
         if page_path.exists():
             # Lê o conteúdo do arquivo
@@ -183,18 +183,16 @@ with st.sidebar:
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Conteúdo principal baseado na página selecionada
+# Conteúdo principal baseado na página selecionada - CORRIGIDO
 if st.session_state.current_page == "Home":
     show_home()
 else:
     # Executa a página externa correspondente
-    with st.sidebar:
-        st.write(PAGE_MAPPING.get(st.session_state.current_page))
-    
-    page_file = PROGRAMS_PATH / PAGE_MAPPING.get(st.session_state.current_page)
+    page_file = PAGE_MAPPING.get(st.session_state.current_page)
     if page_file:
         run_external_page(page_file)
     else:
-        st.error("Página não encontrada")
+        st.error("Página não encontrada no mapeamento")
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
