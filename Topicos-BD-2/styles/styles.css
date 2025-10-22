@@ -134,7 +134,6 @@ section[data-testid="stSidebar"] > div {
     padding-left: 0rem !important;
     padding-right: 0rem !important;
     margin: 0rem !important;
-    margin-right: -3rem !important;
 }
 
 /* Container do sidebar */
@@ -142,6 +141,7 @@ section[data-testid="stSidebar"] {
     padding: 0rem !important;
     margin: 0rem !important;
     width: auto !important;
+    margin-right: 2rem !important;
 }
 
 /* Remove padding do conteudo do sidebar */
@@ -640,6 +640,7 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
 
 
