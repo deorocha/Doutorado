@@ -131,7 +131,7 @@ def carregar_stopwords_padrao():
                     if palavra:
                         palavra_sem_acento = remover_acentos(palavra)
                         stopwords_padrao.add(palavra_sem_acento)
-            st.success(f"✅ {len(stopwords_padrao)} stopwords carregadas do arquivo padrão")
+            st.write(f"✅ {len(stopwords_padrao)} stopwords carregadas do arquivo padrão")
         else:
             st.warning(f"Arquivo {stopwords_path} não encontrado. Será criado um conjunto vazio de stopwords.")
     except Exception as e:
@@ -189,9 +189,9 @@ def main():
     # Inicializa o detector de idioma
     with st.spinner("Inicializando detector de idiomas..."):
         detector_idioma = inicializar_detector_idioma()
-    st.success("✅ Detector de idiomas inicializado")
+    st.write("✅ Detector de idiomas inicializado")
     
-    # Verifica se a pasta existe
+    # Verifica se a patopwords carregadas do arquivo padrãosta existe
     if not pasta_pdf.exists():
         st.error(f"A pasta '{pasta_pdf}' não foi encontrada!")
         return
