@@ -174,7 +174,7 @@ if st.session_state.current_page == "Home":
     show_home()
 else:
     # Executa a página externa correspondente
-    page_file = "programas/" + PAGE_MAPPING.get(st.session_state.current_page)
+    page_file = PAGE_MAPPING.get(st.session_state.current_page)
     if page_file:
         run_external_page(page_file)
     else:
