@@ -10,6 +10,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent
 CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
+ASL_PATH = PROJECT_ROOT / "src/asl"
 
 # Função para carregar CSS externo
 def load_external_css(css_file_path):
@@ -236,7 +237,7 @@ def initialize_simulation(mas2j_content):
         st.session_state.agents_history = {}  # Resetar histórico
         
         for nome in nomes_agentes:
-            asl_path = f"ASL_PATH/{nome}.asl"
+            asl_path = ASL_PATH / f"{nome}.asl"
             if os.path.exists(asl_path):
                 st.session_state.simulators[nome] = AgentSimulator(nome, asl_path)
                 st.session_state.agents_state[nome] = {
@@ -385,7 +386,7 @@ if mas2j_files:
             for nome in nomes:
                 with st.expander(f"Agente: {nome}", expanded=False):
                     try:
-                        asl_path = f"./src/asl/{nome}.asl"
+                        asl_path = ASL_PATH / f"{nome}.asl"
                         if os.path.exists(asl_path):
                             with open(asl_path, 'r', encoding='utf-8') as f:
                                 content = f.read()
@@ -416,7 +417,7 @@ else:
             for nome in nomes:
                 with st.expander(f"Agente: {nome}", expanded=False):
                     try:
-                        asl_path = PROJECT_ROOT / f"src/asl/{nome}.asl"
+                        asl_path = ASL_PATH / f"{nome}.asl"
                         with st.sidebar:
                             st.write(asl_path)
                         # asl_path = f"./src/asl/{nome}.asl"
@@ -518,6 +519,7 @@ st.sidebar.write("Diretório ASL: `./src/asl/`")
 # Mostrar arquivos encontrados para debug
 st.sidebar.subheader("🔍 Debug")
 st.sidebar.write(f"Arquivos .mas2j encontrados: {mas2j_files}")
+
 
 
 
