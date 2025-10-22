@@ -20,8 +20,17 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Obtém o diretório atual do script (app.py)
+# Tenta encontrar a raiz do projeto: sobe até encontrar a pasta 'styles' ou 'images'
+def find_project_root(current_path):
+    # Sobe até encontrar a raiz (onde estão as pastas styles e images)
+    for parent in [current_path] + list(current_path.parents):
+        if (parent / "styles").exists() and (parent / "images").exists():
+            return parent
+    return current_path  # fallback
+
+# Obtém o diretório atual do script
 current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
+project_root = find_project_root(current_dir)
 
 # Constrói caminhos absolutos para os arquivos
 css_path = current_dir / "styles" / "styles.css"
@@ -182,3 +191,4 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
