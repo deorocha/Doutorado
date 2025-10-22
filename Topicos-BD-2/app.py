@@ -99,7 +99,7 @@ PAGE_MAPPING = {
     "✂️ Tokenização": "Tokenizacao.py",
     "📝 Classes Gramaticais": "Classes Gramaticais.py",
     "🔗 Análise de Dependências": "Analise de Dependencias.py",
-    "📏 Limites de Frases": "Deteccao de Limites de Frases.py",
+    "📏 Detecção de Limites de Frases": "Deteccao de Limites de Frases.py",
     "📐 Análise de Similaridade": "Analise de Similaridade.py",
     "☁️ Word Cloud": "Word Cloud.py"
 }
@@ -196,3 +196,4 @@ else:
         if st.button("Voltar para Home"):
             st.session_state.current_page = "Home"
             st.rerun()
+
