@@ -88,7 +88,6 @@ div[data-testid="stAppViewContainer"] {
 /* Move todo o conteúdo do sidebar para baixo da imagem */
 section[data-testid="stSidebar"] > div:first-child {
     padding-top: 0px !important; /* Ajuste conforme a altura da sua imagem */
-    margin-right: 5rem !important;
 }
 
 /* Imagem fixa no topo - CORRIGIDA para largura do sidebar */
@@ -103,6 +102,7 @@ section[data-testid="stSidebar"] > div:first-child {
     padding: 0 !important;
     border-bottom: 1px solid #e0e0e0 !important;
     max-width: 350px !important; /* Largura máxima do sidebar */
+    margin-right: 5rem !important;
 }
 
 /* Remove qualquer margem da imagem - CORRIGIDA */
@@ -640,5 +640,6 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
     }
 
 }
+
 
 
