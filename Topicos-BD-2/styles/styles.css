@@ -1,0 +1,641 @@
+/* ESTILOS GLOBAIS DA APLICACAO WEBMEDIA 2024 */
+/* REMOCAO COMPLETA DE MARGENS SUPERIORES */
+
+/* Remove todo o padding e margin do container principal */
+.main .block-container {
+    padding-top: 0rem !important;
+    padding-bottom: 1rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
+    max-width: 100%;
+}
+
+/* Remove margin do header do Streamlit */
+header {
+    margin-bottom: 0rem !important;
+    padding-bottom: 0rem !important;
+}
+
+/* Remove todo o espaco acima do primeiro h1 */
+h1:first-child {
+    margin-top: 1.5rem !important;
+    padding-top: 0rem !important;
+}
+
+/* Remove margin-top de todos os h1 */
+h1 {
+    margin-top: 5rem !important;
+    padding-top: 0rem !important;
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    color: #1f3a2d !important;
+    margin-bottom: 1.5rem !important;
+    border-bottom: 3px solid #4CAF50;
+    padding-bottom: 0.5rem;
+}
+
+/* Remove espacamento do elemento div que pode conter o titulo */
+div[data-testid="stVerticalBlock"] > div[style*="flex-direction: column;"] > div:first-child {
+    padding-top: 0rem !important;
+    margin-top: 0rem !important;
+}
+
+/* Remove padding do container vertical */
+div[data-testid="stVerticalBlock"] {
+    padding-top: 0rem !important;
+    margin-top: 0rem !important;
+}
+
+/* Remove espacamento do block container */
+div[data-testid="stVerticalBlockBorderWrapper"] {
+    padding-top: 0rem !important;
+    margin-top: 0rem !important;
+}
+
+/* Garante que o primeiro elemento nao tenha margem */
+div[data-testid="stVerticalBlock"] > div:first-child {
+    margin-top: 0rem !important;
+    padding-top: 0rem !important;
+}
+
+/* Remove qualquer padding adicional do main */
+.main {
+    padding-top: 0rem !important;
+}
+
+/* Remove margin do elemento section */
+section.main {
+    padding-top: 0rem !important;
+    margin-top: 0rem !important;
+}
+
+/* REGRAS EXTRAS - Remove qualquer espaco residual */
+div[data-testid="stAppViewContainer"] > div:first-child {
+    padding-top: 0rem !important;
+    margin-top: 0rem !important;
+}
+
+section[data-testid="stMain"] > div:first-child {
+    padding-top: 0rem !important;
+    margin-top: 0rem !important;
+}
+
+/* Remove padding do stApp view container */
+div[data-testid="stAppViewContainer"] {
+    padding-top: 0rem !important;
+}
+
+/* Move todo o conteúdo do sidebar para baixo da imagem */
+section[data-testid="stSidebar"] > div:first-child {
+    padding-top: 0px !important; /* Ajuste conforme a altura da sua imagem */
+}
+
+/* Imagem fixa no topo - CORRIGIDA para largura do sidebar */
+.sidebar-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: var(--sidebar-width) !important; /* Largura do sidebar */
+    background: white !important;
+    z-index: 9999 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+    max-width: 340px !important; /* Largura máxima do sidebar */
+}
+
+/* Remove qualquer margem da imagem - CORRIGIDA */
+.sidebar-header img {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    max-width: 100% !important;
+}
+
+/* Garante que o sidebar tenha scroll correto */
+section[data-testid="stSidebar"] > div {
+    overflow-y: auto !important;
+    height: 100vh !important;
+}
+
+/* Ajusta o conteúdo para não ficar atrás da imagem fixa */
+section[data-testid="stSidebar"] .stHeader,
+section[data-testid="stSidebar"] .stMarkdown,
+section[data-testid="stSidebar"] [data-testid="stSidebarNav"] {
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+/* Remove todas as margens e padding do sidebar */
+section[data-testid="stSidebar"] > div {
+    padding-top: 0rem !important;
+    padding-left: 0rem !important;
+    padding-right: 0rem !important;
+    margin: 0rem !important;
+}
+
+/* Container do sidebar */
+section[data-testid="stSidebar"] {
+    padding: 0rem !important;
+    margin: 0rem !important;
+    width: auto !important;
+}
+
+/* Remove padding do conteudo do sidebar */
+.css-1d391kg {
+    padding: 0rem !important;
+    margin: 0rem !important;
+}
+
+/* Imagem no topo do sidebar - CORRIGIDA */
+section[data-testid="stSidebar"] img {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0rem !important;
+    padding: 0rem !important;
+    display: block !important;
+    border-radius: 0rem !important;
+    box-shadow: none !important;
+}
+
+/* Remove qualquer margem do container da imagem no sidebar */
+section[data-testid="stSidebar"] .stImage {
+    margin: 0rem !important;
+    padding: 0rem !important;
+    width: 100% !important;
+}
+
+/* Remove bordas e sombras da imagem do sidebar */
+section[data-testid="stSidebar"] .stImage img {
+    border-radius: 0rem !important;
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Garante que a imagem seja o primeiro elemento */
+section[data-testid="stSidebar"] > div > div:first-child {
+    margin: 0rem !important;
+    padding: 0rem !important;
+}
+
+/* ===== AJUSTE DE MARGEM ESQUERDA DO SIDEBAR ===== */
+
+/* Remove margem esquerda do container principal do sidebar */
+section[data-testid="stSidebar"] {
+    margin-left: 0rem !important;
+    padding-left: 0rem !important;
+}
+
+/* Remove margem do conteúdo interno do sidebar */
+section[data-testid="stSidebar"] > div {
+    margin-left: 0rem !important;
+    padding-left: 0rem !important;
+}
+
+/* Remove padding do conteúdo do sidebar */
+.css-1d391kg {
+    margin-left: 0rem !important;
+    padding-left: 0.5rem !important; /* Reduzido para 0.5rem */
+}
+
+/* Ajusta a imagem do sidebar para ficar colada à esquerda */
+.sidebar-header {
+    margin-left: 0rem !important;
+    padding-left: 0rem !important;
+    left: 0 !important;
+}
+
+/* Remove margens dos elementos dentro do sidebar */
+section[data-testid="stSidebar"] .stHeader,
+section[data-testid="stSidebar"] .stMarkdown,
+section[data-testid="stSidebar"] [data-testid="stSidebarNav"] {
+    margin-left: 0rem !important;
+    padding-left: 0.5rem !important; /* Reduzido para 0.5rem */
+}
+
+/* Remove margens específicas do navigation */
+[data-testid="stSidebarNav"] {
+    margin-left: 0rem !important;
+    padding-left: 0.5rem !important;
+}
+
+/* Remove margens de todos os elementos filhos do sidebar */
+section[data-testid="stSidebar"] * {
+    margin-left: 0rem !important;
+}
+
+/* Ajuste específico para itens da lista de navegação */
+[data-testid="stSidebarNav"] li,
+[data-testid="stSidebarNav"] a {
+    margin-left: 0rem !important;
+    padding-left: 0.5rem !important;
+}
+
+/* Remove margens dos elementos apos a imagem */
+section[data-testid="stSidebar"] [data-testid="stSidebarNav"],
+section[data-testid="stSidebar"] .stMarkdown,
+section[data-testid="stSidebar"] .stHeader {
+    margin-top: 1rem !important;
+    padding-left: 0.5rem !important; /* Reduzido de 1rem para 0.5rem */
+    padding-right: 0.5rem !important;
+}
+
+/* ===== CORREÇÃO FORÇADA DA IMAGEM NO SIDEBAR ===== */
+
+/* Força a exibição de TODAS as imagens no sidebar */
+section[data-testid="stSidebar"] img {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+}
+
+/* Remove qualquer hide que possa estar acontecendo */
+section[data-testid="stSidebar"] * {
+    visibility: visible !important;
+}
+
+/* Container da imagem */
+section[data-testid="stSidebar"] .stImage {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Garante que o primeiro elemento seja visível */
+section[data-testid="stSidebar"] > div:first-child {
+    display: block !important;
+    visibility: visible !important;
+}
+
+/* ESTILOS GERAIS */
+
+/* Subtitulos */
+h2 {
+    font-size: 1.8rem !important;
+    font-weight: 600 !important;
+    color: #2c5530 !important;
+    margin-top: 2rem !important;
+    margin-bottom: 1rem !important;
+}
+
+/* Titulos menores */
+h3 {
+    font-size: 1.4rem !important;
+    font-weight: 500 !important;
+    color: #3a7c5f !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.8rem !important;
+}
+
+/* Titulos h4 */
+h4 {
+    font-size: 1.2rem !important;
+    font-weight: 500 !important;
+    color: #4a8c6d !important;
+    margin-top: 1.2rem !important;
+    margin-bottom: 0.6rem !important;
+}
+
+/* Paragrafos e texto geral */
+p {
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+    color: #333333 !important;
+    margin-bottom: 1rem !important;
+}
+
+/* Texto dentro de write */
+.stMarkdown p {
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+    color: #444444 !important;
+}
+
+/* Listas */
+ul, ol {
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+    color: #444444 !important;
+    margin-left: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+/* Itens de lista */
+li {
+    margin-bottom: 0.5rem !important;
+}
+
+/* Links */
+a {
+    color: #4CAF50 !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+}
+
+a:hover {
+    color: #45a049 !important;
+    text-decoration: underline !important;
+}
+
+/* Sidebar - ajustes */
+.css-1d391kg {
+    padding: 2rem 1.5rem;
+}
+
+/* Navegacao do sidebar */
+[data-testid="stSidebarNav"] {
+    margin-top: 1rem !important;
+}
+
+/* Botoes */
+.stButton button {
+    background-color: #92bfff !important;
+    color: white !important;
+    border: none !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 5px !important;
+    font-weight: 500 !important;
+    transition: background-color 0.3s ease !important;
+    height: 30px !important;
+    padding-top: 25px !important; /* Adjust padding if necessary */
+    padding-bottom: 5px !important; /* Adjust padding if necessary */
+}
+
+.stButton button:hover {
+    background-color: #72d376 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+}
+
+/* Selectbox e inputs */
+.stSelectbox, .stTextInput, .stTextArea {
+    margin-bottom: 1rem !important;
+}
+
+.stSelectbox > div > div {
+    border-radius: 5px !important;
+}
+
+/* Imagens no conteudo principal */
+.stImage {
+    margin: 1.5rem 0 !important;
+    text-align: center !important;
+}
+
+.stImage img {
+    border-radius: 8px !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Container de imagens com caption */
+.stImage > div {
+    margin: 0 auto !important;
+}
+
+/* Alertas e mensagens */
+.stAlert, .stInfo, .stSuccess, .stWarning, .stError {
+    border-radius: 8px !important;
+    margin: 1rem 0 !important;
+    padding: 1rem !important;
+    border-left: 4px solid !important;
+}
+
+.stInfo {
+    border-left-color: #17a2b8 !important;
+}
+
+.stSuccess {
+    border-left-color: #28a745 !important;
+}
+
+.stWarning {
+    border-left-color: #ffc107 !important;
+}
+
+.stError {
+    border-left-color: #dc3545 !important;
+}
+
+/* Tabelas */
+.stTable {
+    margin: 1.5rem 0 !important;
+    font-size: 1rem !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+/* Code blocks */
+.stCodeBlock {
+    margin: 1.5rem 0 !important;
+    border-radius: 8px !important;
+    border: 1px solid #e0e0e0 !important;
+}
+
+/* Expanders */
+.streamlit-expanderHeader {
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    color: #2c5530 !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+
+/* Footer e informacoes */
+.stFooter {
+    margin-top: 3rem !important;
+    padding-top: 1rem !important;
+    border-top: 1px solid #e0e0e0 !important;
+    font-size: 0.9rem !important;
+    color: #666 !important;
+}
+
+/* CORES TEMATICAS WEBMEDIA 2024 */
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #1f3a2d;
+    --accent-color: #3a7c5f;
+    --text-color: #333333;
+    --background-color: #ffffff;
+    --sidebar-color: #f8f9fa;
+    --sidebar-width: 340px; /* Largura padrão do sidebar */
+}
+
+/* Aplicar cores tematicas */
+.main {
+    background-color: var(--background-color);
+}
+
+/* Sidebar */
+.sidebar .sidebar-content {
+    background-color: var(--sidebar-color);
+    background-image: linear-gradient(180deg, var(--sidebar-color) 0%, #ffffff 100%);
+}
+
+/* Badges e tags */
+.st-bd, .st-bc, .st-be {
+    border-radius: 4px !important;
+}
+
+/* Progress bars */
+.stProgress > div > div > div {
+    background-color: var(--primary-color) !important;
+}
+
+/* Metric cards */
+[data-testid="stMetricValue"] {
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    color: var(--secondary-color) !important;
+}
+
+[data-testid="stMetricLabel"] {
+    font-size: 1rem !important;
+    color: var(--accent-color) !important;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
+    .main .block-container {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        padding-top: 0rem !important;
+        padding-bottom: 1rem !important;
+    }
+    
+    h1 {
+        font-size: 2rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    h2 {
+        font-size: 1.5rem !important;
+        margin-top: 1.5rem !important;
+        margin-bottom: 0.8rem !important;
+    }
+    
+    h3 {
+        font-size: 1.2rem !important;
+        margin-top: 1.2rem !important;
+        margin-bottom: 0.6rem !important;
+    }
+    
+    h4 {
+        font-size: 1.1rem !important;
+        margin-top: 1rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    p, .stMarkdown p {
+        font-size: 1rem !important;
+    }
+    
+    ul, ol {
+        font-size: 1rem !important;
+        margin-left: 1rem !important;
+    }
+    
+    /* Sidebar mobile */
+    .css-1d391kg {
+        padding: 1rem !important;
+    }
+    
+    /* Ajuste do padding para imagem no mobile */
+    section[data-testid="stSidebar"] > div:first-child {
+        padding-top: 80px !important;
+    }
+    
+    /* Ajuste da largura do sidebar no mobile */
+    .sidebar-header {
+        max-width: 280px !important;
+        width: 280px !important;
+    }
+    
+    /* Ajuste de margem esquerda no mobile */
+    section[data-testid="stSidebar"] .stHeader,
+    section[data-testid="stSidebar"] .stMarkdown,
+    section[data-testid="stSidebar"] [data-testid="stSidebarNav"] {
+        padding-left: 0.25rem !important;
+    }
+}
+
+/* UTILITARIOS */
+
+/* Centralizacao de conteudo */
+.center-content {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+}
+
+/* Texto justificado */
+.justified-text {
+    text-align: justify !important;
+    text-justify: inter-word !important;
+}
+
+/* Sombras suaves */
+.shadow-soft {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+
+/* Bordas arredondadas */
+.rounded-corners {
+    border-radius: 8px !important;
+}
+
+/* Gradientes verdes */
+.gradient-green {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%) !important;
+}
+
+/* ANIMACOES SUAVES */
+* {
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Loading spinner */
+.stSpinner > div {
+    border-color: var(--primary-color) transparent transparent transparent !important;
+}
+
+/* ACESSIBILIDADE */
+
+/* Foco visivel para teclado */
+/*
+button:focus, a:focus, input:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--primary-color) !important;
+    outline-offset: 2px !important;
+}
+*/
+
+/* Contraste para texto */
+.high-contrast {
+    color: #000000 !important;
+    background-color: #ffffff !important;
+}
+
+/* IMPRESSAO */
+@media print {
+    .sidebar {
+        display: none !important;
+    }
+    
+    .main .block-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+    }
+
+}
