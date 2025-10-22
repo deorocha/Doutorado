@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import sys
 
 def get_project_root():
     """Retorna o caminho raiz do projeto funcionando localmente e no Streamlit Cloud"""
@@ -18,3 +19,4 @@ CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
 IMAGES_PATH = PROJECT_ROOT / "images"
 PROGRAMAS_PATH = PROJECT_ROOT / "programas"
 ARQUIVOS_PATH = PROJECT_ROOT / "arquivos"
+
