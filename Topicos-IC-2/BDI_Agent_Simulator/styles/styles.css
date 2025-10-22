@@ -1,0 +1,182 @@
+/* Remover TODAS as margens e paddings de TODOS os elementos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Container principal do Streamlit */
+.main .block-container {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    max-width: 100% !important;
+}
+
+/* MANTER o header visível para o botão do sidebar */
+/* header {
+    display: none !important;
+} */
+
+/* Remover margens do título */
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
+    padding: 5px !important;
+}
+
+/* Remover margens de todos os elementos do Streamlit */
+.stApp {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+/* Ajustar file uploader */
+.stFileUploader {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+/* Ajustar botões */
+.stButton button {
+    margin: 10px !important;
+    padding: 5px 10px !important;
+}
+
+/* Ajustar colunas */
+.stColumns {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+/* Ajustar expanders */
+.streamlit-expander {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+/* Espaço ANTES do primeiro expander (acima) */
+div[data-testid="stExpander"]:first-child {
+    margin-top: 0.5rem !important;  /* ← AJUSTE AQUI: espaço acima do primeiro expander */
+}
+
+/* Espaço ENTRE expanders */
+div[data-testid="stExpander"] {
+    margin-top: 0.3rem !important;    /* ← AJUSTE AQUI: espaço acima de cada expander */
+    margin-bottom: 0.3rem !important;  /* ← AJUSTE AQUI: espaço abaixo de cada expander */
+}
+
+/* Espaço DEPOIS do último expander (abaixo) */
+div[data-testid="stExpander"]:last-child {
+    margin-bottom: 0.5rem !important; /* ← AJUSTE AQUI: espaço abaixo do último expander */
+}
+
+div[data-testid="stExpander"] details {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+div[data-testid="stExpander"] details summary {
+    margin: 0px !important;
+    padding: 5px !important;
+}
+
+div[data-testid="stExpander"] details summary p {
+    font-family: 'Courier New' !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+div[data-testid="stExpander"] details div {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+div[data-testid="stExpander"] pre {
+    font-size: 10px !important;
+    max-height: 350px !important;
+    overflow-y: auto !important;
+    margin: 0 !important;
+    padding: 5px !important;
+}
+
+/* Containers de log */
+.log-container {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+    padding: 5px;
+    max-height: 400px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    white-space: pre-wrap;
+    margin: 0 !important;
+}
+
+/* Histórico dos agentes */
+.agent-history {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+    max-height: 500px;
+    overflow-y: auto;
+    white-space: pre;
+    margin: 0 !important;
+}
+
+/* Sidebar - manter visível e ajustar */
+section[data-testid="stSidebar"] {
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+}
+
+.css-1d391kg, .css-1lcbmhc, .css-1outpf7 {
+    padding: 5px !important;
+    margin: 0px !important;
+}
+
+/* Botão do sidebar */
+.css-1v0mbdj {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+/* Alertas e mensagens */
+.stAlert, .stSuccess, .stInfo, .stWarning, .stError {
+    margin: 2px 0 !important;
+    padding: 5px !important;
+}
+
+/* Espaçamento entre seções */
+.element-container {
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+/* Remover qualquer padding residual */
+div[data-testid="stVerticalBlock"] {
+    gap: 0rem !important;
+}
+
+/* Ajustar o header para ser mínimo */
+header .decoration {
+    display: none;
+}
+
+/* Manter o botão do sidebar visível */
+.css-1vq4p4l {
+    padding: 0px !important;
+    margin: 0px !important;
+}
+
+/* Ajustar o conteúdo principal para compensar a barra lateral */
+.main .block-container {
+    padding-left: 1rem !important;
+}
