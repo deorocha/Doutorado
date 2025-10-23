@@ -57,54 +57,65 @@ def load_project_file(project_info):
         st.error(f"Arquivo não encontrado: {project_path}")
     return None
 
-def parse_asl_source_path(file_content):
-    """Extrai o aslSourcePath do conteúdo do arquivo .mas2j"""
+def parse_project_paths(file_content):
+    """Extrai os caminhos do projeto do conteúdo do arquivo .mas2j"""
     # Remove comentários para facilitar o parsing
     content_no_comments = re.sub(r'//.*?$|/\*.*?\*/', '', file_content, flags=re.MULTILINE | re.DOTALL)
     
-    # Procura pelo aslSourcePath
-    pattern = r'aslSourcePath\s*:\s*"([^"]+)"'
-    match = re.search(pattern, content_no_comments)
+    paths = {}
     
-    if match:
-        return match.group(1)
-    return None
+    # Procura pelo aslSourcePath
+    asl_pattern = r'aslSourcePath\s*:\s*"([^"]+)"'
+    asl_match = re.search(asl_pattern, content_no_comments)
+    if asl_match:
+        paths['asl_source_path'] = asl_match.group(1)
+    
+    # Procura pelo classPath
+    class_pattern = r'classPath\s*:\s*"([^"]+)"'
+    class_match = re.search(class_pattern, content_no_comments)
+    if class_match:
+        paths['class_path'] = class_match.group(1)
+    
+    return paths
 
-def get_additional_files(project_info, project_content=None):
-    """Obtém lista de arquivos adicionais no projeto, considerando aslSourcePath"""
+def get_all_project_files(project_info, project_content=None):
+    """Obtém todos os arquivos do projeto, incluindo aslSourcePath e classPath"""
     if isinstance(project_info, dict) and 'folder' in project_info:
         folder = project_info['folder']
-        additional_files = []
+        all_files = []
         
-        # Primeiro, procura por arquivos na pasta raiz do projeto
-        all_files = [f for f in folder.iterdir() if f.is_file()]
-        additional_files.extend([
-            f for f in all_files 
+        # Primeiro, procura por todos os arquivos na pasta raiz do projeto
+        root_files = [f for f in folder.iterdir() if f.is_file()]
+        all_files.extend([
+            f for f in root_files 
             if f.suffix.lower() not in ['.mas2j', '.mas3j']
         ])
         
-        # Se temos o conteúdo do projeto, procura no aslSourcePath
+        # Se temos o conteúdo do projeto, procura nos caminhos especificados
         if project_content:
-            asl_source_path = parse_asl_source_path(project_content)
+            paths = parse_project_paths(project_content)
             
-            if asl_source_path:
-                # Constrói o caminho completo para aslSourcePath
-                asl_path = folder / asl_source_path
-                
+            # Procura arquivos no aslSourcePath
+            if 'asl_source_path' in paths:
+                asl_path = folder / paths['asl_source_path']
                 if asl_path.exists() and asl_path.is_dir():
-                    # Procura por arquivos .asl no aslSourcePath
-                    asl_files = list(asl_path.glob("*.asl"))
-                    additional_files.extend(asl_files)
-                    
-                    # Também procura recursivamente em subpastas
-                    asl_files_recursive = list(asl_path.rglob("*.asl"))
-                    additional_files.extend(asl_files_recursive)
+                    # Procura por todos os arquivos no aslSourcePath (não apenas .asl)
+                    asl_files = list(asl_path.rglob("*"))
+                    all_files.extend([f for f in asl_files if f.is_file()])
+            
+            # Procura arquivos no classPath
+            if 'class_path' in paths:
+                class_path = folder / paths['class_path']
+                if class_path.exists() and class_path.is_dir():
+                    # Procura por todos os arquivos no classPath
+                    class_files = list(class_path.rglob("*"))
+                    all_files.extend([f for f in class_files if f.is_file()])
         
         # Remove duplicatas
         seen_files = set()
         unique_files = []
         
-        for file in additional_files:
+        for file in all_files:
             if file.name not in seen_files:
                 seen_files.add(file.name)
                 unique_files.append(file)
@@ -252,6 +263,29 @@ def create_agent_history_table(agent_history, agent_name):
     df = pd.DataFrame(agent_history[agent_name])
     return df
 
+def get_file_language(file_path):
+    """Determina a linguagem para syntax highlighting baseada na extensão do arquivo"""
+    extension = file_path.suffix.lower()
+    language_map = {
+        '.asl': 'lisp',
+        '.java': 'java',
+        '.py': 'python',
+        '.xml': 'xml',
+        '.json': 'json',
+        '.txt': 'text',
+        '.md': 'markdown',
+        '.yml': 'yaml',
+        '.yaml': 'yaml',
+        '.properties': 'properties',
+        '.sh': 'bash',
+        '.bat': 'bat',
+        '.sql': 'sql',
+        '.html': 'html',
+        '.css': 'css',
+        '.js': 'javascript'
+    }
+    return language_map.get(extension, 'text')
+
 # Configuração da página
 st.set_page_config(page_title="Simulador MAS2J", layout="wide")
 st.title("🔍 Analisador de Projetos MAS2J")
@@ -291,22 +325,25 @@ if projects:
         project_content = load_project_file(selected_project)
         
         if project_content:
-            # Extrai aslSourcePath para mostrar na estrutura do projeto
-            asl_source_path = parse_asl_source_path(project_content)
+            # Extrai os caminhos do projeto
+            paths = parse_project_paths(project_content)
             
             # Mostra informações da pasta do projeto
             with st.expander("📁 Estrutura do Projeto"):
                 st.write(f"**Pasta:** `{selected_project['folder']}`")
                 st.write(f"**Arquivo principal:** `{selected_project['main_file'].name}`")
                 
-                if asl_source_path:
-                    st.write(f"**aslSourcePath:** `{asl_source_path}`")
+                if 'asl_source_path' in paths:
+                    st.write(f"**aslSourcePath:** `{paths['asl_source_path']}`")
                 
-                # Lista arquivos adicionais
-                additional_files = get_additional_files(selected_project, project_content)
-                if additional_files:
+                if 'class_path' in paths:
+                    st.write(f"**classPath:** `{paths['class_path']}`")
+                
+                # Lista todos os arquivos do projeto
+                all_files = get_all_project_files(selected_project, project_content)
+                if all_files:
                     st.write("**Arquivos do projeto:**")
-                    for file in additional_files:
+                    for file in all_files:
                         st.write(f"- `{file.name}`")
                 else:
                     st.info("Nenhum arquivo adicional encontrado")
@@ -320,17 +357,47 @@ if projects:
             
             with tab2:
                 st.subheader("Arquivos do Projeto")
-                additional_files = get_additional_files(selected_project, project_content)
+                all_files = get_all_project_files(selected_project, project_content)
                 
-                if additional_files:
-                    for file in additional_files:
-                        with st.expander(f"📄 {file.name}"):
-                            try:
-                                with open(file, 'r', encoding='utf-8') as f:
-                                    file_content = f.read()
-                                st.code(file_content, language="lisp" if file.suffix == '.asl' else "text")
-                            except Exception as e:
-                                st.error(f"Erro ao ler arquivo {file.name}: {e}")
+                if all_files:
+                    # Agrupa arquivos por tipo para melhor organização
+                    asl_files = [f for f in all_files if f.suffix.lower() == '.asl']
+                    java_files = [f for f in all_files if f.suffix.lower() == '.java']
+                    other_files = [f for f in all_files if f.suffix.lower() not in ['.asl', '.java']]
+                    
+                    if asl_files:
+                        st.subheader("🔧 Arquivos ASL (Agentes)")
+                        for file in asl_files:
+                            with st.expander(f"📄 {file.name}"):
+                                try:
+                                    with open(file, 'r', encoding='utf-8') as f:
+                                        file_content = f.read()
+                                    st.code(file_content, language="lisp")
+                                except Exception as e:
+                                    st.error(f"Erro ao ler arquivo {file.name}: {e}")
+                    
+                    if java_files:
+                        st.subheader("☕ Arquivos Java")
+                        for file in java_files:
+                            with st.expander(f"📄 {file.name}"):
+                                try:
+                                    with open(file, 'r', encoding='utf-8') as f:
+                                        file_content = f.read()
+                                    st.code(file_content, language="java")
+                                except Exception as e:
+                                    st.error(f"Erro ao ler arquivo {file.name}: {e}")
+                    
+                    if other_files:
+                        st.subheader("📄 Outros Arquivos")
+                        for file in other_files:
+                            with st.expander(f"📄 {file.name}"):
+                                try:
+                                    with open(file, 'r', encoding='utf-8') as f:
+                                        file_content = f.read()
+                                    language = get_file_language(file)
+                                    st.code(file_content, language=language)
+                                except Exception as e:
+                                    st.error(f"Erro ao ler arquivo {file.name}: {e}")
                 else:
                     st.info("Nenhum arquivo adicional encontrado")
             
@@ -459,8 +526,10 @@ else:
         ├── projeto2/
         │   ├── projeto2.mas2j
         │   └── src/
-        │       └── asl/
-        │           └── agentes.asl
+        │       ├── asl/
+        │       │   └── agentes.asl
+        │       └── java/
+        │           └── Environment.java
         └── projeto3/
             ├── projeto3.mas3j
             └── scripts.asl
