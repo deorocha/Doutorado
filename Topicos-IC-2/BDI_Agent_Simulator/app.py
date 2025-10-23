@@ -332,11 +332,8 @@ if projects:
     project_names = [project['name'] for project in projects]
     
     # Selectbox para escolher o projeto
-    selected_project_name = st.selectbox(
-        "Selecione um projeto:",
-        project_names,
-        index=0
-    )
+    
+    selected_project_name = st.sidebar.selectbox("Selecione um projeto:", project_names, index=0)
     
     # Encontra o projeto selecionado
     selected_project = next((p for p in projects if p['name'] == selected_project_name), None)
