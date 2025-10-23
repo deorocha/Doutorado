@@ -5,7 +5,6 @@ import os
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent
-# CSS_PATH = PROJECT_ROOT / "styles" / "styles.css"
 
 def get_project_files():
     """Obtém a lista de arquivos .mas2j da pasta projects"""
@@ -19,10 +18,17 @@ def get_project_files():
 
 def load_project_file(filename):
     """Carrega o conteúdo de um arquivo de projeto"""
-    project_path = Path("./projects") / filename
+    project_path = PROJECT_ROOT / "projects" / filename  # CORREÇÃO AQUI
     if project_path.exists():
-        with open(project_path, 'r', encoding='utf-8') as file:
-            return file.read()
+        try:
+            with open(project_path, 'r', encoding='utf-8') as file:
+                return file.read()
+        except UnicodeDecodeError:
+            # Tenta latin-1 se utf-8 falhar
+            with open(project_path, 'r', encoding='latin-1') as file:
+                return file.read()
+    else:
+        st.error(f"Arquivo não encontrado: {project_path}")
     return None
 
 def parse_mas2j(file_content):
@@ -93,6 +99,11 @@ with st.sidebar:
 
 # Obtém lista de projetos
 project_files = get_project_files()
+
+# Debug: mostrar arquivos encontrados
+st.sidebar.write(f"📊 Arquivos encontrados: {len(project_files)}")
+for file in project_files:
+    st.sidebar.write(f"• {file.name}")
 
 if project_files:
     # Cria lista de nomes para o selectbox
@@ -189,7 +200,19 @@ if project_files:
 
 else:
     st.error("📂 Nenhum projeto encontrado na pasta './projects'")
+    
+    st.info("""
+    **Estrutura do projeto necessária:**
+    ```
+    seu-repositorio/
+    ├── app.py
+    ├── requirements.txt
+    └── projects/
+        ├── Communication.mas2j
+        └── outros_projetos.mas2j
+    ```
+    """)
 
 # Footer
 st.markdown("---")
-st.caption("Desenvolvido para análise de sistemas multiagente | 💡 Dica: Verifique se a pasta 'projects' existe e contém arquivos .mas2j")
+st.caption("Desenvolvido para análise de sistemas multiagente")
