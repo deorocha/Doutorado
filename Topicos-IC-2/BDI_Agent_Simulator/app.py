@@ -184,11 +184,19 @@ def simulate_communication(agents):
     # Inicialização dos agentes
     logs.append("🚀 Iniciando sistema multiagente...")
     
+    # Tempo inicial de referência
+    start_time = datetime.now()
+    
     for agent in agents:
         logs.append(f"✅ {agent} inicializado")
-        # Adiciona ao histórico
+        # Adiciona ao histórico com timestamp preciso
+        current_time = datetime.now()
+        elapsed = current_time - start_time
+        milliseconds = int(elapsed.total_seconds() * 1000)
+        timestamp = f"{elapsed.seconds // 3600:02d}:{(elapsed.seconds // 60) % 60:02d}:{elapsed.seconds % 60:02d}.{milliseconds % 1000:03d}"
+        
         agent_history[agent].append({
-            'Hora': datetime.now().strftime("%H:%M:%S"),
+            'Hora': timestamp,
             'Ciclo': 0,
             'Crenças': "sistema_iniciado, pronto_para_comunicar",
             'Metas': "inicializar_sistema"
@@ -203,9 +211,13 @@ def simulate_communication(agents):
         receiver = agents[(cycle) % len(agents)]
         
         # Atualiza histórico do sender
-        current_time = datetime.now().strftime("%H:%M:%S")
+        current_time = datetime.now()
+        elapsed = current_time - start_time
+        milliseconds = int(elapsed.total_seconds() * 1000)
+        timestamp = f"{elapsed.seconds // 3600:02d}:{(elapsed.seconds // 60) % 60:02d}:{elapsed.seconds % 60:02d}.{milliseconds % 1000:03d}"
+        
         agent_history[sender].append({
-            'Hora': current_time,
+            'Hora': timestamp,
             'Ciclo': cycle,
             'Crenças': f"enviando_msg_para_{receiver}, comunicacao_ativa",
             'Metas': f"enviar_mensagem_{receiver}, manter_conexao"
@@ -217,9 +229,13 @@ def simulate_communication(agents):
         time.sleep(0.1)
         
         # Atualiza histórico do receiver
-        current_time = datetime.now().strftime("%H:%M:%S")
+        current_time = datetime.now()
+        elapsed = current_time - start_time
+        milliseconds = int(elapsed.total_seconds() * 1000)
+        timestamp = f"{elapsed.seconds // 3600:02d}:{(elapsed.seconds // 60) % 60:02d}:{elapsed.seconds % 60:02d}.{milliseconds % 1000:03d}"
+        
         agent_history[receiver].append({
-            'Hora': current_time,
+            'Hora': timestamp,
             'Ciclo': cycle,
             'Crenças': f"recebendo_msg_de_{sender}, mensagem_processada",
             'Metas': f"responder_{sender}, processar_mensagem"
@@ -231,9 +247,13 @@ def simulate_communication(agents):
         if cycle == 1:
             logs.append(f"📢 {sender} faz broadcast para todos os agentes")
             # Atualiza histórico para broadcast
-            current_time = datetime.now().strftime("%H:%M:%S")
+            current_time = datetime.now()
+            elapsed = current_time - start_time
+            milliseconds = int(elapsed.total_seconds() * 1000)
+            timestamp = f"{elapsed.seconds // 3600:02d}:{(elapsed.seconds // 60) % 60:02d}:{elapsed.seconds % 60:02d}.{milliseconds % 1000:03d}"
+            
             agent_history[sender].append({
-                'Hora': current_time,
+                'Hora': timestamp,
                 'Ciclo': cycle,
                 'Crenças': "broadcast_enviado, todos_notificados",
                 'Metas': "coordenar_agentes, manter_sincronizacao"
@@ -241,10 +261,14 @@ def simulate_communication(agents):
     
     # Ciclo final
     final_cycle = len(agents) + 1
-    current_time = datetime.now().strftime("%H:%M:%S")
+    current_time = datetime.now()
+    elapsed = current_time - start_time
+    milliseconds = int(elapsed.total_seconds() * 1000)
+    timestamp = f"{elapsed.seconds // 3600:02d}:{(elapsed.seconds // 60) % 60:02d}:{elapsed.seconds % 60:02d}.{milliseconds % 1000:03d}"
+    
     for agent in agents:
         agent_history[agent].append({
-            'Hora': current_time,
+            'Hora': timestamp,
             'Ciclo': final_cycle,
             'Crenças': "sistema_finalizado, todas_tarefas_concluidas",
             'Metas': "finalizar_processos, aguardar_nova_execucao"
