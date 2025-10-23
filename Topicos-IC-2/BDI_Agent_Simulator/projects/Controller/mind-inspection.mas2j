@@ -26,4 +26,6 @@ MAS mindinspection {
        jh;
 
    aslSourcePath: "src/asl";
+   classPath: "src/java";
 }
+
