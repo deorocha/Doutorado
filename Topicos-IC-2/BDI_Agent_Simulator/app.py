@@ -314,19 +314,8 @@ def get_file_language(file_path):
 st.set_page_config(page_title="Simulador MAS2J", layout="wide")
 st.title("🔍 Analisador de Projetos MAS2J")
 
-# Sidebar com informações
-with st.sidebar:
-    st.header("📁 Projetos Disponíveis")
-    st.info("Selecione um projeto da lista para analisar")
-
 # Obtém lista de projetos (pastas)
 projects = get_project_folders()
-
-# Debug: mostrar projetos encontrados
-st.sidebar.write(f"📊 Projetos encontrados: {len(projects)}")
-for project in projects:
-    st.sidebar.write(f"• {project['name']}")
-
 if projects:
     # Cria lista de nomes para o selectbox
     project_names = [project['name'] for project in projects]
