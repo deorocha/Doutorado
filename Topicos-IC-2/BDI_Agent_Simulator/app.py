@@ -58,14 +58,19 @@ def load_project_file(project_info):
     return None
 
 def get_additional_files(project_info):
-    """Obtém lista de arquivos adicionais no projeto (como .asl)"""
+    """Obtém lista de arquivos adicionais no projeto (como .asl) - CORRIGIDA"""
     if isinstance(project_info, dict) and 'folder' in project_info:
         folder = project_info['folder']
-        # Procura por arquivos .asl e outros arquivos de código
-        asl_files = list(folder.glob("*.asl"))
-        other_files = [f for f in folder.iterdir() 
-                      if f.is_file() and f.suffix not in ['.mas2j', '.mas3j']]
-        return asl_files + other_files
+        # Procura por todos os arquivos, exceto os .mas2j e .mas3j
+        all_files = [f for f in folder.iterdir() if f.is_file()]
+        
+        # Filtra para remover arquivos .mas2j e .mas3j
+        additional_files = [
+            f for f in all_files 
+            if f.suffix.lower() not in ['.mas2j', '.mas3j']
+        ]
+        
+        return additional_files
     return []
 
 def parse_mas2j(file_content):
@@ -272,7 +277,16 @@ if projects:
                 additional_files = get_additional_files(selected_project)
                 
                 if additional_files:
+                    # Remove duplicatas usando um conjunto baseado no nome do arquivo
+                    seen_files = set()
+                    unique_files = []
+                    
                     for file in additional_files:
+                        if file.name not in seen_files:
+                            seen_files.add(file.name)
+                            unique_files.append(file)
+                    
+                    for file in unique_files:
                         with st.expander(f"📄 {file.name}"):
                             try:
                                 with open(file, 'r', encoding='utf-8') as f:
