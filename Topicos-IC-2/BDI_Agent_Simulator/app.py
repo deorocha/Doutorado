@@ -173,27 +173,35 @@ def parse_mas2j(file_content):
     return agents
 
 def simulate_communication(agents):
-    """Simula a comunicação entre agentes e retorna logs e histórico"""
+    """Simula a comunicação entre agentes e retorna logs, histórico e mensagens"""
     logs = []
     agent_history = {agent: [] for agent in agents}
+    agent_messages = []  # Nova lista para armazenar mensagens dos agentes
     
     if not agents:
         logs.append("⚠️ Nenhum agente encontrado para simular comunicação")
-        return logs, agent_history
-    
-    # Inicialização dos agentes
-    logs.append("🚀 Iniciando sistema multiagente...")
+        return logs, agent_history, agent_messages
     
     # Tempo inicial de referência
     start_time = datetime.now()
     
+    # Inicialização dos agentes
+    logs.append("🚀 Iniciando sistema multiagente...")
+    
     for agent in agents:
         logs.append(f"✅ {agent} inicializado")
-        # Adiciona ao histórico com timestamp preciso
+        
+        # Adiciona mensagem de inicialização
         current_time = datetime.now()
         elapsed = current_time - start_time
         milliseconds = int(elapsed.total_seconds() * 1000)
         timestamp = f"{elapsed.seconds // 3600:02d}:{(elapsed.seconds // 60) % 60:02d}:{elapsed.seconds % 60:02d}.{milliseconds % 1000:03d}"
+        
+        agent_messages.append({
+            'Hora': timestamp,
+            'Agente': agent,
+            'Mensagem': f"[INIT] Agente {agent} inicializado com sucesso"
+        })
         
         agent_history[agent].append({
             'Hora': timestamp,
@@ -216,6 +224,13 @@ def simulate_communication(agents):
         milliseconds = int(elapsed.total_seconds() * 1000)
         timestamp = f"{elapsed.seconds // 3600:02d}:{(elapsed.seconds // 60) % 60:02d}:{elapsed.seconds % 60:02d}.{milliseconds % 1000:03d}"
         
+        # Mensagem de envio
+        agent_messages.append({
+            'Hora': timestamp,
+            'Agente': sender,
+            'Mensagem': f"[SEND] Enviando mensagem para {receiver}: 'Olá {receiver}!'"
+        })
+        
         agent_history[sender].append({
             'Hora': timestamp,
             'Ciclo': cycle,
@@ -234,6 +249,20 @@ def simulate_communication(agents):
         milliseconds = int(elapsed.total_seconds() * 1000)
         timestamp = f"{elapsed.seconds // 3600:02d}:{(elapsed.seconds // 60) % 60:02d}:{elapsed.seconds % 60:02d}.{milliseconds % 1000:03d}"
         
+        # Mensagem de recebimento
+        agent_messages.append({
+            'Hora': timestamp,
+            'Agente': receiver,
+            'Mensagem': f"[RECV] Mensagem recebida de {sender}: 'Olá {receiver}!'"
+        })
+        
+        # Mensagem de resposta
+        agent_messages.append({
+            'Hora': timestamp,
+            'Agente': receiver,
+            'Mensagem': f"[SEND] Respondendo para {sender}: 'Olá {sender}! Recebida sua mensagem.'"
+        })
+        
         agent_history[receiver].append({
             'Hora': timestamp,
             'Ciclo': cycle,
@@ -243,23 +272,60 @@ def simulate_communication(agents):
         
         logs.append(f"📥 {receiver} ← {sender}: Confirmação recebida")
         
+        # Pequena pausa entre ações
+        time.sleep(0.1)
+        
+        # Mensagem de confirmação do sender
+        current_time = datetime.now()
+        elapsed = current_time - start_time
+        milliseconds = int(elapsed.total_seconds() * 1000)
+        timestamp = f"{elapsed.seconds // 3600:02d}:{(elapsed.seconds // 60) % 60:02d}:{elapsed.seconds % 60:02d}.{milliseconds % 1000:03d}"
+        
+        agent_messages.append({
+            'Hora': timestamp,
+            'Agente': sender,
+            'Mensagem': f"[RECV] Confirmação recebida de {receiver}"
+        })
+        
         # Alguns agentes fazem broadcast
         if cycle == 1:
             logs.append(f"📢 {sender} faz broadcast para todos os agentes")
-            # Atualiza histórico para broadcast
+            
+            # Mensagem de broadcast
             current_time = datetime.now()
             elapsed = current_time - start_time
             milliseconds = int(elapsed.total_seconds() * 1000)
             timestamp = f"{elapsed.seconds // 3600:02d}:{(elapsed.seconds // 60) % 60:02d}:{elapsed.seconds % 60:02d}.{milliseconds % 1000:03d}"
             
+            agent_messages.append({
+                'Hora': timestamp,
+                'Agente': sender,
+                'Mensagem': f"[BROADCAST] Enviando mensagem para todos os agentes: 'Sincronização iniciada'"
+            })
+            
+            # Atualiza histórico para broadcast
             agent_history[sender].append({
                 'Hora': timestamp,
                 'Ciclo': cycle,
                 'Crenças': "broadcast_enviado, todos_notificados",
                 'Metas': "coordenar_agentes, manter_sincronizacao"
             })
+            
+            # Mensagens de recebimento do broadcast para outros agentes
+            for other_agent in agents:
+                if other_agent != sender:
+                    current_time = datetime.now()
+                    elapsed = current_time - start_time
+                    milliseconds = int(elapsed.total_seconds() * 1000)
+                    timestamp = f"{elapsed.seconds // 3600:02d}:{(elapsed.seconds // 60) % 60:02d}:{elapsed.seconds % 60:02d}.{milliseconds % 1000:03d}"
+                    
+                    agent_messages.append({
+                        'Hora': timestamp,
+                        'Agente': other_agent,
+                        'Mensagem': f"[RECV] Broadcast recebido de {sender}: 'Sincronização iniciada'"
+                    })
     
-    # Ciclo final
+    # Ciclo final - mensagens de finalização
     final_cycle = len(agents) + 1
     current_time = datetime.now()
     elapsed = current_time - start_time
@@ -267,6 +333,12 @@ def simulate_communication(agents):
     timestamp = f"{elapsed.seconds // 3600:02d}:{(elapsed.seconds // 60) % 60:02d}:{elapsed.seconds % 60:02d}.{milliseconds % 1000:03d}"
     
     for agent in agents:
+        agent_messages.append({
+            'Hora': timestamp,
+            'Agente': agent,
+            'Mensagem': f"[INFO] Finalizando execução - todas as tarefas concluídas"
+        })
+        
         agent_history[agent].append({
             'Hora': timestamp,
             'Ciclo': final_cycle,
@@ -277,7 +349,7 @@ def simulate_communication(agents):
     logs.append("---")
     logs.append("✅ Todos os agentes finalizaram suas tarefas")
     
-    return logs, agent_history
+    return logs, agent_history, agent_messages
 
 def create_agent_history_table(agent_history, agent_name):
     """Cria uma tabela DataFrame para o histórico de um agente"""
@@ -285,6 +357,14 @@ def create_agent_history_table(agent_history, agent_name):
         return pd.DataFrame()
     
     df = pd.DataFrame(agent_history[agent_name])
+    return df
+
+def create_messages_table(agent_messages):
+    """Cria uma tabela DataFrame para as mensagens dos agentes"""
+    if not agent_messages:
+        return pd.DataFrame()
+    
+    df = pd.DataFrame(agent_messages)
     return df
 
 def get_file_language(file_path):
@@ -321,7 +401,6 @@ if projects:
     project_names = [project['name'] for project in projects]
     
     # Selectbox para escolher o projeto
-    
     selected_project_name = st.sidebar.selectbox("Selecione um projeto:", project_names, index=0)
     
     # Encontra o projeto selecionado
@@ -359,7 +438,7 @@ if projects:
                     st.info("Nenhum arquivo adicional encontrado")
             
             # Abas para organizar as informações
-            tab1, tab2, tab3, tab4 = st.tabs(["📋 Código", "📁 Arquivos", "🤖 Agentes", "🔄 Simulação"])
+            tab1, tab2, tab3, tab4, tab5 = st.tabs(["📋 Código", "📁 Arquivos", "🤖 Agentes", "🔄 Simulação", "📝 Logs dos Agentes"])
             
             with tab1:
                 st.subheader("Conteúdo do Arquivo Principal")
@@ -449,10 +528,12 @@ if projects:
                             # Limpar histórico anterior se existir
                             if 'agent_history' in st.session_state:
                                 del st.session_state.agent_history
+                            if 'agent_messages' in st.session_state:
+                                del st.session_state.agent_messages
                     
                     # Executa simulação se solicitado
                     if st.session_state.get('run_simulation', False):
-                        logs, agent_history = simulate_communication(agents)
+                        logs, agent_history, agent_messages = simulate_communication(agents)
                         
                         # Container para logs com rolagem
                         log_container = st.container()
@@ -473,8 +554,9 @@ if projects:
                                 log_text = "\n".join(current_logs)
                                 log_display.code(log_text)
                         
-                        # Salva o histórico na session state
+                        # Salva o histórico e mensagens na session state
                         st.session_state.agent_history = agent_history
+                        st.session_state.agent_messages = agent_messages
                         st.session_state.run_simulation = False
                         st.success("🎉 Simulação concluída!")
                     
@@ -510,6 +592,67 @@ if projects:
                                     st.warning(f"Nenhum histórico disponível para o agente {agent}")
                 else:
                     st.error("❌ Não é possível simular: nenhum agente encontrado")
+            
+            with tab5:
+                st.subheader("📝 Logs dos Agentes")
+                
+                # Mostrar tabela de mensagens se disponível
+                if 'agent_messages' in st.session_state and st.session_state.agent_messages:
+                    messages_df = create_messages_table(st.session_state.agent_messages)
+                    
+                    if not messages_df.empty:
+                        # Estatísticas das mensagens
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            st.metric("Total de Mensagens", len(messages_df))
+                        with col2:
+                            unique_agents = messages_df['Agente'].nunique()
+                            st.metric("Agentes Ativos", unique_agents)
+                        with col3:
+                            # Contar tipos de mensagens
+                            send_count = messages_df['Mensagem'].str.contains('\\[SEND\\]').sum()
+                            recv_count = messages_df['Mensagem'].str.contains('\\[RECV\\]').sum()
+                            st.metric("Env/Recv", f"{send_count}/{recv_count}")
+                        
+                        # Filtros para a tabela
+                        st.subheader("Filtros")
+                        col1, col2 = st.columns(2)
+                        
+                        with col1:
+                            # Filtro por agente
+                            all_agents = ["Todos"] + list(messages_df['Agente'].unique())
+                            selected_agent = st.selectbox("Filtrar por agente:", all_agents)
+                        
+                        with col2:
+                            # Filtro por tipo de mensagem
+                            message_types = ["Todos", "INIT", "SEND", "RECV", "BROADCAST", "INFO"]
+                            selected_type = st.selectbox("Filtrar por tipo:", message_types)
+                        
+                        # Aplicar filtros
+                        filtered_df = messages_df.copy()
+                        
+                        if selected_agent != "Todos":
+                            filtered_df = filtered_df[filtered_df['Agente'] == selected_agent]
+                        
+                        if selected_type != "Todos":
+                            filtered_df = filtered_df[filtered_df['Mensagem'].str.contains(f'\\[{selected_type}\\]')]
+                        
+                        # Mostrar tabela filtrada
+                        st.write(f"**Mensagens dos Agentes** ({len(filtered_df)} mensagens)")
+                        st.dataframe(filtered_df, use_container_width=True)
+                        
+                        # Botão para exportar dados
+                        csv = filtered_df.to_csv(index=False).encode('utf-8')
+                        st.download_button(
+                            label="📥 Exportar logs como CSV",
+                            data=csv,
+                            file_name=f"logs_{selected_project_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                            mime="text/csv"
+                        )
+                    else:
+                        st.warning("Nenhuma mensagem disponível")
+                else:
+                    st.info("Execute a simulação primeiro para ver os logs dos agentes")
         
         else:
             st.error(f"❌ Erro ao carregar o arquivo do projeto: {selected_project_name}")
