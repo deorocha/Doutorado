@@ -3,6 +3,9 @@ import xml.etree.ElementTree as ET
 import re
 import os
 from pathlib import Path
+import time
+from datetime import datetime
+import pandas as pd
 
 PROJECT_ROOT = Path(__file__).parent
 
@@ -37,9 +40,6 @@ def parse_mas2j(file_content):
     
     # Remove comentários para facilitar o parsing
     content_no_comments = re.sub(r'//.*?$|/\*.*?\*/', '', file_content, flags=re.MULTILINE | re.DOTALL)
-    
-    # DEBUG: Mostrar conteúdo sem comentários
-    st.sidebar.code(content_no_comments[:500] + "..." if len(content_no_comments) > 500 else content_no_comments, language="java")
     
     # Múltiplos padrões para capturar diferentes formatos de definição de agentes
     
@@ -83,36 +83,95 @@ def parse_mas2j(file_content):
     return agents
 
 def simulate_communication(agents):
-    """Simula a comunicação entre agentes"""
+    """Simula a comunicação entre agentes e retorna logs e histórico"""
     logs = []
+    agent_history = {agent: [] for agent in agents}
     
     if not agents:
         logs.append("⚠️ Nenhum agente encontrado para simular comunicação")
-        return logs
+        return logs, agent_history
     
+    # Inicialização dos agentes
     logs.append("🚀 Iniciando sistema multiagente...")
     
     for agent in agents:
         logs.append(f"✅ {agent} inicializado")
+        # Adiciona ao histórico
+        agent_history[agent].append({
+            'Hora': datetime.now().strftime("%H:%M:%S"),
+            'Ciclo': 0,
+            'Crenças': ["sistema_iniciado", "pronto_para_comunicar"],
+            'Metas': ["inicializar_sistema"]
+        })
     
     logs.append("---")
     logs.append("📨 Iniciando comunicação entre agentes...")
     
     # Simula diferentes padrões de comunicação
-    for i, sender in enumerate(agents):
+    for cycle, sender in enumerate(agents, 1):
         # Cada agente envia mensagem para o próximo (anéis)
-        receiver = agents[(i + 1) % len(agents)]
+        receiver = agents[(cycle) % len(agents)]
+        
+        # Atualiza histórico do sender
+        current_time = datetime.now().strftime("%H:%M:%S")
+        agent_history[sender].append({
+            'Hora': current_time,
+            'Ciclo': cycle,
+            'Crenças': [f"enviando_msg_para_{receiver}", "comunicacao_ativa"],
+            'Metas': [f"enviar_mensagem_{receiver}", "manter_conexao"]
+        })
+        
         logs.append(f"📤 {sender} → {receiver}: Mensagem de saudação")
+        
+        # Pequena pausa entre ações
+        time.sleep(0.1)
+        
+        # Atualiza histórico do receiver
+        current_time = datetime.now().strftime("%H:%M:%S")
+        agent_history[receiver].append({
+            'Hora': current_time,
+            'Ciclo': cycle,
+            'Crenças': [f"recebendo_msg_de_{sender}", "mensagem_processada"],
+            'Metas': [f"responder_{sender}", "processar_mensagem"]
+        })
+        
         logs.append(f"📥 {receiver} ← {sender}: Confirmação recebida")
         
         # Alguns agentes fazem broadcast
-        if i == 0:
+        if cycle == 1:
             logs.append(f"📢 {sender} faz broadcast para todos os agentes")
+            # Atualiza histórico para broadcast
+            current_time = datetime.now().strftime("%H:%M:%S")
+            agent_history[sender].append({
+                'Hora': current_time,
+                'Ciclo': cycle,
+                'Crenças': ["broadcast_enviado", "todos_notificados"],
+                'Metas': ["coordenar_agentes", "manter_sincronizacao"]
+            })
+    
+    # Ciclo final
+    final_cycle = len(agents) + 1
+    current_time = datetime.now().strftime("%H:%M:%S")
+    for agent in agents:
+        agent_history[agent].append({
+            'Hora': current_time,
+            'Ciclo': final_cycle,
+            'Crenças': ["sistema_finalizado", "todas_tarefas_concluidas"],
+            'Metas': ["finalizar_processos", "aguardar_nova_execucao"]
+        })
     
     logs.append("---")
     logs.append("✅ Todos os agentes finalizaram suas tarefas")
     
-    return logs
+    return logs, agent_history
+
+def create_agent_history_table(agent_history, agent_name):
+    """Cria uma tabela DataFrame para o histórico de um agente"""
+    if agent_name not in agent_history or not agent_history[agent_name]:
+        return pd.DataFrame()
+    
+    df = pd.DataFrame(agent_history[agent_name])
+    return df
 
 # Configuração da página
 st.set_page_config(page_title="Simulador MAS2J", layout="wide")
@@ -206,10 +265,13 @@ if project_files:
                     
                     if st.button("▶️ Iniciar Simulação", type="primary"):
                         st.session_state.run_simulation = True
+                        # Limpar histórico anterior se existir
+                        if 'agent_history' in st.session_state:
+                            del st.session_state.agent_history
                 
                 # Executa simulação se solicitado
                 if st.session_state.get('run_simulation', False):
-                    logs = simulate_communication(agents)
+                    logs, agent_history = simulate_communication(agents)
                     
                     # Container para logs com rolagem
                     log_container = st.container()
@@ -224,15 +286,51 @@ if project_files:
                             
                             # Atraso baseado na velocidade selecionada
                             delay_map = {"Lenta": 1.0, "Normal": 0.5, "Rápida": 0.1}
-                            import time
                             time.sleep(delay_map[simulation_speed])
                             
                             # Atualiza display
                             log_text = "\n".join(current_logs)
                             log_display.code(log_text)
                     
+                    # Salva o histórico na session state
+                    st.session_state.agent_history = agent_history
                     st.session_state.run_simulation = False
                     st.success("🎉 Simulação concluída!")
+                
+                # Mostrar histórico dos agentes se disponível
+                if 'agent_history' in st.session_state and st.session_state.agent_history:
+                    st.subheader("📊 Histórico dos Agentes")
+                    
+                    # Cria abas para cada agente
+                    agent_tabs = st.tabs([f"👤 {agent}" for agent in agents])
+                    
+                    for i, agent in enumerate(agents):
+                        with agent_tabs[i]:
+                            history_df = create_agent_history_table(st.session_state.agent_history, agent)
+                            if not history_df.empty:
+                                st.write(f"**Histórico do Agente {agent}**")
+                                
+                                # Formata a tabela para melhor visualização
+                                styled_df = history_df.style.set_properties(**{
+                                    'background-color': '#f0f2f6',
+                                    'color': 'black',
+                                    'border-color': 'white'
+                                })
+                                
+                                st.dataframe(styled_df, use_container_width=True)
+                                
+                                # Estatísticas do agente
+                                col1, col2, col3 = st.columns(3)
+                                with col1:
+                                    st.metric("Total de Ciclos", len(history_df))
+                                with col2:
+                                    total_beliefs = sum(len(beliefs) for beliefs in history_df['Crenças'])
+                                    st.metric("Total de Crenças", total_beliefs)
+                                with col3:
+                                    total_goals = sum(len(goals) for goals in history_df['Metas'])
+                                    st.metric("Total de Metas", total_goals)
+                            else:
+                                st.warning(f"Nenhum histórico disponível para o agente {agent}")
             else:
                 st.error("❌ Não é possível simular: nenhum agente encontrado")
     
