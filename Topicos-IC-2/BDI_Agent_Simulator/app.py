@@ -426,11 +426,6 @@ if projects:
                     with col2:
                         st.write("**Estatísticas:**")
                         st.metric("Total de Agentes", len(agents))
-                        
-                    # Debug: mostrar seção de agentes encontrada
-                    st.sidebar.write("🔍 Agentes encontrados:")
-                    for agent in agents:
-                        st.sidebar.write(f"• {agent}")
                 else:
                     st.warning("⚠️ Nenhum agente identificado no arquivo!")
                     st.info("💡 Dica: Verifique se o arquivo segue o formato .mas2j correto")
