@@ -18,7 +18,7 @@ def get_project_files():
 
 def load_project_file(filename):
     """Carrega o conteúdo de um arquivo de projeto"""
-    project_path = PROJECT_ROOT / "projects" / filename  # CORREÇÃO AQUI
+    project_path = PROJECT_ROOT / "projects" / filename
     if project_path.exists():
         try:
             with open(project_path, 'r', encoding='utf-8') as file:
@@ -32,29 +32,55 @@ def load_project_file(filename):
     return None
 
 def parse_mas2j(file_content):
-    """Faz o parsing básico de um arquivo .mas2j para extrair agentes"""
+    """Faz o parsing de um arquivo .mas2j para extrair agentes - versão melhorada"""
     agents = []
     
     # Remove comentários para facilitar o parsing
     content_no_comments = re.sub(r'//.*?$|/\*.*?\*/', '', file_content, flags=re.MULTILINE | re.DOTALL)
     
-    # Padrão para encontrar definições de agentes
-    agent_pattern = r'agent\s*:\s*(\w+)\s*\{'
-    agents.extend(re.findall(agent_pattern, content_no_comments))
+    # DEBUG: Mostrar conteúdo sem comentários
+    st.sidebar.code(content_no_comments[:500] + "..." if len(content_no_comments) > 500 else content_no_comments, language="java")
     
-    # Padrão alternativo para agentes em linhas individuais
-    alt_pattern = r'agents?\s*:\s*((?:\w+\s*)+);'
-    alt_match = re.search(alt_pattern, content_no_comments)
-    if alt_match:
-        agents.extend(re.findall(r'\w+', alt_match.group(1)))
+    # Múltiplos padrões para capturar diferentes formatos de definição de agentes
     
-    # Padrão para agentes entre chaves
-    brace_pattern = r'agents?\s*:\s*\{([^}]+)\}'
-    brace_match = re.search(brace_pattern, content_no_comments)
-    if brace_match:
-        agents.extend(re.findall(r'\w+', brace_match.group(1)))
+    # Padrão 1: agentes em múltiplas linhas com atributos (seu formato)
+    pattern1 = r'agents\s*:\s*((?:\w+\s*(?:\[.*?\])?(?:\s*at\s*"[^"]*")?\s*;?\s*)+)'
+    match1 = re.search(pattern1, content_no_comments, re.DOTALL)
+    if match1:
+        agents_section = match1.group(1)
+        # Extrai nomes dos agentes (palavras antes de [ ou at ou ;)
+        agent_names = re.findall(r'(\w+)\s*(?:\[|\bat\b|;)', agents_section)
+        agents.extend(agent_names)
     
-    return list(set(agents))  # Remove duplicatas
+    # Padrão 2: agentes entre chaves
+    pattern2 = r'agents\s*:\s*\{([^}]+)\}'
+    match2 = re.search(pattern2, content_no_comments, re.DOTALL)
+    if match2:
+        agents_section = match2.group(1)
+        agent_names = re.findall(r'(\w+)\s*(?:\[|\bat\b|;|$)', agents_section)
+        agents.extend(agent_names)
+    
+    # Padrão 3: agentes em linha única
+    pattern3 = r'agents?\s*:\s*((?:\w+\s*)+);'
+    match3 = re.search(pattern3, content_no_comments)
+    if match3:
+        agents_section = match3.group(1)
+        agent_names = re.findall(r'\w+', agents_section)
+        agents.extend(agent_names)
+    
+    # Padrão 4: definições individuais de agentes
+    pattern4 = r'agent\s+(\w+)\s*(?:\[.*?\])?(?:\s*at\s*"[^"]*")?\s*;'
+    agents.extend(re.findall(pattern4, content_no_comments))
+    
+    # Remove duplicatas e limpa resultados
+    agents = list(set(agents))
+    
+    # Filtra palavras que não são agentes (remover palavras-chave comuns)
+    keywords = ['infrastructure', 'environment', 'aslSourcePath', 'classPath', 
+                'initialisation', 'launchParameters', 'agents', 'agent']
+    agents = [agent for agent in agents if agent not in keywords and len(agent) > 1]
+    
+    return agents
 
 def simulate_communication(agents):
     """Simula a comunicação entre agentes"""
@@ -145,9 +171,24 @@ if project_files:
                 with col2:
                     st.write("**Estatísticas:**")
                     st.metric("Total de Agentes", len(agents))
+                    
+                # Debug: mostrar seção de agentes encontrada
+                st.sidebar.write("🔍 Agentes encontrados:")
+                for agent in agents:
+                    st.sidebar.write(f"• {agent}")
             else:
                 st.warning("⚠️ Nenhum agente identificado no arquivo!")
                 st.info("💡 Dica: Verifique se o arquivo segue o formato .mas2j correto")
+                
+                # Debug adicional
+                st.sidebar.subheader("🔧 Debug do Parser")
+                content_no_comments = re.sub(r'//.*?$|/\*.*?\*/', '', project_content, flags=re.MULTILINE | re.DOTALL)
+                agents_match = re.search(r'agents\s*:\s*(.*?)(?=\n\s*\w+\s*:|$)', content_no_comments, re.DOTALL)
+                if agents_match:
+                    st.sidebar.write("Seção 'agents' encontrada:")
+                    st.sidebar.code(agents_match.group(1))
+                else:
+                    st.sidebar.write("Nenhuma seção 'agents' encontrada")
         
         with tab3:
             st.subheader("Simulação de Execução")
