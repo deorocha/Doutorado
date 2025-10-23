@@ -9,19 +9,42 @@ import pandas as pd
 
 PROJECT_ROOT = Path(__file__).parent
 
-def get_project_files():
-    """Obtém a lista de arquivos .mas2j da pasta projects"""
+def get_project_folders():
+    """Obtém a lista de pastas de projetos dentro da pasta projects"""
     project_dir = PROJECT_ROOT / "projects"
+    
+    if not project_dir.exists():
+        return []
+    
+    # Encontra todas as subpastas dentro de ./projects
+    project_folders = [f for f in project_dir.iterdir() if f.is_dir()]
+    
+    projects = []
+    
+    for folder in project_folders:
+        # Procura por arquivos .mas2j ou .mas3j dentro da pasta do projeto
+        mas_files = list(folder.glob("*.mas2j")) + list(folder.glob("*.mas3j"))
+        
+        if mas_files:
+            # Usa o primeiro arquivo .mas2j/.mas3j encontrado como arquivo principal do projeto
+            main_file = mas_files[0]
+            projects.append({
+                'name': folder.name,
+                'folder': folder,
+                'main_file': main_file,
+                'all_files': mas_files
+            })
+    
+    return projects
 
-    if project_dir.exists():
-        mas2j_files = list(project_dir.glob("*.mas2j"))
-        mas3j_files = list(project_dir.glob("*.mas3j"))
-        return mas2j_files + mas3j_files
-    return []
-
-def load_project_file(filename):
-    """Carrega o conteúdo de um arquivo de projeto"""
-    project_path = PROJECT_ROOT / "projects" / filename
+def load_project_file(project_info):
+    """Carrega o conteúdo do arquivo principal de um projeto"""
+    if isinstance(project_info, dict) and 'main_file' in project_info:
+        project_path = project_info['main_file']
+    else:
+        # Fallback para o comportamento antigo
+        project_path = PROJECT_ROOT / "projects" / project_info
+    
     if project_path.exists():
         try:
             with open(project_path, 'r', encoding='utf-8') as file:
@@ -33,6 +56,17 @@ def load_project_file(filename):
     else:
         st.error(f"Arquivo não encontrado: {project_path}")
     return None
+
+def get_additional_files(project_info):
+    """Obtém lista de arquivos adicionais no projeto (como .asl)"""
+    if isinstance(project_info, dict) and 'folder' in project_info:
+        folder = project_info['folder']
+        # Procura por arquivos .asl e outros arquivos de código
+        asl_files = list(folder.glob("*.asl"))
+        other_files = [f for f in folder.iterdir() 
+                      if f.is_file() and f.suffix not in ['.mas2j', '.mas3j']]
+        return asl_files + other_files
+    return []
 
 def parse_mas2j(file_content):
     """Faz o parsing de um arquivo .mas2j para extrair agentes - versão melhorada"""
@@ -182,146 +216,180 @@ with st.sidebar:
     st.header("📁 Projetos Disponíveis")
     st.info("Selecione um projeto da lista para analisar")
 
-# Obtém lista de projetos
-project_files = get_project_files()
+# Obtém lista de projetos (pastas)
+projects = get_project_folders()
 
-# Debug: mostrar arquivos encontrados
-st.sidebar.write(f"📊 Arquivos encontrados: {len(project_files)}")
-for file in project_files:
-    st.sidebar.write(f"• {file.name}")
+# Debug: mostrar projetos encontrados
+st.sidebar.write(f"📊 Projetos encontrados: {len(projects)}")
+for project in projects:
+    st.sidebar.write(f"• {project['name']}")
 
-if project_files:
+if projects:
     # Cria lista de nomes para o selectbox
-    project_names = [file.name for file in project_files]
+    project_names = [project['name'] for project in projects]
     
     # Selectbox para escolher o projeto
-    selected_project = st.selectbox(
+    selected_project_name = st.selectbox(
         "Selecione um projeto:",
         project_names,
         index=0
     )
     
-    # Mostra informações do projeto selecionado
-    st.subheader(f"📄 Projeto: {selected_project}")
+    # Encontra o projeto selecionado
+    selected_project = next((p for p in projects if p['name'] == selected_project_name), None)
     
-    # Carrega e exibe o conteúdo do projeto
-    project_content = load_project_file(selected_project)
-    
-    if project_content:
-        # Abas para organizar as informações
-        tab1, tab2, tab3 = st.tabs(["📋 Código", "🤖 Agentes", "🔄 Simulação"])
+    if selected_project:
+        # Mostra informações do projeto selecionado
+        st.subheader(f"📄 Projeto: {selected_project_name}")
         
-        with tab1:
-            st.subheader("Conteúdo do Arquivo")
-            st.code(project_content, language="java")
-        
-        with tab2:
-            st.subheader("Agentes Identificados")
-            agents = parse_mas2j(project_content)
+        # Mostra informações da pasta do projeto
+        with st.expander("📁 Estrutura do Projeto"):
+            st.write(f"**Pasta:** `{selected_project['folder']}`")
+            st.write(f"**Arquivo principal:** `{selected_project['main_file'].name}`")
             
-            if agents:
-                col1, col2 = st.columns([2, 1])
-                
-                with col1:
-                    st.write("**Lista de Agentes:**")
-                    for i, agent in enumerate(agents, 1):
-                        st.write(f"{i}. `{agent}`")
-                
-                with col2:
-                    st.write("**Estatísticas:**")
-                    st.metric("Total de Agentes", len(agents))
-                    
-                # Debug: mostrar seção de agentes encontrada
-                st.sidebar.write("🔍 Agentes encontrados:")
-                for agent in agents:
-                    st.sidebar.write(f"• {agent}")
+            # Lista arquivos adicionais
+            additional_files = get_additional_files(selected_project)
+            if additional_files:
+                st.write("**Arquivos do projeto:**")
+                for file in additional_files:
+                    st.write(f"- `{file.name}`")
             else:
-                st.warning("⚠️ Nenhum agente identificado no arquivo!")
-                st.info("💡 Dica: Verifique se o arquivo segue o formato .mas2j correto")
+                st.info("Nenhum arquivo adicional encontrado (como .asl)")
         
-        with tab3:
-            st.subheader("Simulação de Execução")
-            agents = parse_mas2j(project_content)
+        # Carrega e exibe o conteúdo do projeto
+        project_content = load_project_file(selected_project)
+        
+        if project_content:
+            # Abas para organizar as informações
+            tab1, tab2, tab3, tab4 = st.tabs(["📋 Código", "📁 Arquivos", "🤖 Agentes", "🔄 Simulação"])
             
-            if agents:
-                # Controles de simulação
-                col1, col2 = st.columns([1, 3])
+            with tab1:
+                st.subheader("Conteúdo do Arquivo Principal")
+                st.code(project_content, language="java")
+            
+            with tab2:
+                st.subheader("Arquivos do Projeto")
+                additional_files = get_additional_files(selected_project)
                 
-                with col1:
-                    simulation_speed = st.select_slider(
-                        "Velocidade da simulação:",
-                        options=["Lenta", "Normal", "Rápida"]
-                    )
-                    
-                    if st.button("▶️ Iniciar Simulação", type="primary"):
-                        st.session_state.run_simulation = True
-                        # Limpar histórico anterior se existir
-                        if 'agent_history' in st.session_state:
-                            del st.session_state.agent_history
+                if additional_files:
+                    for file in additional_files:
+                        with st.expander(f"📄 {file.name}"):
+                            try:
+                                with open(file, 'r', encoding='utf-8') as f:
+                                    file_content = f.read()
+                                st.code(file_content, language="lisp" if file.suffix == '.asl' else "text")
+                            except Exception as e:
+                                st.error(f"Erro ao ler arquivo {file.name}: {e}")
+                else:
+                    st.info("Nenhum arquivo adicional encontrado nesta pasta")
+            
+            with tab3:
+                st.subheader("Agentes Identificados")
+                agents = parse_mas2j(project_content)
                 
-                # Executa simulação se solicitado
-                if st.session_state.get('run_simulation', False):
-                    logs, agent_history = simulate_communication(agents)
+                if agents:
+                    col1, col2 = st.columns([2, 1])
                     
-                    # Container para logs com rolagem
-                    log_container = st.container()
-                    with log_container:
-                        st.write("**Logs de Execução:**")
-                        log_display = st.empty()
+                    with col1:
+                        st.write("**Lista de Agentes:**")
+                        for i, agent in enumerate(agents, 1):
+                            st.write(f"{i}. `{agent}`")
+                    
+                    with col2:
+                        st.write("**Estatísticas:**")
+                        st.metric("Total de Agentes", len(agents))
                         
-                        # Simula execução em tempo real
-                        current_logs = []
-                        for log in logs:
-                            current_logs.append(log)
-                            
-                            # Atraso baseado na velocidade selecionada
-                            delay_map = {"Lenta": 1.0, "Normal": 0.5, "Rápida": 0.1}
-                            time.sleep(delay_map[simulation_speed])
-                            
-                            # Atualiza display
-                            log_text = "\n".join(current_logs)
-                            log_display.code(log_text)
-                    
-                    # Salva o histórico na session state
-                    st.session_state.agent_history = agent_history
-                    st.session_state.run_simulation = False
-                    st.success("🎉 Simulação concluída!")
+                    # Debug: mostrar seção de agentes encontrada
+                    st.sidebar.write("🔍 Agentes encontrados:")
+                    for agent in agents:
+                        st.sidebar.write(f"• {agent}")
+                else:
+                    st.warning("⚠️ Nenhum agente identificado no arquivo!")
+                    st.info("💡 Dica: Verifique se o arquivo segue o formato .mas2j correto")
+            
+            with tab4:
+                st.subheader("Simulação de Execução")
+                agents = parse_mas2j(project_content)
                 
-                # Mostrar histórico dos agentes se disponível
-                if 'agent_history' in st.session_state and st.session_state.agent_history:
-                    st.subheader("📊 Histórico dos Agentes")
+                if agents:
+                    # Controles de simulação
+                    col1, col2 = st.columns([1, 3])
                     
-                    # Cria abas para cada agente
-                    agent_tabs = st.tabs([f"👤 {agent}" for agent in agents])
+                    with col1:
+                        simulation_speed = st.select_slider(
+                            "Velocidade da simulação:",
+                            options=["Lenta", "Normal", "Rápida"]
+                        )
+                        
+                        if st.button("▶️ Iniciar Simulação", type="primary"):
+                            st.session_state.run_simulation = True
+                            # Limpar histórico anterior se existir
+                            if 'agent_history' in st.session_state:
+                                del st.session_state.agent_history
                     
-                    for i, agent in enumerate(agents):
-                        with agent_tabs[i]:
-                            history_df = create_agent_history_table(st.session_state.agent_history, agent)
-                            if not history_df.empty:
-                                st.write(f"**Histórico do Agente {agent}**")
+                    # Executa simulação se solicitado
+                    if st.session_state.get('run_simulation', False):
+                        logs, agent_history = simulate_communication(agents)
+                        
+                        # Container para logs com rolagem
+                        log_container = st.container()
+                        with log_container:
+                            st.write("**Logs de Execução:**")
+                            log_display = st.empty()
+                            
+                            # Simula execução em tempo real
+                            current_logs = []
+                            for log in logs:
+                                current_logs.append(log)
                                 
-                                # Exibe a tabela sem estilização (correção do erro)
-                                st.dataframe(history_df, use_container_width=True)
+                                # Atraso baseado na velocidade selecionada
+                                delay_map = {"Lenta": 1.0, "Normal": 0.5, "Rápida": 0.1}
+                                time.sleep(delay_map[simulation_speed])
                                 
-                                # Estatísticas do agente
-                                col1, col2, col3 = st.columns(3)
-                                with col1:
-                                    st.metric("Total de Ciclos", len(history_df))
-                                with col2:
-                                    # Contar crenças (separadas por vírgula)
-                                    total_beliefs = sum(len(beliefs.split(',')) for beliefs in history_df['Crenças'])
-                                    st.metric("Total de Crenças", total_beliefs)
-                                with col3:
-                                    # Contar metas (separadas por vírgula)
-                                    total_goals = sum(len(goals.split(',')) for goals in history_df['Metas'])
-                                    st.metric("Total de Metas", total_goals)
-                            else:
-                                st.warning(f"Nenhum histórico disponível para o agente {agent}")
-            else:
-                st.error("❌ Não é possível simular: nenhum agente encontrado")
-    
-    else:
-        st.error(f"❌ Erro ao carregar o arquivo: {selected_project}")
+                                # Atualiza display
+                                log_text = "\n".join(current_logs)
+                                log_display.code(log_text)
+                        
+                        # Salva o histórico na session state
+                        st.session_state.agent_history = agent_history
+                        st.session_state.run_simulation = False
+                        st.success("🎉 Simulação concluída!")
+                    
+                    # Mostrar histórico dos agentes se disponível
+                    if 'agent_history' in st.session_state and st.session_state.agent_history:
+                        st.subheader("📊 Histórico dos Agentes")
+                        
+                        # Cria abas para cada agente
+                        agent_tabs = st.tabs([f"👤 {agent}" for agent in agents])
+                        
+                        for i, agent in enumerate(agents):
+                            with agent_tabs[i]:
+                                history_df = create_agent_history_table(st.session_state.agent_history, agent)
+                                if not history_df.empty:
+                                    st.write(f"**Histórico do Agente {agent}**")
+                                    
+                                    # Exibe a tabela sem estilização
+                                    st.dataframe(history_df, use_container_width=True)
+                                    
+                                    # Estatísticas do agente
+                                    col1, col2, col3 = st.columns(3)
+                                    with col1:
+                                        st.metric("Total de Ciclos", len(history_df))
+                                    with col2:
+                                        # Contar crenças (separadas por vírgula)
+                                        total_beliefs = sum(len(beliefs.split(',')) for beliefs in history_df['Crenças'])
+                                        st.metric("Total de Crenças", total_beliefs)
+                                    with col3:
+                                        # Contar metas (separadas por vírgula)
+                                        total_goals = sum(len(goals.split(',')) for goals in history_df['Metas'])
+                                        st.metric("Total de Metas", total_goals)
+                                else:
+                                    st.warning(f"Nenhum histórico disponível para o agente {agent}")
+                else:
+                    st.error("❌ Não é possível simular: nenhum agente encontrado")
+        
+        else:
+            st.error(f"❌ Erro ao carregar o arquivo do projeto: {selected_project_name}")
 
 else:
     st.error("📂 Nenhum projeto encontrado na pasta './projects'")
@@ -333,8 +401,16 @@ else:
     ├── app.py
     ├── requirements.txt
     └── projects/
-        ├── Communication.mas2j
-        └── outros_projetos.mas2j
+        ├── projeto1/
+        │   ├── projeto1.mas2j
+        │   ├── agente1.asl
+        │   └── agente2.asl
+        ├── projeto2/
+        │   ├── projeto2.mas2j
+        │   └── agentes.asl
+        └── projeto3/
+            ├── projeto3.mas3j
+            └── scripts.asl
     ```
     """)
 
