@@ -100,8 +100,8 @@ def simulate_communication(agents):
         agent_history[agent].append({
             'Hora': datetime.now().strftime("%H:%M:%S"),
             'Ciclo': 0,
-            'Crenças': ["sistema_iniciado", "pronto_para_comunicar"],
-            'Metas': ["inicializar_sistema"]
+            'Crenças': "sistema_iniciado, pronto_para_comunicar",
+            'Metas': "inicializar_sistema"
         })
     
     logs.append("---")
@@ -117,8 +117,8 @@ def simulate_communication(agents):
         agent_history[sender].append({
             'Hora': current_time,
             'Ciclo': cycle,
-            'Crenças': [f"enviando_msg_para_{receiver}", "comunicacao_ativa"],
-            'Metas': [f"enviar_mensagem_{receiver}", "manter_conexao"]
+            'Crenças': f"enviando_msg_para_{receiver}, comunicacao_ativa",
+            'Metas': f"enviar_mensagem_{receiver}, manter_conexao"
         })
         
         logs.append(f"📤 {sender} → {receiver}: Mensagem de saudação")
@@ -131,8 +131,8 @@ def simulate_communication(agents):
         agent_history[receiver].append({
             'Hora': current_time,
             'Ciclo': cycle,
-            'Crenças': [f"recebendo_msg_de_{sender}", "mensagem_processada"],
-            'Metas': [f"responder_{sender}", "processar_mensagem"]
+            'Crenças': f"recebendo_msg_de_{sender}, mensagem_processada",
+            'Metas': f"responder_{sender}, processar_mensagem"
         })
         
         logs.append(f"📥 {receiver} ← {sender}: Confirmação recebida")
@@ -145,8 +145,8 @@ def simulate_communication(agents):
             agent_history[sender].append({
                 'Hora': current_time,
                 'Ciclo': cycle,
-                'Crenças': ["broadcast_enviado", "todos_notificados"],
-                'Metas': ["coordenar_agentes", "manter_sincronizacao"]
+                'Crenças': "broadcast_enviado, todos_notificados",
+                'Metas': "coordenar_agentes, manter_sincronizacao"
             })
     
     # Ciclo final
@@ -156,8 +156,8 @@ def simulate_communication(agents):
         agent_history[agent].append({
             'Hora': current_time,
             'Ciclo': final_cycle,
-            'Crenças': ["sistema_finalizado", "todas_tarefas_concluidas"],
-            'Metas': ["finalizar_processos", "aguardar_nova_execucao"]
+            'Crenças': "sistema_finalizado, todas_tarefas_concluidas",
+            'Metas': "finalizar_processos, aguardar_nova_execucao"
         })
     
     logs.append("---")
@@ -238,16 +238,6 @@ if project_files:
             else:
                 st.warning("⚠️ Nenhum agente identificado no arquivo!")
                 st.info("💡 Dica: Verifique se o arquivo segue o formato .mas2j correto")
-                
-                # Debug adicional
-                st.sidebar.subheader("🔧 Debug do Parser")
-                content_no_comments = re.sub(r'//.*?$|/\*.*?\*/', '', project_content, flags=re.MULTILINE | re.DOTALL)
-                agents_match = re.search(r'agents\s*:\s*(.*?)(?=\n\s*\w+\s*:|$)', content_no_comments, re.DOTALL)
-                if agents_match:
-                    st.sidebar.write("Seção 'agents' encontrada:")
-                    st.sidebar.code(agents_match.group(1))
-                else:
-                    st.sidebar.write("Nenhuma seção 'agents' encontrada")
         
         with tab3:
             st.subheader("Simulação de Execução")
@@ -310,24 +300,20 @@ if project_files:
                             if not history_df.empty:
                                 st.write(f"**Histórico do Agente {agent}**")
                                 
-                                # Formata a tabela para melhor visualização
-                                styled_df = history_df.style.set_properties(**{
-                                    'background-color': '#f0f2f6',
-                                    'color': 'black',
-                                    'border-color': 'white'
-                                })
-                                
-                                st.dataframe(styled_df, use_container_width=True)
+                                # Exibe a tabela sem estilização (correção do erro)
+                                st.dataframe(history_df, use_container_width=True)
                                 
                                 # Estatísticas do agente
                                 col1, col2, col3 = st.columns(3)
                                 with col1:
                                     st.metric("Total de Ciclos", len(history_df))
                                 with col2:
-                                    total_beliefs = sum(len(beliefs) for beliefs in history_df['Crenças'])
+                                    # Contar crenças (separadas por vírgula)
+                                    total_beliefs = sum(len(beliefs.split(',')) for beliefs in history_df['Crenças'])
                                     st.metric("Total de Crenças", total_beliefs)
                                 with col3:
-                                    total_goals = sum(len(goals) for goals in history_df['Metas'])
+                                    # Contar metas (separadas por vírgula)
+                                    total_goals = sum(len(goals.split(',')) for goals in history_df['Metas'])
                                     st.metric("Total de Metas", total_goals)
                             else:
                                 st.warning(f"Nenhum histórico disponível para o agente {agent}")
