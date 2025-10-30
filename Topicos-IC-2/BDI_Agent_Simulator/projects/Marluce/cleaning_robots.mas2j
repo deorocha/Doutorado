@@ -3,6 +3,7 @@ MAS cleaning_robots {
     agents:
         R1;
         R2;
-    aslSourcePath: ["src/"]
+    aslSourcePath: ["src/asl/"]
 
 }
+
