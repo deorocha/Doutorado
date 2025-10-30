@@ -1,9 +1,10 @@
 MAS cleaning_robots {
     infrastructure: Centralised
     agents:
-        R1;
-        R2;
+        R1_collector.asl;
+        R2_incinerator.asl;
     aslSourcePath: ["src/asl/"]
 
 }
+
 
