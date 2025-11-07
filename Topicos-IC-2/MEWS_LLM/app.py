@@ -177,7 +177,6 @@ def main():
                 2. **Riscos da Omissão** - Consequências de não realizar o procedimento  
                 3. **Evidências Clínicas** - Comprovações baseadas em estudos
                 4. **Impacto no Paciente** - Efeitos diretos no bem-estar
-            
             **💡 Exemplos de perguntas:**
                 - "Por que devo verificar sinais vitais regularmente?"
                 - "Qual o fundamento fisiológico da monitorização respiratória?"
@@ -226,16 +225,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
