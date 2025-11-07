@@ -185,23 +185,32 @@ def main():
             st.error("❌ Arquivo procedimentos.json não encontrado")
 
         with st.expander("🎯 Como funciono", expanded=True):
-            st.caption("""
-            **Como funciono:**
-            - Forneço respostas **estruturadas** com base científica
-            - Apresento informações em **4 categorias** específicas:
-              1. **Fundamento Fisiológico** - Base científica do procedimento
-              2. **Riscos da Omissão** - Consequências de não realizar o procedimento  
-              3. **Evidências Clínicas** - Comprovações baseadas em estudos
-              4. **Impacto no Paciente** - Efeitos diretos no bem-estar
+            st.markdown("""
+            <style>
+            .small-font {
+                font-size: 14px;
+                line-height: 1.4;
+            }
+            </style>
             
-            **💡 Exemplos de perguntas:**
-            - "Por que devo verificar sinais vitais regularmente?"
-            - "Qual o fundamento fisiológico da monitorização respiratória?"
-            - "Quais os riscos de não comunicar alterações ao médico?"
-            - "Por que é importante orientar pacientes sobre sinais de alerta?"
-            - "Qual o impacto da documentação no prontuário?"
-            """)
-    
+            <div class="small-font">
+            <strong>Como funciono:</strong><br/>
+            - Forneço respostas <strong>estruturadas</strong> com base científica<br/>
+            - Apresento informações em <strong>4 categorias</strong> específicas:<br/>
+            &nbsp;&nbsp;1. <strong>Fundamento Fisiológico</strong> - Base científica do procedimento<br/>
+            &nbsp;&nbsp;2. <strong>Riscos da Omissão</strong> - Consequências de não realizar o procedimento<br/>
+            &nbsp;&nbsp;3. <strong>Evidências Clínicas</strong> - Comprovações baseadas em estudos<br/>
+            &nbsp;&nbsp;4. <strong>Impacto no Paciente</strong> - Efeitos diretos no bem-estar<br/><br/>
+            
+            <strong>💡 Exemplos de perguntas:</strong><br/>
+            - "Por que devo verificar sinais vitais regularmente?"<br/>
+            - "Qual o fundamento fisiológico da monitorização respiratória?"<br/>
+            - "Quais os riscos de não comunicar alterações ao médico?"<br/>
+            - "Por que é importante orientar pacientes sobre sinais de alerta?"<br/>
+            - "Qual o impacto da documentação no prontuário?"<br/>
+            </div>
+            """, unsafe_allow_html=True)
+
     # Inicializa conversa
     if 'conversation' not in st.session_state:
         st.session_state.conversation = []
@@ -242,6 +251,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
