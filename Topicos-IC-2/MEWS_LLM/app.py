@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 # Título principal
-st.title("🤖 ChatBot MEWS-LLM Especializado")
+st.title("🤖 ChatBot MEWS-LLM")
 st.markdown("Consulta informações detalhadas sobre procedimentos hospitalares com **respostas estruturadas**")
 
 # Definir o caminho base do projeto
@@ -225,4 +225,5 @@ Impacto no Paciente: [efeitos]
 
 if __name__ == "__main__":
     main()
+
 
