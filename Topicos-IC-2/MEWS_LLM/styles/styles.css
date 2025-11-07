@@ -47,6 +47,6 @@ div[data-testid="stExpander"] details summary {
 
 }
 
-.stExpander > .streamlit-expanderHeader {
+section[data-testid="stSidebar"] .streamlit-expanderHeader {
     font-size: 10px !important;
 }
