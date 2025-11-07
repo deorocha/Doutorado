@@ -52,21 +52,23 @@ except ImportError as e:
 def init_chatbot():
     chatbot = MEWSChatbot()
     
-    # Debug: verificar estrutura de diretórios
-    #st.sidebar.write("🔍 Debug - Estrutura de diretórios:")
-    #st.sidebar.write(f"Diretório atual: {Path.cwd()}")
-    #st.sidebar.write(f"Diretório do app: {PROJECT_ROOT}")
-    
     # Verificar se a pasta models existe
     models_dir = PROJECT_ROOT / "models"
-    #st.sidebar.write(f"Pasta models existe: {models_dir.exists()}")
     
+    # Verifica se os arquivos do modelo existem sem mostrar a lista
+    model_files_exist = False
     if models_dir.exists():
-        files = list(models_dir.glob("*"))
-        # st.sidebar.write(f"Arquivos em models: {[f.name for f in files]}")
+        model_files = list(models_dir.glob("*"))
+        # Verifica se ambos arquivos necessários existem
+        has_pkl = any("mews_model.pkl" in f.name and f.is_file() for f in model_files)
+        has_transformer = any("mews_model.pkl_transformer" in f.name for f in model_files)
+        model_files_exist = has_pkl and has_transformer
     
-    # Tenta carregar o modelo
-    model_loaded = chatbot.load_model()
+    # Tenta carregar o modelo apenas se os arquivos existirem
+    if model_files_exist:
+        model_loaded = chatbot.load_model()
+    else:
+        model_loaded = False
     
     if not model_loaded:
         st.error("""
@@ -83,7 +85,6 @@ def init_chatbot():
 
 chatbot = init_chatbot()
 
-# ... o resto do código permanece igual ...
 def find_procedure_fallback(json_data, query):
     """Busca básica fallback caso o modelo não esteja disponível"""
     query_lower = query.lower().strip()
@@ -248,23 +249,16 @@ def main():
         with st.chat_message("assistant"):
             st.markdown("""
 👋 **Olá! Sou seu assistente especializado em procedimentos MEWS.**
+
+**Estou aqui para ajudar você a entender:** 
+- 📊 **Fundamentos fisiológicos** dos procedimentos
+- ⚠️ **Riscos da omissão** de cuidados
+- 🔬 **Evidências clínicas** que embasam as condutas
+- 💡 **Impacto direto** no bem-estar do paciente
+
+**Como posso ajudar você hoje?** 
+*Exemplo: "Por que é importante monitorar os sinais vitais regularmente?"*
 """)
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
