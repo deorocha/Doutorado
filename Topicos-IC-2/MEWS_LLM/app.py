@@ -225,16 +225,9 @@ def main():
 - "Quais os riscos de não comunicar alterações ao médico?"
 - "Por que é importante orientar pacientes sobre sinais de alerta?"
 - "Qual o impacto da documentação no prontuário?"
-
-**📝 Formato das respostas:**
-Fundamento Fisiológico: [explicação científica]
-Riscos da Omissão: [consequências]
-Evidências Clínicas: [comprovações]
-Impacto no Paciente: [efeitos]
-
-**Digite sua pergunta abaixo!**
 """)
 
 if __name__ == "__main__":
     main()
+
 
