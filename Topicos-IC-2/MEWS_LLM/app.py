@@ -184,35 +184,28 @@ def main():
         else:
             st.error("❌ Arquivo procedimentos.json não encontrado")
 
-        with st.expander("🎯 Como funciono", expanded=False):
+        with st.expander("🎯 Como funciono", expanded=True):
             st.markdown("""
             <style>
             .small-font {
-                font-size: 12px;
-                line-height: 1.2;
-            }
-            .streamlit-expanderHeader {
-                font-size: 14px;
-                font-weight: bold;
-                color: #2e86ab;
+                font-size:14px;
             }
             </style>
-            
             <div class="small-font">
-            <strong>Como funciono:</strong><br/>
-            - Forneço respostas <strong>estruturadas</strong> com base científica<br/>
-            - Apresento informações em <strong>4 categorias</strong> específicas:<br/>
-            &nbsp;&nbsp;1. <strong>Fundamento Fisiológico</strong> - Base científica do procedimento<br/>
-            &nbsp;&nbsp;2. <strong>Riscos da Omissão</strong> - Consequências de não realizar o procedimento<br/>
-            &nbsp;&nbsp;3. <strong>Evidências Clínicas</strong> - Comprovações baseadas em estudos<br/>
-            &nbsp;&nbsp;4. <strong>Impacto no Paciente</strong> - Efeitos diretos no bem-estar<br/><br/>
-            
-            <strong>💡 Exemplos de perguntas:</strong><br/>
-            &nbsp;&nbsp;- "Por que devo verificar sinais vitais regularmente?"<br/>
-            &nbsp;&nbsp;- "Qual o fundamento fisiológico da monitorização respiratória?"<br/>
-            &nbsp;&nbsp;- "Quais os riscos de não comunicar alterações ao médico?"<br/>
-            &nbsp;&nbsp;- "Por que é importante orientar pacientes sobre sinais de alerta?"<br/>
-            &nbsp;&nbsp;- "Qual o impacto da documentação no prontuário?"<br/>
+            **🎯 Como funciono:**  
+            - Forneço respostas **estruturadas** com base científica;
+            - Apresento informações em **4 categorias** específicas: 
+              1. **Fundamento Fisiológico** - Base científica do procedimento;
+              2. **Riscos da Omissão** - Consequências de não realizar o procedimento;
+              3. **Evidências Clínicas** - Comprovações baseadas em estudos;
+              4. **Impacto no Paciente** - Efeitos diretos no bem-estar.
+        
+            **💡 Exemplos de perguntas:**  
+            - "Por que devo verificar sinais vitais regularmente?"
+            - "Qual o fundamento fisiológico da monitorização respiratória?"
+            - "Quais os riscos de não comunicar alterações ao médico?"
+            - "Por que é importante orientar pacientes sobre sinais de alerta?"
+            - "Qual o impacto da documentação no prontuário?"
             </div>
             """, unsafe_allow_html=True)
 
@@ -256,6 +249,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
