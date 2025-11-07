@@ -124,7 +124,6 @@ def main():
     # Sidebar
     with st.sidebar:
         st.title("🏥 Sistema MEWS")
-        st.markdown("---")
         st.markdown("""
         **Faixas MEWS:**
         - 🟢 Verde - Monitoramento
@@ -133,7 +132,6 @@ def main():
         """)
         
         st.markdown("---")
-        st.subheader("🤖 Status do Modelo")
         
         model_info = chatbot.get_model_info()
         if model_info["modelo_carregado"]:
@@ -231,6 +229,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
