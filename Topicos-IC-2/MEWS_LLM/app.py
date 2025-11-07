@@ -47,6 +47,7 @@ def init_chatbot():
     
     if models_dir.exists():
         files = list(models_dir.glob("*"))
+        arq = f.name for f in files
         # st.sidebar.write(f"Arquivos em models: {[f.name for f in files]}")
     
     # Tenta carregar o modelo
@@ -231,6 +232,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
