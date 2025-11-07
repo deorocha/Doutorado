@@ -225,3 +225,4 @@ Impacto no Paciente: [efeitos]
 
 if __name__ == "__main__":
     main()
+
