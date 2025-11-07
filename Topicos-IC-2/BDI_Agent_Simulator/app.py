@@ -438,7 +438,7 @@ if projects:
                     st.info("Nenhum arquivo adicional encontrado")
             
             # Abas para organizar as informações
-            tab1, tab2, tab3, tab4, tab5 = st.tabs(["📋 Código", "📁 Arquivos", "🤖 Agentes", "🔄 Simulação", "📝 Logs dos Agentes"])
+            tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["📋 Código", "📁 Arquivos", "🤖 Agentes", "🔄 Simulação", "📝 Logs dos Agentes", "📊 Sniffer Agent"])
             
             with tab1:
                 st.subheader("Conteúdo do Arquivo Principal")
@@ -653,7 +653,10 @@ if projects:
                         st.warning("Nenhuma mensagem disponível")
                 else:
                     st.info("Execute a simulação primeiro para ver os logs dos agentes")
-        
+
+            with tab6:
+                st.subheader("📊 Sniffer Agent")
+                
         else:
             st.error(f"❌ Erro ao carregar o arquivo do projeto: {selected_project_name}")
 
