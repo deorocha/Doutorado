@@ -191,6 +191,11 @@ def main():
                 font-size: 12px;
                 line-height: 1.2;
             }
+            .streamlit-expanderHeader {
+                font-size: 14px;
+                font-weight: bold;
+                color: #2e86ab;
+            }
             </style>
             
             <div class="small-font">
@@ -251,6 +256,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
