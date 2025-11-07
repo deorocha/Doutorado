@@ -184,12 +184,12 @@ def main():
         else:
             st.error("❌ Arquivo procedimentos.json não encontrado")
 
-        with st.expander("🎯 Como funciono", expanded=True):
+        with st.expander("🎯 Como funciono", expanded=False):
             st.markdown("""
             <style>
             .small-font {
-                font-size: 14px;
-                line-height: 1.4;
+                font-size: 10px;
+                line-height: 1.1;
             }
             </style>
             
@@ -251,6 +251,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
