@@ -19,7 +19,7 @@ st.markdown(
     """
     <style>
     .streamlit-expanderHeader {
-        font-size: 10px; /* Adjust the font size as needed */
+        font-size: 10px !important;
     }
     </style>
     """,
@@ -300,5 +300,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
