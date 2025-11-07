@@ -168,7 +168,7 @@ def main():
         else:
             st.error("❌ Arquivo procedimentos.json não encontrado")
 
-        with st.expander("** 🎯 Como funciono:"):
+        with st.expander("🎯 Como funciono:"):
             with st.container():
                 st.markdown("""
                 - Forneço respostas **estruturadas** com base científica
@@ -227,3 +227,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
