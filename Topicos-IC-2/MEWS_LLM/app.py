@@ -194,14 +194,14 @@ def main():
             <div class="small-font">
                 🎯 Como funciono:<p>
                 - Forneço respostas estruturadas com base científica;<br>
-                - Apresento informações em 4 categorias específicas:<br>
+                - Apresento informações em 4 categorias específicas:
                 <ul>
                     <li>  1. Fundamento Fisiológico - Base científica do procedimento;<br></li>
                     <li>  2. Riscos da Omissão - Consequências de não realizar o procedimento;<br></li>
                     <li>  3. Evidências Clínicas - Comprovações baseadas em estudos;<br></li>
                     <li>  4. Impacto no Paciente - Efeitos diretos no bem-estar.<p></li>
                 </ul>
-                💡 Exemplos de perguntas:<p>
+                💡 Exemplos de perguntas:
                 <ul>
                     <li>  - "Por que devo verificar sinais vitais regularmente?"<br></li>
                     <li>  - "Qual o fundamento fisiológico da monitorização respiratória?"<br></li>
@@ -252,6 +252,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
