@@ -47,6 +47,7 @@ div[data-testid="stExpander"] details summary {
 
 }
 
-.streamlit-expanderHeader {
-    font-size: 10px !important; 
+div[data-testid="stExpander"] .streamlit-expanderHeader {
+    font-size: 10px !important;
+    font-weight: 500 !important;
 }
