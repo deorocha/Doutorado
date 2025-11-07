@@ -203,11 +203,11 @@ def main():
             &nbsp;&nbsp;4. <strong>Impacto no Paciente</strong> - Efeitos diretos no bem-estar<br/><br/>
             
             <strong>💡 Exemplos de perguntas:</strong><br/>
-            - "Por que devo verificar sinais vitais regularmente?"<br/>
-            - "Qual o fundamento fisiológico da monitorização respiratória?"<br/>
-            - "Quais os riscos de não comunicar alterações ao médico?"<br/>
-            - "Por que é importante orientar pacientes sobre sinais de alerta?"<br/>
-            - "Qual o impacto da documentação no prontuário?"<br/>
+            &nbsp;&nbsp;- "Por que devo verificar sinais vitais regularmente?"<br/>
+            &nbsp;&nbsp;- "Qual o fundamento fisiológico da monitorização respiratória?"<br/>
+            &nbsp;&nbsp;- "Quais os riscos de não comunicar alterações ao médico?"<br/>
+            &nbsp;&nbsp;- "Por que é importante orientar pacientes sobre sinais de alerta?"<br/>
+            &nbsp;&nbsp;- "Qual o impacto da documentação no prontuário?"<br/>
             </div>
             """, unsafe_allow_html=True)
 
@@ -251,6 +251,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
