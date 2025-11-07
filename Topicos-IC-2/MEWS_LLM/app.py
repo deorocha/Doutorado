@@ -175,8 +175,6 @@ def main():
             st.error("❌ Arquivo procedimentos.json não encontrado")
 
         st.markdown("""
-        👋 **Olá! Sou seu assistente especializado em procedimentos MEWS.**
-        
         **🎯 Como funciono:**
         - Forneço respostas **estruturadas** com base científica
         - Apresento informações em **4 categorias** específicas:
@@ -224,8 +222,16 @@ def main():
             st.markdown(response)
             st.session_state.conversation.append({"role": "assistant", "content": response})
 
+    # Mensagem de boas-vindas
+    if not st.session_state.conversation:
+        with st.chat_message("assistant"):
+            st.markdown("""
+👋 **Olá! Sou seu assistente especializado em procedimentos MEWS.**
+""")
+
 if __name__ == "__main__":
     main()
+
 
 
 
