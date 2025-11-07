@@ -45,9 +45,9 @@ def init_chatbot():
     models_dir = PROJECT_ROOT / "models"
     #st.sidebar.write(f"Pasta models existe: {models_dir.exists()}")
     
-    #if models_dir.exists():
-    #    files = list(models_dir.glob("*"))
-    #    st.sidebar.write(f"Arquivos em models: {[f.name for f in files]}")
+    if models_dir.exists():
+        files = list(models_dir.glob("*"))
+        st.sidebar.write(f"Arquivos em models: {[f.name for f in files]}")
     
     # Tenta carregar o modelo
     model_loaded = chatbot.load_model()
@@ -231,6 +231,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
