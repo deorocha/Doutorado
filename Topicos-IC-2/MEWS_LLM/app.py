@@ -168,23 +168,22 @@ def main():
         else:
             st.error("❌ Arquivo procedimentos.json não encontrado")
 
-        with st.container():
-            st.caption("""
-            **🎯 Como funciono:**
-            - Forneço respostas **estruturadas** com base científica
-            - Apresento informações em **4 categorias** específicas:
-              1. **Fundamento Fisiológico** - Base científica do procedimento
-              2. **Riscos da Omissão** - Consequências de não realizar o procedimento  
-              3. **Evidências Clínicas** - Comprovações baseadas em estudos
-              4. **Impacto no Paciente** - Efeitos diretos no bem-estar
-            
-            **💡 Exemplos de perguntas:**
-            - "Por que devo verificar sinais vitais regularmente?"
-            - "Qual o fundamento fisiológico da monitorização respiratória?"
-            - "Quais os riscos de não comunicar alterações ao médico?"
-            - "Por que é importante orientar pacientes sobre sinais de alerta?"
-            - "Qual o impacto da documentação no prontuário?"
-            """)
+        with st.expander("** 🎯 Como funciono:"):
+            with st.container():
+                - Forneço respostas **estruturadas** com base científica
+                - Apresento informações em **4 categorias** específicas:
+                  1. **Fundamento Fisiológico** - Base científica do procedimento
+                  2. **Riscos da Omissão** - Consequências de não realizar o procedimento  
+                  3. **Evidências Clínicas** - Comprovações baseadas em estudos
+                  4. **Impacto no Paciente** - Efeitos diretos no bem-estar
+                
+                **💡 Exemplos de perguntas:**
+                - "Por que devo verificar sinais vitais regularmente?"
+                - "Qual o fundamento fisiológico da monitorização respiratória?"
+                - "Quais os riscos de não comunicar alterações ao médico?"
+                - "Por que é importante orientar pacientes sobre sinais de alerta?"
+                - "Qual o impacto da documentação no prontuário?"
+
     
     # Inicializa conversa
     if 'conversation' not in st.session_state:
@@ -226,5 +225,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
