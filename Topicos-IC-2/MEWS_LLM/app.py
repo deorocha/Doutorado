@@ -195,16 +195,16 @@ def main():
                 🎯 Como funciono:<p>
                 - Forneço respostas **estruturadas** com base científica;<br>
                 - Apresento informações em 4 categorias específicas:<br>
-                  1. Fundamento Fisiológico - Base científica do procedimento;<br>
-                  2. Riscos da Omissão - Consequências de não realizar o procedimento;<br>
-                  3. Evidências Clínicas - Comprovações baseadas em estudos;<br>
-                  4. Impacto no Paciente - Efeitos diretos no bem-estar.<p>
+                <li>  1. Fundamento Fisiológico - Base científica do procedimento;<br>
+                <li>  2. Riscos da Omissão - Consequências de não realizar o procedimento;<br>
+                <li>  3. Evidências Clínicas - Comprovações baseadas em estudos;<br>
+                <li>  4. Impacto no Paciente - Efeitos diretos no bem-estar.<p>
                 💡 Exemplos de perguntas:<p>
-                - "Por que devo verificar sinais vitais regularmente?"<br>
-                - "Qual o fundamento fisiológico da monitorização respiratória?"<br>
-                - "Quais os riscos de não comunicar alterações ao médico?"<br>
-                - "Por que é importante orientar pacientes sobre sinais de alerta?"<br>
-                - "Qual o impacto da documentação no prontuário?"<br>
+                <li>  - "Por que devo verificar sinais vitais regularmente?"<br>
+                <li>  - "Qual o fundamento fisiológico da monitorização respiratória?"<br>
+                <li>  - "Quais os riscos de não comunicar alterações ao médico?"<br>
+                <li>  - "Por que é importante orientar pacientes sobre sinais de alerta?"<br>
+                <li>  - "Qual o impacto da documentação no prontuário?"<br>
             </div>
             """, unsafe_allow_html=True)
 
@@ -248,6 +248,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
