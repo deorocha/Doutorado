@@ -55,31 +55,75 @@ def init_chatbot():
     # Verificar se a pasta models existe
     models_dir = PROJECT_ROOT / "models"
     
-    # Verifica se os arquivos do modelo existem sem mostrar a lista
+    # Verificação mais robusta dos arquivos do modelo
+    model_loaded = False
     model_files_exist = False
+    
     if models_dir.exists():
-        model_files = list(models_dir.glob("*"))
-        # Verifica se ambos arquivos necessários existem
-        has_pkl = any("mews_model.pkl" in f.name and f.is_file() for f in model_files)
-        has_transformer = any("mews_model.pkl_transformer" in f.name for f in model_files)
-        model_files_exist = has_pkl and has_transformer
+        # Verifica arquivos específicos
+        pkl_file = models_dir / "mews_model.pkl"
+        transformer_dir = models_dir / "mews_model.pkl_transformer"
+        
+        pkl_exists = pkl_file.exists() and pkl_file.is_file()
+        transformer_exists = transformer_dir.exists() and transformer_dir.is_dir()
+        
+        model_files_exist = pkl_exists and transformer_exists
+        
+        # Debug silencioso - não mostra na UI
+        print(f"Model files check - PKL: {pkl_exists}, Transformer: {transformer_exists}")
     
     # Tenta carregar o modelo apenas se os arquivos existirem
     if model_files_exist:
-        model_loaded = chatbot.load_model()
+        try:
+            model_loaded = chatbot.load_model()
+            if model_loaded:
+                print("✅ Modelo carregado com sucesso")
+            else:
+                print("❌ Falha ao carregar modelo (load_model retornou False)")
+        except Exception as e:
+            print(f"❌ Exceção ao carregar modelo: {e}")
+            model_loaded = False
     else:
+        print("❌ Arquivos do modelo não encontrados")
         model_loaded = False
     
+    # Se não conseguiu carregar, mostra mensagem de erro
     if not model_loaded:
-        st.error("""
-        ❌ **Modelo IA não carregado no Streamlit Cloud**
+        # Verifica quais arquivos estão faltando para mensagem mais específica
+        missing_files = []
+        models_dir = PROJECT_ROOT / "models"
         
-        **Possíveis soluções:**
-        1. Verifique se a pasta `models/` está no GitHub
-        2. Verifique se `mews_model.pkl` e `mews_model.pkl_transformer/` estão na pasta models
-        3. Os arquivos de modelo podem ser muito grandes para o GitHub
-        4. Execute `train_model.py` localmente e faça commit dos arquivos do modelo
-        """)
+        if not models_dir.exists():
+            missing_files.append("pasta 'models/'")
+        else:
+            if not (models_dir / "mews_model.pkl").exists():
+                missing_files.append("arquivo 'mews_model.pkl'")
+            if not (models_dir / "mews_model.pkl_transformer").exists():
+                missing_files.append("pasta 'mews_model.pkl_transformer/'")
+        
+        if missing_files:
+            missing_text = ", ".join(missing_files)
+            st.error(f"""
+            ❌ **Modelo IA não carregado - Arquivos faltando: {missing_text}**
+            
+            **Soluções:**
+            1. Verifique se a pasta `models/` está no repositório do GitHub
+            2. Certifique-se de que `mews_model.pkl` e `mews_model.pkl_transformer/` estão na pasta models
+            3. Os arquivos de modelo podem ser muito grandes (>25MB) para o Git
+               - Use Git LFS (Large File Storage) para arquivos grandes
+               - Ou reduza o tamanho do modelo no train_model.py
+            4. Execute `train_model.py` localmente e faça commit dos arquivos do modelo
+            5. Verifique se fez push de todos os arquivos para o GitHub
+            """)
+        else:
+            st.error("""
+            ❌ **Modelo IA não carregado - Erro desconhecido**
+            
+            **Soluções:**
+            1. Execute `train_model.py` localmente para gerar os arquivos do modelo
+            2. Verifique se todos os arquivos estão commitados e push para o GitHub
+            3. Verifique os logs de erro no Streamlit Cloud
+            """)
     
     return chatbot
 
@@ -150,9 +194,6 @@ def main():
         
         model_info = chatbot.get_model_info()
         if model_info["modelo_carregado"]:
-            # st.success(f"✅ Modelo IA Carregado")
-            # st.info(f"📚 {model_info['documentos_carregados']} procedimentos")
-            
             # Controle de sensibilidade
             threshold = st.slider(
                 "Precisão da Busca",
@@ -163,9 +204,10 @@ def main():
                 help="Ajuste quão precisa deve ser a correspondência"
             )
             chatbot.set_similarity_threshold(threshold)
+            st.success("✅ Modo IA Ativo")
         else:
             st.warning("⚠️ Modo Básico")
-            st.info("Execute train_model.py para ativar a IA")
+            st.info("Usando busca por palavras-chave")
         
         if st.button("🗑️ Limpar Conversa", use_container_width=True, type="secondary"):
             if 'conversation' in st.session_state:
@@ -232,7 +274,8 @@ def main():
         # Busca e mostra resposta
         with st.chat_message("assistant"):
             with st.spinner("🔍 Analisando sua pergunta..."):
-                if chatbot.model and chatbot.embeddings is not None:
+                model_info = chatbot.get_model_info()
+                if model_info["modelo_carregado"]:
                     # Usa o modelo treinado
                     response = chatbot.get_answer(prompt)
                 else:
