@@ -1,0 +1,181 @@
+.main-header {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.stTabs [data-baseweb="tab-list"] button [data-testid="stMarkdownContainer"] p {
+    font-size: 1.5rem;
+}
+
+/* ESTILOS ESPECÍFICOS PARA TABS */
+div[data-testid="stTabs"] button {
+    padding: 5px 5px !important;
+    height: 35px !important;
+    min-height: 30px !important;
+}
+
+div[data-testid="stTabs"] button[aria-selected="true"] {
+    background-color: #e0f2fe !important;
+    color: #0369a1 !important;
+    border: 2px solid #0ea5e9 !important;
+}
+
+div[data-testid="stTabs"] button[aria-selected="false"] {
+    background-color: #f8fafc !important;
+    color: #475569 !important;
+    border: 2px solid #e2e8f0 !important;
+}
+
+section[data-testid="stSidebar"] div[data-testid="stTabs"] button {
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    padding: 5px 5px !important;
+}
+
+/* ESTILOS PARA BOTÕES DA SIDEBAR */
+section[data-testid="stSidebar"] .stButton button {
+    text-align: left !important;
+    justify-content: flex-start !important;
+    padding: 0.01rem 0.3rem !important;
+    margin: 0.0rem 0 !important;
+    border: none !important;
+    border-radius: 0px !important;
+    min-height: auto !important;
+    height: auto !important;
+    line-height: 1.1 !important;
+}
+
+section[data-testid="stSidebar"] .stButton {
+    margin-bottom: -8px !important;
+    padding-bottom: 0px !important;
+    min-height: 0px !important;
+}
+
+section[data-testid="stSidebar"] .stButton button:hover {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+section[data-testid="stSidebar"] .stButton button:focus {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+section[data-testid="stSidebar"] .stButton button[kind="secondary"] {
+    background-color: transparent !important;
+}
+
+section[data-testid="stSidebar"] .stButton button[kind="primary"] {
+    background-color: #f0f2f6 !important;
+    color: #1f1f1f !important;
+}
+
+.classification-box {
+    background-color: #10b981;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.classification-box-amarelo {
+    background-color: #f59e0b;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.classification-box-vermelho {
+    background-color: #ef4444;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.objective-box {
+    background-color: #dbeafe;
+    color: #1e40af;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    border-left: 4px solid #3b82f6;
+}
+
+.context-box {
+    background-color: #f3f4f6;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border-left: 4px solid #6b7280;
+    margin-bottom: 2rem;
+}
+
+.procedure-header {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.section-header {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #374151;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.section-content {
+    background-color: #f9fafb;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    border-left: 4px solid #10b981;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.fundament-section {
+    border-left: 4px solid #0d845d;
+    background-color: #badfd3;
+}
+
+.risk-section {
+    border-left: 4px solid #ef4444;
+    background-color: #ebbfbf;
+}
+
+.evidence-section {
+    border-left: 4px solid #3b82f6;
+    background-color: #b7ccf0;
+}
+
+.impact-section {
+    border-left: 4px solid #8b5cf6;
+    background-color: #d9cef1;
+}
+
+/* ESTILOS PARA EXPANDER */
+div[data-testid="stExpander"] details summary p {
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+}
+
+div[data-testid="stExpander"] details summary {
+    padding: 0.75rem 1rem !important;
+}

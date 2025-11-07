@@ -1,0 +1,630 @@
+{
+  "faixas_mews": [
+    {
+      "id": 1,
+      "nome": "Verde",
+      "atores": [
+        {
+          "ator": "ENFERMAGEM",
+          "condutas": [
+            {
+              "conduta": "MONITORAMENTO DE ROTINA",
+              "procedimentos": [
+                {
+                  "procedimento": "Verificar sinais vitais a cada 4-8 horas conforme protocolo",
+                  "acoes": [],
+                  "motivos": {
+                    "fundamento": "Em pacientes estáveis, os sistemas homeostáticos estão compensados. A verificação em intervalos padronizados estabelece uma linha de base individual e permite a detecção de desvios sutis dessa linha de base, que são os primeiros sinais de uma possível deterioração. Intervalos superiores a 8 horas podem não capturar uma tendência de agravamento que ainda é lenta e silenciosa.",
+                    "evidencias": "O Programa Nacional de Segurança do Paciente (PNSP) e protocolos baseados na RDC 36/2013 recomendam a monitorização vital periódica como a espinha dorsal da detecção precoce. Estudos de validação do MEWS mostram que a frequência de coleta de dados impacta diretamente sua sensibilidade. A faixa de 4-8h é considerada o equilíbrio ideal entre segurança e alocação eficiente de recursos para pacientes de baixo risco.",
+                    "riscos": "A omissão ou a extensão excessiva do intervalo permitiria que uma deterioração inicial progredisse sem ser notada, potencialmente evoluindo para uma situação de emergência que poderia ter sido evitada com uma intervenção simples e oportuna.",
+                    "impacto": "Proporciona segurança contínua e não invasiva. O paciente se sente cuidado e monitorado, e a equipe tem dados objetivos para sustentar a conduta de baixo risco."
+                  }
+                },
+                {
+                  "procedimento": "Manter observação para mudanças no padrão respiratório",
+                  "acoes": [],
+                  "motivos": {
+                    "fundamento": "O sistema respiratório é um dos primeiros a apresentar sinais de descompensação em diversas condições (infecciosas, metabólicas, cardíacas). Alterações na frequência, ritmo ou profundidade (taquipneia, bradipneia, respiração laboriosa) são marcadores sensíveis de estresse fisiológico.",
+                    "evidencias": "A alteração da frequência respiratória é um dos componentes mais sensíveis e precocemente alterados no MEWS e em outros escores de alerta precoce. A observação contínua vai além da mensuração numérica pontual, captando sinais clínicos de sofrimento respiratório.",
+                    "riscos": "Ignorar uma taquipneia progressiva, por exemplo, pode significar não identificar uma pneumonia incipiente, uma acidose metabólica ou uma insuficiência cardíaca inicial.",
+                    "impacto": "Permite a identificação precoce de problemas que, se tratados rapidamente, têm uma resolução muito mais simples e com menor morbidade."
+                  }
+                },
+                {
+                  "procedimento": "Documentar evolução no prontuário",
+                  "acoes": [],
+                  "motivos": {
+                    "fundamento": "A documentação serial constrói uma \"linha do tempo fisiológica\" do paciente. Ela transforma observações pontuais em uma narrativa clínica que permite identificar padrões e tendências.",
+                    "evidencias": "A documentação é um requisito de qualidade e segurança previsto em manuais de acreditação hospitalar (como ONA e JCI) e é implícita na RDC 36/2013 como parte da comunicação efetiva da equipe. É uma ferramenta legal que comprova os cuidados prestados.",
+                    "riscos": "A falta de documentação gera descontinuidade do cuidado. A próxima equipe não terá informações precisas sobre a evolução do paciente, podendo ignorar uma mudança sutil, mas significativa. Fragiliza a defesa legal em caso de eventos adversos.",
+                    "impacto": "Garante a continuidade do cuidado e que qualquer alteração seja percebida por todos os membros da equipe ao longo do tempo, assegurando uma abordagem coerente e integrada."
+                  }
+                },
+                {
+                  "procedimento": "Manter comunicação com equipe sobre qualquer alteração subjetiva",
+                  "acoes": [],
+                  "motivos": {
+                    "fundamento": "Muitas vezes, o próprio paciente é o primeiro a perceber que \"algo não está certo\". Sintomas subjetivos como mal-estar, tontura, dor, ansiedade ou \"sensação de febre\" podem preceder em horas as alterações objetivas nos sinais vitais.",
+                    "evidencias": "O PNSP e os protocolos de segurança enfatizam a cultura de comunicação e trabalho em equipe. A valorização da queixa do paciente e sua rápida comunicação são barreiras cruciais para prevenir eventos adversos.",
+                    "riscos": "Desconsiderar o relato do paciente é perder um sinal de alerta precoce e valioso. Pode levar a um atraso significativo no diagnóstico e tratamento.",
+                    "impacto": "Empodera o paciente, valoriza sua experiência e fortalece a relação de confiança com a equipe. É uma intervenção de custo zero e alto impacto na segurança."
+                  }
+                },
+                {
+                  "procedimento": "Orientar paciente/família sobre sinais de alerta",
+                  "acoes": [],
+                  "motivos": {
+                    "fundamento": "O paciente e seus acompanhantes tornam-se vigilantes extensionistas da equipe, 24 horas por dia. Eles podem alertar a equipe no momento exato em que um sinal surgir, e não apenas no momento da verificação de rotina.",
+                    "evidencias": "É uma das ações centrais do protocolo \"O Paciente pela Sua Própria Segurança\", do PNSP. Envolver o paciente e a família é uma estratégia baseada em fortes evidências para aumentar a adesão aos protocolos e a detecção precoce de problemas.",
+                    "riscos": "Sem o conhecimento dos sinais de alerta, o paciente ou familiar pode não perceber a importância de um sintoma novo ou pode hesitar em chamar a equipe, perdendo a janela de oportunidade para uma intervenção precoce.",
+                    "impacto": "Aumenta drasticamente a sensibilidade do sistema de vigilância, transformando o paciente de um receptor passivo em um agente ativo de sua própria segurança."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ator": "MÉDICOS",
+          "condutas": [
+            {
+              "conduta": "CONDUTA MÉDICA",
+              "procedimentos": [
+                {
+                  "procedimento": "Manter plano terapêutico estabelecido",
+                  "acoes": [],
+                  "motivos": {
+                    "fundamento": "O paciente na faixa verde está respondendo adequadamente ao tratamento instituído. Manter a conduta garante a continuidade do suporte fisiológico e terapêutico que está sustentando sua estabilidade (ex.: antibioticoterapia, controle glicêmico, terapia de reposição volêmica).",
+                    "evidencias": "A prática médica baseada em evidências prega a estabilidade e a avaliação contínua. Alterar um plano que está funcionando sem uma indicação clara pode introduzir riscos desnecessários e interromper um processo de recuperação adequado.",
+                    "riscos": "A descontinuação inadvertida de uma terapia efetiva pode levar à recidiva da doença de base. Alterações frequentes e não justificadas podem confundir a equipe e desestabilizar o paciente.",
+                    "impacto": "Garante a continuidade e a previsibilidade do tratamento, essenciais para a recuperação e para a sensação de segurança do paciente."
+                  }
+                },
+                {
+                  "procedimento": "Reavaliar prescrições nas próximas 24h",
+                  "acoes": [],
+                  "motivos": {
+                    "fundamento": "A condição clínica é dinâmica. Uma reavaliação programada dentro de um prazo clinicamente relevante (24h para pacientes estáveis) visa antecipar necessidades futuras e ajustar profilaxias, suportes e medicações de acordo com a evolução esperada.",
+                    "evidencias": "Boas práticas de prescrição, recomendadas pela ANVISA e conselhos de medicina, envolvem a revisão periódica de todos os medicamentos, especialmente antimicrobianos, analgésicos e sedativos, para evitar tratamentos desnecessariamente longos e seus efeitos colaterais.",
+                    "riscos": "Prescrições \"estáticas\" podem se tornar rapidamente obsoletas, levando à administração de medicamentos não mais indicados, aumento do risco de eventos adversos e resistência microbiana.",
+                    "impacto": "Assegura que a terapia permaneça apropriada, efetiva e segura, otimizando a recuperação e minimizando danos."
+                  }
+                },
+                {
+                  "procedimento": "Considerar necessidade de exames complementares de rotina",
+                  "acoes": [],
+                  "motivos": {
+                    "fundamento": "Em pacientes estáveis, a solicitação de exames deve ser guiada por uma questão clínica específica. A \"rotina\" aqui se refere aos exames necessários para monitorar a doença de base ou os efeitos do tratamento, e não a um pedido indiscriminado. O objetivo é obter dados objetivos para embasar a alta hospitalar ou a continuidade do plano.",
+                    "evidencias": "Diretrizes clínicas e políticas de uso racional de recursos (como as da ANVISA para uso de antibióticos, que exigem reeavaliação) recomendam evitar a medicina defensiva e a solicitação de exames sem uma clara indicação, devido aos riscos de resultados falso-positivos, ansiedade do paciente e custos.",
+                    "riscos": "Solicitação desnecessária: Pode levar a \"cascata de diagnósticos\", onde um resultado anormal leve a mais exames invasivos e tratamentos desnecessários, causando iatrogenia. Não solicitar um exame necessário: Pode deixar de identificar uma complicação silenciosa (ex.: anemia, distúrbio eletrolítico) que, se não corrigida, pode atrasar a recuperação ou levar à deterioração.",
+                    "impacto": "Garante que a investigação e o monitoramento sejam racionais, seguros e direcionados para o benefício direto do paciente, preparando-o de forma adequada para a continuidade do cuidado ou para a alta."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "nome": "Amarelo",
+      "atores": [
+        {
+          "ator": "ENFERMAGEM",
+          "condutas": [
+            {
+              "conduta": "AÇÕES IMEDIATAS",
+              "procedimentos": [
+                {
+                  "procedimento": "Aumentar frequência de observações para CADA 2 HORAS",
+                  "acoes": [],
+                  "motivos": {
+                    "fundamento": "Um escore MEWS elevado indica que os sistemas homeostáticos estão sob estresse e a condição clínica é dinâmica. Intervalos de 2 horas permitem capturar a velocidade de deterioração, diferenciando uma anormalidade transitória de uma tendência de agravamento sustentada, que exigiria intervenção mais urgente.",
+                    "evidencias": "Protocolos de resposta a escores de alerta precoce, baseados na RDC 36/2013, estabelecem que a elevação do escore deve desencadear um aumento proporcional na frequência de monitorização. Estudos mostram que a taxa de mudança nos parâmetros vitais é um preditor tão importante quanto o valor absoluto.",
+                    "riscos": "Com intervalos de 4-8 horas, um paciente pode deteriorar-se significativamente e atingir um estado crítico (ex.: choque séptico) sem que a equipe perceba a trajetória de agravamento, perdendo a \"janela de oportunidade\" para intervenções simples.",
+                    "impacto": "Fornece um \"colchão de segurança\" temporal, garantindo que qualquer piora será identificada rapidamente, permitindo uma correção de curso antes que o quadro se torne uma emergência."
+                  }
+                },
+                {
+                  "procedimento": "Verificar saturação periférica de oxigênio (SpO2)",
+                  "acoes": [],
+                  "motivos": {
+                    "fundamento": "A hipóxia é um insulto final comum em diversas síndromes de deterioração (séptica, cardíaca, pulmonar). A SpO2 é uma medida não-invasiva e contínua da oxigenação do sangue, funcionando como um sinal vital essencial. Uma SpO2 em queda é um marcador precoce de insuficiência respiratória ou baixo débito cardíaco.",
+                    "evidencias": "A SpO2 é um componente chave em todos os escores de alerta precoce modernos. Sua verificação é mandatória na avaliação de qualquer paciente com alteração aguda do estado geral, conforme reforçado por diretrizes de sociedades médicas internacionais e protocolos do PNSP.",
+                    "riscos": "Não identificar hipóxia precoce resulta em atraso na suplementação de oxigênio, levando a danos tissulares por hipóxia, piora da função cardíaca e potencial parada respiratória.",
+                    "impacto": "Permite a correção imediata de um dos distúrbios mais letais, a hipóxia, com uma intervenção simples (oxigenoterapia), melhorando dramaticamente o prognóstico."
+                  }
+                },
+                {
+                  "procedimento": "Realizar glicemia capilar",
+                  "acoes": [],
+                  "motivos": {
+                    "fundamento": "O estresse fisiológico (ex.: infecção, dor, desidratação) eleva os níveis de hormônios contra-reguladores (cortisol, adrenalina), podendo causar hiperglicemia. Alternativamente, o paciente pode estar em hipoglicemia por baixa ingesta ou efeito de medicamentos. Ambos os extremos (hiper e hipo) causam descompensação clínica, confusão mental e pioram os desfechos.",
+                    "evidencias": "A hiperglicemia é um marcador independente de pior prognóstico em pacientes hospitalizados. A triagem de distúrbios glicêmicos é uma ação padrão em protocolos de deterioração, pois é uma causa comum e facilmente tratável de alteração do estado mental e agravamento clínico.",
+                    "riscos": "Deixar uma hipoglicemia sem tratamento pode levar a convulsões, coma e morte em poucas horas. Ignorar uma hiperglicemia grave predispõe o paciente a desidratação, acidose metabólica e maior risco infeccioso.",
+                    "impacto": "Identifica e permite a correção rápida de um distúrbio metabólico que, por si só, pode ser a causa da deterioração ou um fator agravante significativo."
+                  }
+                },
+                {
+                  "procedimento": "Comunicar ao enfermeiro sênior IMEDIATAMENTE",
+                  "acoes": [],
+                  "motivos": {
+                    "fundamento": "Um MEWS na faixa amarelo sinaliza uma instabilidade fisiológica que exige uma validação clínica imediata e uma priorização de ações; a comunicação instantânea com o enfermeiro sênior mobiliza a experiência e a capacidade de julgamento clínico avançado da liderança de enfermagem para confirmar os dados, interpretar nuances e coordenar as primeiras condutas de estabilização enquanto se prepara a notificação médica.",
+                    "evidencias": "Esta prática é uma barreira crítica de segurança, operacionalizando o princípio de trabalho em equipe e supervisão clínica do Programa Nacional de Segurança do Paciente (PNSP) e da RDC 36/2013, as quais enfatizam a necessidade de uma cultura de comunicação hierárquica efetiva para evitar a subvalorização de um quadro em deterioração.",
+                    "riscos": "Omitir esta comunicação immediate expõe o paciente ao julgamento clínico isolado de um profissional potencialmente menos experiente, podendo levar a uma subestimação do risco, a uma demora na implementação de cuidados stabilizadores e a uma falha na primeira e mais rápida barreira de resgate.",
+                    "impacto": "Garante que a expertise máxima da equipe de enfermagem seja instantaneamente aplicada, resultando em uma avaliação mais qualificada, ações de estabilização mais rápidas e uma notificação médica mais precisa, interrompendo precocemente a cadeia de deterioração."
+                  }
+                },
+                {
+                  "procedimento": "Notificar médico responsável dentro de 2 HORAS",
+                  "acoes": [],
+                  "motivos": {
+                    "fundamento": "A notificação ao médico dentro da janela de 2 horas é fundamental porque a deterioração moderada exige uma reavaliação diagnóstica e uma redefinição do plano terapêutico; este prazo equilibra a urgência clínica com a viabilidade operacional, garantindo que o único profissional habilitado a prescrever medicamentos, solicitar exames e alterar condutas avalie o paciente em tempo hábil para intervir na causa raiz do agravamento.",
+                    "evidencias": "O prazo de 2 horas é um padrão estabelecido em sistemas de alerta precoce internacionais (como o NEWS) e adotado pelos protocolos nacionais baseados na RDC 36/2013, que exige uma resposta \"compatível com a necessidade do paciente\", sendo este intervalo associado na literatura com a prevenção de desfechos adversos e a redução de mortalidade.",
+                    "riscos": "Atrasos além de 2 horas na notificação médica resultam em atrasos terapêuticos críticos (como a demora na administração de antibióticos na sepse), permitem a progressão silenciosa do agravamento para um estado crítico e configuram uma \"falha de resgate\" do sistema, onde a detecção precoce não é seguida pela intervenção necessária.",
+                    "impacto": "Esta notificação no prazo correto é o elo que transforma a detecção precoce em ação médica salvadora, sendo a diferença entre conter um problema de forma simples e enfrentar uma complicação grave, impactando diretamente na redução da mortalidade, do tempo de internação e da necessidade de cuidados intensivos."
+                  }
+                },
+                {
+                  "procedimento": "Reavaliar score MEWS em 1 HORA",
+                  "acoes": [],
+                  "motivos": {
+                    "fundamento": "A reavaliação do escore MEWS em 1 hora é fundamental porque a condição de um paciente em alerta (faixa amarela) é dinâmica; este curto intervalo permite capturar a **trajetória clínica**, diferenciando uma alteração transitória de uma deterioração sustentada, e avalia a eficácia das condutas iniciais de enfermagem, fornecendo dados cruciais em tempo real para decidir se é necessário escalonar o cuidado ou se o paciente está se estabilizando.",
+                    "evidencias": "Protocolos de resposta a escores de alerta precoce, baseados na RDC 36/2013 e em diretrizes internacionais como o NEWS, estabelecem a reavaliação em curtos intervalos como um pilar para a segurança; estudos demonstram que a taxa de mudança dos parâmetros vitais é um preditor forte de desfechos adversos, e essa reavaliação sistemática é uma ação barreira para prevenir a \"falha de resgate\".",
+                    "riscos": "Omitir a reavaliação em 1 hora deixa a equipe com uma visão obsoleta do paciente, podendo resultar na não identificação de um agravamento rápido; isso causa um atraso perigoso na notificação médica e na implementação de terapias essenciais, permitindo que uma deterioração moderada evolua para uma emergência que exigirá intervenções muito mais complexas.",
+                    "impacto": "Esta prática assegura que a resposta clínica seja proporcional e ágil à evolução do quadro, permitindo intervenções corretivas precoces que interrompem a cadeia de deterioração; para o paciente, isso se traduz diretamente em maior segurança, menor risco de complicações graves e redução da probabilidade de transferência para unidades de terapia intensiva."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ator": "MÉDICOS",
+          "condutas": [
+            {
+              "conduta": "AÇÕES DENTRO DE 2 HORAS",
+              "procedimentos": [
+                {
+                  "procedimento": "Avaliação clínica completa focando:",
+                  "acoes": [
+                    {
+                      "acao": "Fonte infecciosa",
+                      "motivos": {
+                        "fundamento": "A infecção sistêmica (sepse) é uma das principais causas de deterioração rápida e evitável em hospitais; uma busca ativa por um foco infeccioso (pulmonar, urinário, tegumentar, abdominal) é crucial para direcionar a terapia antimicrobiana e controlar a fonte, interrompendo a cascata inflamatória que leva à disfunção orgânica.",
+                        "evidencias": "Diretrizes internacionais de sepse (como as da \"Surviving Sepsis Campaign\") e protocolos nacionais do PNSP enfatizam a identificação precoce do foco infeccioso como o primeiro passo para um manejo eficaz, visando reduzir a mortalidade através da intervenção rápida e direcionada.",
+                        "riscos": "Não identificar e tratar a fonte de uma infecção permite a progressão descontrolada para sepse grave e choque séptico, condições associadas a alta mortalidade, maior tempo de internação e necessidade de suporte avançado em UTI.",
+                        "impacto": "O diagnóstico e controle precoces do foco infeccioso interrompem a causa raiz da deterioração, estabilizando o paciente, prevenindo danos orgânicos irreversíveis e significativamente melhorando suas chances de recuperação completa."
+                      }
+                    },
+                    {
+                      "acao": "Estado volêmico",
+                      "motivos": {
+                        "fundamento": "O estado volêmico (hidratação) é central para a perfusão tissular; a desidratação causa hipotensão, taquicardia e pré-insuficiência renal, enquanto a sobrecarga de fluidos pode precipitar edema agudo de pulmão, sendo essencial avaliar a volemia para guiar a reposição hídrica de forma segura e eficaz.",
+                        "evidencias": "A avaliação clínica do estado volêmico (mucosas, enchimento capilar, turgor da pele, edemas) é um componente fundamental da avaliação de pacientes agudos, recomendada em manuais de medicina hospitalar e protocolos de tratamento de sepse para orientar a terapia hídrica inicial.",
+                        "riscos": "A falha em corrigir a desidratação perpetua a hipoperfusão e pode levar à injúria renal aguda, enquanto a administração indiscriminada de fluidos em um paciente normo ou hipervolêmico pode causar congestão pulmonar e piora do quadro respiratório.",
+                        "impacto": "A correta avaliação e correção do estado volêmico restaura a perfusão vital aos órgãos, melhora o estado mental, normaliza os sinais vitais e previne complicações renais e cardiopulmonares."
+                      }
+                    },
+                    {
+                      "acao": "Controle da dor",
+                      "motivos": {
+                        "fundamento": "A dor não controlada desencadeia uma resposta de estresse neuroendócrino, elevando a frequência cardíaca, a pressão arterial e o consumo de oxigênio, o que pode mimetizar ou agravar um quadro de deterioração; otimizar a analgesia é, portanto, tanto um ato de conforto quanto uma intervenção stabilizadora.",
+                        "evidencias": "Protocolos de segurança do paciente e diretrizes de manejo da dor reconhecem o controle efetivo da dor como um direito do paciente e uma medida essencial para a estabilização clínica, reduzindo complicações associadas ao estresse fisiológico.",
+                        "riscos": "A dor persistente mantém o paciente em um estado de alto estresse metabólico, dificulta a mobilização e a respiração profunda, podendo levar a complicações como atelectasias, taquiarritmias e maior tempo de recuperação.",
+                        "impacto": "O alívio da dor promove conforto, facilita a cooperação com os tratamentos, reduz a ansiedade e contribui para a normalização dos sinais vitais, criando um ambiente fisiológico mais favorável à recuperação."
+                      }
+                    },
+                    {
+                      "acao": "Função renal",
+                      "motivos": {
+                        "fundamento": "O rim é um órgão-alvo frequente na deterioração clínica, sendo sensível à hipoperfusão (pré-renal) e a toxinas; avaliar a função renal através do débito urinário e dosagem de creatinina é vital para detectar injúria renal aguda precoce, uma complicação que piora drasticamente o prognóstico.",
+                        "evidencias": "Critérios consagrados como o KDIGO (Kidney Disease: Improving Global Outcomes) recomendam a monitorização da função renal em qualquer paciente hospitalizado em deterioração, pois a identificação precoce da injúria renal aguda permite intervenções para prevenir sua progressão.",
+                        "riscos": "Não identificar uma disfunção renal incipiente resulta em atraso no suporte volêmico e no ajuste de medicamentos nefrotóxicos, podendo levar à instalação de uma insuficiência renal estabelecida, que exigirá diálise e está associada a alta mortalidade.",
+                        "impacto": "A proteção da função renal assegura o equilíbrio hidroeletrolítico e ácido-básico do organismo, previne a acumulação de toxinas e medicamentos, e é um determinante crucial para a sobrevida e recuperação do paciente grave."
+                      }
+                    }
+                  ],
+                  "motivos": {}
+                },
+                {
+                  "procedimento": "Solicitar exames complementares:",
+                  "acoes": [
+                    {
+                      "acao": "Hemograma completo, Função renal (ureia/creatinina), Eletrólitos, Proteína C reativa (PCR)",
+                      "motivos": {
+                        "fundamento": "Este painel de exames investiga as causas metabólicas e inflamatórias mais comuns de deterioração: o hemograma e a PCR buscam evidências de infecção ou inflamação sistêmica; a função renal e os eletrólitos avaliam complicações da desidratação, sepse ou da própria doença de base, guiando terapias específicas como reposição volêmica e correção de distúrbios iônicos.",
+                        "evidencias": "A solicitação deste conjunto de exames é um padrão ouro na abordagem inicial do paciente agudamente enfermo, recomendado por diretrizes de medicina interna e de sepse para fornecer um retrato objetivo do estado metabólico-inflamatório do paciente.",
+                        "riscos": "Realizar intervenções sem estes dados laboratoriais é como \"dirigir no escuro\", podendo levar a um tratamento inadequado (ex.: não tratar uma infecção bacteriana), falha em diagnosticar distúrbios graves (ex.: hipocalemia) e atraso no manejo correto.",
+                        "impacto": "Fornece ao médico evidências concretas para confirmar ou excluir hipóteses diagnósticas, permitindo um tratamento preciso e personalizado que ataca a causa da deterioração, evitando terapias desnecessárias e melhorando a eficácia do cuidado."
+                      }
+                    },
+                    {
+                      "acao": "Gasometria venosa se FR >20",
+                      "motivos": {
+                        "fundamento": "A taquipneia (FR >20) é um marcador sensível de estresse fisiológico, frequentemente indicando um distúrbio acidobásico subjacente (ex.: acidose metabólica na sepse ou na hipoperfusão); a gasometria venosa confirma a presença e caracteriza o tipo do distúrbio, fornecendo informações críticas sobre o equilíbrio ácido-base e a oxigenação tissular.",
+                        "evidencias": "Diretrizes clínicas para avaliação de pacientes com suspeita de sepse ou em estado crítico recomendam a gasometria venosa como ferramenta rápida e acessível para avaliar o estado acidobásico e guiar a ressuscitação, sendo um exame de alto rendimento em cenários de deterioração.",
+                        "riscos": "Ignorar a taquipneia e não investigar sua causa com uma gasometria pode resultar na não identificação de uma acidose láctica grave (marcador de hipoperfusão), atrasando intervenções salvadoras como a reposição volêmica agressiva.",
+                        "impacto": "Permite a identificação precoce de acidose metabólica, um sinal de alerta máximo para hipoperfusão tissular, direcionando uma ressuscitação volêmica mais vigorosa e melhorando a oxigenação periférica e a função orgânica."
+                      }
+                    }
+                  ],
+                  "motivos": {}
+                },
+                {
+                  "procedimento": "Intervenções específicas:",
+                  "acoes": [
+                    {
+                      "acao": "Otimizar analgesia se dor presente",
+                      "motivos": {
+                        "fundamento": "A dor é um potente estimulante do sistema nervoso simpático; otimizar a analgesia não é apenas um conforto, mas uma intervenção estabilizadora que reduz a demanda metabólica, a frequência cardíaca e a pressão arterial, contribuindo para a normalização dos parâmetros fisiológicos do MEWS.",
+                        "evidencias": "Protocolos de segurança e diretrizes de manejo da dor em pacientes hospitalizados defendem o tratamento agressivo da dor como parte integrante da estabilização clínica, melhorando a cooperação do paciente e os desfechos respiratórios.",
+                        "riscos": "A dor não tratada mantém o paciente em um estado de alto estresse, eleva o trabalho cardíaco e respiratório, podendo descompensar condições preexistentes e dificultar a avaliação clínica da verdadeira causa da deterioração.",
+                        "impacto": "Proporciona alívio imediato, reduz a ansiedade, facilita a respiração e a mobilização, e cria um ambiente fisiológico mais estável, permitindo que o paciente se concentre na recuperação."
+                      }
+                    },
+                    {
+                      "acao": "Reposição volêmica se desidratado",
+                      "motivos": {
+                        "fundamento": "A reposição volêmica com cristaloides é a intervenção primária para corrigir a hipoperfusão causada pela depleção de volume; ela restaura o débito cardíaco e a pressão arterial, melhorando o fluxo sanguíneo para os órgãos vitais e revertendo os sinais de choque inicial.",
+                        "evidencias": "É a pedra angular do tratamento da sepse e de estados de desidratação, endossada pela \"Surviving Sepsis Campaign\" e por diretrizes de suporte vital, com fortes evidências de que a ressuscitação volêmica precoce melhora a sobrevida.",
+                        "riscos": "A falha em repor volume em um paciente hipovolêmico leva à piora da hipoperfusão, progressão para injúria renal aguda, acidose láctica, choque irreversível e morte.",
+                        "impacto": "Reverte diretamente os sinais de deterioração (taquicardia, hipotensão, oligúria), prevenindo danos isquêmicos aos órgãos e sendo a intervenção mais crítica para salvar vidas em casos de choque hipovolêmico ou séptico."
+                      }
+                    },
+                    {
+                      "acao": "Antibioticoterapia empírica se suspeita infecciosa",
+                      "motivos": {
+                        "fundamento": "Na suspeita de uma infecção bacteriana grave, cada hora de atraso na administração do antibiótico adequado aumenta significativamente a mortalidade; a terapia empírica, baseada no provável foco e nos microrganismos comuns, é iniciada imediatamente após a coleta de culturas para cobrir os patógenos mais prováveis enquanto se aguarda o resultado dos exames.",
+                        "evidencias": "Diretrizes mundiais de sepse, como as da \"Surviving Sepsis Campaign\", recomendam a administração de antibióticos de espectro adequado dentro da primeira hora após o reconhecimento do choque séptico, e dentro de 3 horas para sepse sem choque, sendo esta uma das metas de desempenho mais importantes.",
+                        "riscos": "O atraso na antibioticoterapia é a principal causa evitável de morte por sepse, permitindo a multiplicação descontrolada de bactérias e a progressão da resposta inflamatória sistêmica para falência orgânica múltipla.",
+                        "impacto": "Iniciar antibióticos dentro da janela de tempo crítica é a intervenção que mais impacta na redução da mortalidade por infecções graves, controlando a causa primária da deterioração e dando ao sistema imune a chance de combater a infecção."
+                      }
+                    },
+                    {
+                      "acao": "Considerar suplementação de O2 se SpO2 <92%",
+                      "motivos": {
+                        "fundamento": "A SpO2 abaixo de 92% indica hipoxemia, um insulto direto à oxigenação tissular que pode levar a disfunção celular e acidose; a suplementação de oxigênio é uma medida de suporte vital que corrige a hipóxia, reduz o trabalho respiratório e cardíaco, e previne a piora do quadro clínico.",
+                        "evidencias": "Diretrizes de oxigenoterapia e manejo de pacientes agudos estabelecem o limiar de SpO2 <92% como indicativo para suplementação de oxigênio, visando manter uma oxigenação adequada (alvo geralmente >94%) como parte do suporte básico para garantir a oferta de oxigênio aos tecidos.",
+                        "riscos": "Não suplementar oxigênio em um paciente hipoxêmico permite a piora da insuficiência respiratória, podendo precipitar arritmias cardíacas, isquemia miocárdica, agitação e parada cardiorrespiratória.",
+                        "impacto": "Melhora imediatamente a oxigenação, alivia a dispneia, reduz a ansiedade e protege os órgãos vitais de danos por hipóxia, estabilizando o paciente enquanto a causa da deterioração é investigada e tratada."
+                      }
+                    }
+                  ],
+                  "motivos": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "nome": "Vermelho",
+      "atores": [
+        {
+          "ator": "ENFERMAGEM",
+          "condutas": [
+            {
+              "conduta": "AÇÕES IMEDIATAS - PRIMEIROS 15 MINUTOS:",
+              "procedimentos": [
+                {
+                  "procedimento": "Ativação do Sistema",
+                  "acoes": [
+                    {
+                      "acao": "Acionar Equipe de Resposta Rápida (RRT) ou médico plantonista URGENTE",
+                      "motivos": {
+                        "fundamento": "Um MEWS vermelho sinaliza falência iminente de um ou mais sistemas vitais; o acionamento URGENTE da RRT ou do médico mobiliza instantaneamente um time multidisciplinar com competências para procedimentos avançados de suporte vital, transformando a resposta de um cuidado individual para um esforço de ressuscitação coordenado, onde o tempo é o fator mais crítico para a sobrevida.",
+                        "evidencias": "A RDC 36/2013, ao instituir o Núcleo de Segurança do Paciente, incentiva a criação de mecanismos de resposta à deterioração, sendo a RRT a expressão máxima disso; evidências robustas mostram que a ativação imediata de um sistema de resposta reduz a mortalidade intra-hospitalar e os casos de parada cardiorrespiratória.",
+                        "riscos": "Qualquer demora no acionamento da equipe adequada constitui uma \"falha de resgate\" catastrófica, onde o paciente em deterioração rápida não recebe as intervenções médicas salvadoras a tempo, levando inevitavelmente a um desfecho fatal ou com graves sequelas.",
+                        "impacto": "Esta ação é a mais crucial para o desfecho, pois é o gatilho que coloca em movimento todos os recursos e especialistas necessários para reverter o quadro, representando a diferença direta entre a vida e a morte."
+                      }
+                    },
+                    {
+                      "acao": "Preparar carro de emergência/carro de parada",
+                      "motivos": {
+                        "fundamento": "A situação exige intervenções imediatas com equipamentos e medicamentos específicos; preparar o carro de emergência no local garante que todos os recursos para intubação, acesso venoso central, administração de drogas vasoativas e desfibrilação estejam imediatamente disponíveis, eliminando atrasos logísticos fatais durante a crise.",
+                        "evidencias": "É um requisito de preparação em protocolos de suporte avançado de vida (ACLS, ATLS) e em padrões de acreditação hospitalar, que exigem que equipamentos de emergência sejam verificados, disponíveis e rapidamente acessíveis para qualquer cenário de parada ou pré-parada.",
+                        "riscos": "Ter que correr para buscar um equipamento ou medicamento essencial (como um laringoscópio ou adrenalina) consome minutos preciosos de perfusão cerebral, podendo transformar uma situação reversível em morte encefálica ou parada cardíaca irreversível.",
+                        "impacto": "Garante a prontidão do sistema, assegurando que, quando a equipe médica chegar, todas as ferramentas para salvar a vida do paciente estarão ao seu alcance, maximizando a eficácia da resposta."
+                      }
+                    }
+                  ],
+                  "motivos": {}
+                },
+                {
+                  "procedimento": "Monitoração Contínua",
+                  "acoes": [
+                    {
+                      "acao": "Monitorizar ECG, SpO2, PAS continuamente",
+                      "motivos": {
+                        "fundamento": "A condição do paciente é extremamente dinâmica e pode evoluir para uma arritmia fatal ou choque profundo em segundos; a monitorização contínua não-invasiva fornece um fluxo de dados em tempo real sobre a performance cardíaca e a oxigenação, permitindo a detecção instantânea de paradas, arritmias graves ou queda da pressão, que exigem ação imediata.",
+                        "evidencias": "A monitorização contínua de sinais vitais é mandatória para qualquer paciente criticamente enfermo, conforme estabelecido por diretrizes de sociedades de terapia intensiva e de cardiologia, sendo a ferramenta primária para guiar a terapia e detectar complicações súbitas.",
+                        "riscos": "A monitorização intermitente em um paciente instável é como \"piscar os olhos\" durante uma emergência; uma parada cardíaca, uma fibrilação ventricular ou uma hipotensão severa pode ocorrer e não ser percebida até que seja tarde demais para uma reanimação bem-sucedida.",
+                        "impacto": "Fornece um \"sistema de alarme\" fisiológico contínuo, garantindo que qualquer deterioração adicional seja identificada no momento exato em que ocorre, permitindo intervenções em tempo real para sustentar a vida."
+                      }
+                    },
+                    {
+                      "acao": "Manter via aérea pérvia - posicionamento adequado",
+                      "motivos": {
+                        "fundamento": "A obstrução da via aérea por queda da língua (em um paciente com baixo nível de consciência) ou por vômito leva à hipóxia cerebral e cardíaca em poucos minutos; a manobra simples de posicionamento (como a elevação do queixo ou a extensão da cabeça) é a primeira e mais crucial intervenção para garantir a passagem de ar, compondo a base do suporte vital básico (ABC).",
+                        "evidencias": "É o primeiro passo do algoritmo ABCDE de manejo do paciente crítico, ensinado universalmente em cursos de suporte vital, e uma ação fundamental para prevenir a parada cardiorrespiratória de origem hipóxica.",
+                        "riscos": "A falha em garantir uma via aérea pérvia resulta em hipóxia rapidamente progressiva, dano cerebral irreversível em 4-5 minutos e parada cardíaca subsequente, tornando todas as outras intervenções médicas inúteis.",
+                        "impacto": "Esta manobra simples e imediata é a intervenção mais vital para manter o paciente oxigenado e vivo, criando as condições mínimas para que as outras terapias de suporte avançado possam ser efetivas."
+                      }
+                    },
+                    {
+                      "acao": "Administrar Oxigênio suplementar 10-15L/min via máscara não-reinalante",
+                      "motivos": {
+                        "fundamento": "O paciente em MEWS vermelho está em alto risco de ou já experimentando hipóxia grave; a máscara não-reinalante, com alto fluxo de oxigênio, fornece uma concentração de O2 próxima a 100%, maximizando a oferta de oxigênio ao sangue e, consequentemente, aos órgãos vitais (cérebro, coração), que estão sob risco isquêmico.",
+                        "evidencias": "Diretrizes de oxigenoterapia em emergências recomendam o uso de máscara não-reinalante como dispositivo de primeira linha para pacientes criticamente hipoxêmicos ou em choque, visando corrigir rapidamente o déficit de oxigenação enquanto a causa é investigada.",
+                        "riscos": "Oferecer um fluxo baixo de oxigênio ou por um dispositivo inadequado (como uma máscara simples) em uma situação crítica é insuficiente para reverter a hipóxia, permitindo a progressão da acidose láctica, disfunção miocárdica e parada cardiorrespiratória.",
+                        "impacto": "Eleva drasticamente a saturação de oxigênio, comprando tempo precioso para a equipe médica diagnosticar e tratar a causa subjacente da deterioração, e é a intervenção mais rápida para proteger o cérebro e o coração de danos por falta de oxigênio."
+                      }
+                    }
+                  ],
+                  "motivos": {}
+                },
+                {
+                  "procedimento": "Preparação de Acessos",
+                  "acoes": [
+                    {
+                      "acao": "Obter 2 acessos venosos calibrosos (14G ou 16G)",
+                      "motivos": {
+                        "fundamento": "A administração rápida de grandes volumes de fluidos (em sepse ou hemorragia) ou de medicamentos de emergência (como adrenalina) requer acessos venosos de grande calibre e curto comprimento; cateteres 14G ou 16G oferecem baixa resistência ao fluxo, permitindo uma infusão volêmica muito mais rápida, o que é crucial para a ressuscitação.",
+                        "evidencias": "Protocolos de trauma (ATLS) e sepse (Surviving Sepsis) recomendam explicitamente a obtenção de dois acessos venosos periféricos de grande calibre (14G-16G) como padrão ouro inicial para a ressuscitação hemodinâmica agressiva em situações de choque.",
+                        "riscos": "Tentar reanimar um paciente em choque com um acesso venoso fino (22G) ou permeabilizado lentamente é como tentar apagar um incêndio com um conta-gotas; a reposição volêmica será ineficaz, atrasando a estabilização e perpetuando o estado de choque, com consequências fatais.",
+                        "impacto": "Garante um \"canal de vida\" de alto fluxo, permitindo que volumes terapêuticos de fluidos e medicamentos salvadores cheguem à circulação central em segundos, sendo fundamental para reverter o estado de choque."
+                      }
+                    },
+                    {
+                      "acao": "Coletar exames laboratoriais: hemograma, coagulograma, lactato",
+                      "motivos": {
+                        "fundamento": "Esta tríade de exames fornece um panorama instantâneo das causas mais letais de deterioração: o hemograma e o lactato avaliam a sepse e a hipoperfusão (o lactato elevado é um marcador de choque), e o coagulograma é essencial para investigar hemorragias ou coagulopatias; coletá-los durante a inserção do acesso venoso otimiza o tempo e guia as intervenções médicas específicas.",
+                        "evidencias": "A dosagem de lactato é um componente central da definição de sepse e seu clearance é usado para monitorar a resposta à terapia; a coleta precoce destes exames é uma recomendação forte nas diretrizes de sepse e de manejo do trauma.",
+                        "riscos": "Não dosar o lactato impede a confirmação objetiva da hipoperfusão e a avaliação da resposta ao tratamento; não avaliar a coagulação em um paciente hemorrágico pode levar à administração inadequada de hemoderivados (ex.: não repor plasma fresco), agravando a coagulopatia.",
+                        "impacto": "Fornece dados críticos que direcionam o tratamento de forma precisa, permitindo, por exemplo, iniciar antibioticoterapia para sepse ou ativar o protocolo maciço de transfusão para hemorragia, intervenções guiadas por esses resultados."
+                      }
+                    },
+                    {
+                      "acao": "Manter via venosa permeável com SF 0,9%",
+                      "motivos": {
+                        "fundamento": "Em um paciente com MEWS vermelho, o acesso venoso é um \"canal de vida\" crítico para a administração imediata de medicamentos de emergência (como vasopressores, antiarrítmicos ou sedativos) e para a reposição volêmica agressiva; manter a permeabilidade com uma infusão lenta de Solução Fisiológica 0,9% previne a trombose e o colabamento do cateter, garantindo que ele esteja instantaneamente funcional no momento em que for necessário, sem o atraso de ter que punir outro acesso ou permeabilizar um cateter ocluído durante uma crise.",
+                        "evidencias": "Protocolos de suporte avançado de vida (ACLS) e manuais de terapia intravenosa consideram a manutenção da permeabilidade de acessos venosos calibrosos como um padrão de cuidado obrigatório em situações de emergência, assegurando a prontidão do sistema para intervenções farmacológicas urgentes.",
+                        "riscos": "Deixar um acesso venoso sem infusão contínua (\"deadlock\") permite que ele coagule e se torne inutilizável no momento mais crítico; tentar administrar adrenalina ou fluidos em um acesso ocluído resulta em um atraso fatal, forçando a equipe a perder minutos preciosos para obter um novo acesso enquanto o paciente se deteriora rapidamente.",
+                        "impacto": "Esta medida simples e proativa garante que a \"ponte\" entre a terapia salvadora e a circulação do paciente permaneça sempre aberta, assegurando a entrega imediata e sem interrupções de qualquer medicamento ou fluido que possa ser decisivo para reverter o quadro de risco de vida."
+                      }
+                    }
+                  ],
+                  "motivos": {}
+                },
+                {
+                  "procedimento": "Documentação Crítica",
+                  "acoes": [
+                    {
+                      "acao": "Registrar hora de início da deterioração",
+                      "motivos": {
+                        "fundamento": "Estabelecer o momento exato em que o paciente começou a se agravar é crucial para calcular a **linha do tempo de resposta da equipe** e a efetividade das intervenções; este marco temporal permite à equipe médica correlacionar a velocidade de deterioração com possíveis causas e avaliar se o \"tempo-para-tratamento\" para condições como sepse e infarto foi adequado, guiando decisões terapêuticas futuras.",
+                        "evidencias": "A RDC Nº 36/2013 e os protocolos do PNSP enfatizam a comunicação e a documentação como pilares da segurança; registrar a hora do evento é uma prática padrão em auditorias e processos de acreditação hospitalar (como ONA e JCI) para medir a qualidade da resposta a incidentes.",
+                        "riscos": "A falta de um registro preciso da hora inicial impossibilita auditar a qualidade do resgate, dificulta a reconstituição dos fatos em uma análise de evento adverso e fragiliza a defesa legal da equipe e da instituição, pois não há como demonstrar a prontidão da resposta.",
+                        "impacto": "Assegura que a sequência de eventos seja clara para todos os profissionais que assumirem o cuidado, permitindo uma avaliação mais precisa da trajetória clínica e garantindo que a instituição aprenda com o caso para melhorar a segurança de futuros pacientes."
+                      }
+                    },
+                    {
+                      "acao": "Documentar todas as intervenções",
+                      "motivos": {
+                        "fundamento": "Em uma situação crítica de alta complexidade e estresse, a memória da equipe pode falhar; a documentação em tempo real de cada intervenção (medicamentos, doses, volumes infundidos, respostas do paciente) cria um **registro objetivo e sequencial** do cuidado prestado, servindo como uma \"memória externa\" que permite à equipe de plantonista e à UTI entenderem exatamente o que foi feito e qual foi a resposta fisiológica do paciente.",
+                        "evidencias": "O Conselho Federal de Medicina (CFM) e o Conselho Federal de Enfermagem (COFEN) tornam a documentação completa e fidedigna uma obrigação ético-profissional; é um requisito legal do prontuário do paciente e uma ferramenta essencial para a continuidade do cuidado, conforme previsto na RDC Nº 36/2013.",
+                        "riscos": "Intervenções não documentadas são consideradas não realizadas; omissões levam a duplicidade de doses de medicamentos, administração de terapias contraditórias, descontinuidade do tratamento e impossibilidade de defender condutas tomadas em situação de emergência, configurando má prática profissional.",
+                        "impacto": "Garante a segurança ao prevenir erros de medicação e terapia, assegura a continuidade de um plano de cuidado coerente durante a transferência de turno ou de unidade e protege os profissionais envolvidos, assegurando que o cuidado de alta complexidade seja prestado de forma organizada e rastreável."
+                      }
+                    },
+                    {
+                      "acao": "Preparar prontuário para transferência",
+                      "motivos": {
+                        "fundamento": "A transferência de um paciente crítico é um momento de alta vulnerabilidade; preparar o prontuário significa reunir e organizar de forma concisa todos os documentos essenciais (súmula de atendimento, prescrições atuais, exames recentes, termo de consentimento) para facilitar a **passagem de plantão verbal e física** de forma eficiente, garantindo que a equipe receptora na UTI tenha imediatamente em mãos as informações necessárias para dar continuidade ao tratamento sem interrupções ou repetição de exames.",
+                        "evidencias": "Manuais de segurança do paciente e protocolos de transferência intra-hospitalar consideram a documentação completa e organizada um componente crítico para uma transição segura do cuidado, sendo uma prática obrigatória para evitar falhas de comunicação durante handoffs.",
+                        "riscos": "A transferência de um paciente crítico com um prontuário desorganizado ou incompleto força a equipe da UTI a tomar decisões com informações insuficientes, resultando em atrasos no tratamento, repetição de exames (aumentando custos e riscos) e potencial para eventos adversos graves durante a \"lacuna\" de informação.",
+                        "impacto": "Esta ação final de documentação é um ato de **cuidado colaborativo** que garante a continuidade segura e ininterrupta do tratamento intensivo, assegurando que todo o esforço de reanimação realizado não seja comprometido por uma falha de comunicação na transição entre as equipes."
+                      }
+                    }
+                  ],
+                  "motivos": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ator": "MÉDICOS/EQUIPE DE RESPOSTA RÁPIDA",
+          "condutas": [
+            {
+              "conduta": "AÇÕES DENTRO DE 30 MINUTOS:",
+              "procedimentos": [
+                {
+                  "procedimento": "Avaliação Rápida ABCDE:",
+                  "acoes": [
+                    {
+                      "acao": "A (VIA AÉREA): Verificar potência, considerar intubação se GCS <8;",
+                      "motivos": {
+                        "fundamento": "A via aérea é o primeiro e mais crítico elo na cadeia de sobrevivência. Uma obstrução (por queda da língua, corpo estranho ou secreções) impede a passagem de oxigênio para os pulmões, levando à hipóxia cerebral e parada cardíaca em poucos minutos. Verificar sua \"potência\" (permeabilidade) significa assegurar que o ar chegue aos pulmões. Um Escore de Coma de Glasgow (GCS) menor que 8 indica profunda depressão do nível de consciência e perda do reflexo protetor da via aérea, tornando a intubação orotraqueal obrigatória para proteger contra a aspiração e garantir uma via segura para a ventilação.",
+                        "evidencias": "É o primeiro passo inquestionável de qualquer protocolo de suporte vital avançado (ACLS, ATLS). Diretrizes internacionais de manejo do trauma e do paciente séptico estabelecem o GCS <8 como um limiar claro para intubação de sequência rápida, pois a falha em fazê-lo é um dos principais fatores evitáveis de morte.",
+                        "riscos": "A falha em assegurar uma via aérea pérvia resulta em hipóxia rapidamente progressiva, dano cerebral irreversível e morte. Não intubar um paciente com GCS <8 pode levar à aspiração de conteúdo gástrico (Síndrome de Mendelson), causando pneumonia química grave e insuficiência respiratória aguda.",
+                        "impacto": "Esta ação é a mais fundamental para manter o paciente vivo. Garantir uma via aérea patentee segura é o alicerce sobre o qual todas as outras intervenções (ventilação, drogas vasoativas) serão construídas. É a diferença entre uma reanimação bem-sucedida e um desfecho fatal."
+                      }
+                    },
+                    {
+                      "acao": "B (RESPIRAÇÃO): Ausculta pulmonar, avaliar necessidade de ventilação;",
+                      "motivos": {
+                        "fundamento": "Uma via aérea pérvia não garante uma ventilação adequada. Esta etapa avalia a **eficácia da troca gasosa**. A ausculta pulmonar identifica rapidamente condições que comprometem a ventilação, como um pneumotórax hipertensivo (murmúrio vesicular ausente), broncoespasmo (sibilos) ou edema pulmonar (estertores). Avaliar a necessidade de ventilação significa verificar se o esforço respiratório do paciente é suficiente (frequência, profundidade, uso de musculatura acessória) ou se há indicação de suporte ventilatório mecânico (invasivo ou não-invasivo) para evitar a fadiga muscular e a acidose respiratória.",
+                        "evidencias": "A abordagem sistemática do \"B\" é um pilar do ABCDE. A identificação de um pneumotórax hipertensivo, por exemplo, é uma emergência que exige descompressão imediata, conforme protocolos de trauma. A decisão de ventilar é guiada por parâmetros objetivos como taquipneia extrema (>30-35 rpm), bradipneia (<8 rpm), hipoxemia refratária ou trabalho respiratório aumentado.",
+                        "riscos": "Não auscultar os pulmões pode fazer com que um pneumotórax hipertensivo, uma condição tratável com uma agulha, não seja diagnosticado, levando à morte por tamponamento cardíaco. Não ventilar um paciente em falência respiratória iminente permite a progressão para acidose, hipóxia e parada cardiorrespiratória.",
+                        "impacto": "Permite diagnosticar e tratar causas reversíveis de insuficiência respiratória de forma imediata. A ventilação mecânica oportuna assume o trabalho respiratório, poupando o paciente, corrigindo a hipóxia e o hipercapnia, e estabilizando o pH sanguíneo."
+                      }
+                    },
+                    {
+                      "acao": "C (CIRCULAÇÃO): Avaliar enchimento capilar, pulsos, pressão arterial;",
+                      "motivos": {
+                        "fundamento": "Esta etapa avalia se o coração está bombeando sangue suficiente para perfundir os órgãos vitais. O **enchimento capilar tardio** (>2 segundos) é um sinal precoce e sensível de vasoconstrição periférica e choque. A palpação dos pulsos (força e simetria) avalia o débito cardíaco de forma mais direta que a pressão arterial. A mensuração da **Pressão Arterial Sistólica (PAS)** confirma a hipotensão (geralmente PAS <90 mmHg), um marcador tardio de choque. Juntos, esses parâmetros guiam a reposição volêmica agressiva e o uso de vasopressores.",
+                        "evidencias": "A avaliação da circulação é central nos protocolos de sepse, trauma e choque. Diretrizes como as da \"Surviving Sepsis Campaign\" utilizam a hipotensão e o lactato elevado (um marcador de hipoperfusão) para definir sepse e iniciar a ressuscitação volêmica. O enchimento capilar é um indicador válido de perfusão periférica, especialmente em ambientes de recursos limitados.",
+                        "riscos": "Ignorar os sinais de choque (enchimento capilar tardio, pulsos finos) e focar apenas na PA \"normal\" pode levar a um atraso fatal no tratamento. A hipoperfusão não corrigida leva rapidamente à injúria renal aguda, acidose láctica, falência de múltiplos órgãos e morte.",
+                        "impacto": "Permite identificar o estado de choque em seus estágios iniciais, antes que a lesão orgânica se torne irreversível. Direciona intervenções salvadoras, como a reposição volêmica agressiva e a administração de vasopressores, para restaurar a perfusão tissular e salvar vidas."
+                      }
+                    },
+                    {
+                      "acao": "D (DISFUNÇÃO NEUROLÓGICA): Reavaliar AVPU, pupilas;",
+                      "motivos": {
+                        "fundamento": "O cérebro é o órgão mais sensível à hipóxia, hipoglicemia e hipoperfusão. A escala **AVPU (Alert, Voice, Pain, Unresponsive)** é uma ferramenta rápida e prática para reavaliar o nível de consciência após as intervenções no ABC, detectando deterioração ou melhora. O exame das **pupilas** (tamanho, simetria e resposta à luz) é um exame neurológico focal crucial: pupilas assimétricas ou não reativas podem indicar herniação cerebral por um hematoma intracraniano, enquanto pupilas puntiformes sugerem intoxicação por opioides.",
+                        "evidencias": "A escala AVPU é amplamente validada como uma alternativa rápida e confiável ao GCS em situações de emergência. A avaliação pupilar é um componente mandatório do exame neurológico em protocolos de acidente vascular cerebral e trauma craniano, sendo um sinal de alarme para lesões expansivas intracranianas.",
+                        "riscos": "Não reavaliar o \"D\" pode fazer com que uma causa neurológica reversível (como um hematoma subdual) seja ignorada, perdendo a janela para uma neurocirurgia salvadora. Alterações pupilares são um sinal de que o paciente está à beira de uma catástrofe neurológica irreversível.",
+                        "impacto": "Identifica rapidamente causas primárias ou secundárias de disfunção cerebral. Uma alteração pupilar pode ser o único sinal que justifica uma tomografia de crânio de emergência e uma intervenção neurocirúrgica, prevenindo a morte cerebral."
+                      }
+                    },
+                    {
+                      "acao": "E (EXPOSIÇÃO): Procurar fontes de sangramento, sinais de infecção",
+                      "motivos": {
+                        "fundamento": "Esta etapa final busca a **causa subjacente** da deterioração que pode não ser óbvia. O paciente deve ser **totalmente despido** (respeitando a dignidade e a hipotermia) para uma inspeção completa da superfície corporal. Isso permite identificar fontes ocultas de **sangramento** (ex.: hematomas expansivos em pelve ou abdômen, feridas nas costas) e **sinais de infecção** (ex.: erisipela, celulite necrotizante, sítio cirúrgico infectado) que podem ser a fonte de uma sepse.",
+                        "evidencias": "A exposição completa é um padrão no Primary Survey do ATLS (Suporte Avançado de Vida no Trauma) e na avaliação do paciente séptico. A falha em expor o paciente adequadamente é uma causa conhecida de diagnósticos perdidos, como hemorragias internas que se manifestam apenas por hematomas ou infecções de pele graves.",
+                        "riscos": "Não expor o paciente significa potencialmente ignorar a causa tratável da deterioração. Um sangramento interno contínuo ou uma fasciite necrotizante não diagnosticada levarão à morte do paciente, mesmo que o ABC tenha sido temporariamente estabilizado.",
+                        "impacto": "É a etapa do diagnóstico visual. Encontrar uma fonte de sangramento direciona para o controle hemodinâmico e cirúrgico; identificar um foco infeccioso guia a antibioticoterapia empírica e o desbridamento cirúrgico. É a ação que permite tratar a causa, e não apenas os sintomas, da crise."
+                      }
+                    }
+                  ],
+                  "motivos": {}
+                },
+                {
+                  "procedimento": "Investigação Diagnóstica Rápida",
+                  "acoes": [
+                    {
+                      "acao": "Gasometria arterial",
+                      "motivos": {
+                        "fundamento": "Fornece um panorama instantâneo e crucial do equilíbrio ácido-base, da oxigenação (PaO2) e da ventilação (PaCO2) do paciente. Em um estado crítico, ela identifica rapidamente acidose metabólica (comum na sepse e hipoperfusão), acidose respiratória (em falência ventilatória) ou alcaloses, guiando diretamente a necessidade de suporte ventilatório, reposição volêmica ou correção de distúrbios metabólicos.",
+                        "evidencias": "É um exame mandatório em protocolos de sepse (para cálculo do *gap* aniônico e avaliação de acidose láctica), trauma e insuficiência respiratória aguda. Sua agilidade e riqueza de informações a tornam um pilar do diagnóstico rápido na beira do leito.",
+                        "riscos": "Sem a gasometria, a equipe pode não quantificar a gravidade de uma acidose láctica (um marcador de choque oculto), subestimar a retenção de CO2 em um paciente cansado ou errar no ajuste do suporte ventilatório, levando a decisões terapêuticas inadequadas ou tardias.",
+                        "impacto": "Permite intervenções precisas e imediatas, como a correção da ventilação ou a intensificação da ressuscitação volêmica, diretamente impactando a correção da hipóxia e da acidose, que são determinantes para a sobrevida de órgãos vitais."
+                      }
+                    },
+                    {
+                      "acao": "Radiografia de tórax",
+                      "motivos": {
+                        "fundamento": "É uma ferramenta de imagem rápida para identificar ou excluir causas mecânicas e pulmonares de deterioração. Ela diagnostica condições imediatamente tratáveis, como pneumotórax (especialmente hipertensivo), derrame pleural maciço, edema pulmonar cardiogênico ou não-cardiogênico (SDRA), consolidações sugestivas de pneumonia e posicionamento de dispositivos (como tubo endotraqueal).",
+                        "evidencias": "Faz parte da avaliação inicial padrão (Primary Survey) no trauma (ATLS) e é indispensável na investigação da dispneia aguda e da sepse de origem pulmonar, fornecendo uma visão macroanatômica crucial em minutos.",
+                        "riscos": "Não realizar uma radiografia de tórax pode resultar na não identificação de um pneumotórax hipertensivo, uma condição fatal se não for descomprimida rapidamente. Também pode levar ao tratamento inadequado de um edema pulmonar sem reconhecer sua causa cardiogênica.",
+                        "impacto": "Permite intervenções salva-vidas diretas, como a drenagem torácica para um pneumotórax ou a instituição de diuréticos e vasodilatadores para o edema agudo de pulmão, revertendo rapidamente a causa da insuficiência respiratória."
+                      }
+                    },
+                    {
+                      "acao": "ECG 12 derivações",
+                      "motivos": {
+                        "fundamento": "O eletrocardiograma é a ferramenta mais rápida para avaliar a atividade elétrica do coração. Ele é essencial para diagnosticar isquemia miocárdica aguda (Infarto com Supradesnivel do Segmento ST), arritmias graves (como taquicardia ventricular ou fibrilação atrial com resposta rápida), embolia pulmonar (padrão S1Q3T3) e distúrbios eletrolíticos agudos que afetam a condução cardíaca.",
+                        "evidencias": "É um exame de primeira linha em qualquer protocolo de dor torácica e síndrome coronariana aguda. Diretrizes internacionais estipulam que o tempo \"porta-balão\" para um IAMCST deve ser inferior a 90 minutos, e o ECG é o gatilho inicial para ativar esse circuito.",
+                        "riscos": "Deixar de fazer um ECG pode atrasar por horas o diagnóstico de um infarto agudo do miocárdio, tornando a reperfusão menos efetiva e aumentando a área de necrose e o risco de morte. Arritmias malignas podem passar despercebidas até evoluírem para parada cardíaca.",
+                        "impacto": "Para um paciente com IAMCST, um ECG rápido significa a ativação imediata do cateterismo de emergência, salvando músculo cardíaco e a vida. Para outros, significa o tratamento correto e imediato de uma arritmia instável."
+                      }
+                    },
+                    {
+                      "acao": "Lactato arterial/venoso",
+                      "motivos": {
+                        "fundamento": "O lactato é um marcador bioquímico de hipoperfusão tissular e metabolismo anaeróbico. Níveis elevados (>2 mmol/L) indicam que os órgãos não estão recebendo oxigênio suficiente, mesmo que a pressão arterial ainda esteja compensada (\"choque oculto\"). É um dos indicadores mais sensíveis da gravidade do choque (séptico, hipovolêmico, cardiogênico) e sua tendência (clearance) é usada para monitorar a resposta à terapia de ressuscitação.",
+                        "evidencias": "A dosagem de lactato é um critério fundamental na definição de sepse e choque séptico (Critérios de Sepse-3) e sua mensuração seriada é recomendada pela \"Surviving Sepsis Campaign\" para guiar a eficácia da reposição volêmica.",
+                        "riscos": "Ignorar o lactato significa subestimar gravemente a extensão da hipoperfusão. Um paciente pode parecer estável clinicamente, mas ter um lactato muito elevado, sinalizando um choque iminente e a necessidade de intervenção agressiva imediata, cujo atraso aumenta drasticamente a mortalidade.",
+                        "impacto": "Um nível de lactato alto serve como um \"grito de alarme\" metabólico, instigando uma reposição volêmica mais agressiva e uma investigação mais profunda da causa do choque, diretamente correlacionando-se com a redução da mortalidade quando tratado precocemente."
+                      }
+                    },
+                    {
+                      "acao": "Ecografia point-of-care (FATE)",
+                      "motivos": {
+                        "fundamento": "A ecografia à beira do leito é uma extensão do exame físico que permite uma avaliação visual e em tempo real da função cardíaca, pulmonar e da presença de fluidos livres. O protocolo FATE (Focused Assessed Transthoracic Echocardiography) avalia rapidamente a contratilidade global do ventrículo esquerdo, o tamanho e colabamento das veias cavas (estado volêmico), derrames pleurais e até tamponamento cardíaco.",
+                        "evidencias": "A ecografia point-of-care é reconhecida como padrão-ouro para a avaliação do paciente em choque de causa indeterminada. Ela é endossada por sociedades de terapia intensiva e emergência para diferenciar rapidamente entre choque cardiogênico, hipovolêmico, obstrutivo e distributivo.",
+                        "riscos": "Sem a ecografia, o diagnóstico pode permanecer clínico e impreciso. Pode-se administrar fluidos em excesso para um paciente com choque cardiogênico (piorando o edema pulmonar) ou falhar em diagnosticar um tamponamento cardíaco, que é fatal sem pericardiocentese de emergência.",
+                        "impacto": "Transforma o manejo de \"um tratamento para todos\" em uma terapia personalizada e direcionada. Permite, por exemplo, iniciar inotrópicos imediatamente para uma cardiomiopatia grave ou identificar uma veia cava colabada que demanda volume agressivo, otimizando a ressuscitação de forma guiada."
+                      }
+                    }
+                  ],
+                  "motivos": {}
+                },
+                {
+                  "procedimento": "Intervenções Específicas",
+                  "acoes": [
+                    {
+                      "acao": "SEPSE: Antibioticoterapia em 1h + reposição volêmica agressiva",
+                      "motivos": {
+                        "fundamento": "A sepse é uma corrida contra o tempo. Cada hora de atraso na antibioticoterapia adequada aumenta a mortalidade em cerca de 8%. A reposição volêmica agressiva (cristaloides) visa reverter a hipoperfusão causada pela vasodilatação e extravasamento capilar, restaurando o débito cardíaco e a perfusão orgânica. São as duas intervenções com maior impacto na sobrevida.",
+                        "evidencias": "Este é o cerne do \"Pacote de 1 Hora\" da *Surviving Sepsis Campaign*, baseado em evidências esmagadoras que mostram redução drástica da mortalidade quando essas ações são implementadas precoce e agressivamente.",
+                        "riscos": "Atrasos na administração de antibióticos ou terapia hídrica tímida permitem a progressão descontrolada da cascata inflamatória e do choque, levando rapidamente à falência múltipla de órgãos e morte.",
+                        "impacto": "Esta intervenção combinada ataca a sepse em suas duas frentes: o antimicrobiano combate o agente infeccioso, e os fluidos sustentam a circulação até que o antibiótico faça efeito. É a intervenção que mais salva vidas na sepse."
+                      }
+                    },
+                    {
+                      "acao": "HEMORRAGIA: Reposição sanguínea + identificação da fonte",
+                      "motivos": {
+                        "fundamento": "Em uma hemorragia grave, a prioridade é restaurar a capacidade de transporte de oxigênio (transfundindo hemácias) e a volemia (com plasma e plaquetas para corrigir a coagulopatia), enquanto se identifica e controla mecanicamente o local do sangramento (cirurgia, embolização, tamponamento). Transfundir sem controlar a fonte é como \"enxugar gelo\".",
+                        "evidencias": "Esta é a base dos *Protocolos de Transfusão Maciça* e da abordagem do trauma (ATLS). A reposição sanguínea balanceada (proporção 1:1:1 de hemácias:plasma:plaquetas) e o controle rápido da fonte são os pilares do manejo do sangramento catastrófico.",
+                        "riscos": "Focar apenas na transfusão sem buscar a fonte levará a uma perda sanguínea contínua e à morte do paciente por exsanguinação. Inverter a ordem (tentar diagnosticar sem repor volume) levará à morte por choque hipovolêmico antes da intervenção.",
+                        "impacto": "Interrompe o ciclo vicioso da coagulopatia e do choque hemorrágico. Controlar a fonte para a perda de sangue e repô-lo de forma balanceada é a única maneira de estabilizar um paciente com hemorragia ativa massiva."
+                      }
+                    },
+                    {
+                      "acao": "CARDIOLÓGICO: Nitratos, diuréticos, antiarrítmicos conforme indicação",
+                      "motivos": {
+                        "fundamento": "São intervenções direcionadas a fisiopatologias cardíacas específicas. Nitratos vasodilatam e reduzem o pré e pós-carga, aliviando o edema agudo de pulmão cardiogênico. Diuréticos (como a furosemida) promovem diurese e reduzem a congestão vascular. Antiarrítmicos stabilizam electricalmente o miocárdio em arritmias malignas. Cada um age em um mecanismo distinto de descompensação.",
+                        "evidencias": "Seu uso é guiado por diretrizes de sociedades de cardiologia (ex.: American Heart Association - AHA) para condições específicas como síndrome coronariana aguda, insuficiência cardíaca descompensada e taquiarritmias.",
+                        "riscos": "Administrar um diurético a um paciente hipovolêmico ou um nitrato a um paciente hipotenso pode precipitar choque profundo. Não usar um antiarrítmico em uma taquicardia ventricular sustentada pode levar à morte súbita.",
+                        "impacto": "Permite reverter condições agudas como o edema pulmonar ou controlar arritmias imediatamente ameaçadoras, aliviando sintomas e ganhando tempo para tratamentos definitivos."
+                      }
+                    },
+                    {
+                      "acao": "NEUROLÓGICO: Neuroimagem urgente",
+                      "motivos": {
+                        "fundamento": "A deterioração neurológica aguda (como a queda do GCS, assimetria pupilar) exige a exclusão de causas estruturais e potencialmente cirúrgicas. A Tomografia Computadorizada (TC) de crânio sem contraste é o exame de escolha para identificar rapidamente hemorragias intracranianas (hematoma subdual, epidural, intraparenquimatoso), edema cerebral ou hidrocefalia.",
+                        "evidencias": "Diretrizes de AVC e trauma craniano estabelecem a neuroimagem urgente como mandatória para qualquer paciente com alteração aguda do nível de consciência de causa não óbvia, pois o tempo é cérebro.",
+                        "riscos": "Atrasar a neuroimagem em um paciente com um hematoma subdual expansivo pode fazer com que ele perca a janela para uma craniotomia descompressiva salvadora, evoluindo para herniação cerebral e morte.",
+                        "impacto": "É a ação que pode levar um paciente do limiar da morte neurológica para uma recuperação completa, ao identificar uma lesão cirúrgica reversível. Para condições isquêmicas, direciona a trombólise ou trombectomia."
+                      }
+                    }
+                  ],
+                  "motivos": {}
+                },
+                {
+                  "procedimento": "Preparação para Transferência",
+                  "acoes": [
+                    {
+                      "acao": "Contactar UTI/CTI para reserva de leito",
+                      "motivos": {
+                        "fundamento": "O paciente em MEWS vermelho esgotou os recursos da unidade de origem. A UTI é o único ambiente com monitorização contínua, equipe especializada e suporte avançado. Contactar antecipadamente garante que o destino final esteja preparado, evitando um deslocamento perigoso para um local sem vaga (\"peregrinação\") e assegurando a admissão imediata.",
+                        "evidencias": "Protocolos de transferência intra-hospitalar e manuais de acreditação enfatizam a comunicação prévia como essencial para a segurança, assegurando uma transição de cuidado contínua e sem atritos.",
+                        "riscos": "Transferir um paciente crítico sem a confirmação de um leito na UTI pode resultar em um transporte de risco sem um destino definido, com o paciente ficando em um corredor ou retornando à unidade de origem, sem o cuidado especializado necessário, aumentando drasticamente o risco de um evento adverso grave.",
+                        "impacto": "Garante que o paciente chegue a um ambiente de cuidado definitivo sem delays, assegurando que o esforço de reanimação não seja perdido durante a transição."
+                      }
+                    },
+                    {
+                      "acao": "Preparar documento de transferência",
+                      "motivos": {
+                        "fundamento": "A \"passagem de plantão\" por escrito é vital. Este documento (súmula de transferência) resume de forma concisa a história, o evento agudo, as intervenções realizadas, a resposta do paciente, os exames pendentes e a medicação em infusão. Ele é a ferramenta que permite à equipe da UTI entender instantaneamente a situação e dar continuidade ao plano de cuidado sem repetir perguntas ou exames desnecessários.",
+                        "evidencias": "É uma prática padrão para garantir a segurança na transição do cuidado, recomendada pelo PNSP e por manuais de qualidade, para evitar falhas de comunicação durante handoffs.",
+                        "riscos": "A transferência sem documentação adequada é como \"recomeçar do zero\". A equipe da UTI tomará decisões com informações incompletas ou incorretas, podendo repetir exames, administrar medicamentos contraditórios ou desconsiderar intervenções críticas já realizadas.",
+                        "impacto": "Garante a continuidade segura e coordenada do tratamento, assegurando que toda a informação crítica seja transmitida com precisão, o que é fundamental para manter a qualidade do cuidado durante essa fase vulnerável."
+                      }
+                    },
+                    {
+                      "acao": "Mobilizar equipamento de transporte monitorizado",
+                      "motivos": {
+                        "fundamento": "O transporte é um período de alto risco, onde o paciente está fora de um ambiente controlado. Um equipamento de transporte monitorizado (com cardioscópio, pressão arterial não-invasiva, oximetria de pulso e, idealmente, capnografia) permite a vigilância contínua dos sinais vitais durante o deslocamento. Uma bomba de infusão portátil garante a administração ininterrupta de drogas vasoativas críticas.",
+                        "evidencias": "Diretrizes de transporte intra-hospitalar de pacientes críticos estipulam que o nível de monitorização durante o transporte deve ser, no mínimo, equivalente ao que o paciente recebia no leito de origem.",
+                        "riscos": "Transportar um paciente instável sem monitorização é uma \"viagem às cegas\". Uma parada cardíaca, uma hipotensão severa ou uma dessaturação podem ocorrer no elevador ou corredor sem que a equipe perceba, atrasando a resposta em minutos que podem ser fatais.",
+                        "impacto": "Fornece um \"colchão de segurança\" durante a fase de transição física. Permite que a equipe responda imediatamente a qualquer deterioração durante o transporte, assegurando que o paciente chegue vivo e estável à UTI."
+                      }
+                    }
+                  ],
+                  "motivos": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
