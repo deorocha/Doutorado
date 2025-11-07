@@ -192,19 +192,19 @@ def main():
             }
             </style>
             <div class="small-font">
-                🎯 Como funciono:
-                - Forneço respostas **estruturadas** com base científica;
-                - Apresento informações em 4 categorias específicas: 
-                  1. Fundamento Fisiológico - Base científica do procedimento;
-                  2. Riscos da Omissão - Consequências de não realizar o procedimento;
-                  3. Evidências Clínicas - Comprovações baseadas em estudos;
-                  4. Impacto no Paciente - Efeitos diretos no bem-estar.
-                💡 Exemplos de perguntas:
-                - "Por que devo verificar sinais vitais regularmente?"
-                - "Qual o fundamento fisiológico da monitorização respiratória?"
-                - "Quais os riscos de não comunicar alterações ao médico?"
-                - "Por que é importante orientar pacientes sobre sinais de alerta?"
-                - "Qual o impacto da documentação no prontuário?"
+                🎯 Como funciono:<p>
+                - Forneço respostas **estruturadas** com base científica;<br>
+                - Apresento informações em 4 categorias específicas:<br>
+                  1. Fundamento Fisiológico - Base científica do procedimento;<br>
+                  2. Riscos da Omissão - Consequências de não realizar o procedimento;<br>
+                  3. Evidências Clínicas - Comprovações baseadas em estudos;<br>
+                  4. Impacto no Paciente - Efeitos diretos no bem-estar.<p>
+                💡 Exemplos de perguntas:<p>
+                - "Por que devo verificar sinais vitais regularmente?"<br>
+                - "Qual o fundamento fisiológico da monitorização respiratória?"<br>
+                - "Quais os riscos de não comunicar alterações ao médico?"<br>
+                - "Por que é importante orientar pacientes sobre sinais de alerta?"<br>
+                - "Qual o impacto da documentação no prontuário?"<br>
             </div>
             """, unsafe_allow_html=True)
 
@@ -248,6 +248,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
