@@ -204,7 +204,7 @@ def main():
                 help="Ajuste quão precisa deve ser a correspondência"
             )
             chatbot.set_similarity_threshold(threshold)
-            st.success("✅ Modo IA Ativo")
+            # st.success("✅ Modo IA Ativo")
         else:
             st.warning("⚠️ Modo Básico")
             st.info("Usando busca por palavras-chave")
@@ -305,3 +305,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
