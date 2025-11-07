@@ -1,7 +1,8 @@
-# app.py - Chatbot MEWS com modelo treinado - FORMATO ESPECÍFICO
+# app.py - Chatbot MEWS com modelo treinado - COMPATÍVEL COM STREAMLIT CLOUD
 import streamlit as st
 import json
 from pathlib import Path
+import sys
 
 # Configuração da página
 st.set_page_config(
@@ -11,13 +12,13 @@ st.set_page_config(
 )
 
 # Título principal
-st.title("🤖 ChatBot MEWS-LLM")
+st.title("🤖 ChatBot MEWS-LLM Especializado")
 st.markdown("Consulta informações detalhadas sobre procedimentos hospitalares com **respostas estruturadas**")
 
 # Definir o caminho base do projeto
 PROJECT_ROOT = Path(__file__).parent
 
-# Carrega o arquivo CSS
+# Carrega o arquivo CSS (se existir)
 css_path = PROJECT_ROOT / "styles" / "styles.css"
 if css_path.exists():
     with open(css_path, "r", encoding="utf-8") as f:
@@ -35,16 +36,38 @@ except ImportError as e:
 def init_chatbot():
     chatbot = MEWSChatbot()
     
+    # Debug: verificar estrutura de diretórios
+    st.sidebar.write("🔍 Debug - Estrutura de diretórios:")
+    st.sidebar.write(f"Diretório atual: {Path.cwd()}")
+    st.sidebar.write(f"Diretório do app: {PROJECT_ROOT}")
+    
+    # Verificar se a pasta models existe
+    models_dir = PROJECT_ROOT / "models"
+    st.sidebar.write(f"Pasta models existe: {models_dir.exists()}")
+    
+    if models_dir.exists():
+        files = list(models_dir.glob("*"))
+        st.sidebar.write(f"Arquivos em models: {[f.name for f in files]}")
+    
     # Tenta carregar o modelo
     model_loaded = chatbot.load_model()
     
     if not model_loaded:
-        st.warning("⚠️ Modelo IA não carregado. O chatbot funcionará em modo básico.")
+        st.error("""
+        ❌ **Modelo IA não carregado no Streamlit Cloud**
+        
+        **Possíveis soluções:**
+        1. Verifique se a pasta `models/` está no GitHub
+        2. Verifique se `mews_model.pkl` e `mews_model.pkl_transformer/` estão na pasta models
+        3. Os arquivos de modelo podem ser muito grandes para o GitHub
+        4. Execute `train_model.py` localmente e faça commit dos arquivos do modelo
+        """)
     
     return chatbot
 
 chatbot = init_chatbot()
 
+# ... o resto do código permanece igual ...
 def find_procedure_fallback(json_data, query):
     """Busca básica fallback caso o modelo não esteja disponível"""
     query_lower = query.lower().strip()
@@ -212,18 +235,5 @@ Impacto no Paciente: [efeitos]
 **Digite sua pergunta abaixo!**
 """)
 
-    # Adiciona informações de debug (opcional)
-    with st.sidebar:
-        st.markdown("---")
-        st.subheader("🔧 Debug Info")
-        if st.checkbox("Mostrar informações técnicas"):
-            st.json(chatbot.get_model_info())
-            
-            if st.button("Recarregar Modelo"):
-                st.cache_resource.clear()
-                st.rerun()
-
 if __name__ == "__main__":
     main()
-
-
