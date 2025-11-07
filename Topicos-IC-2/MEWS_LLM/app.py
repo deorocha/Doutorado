@@ -184,7 +184,7 @@ def main():
         else:
             st.error("❌ Arquivo procedimentos.json não encontrado")
 
-        with st.expander("🎯 Como funciono", expanded=True):
+        with st.expander("🎯 Como funciono", expanded=False):
             st.markdown("""
             <style>
             .small-font {
@@ -193,18 +193,22 @@ def main():
             </style>
             <div class="small-font">
                 🎯 Como funciono:<p>
-                - Forneço respostas **estruturadas** com base científica;<br>
+                - Forneço respostas estruturadas com base científica;<br>
                 - Apresento informações em 4 categorias específicas:<br>
-                <li>  1. Fundamento Fisiológico - Base científica do procedimento;<br>
-                <li>  2. Riscos da Omissão - Consequências de não realizar o procedimento;<br>
-                <li>  3. Evidências Clínicas - Comprovações baseadas em estudos;<br>
-                <li>  4. Impacto no Paciente - Efeitos diretos no bem-estar.<p>
+                <ul>
+                    <li>  1. Fundamento Fisiológico - Base científica do procedimento;<br></li>
+                    <li>  2. Riscos da Omissão - Consequências de não realizar o procedimento;<br></li>
+                    <li>  3. Evidências Clínicas - Comprovações baseadas em estudos;<br></li>
+                    <li>  4. Impacto no Paciente - Efeitos diretos no bem-estar.<p></li>
+                </ul>
                 💡 Exemplos de perguntas:<p>
-                <li>  - "Por que devo verificar sinais vitais regularmente?"<br>
-                <li>  - "Qual o fundamento fisiológico da monitorização respiratória?"<br>
-                <li>  - "Quais os riscos de não comunicar alterações ao médico?"<br>
-                <li>  - "Por que é importante orientar pacientes sobre sinais de alerta?"<br>
-                <li>  - "Qual o impacto da documentação no prontuário?"<br>
+                <ul>
+                    <li>  - "Por que devo verificar sinais vitais regularmente?"<br></li>
+                    <li>  - "Qual o fundamento fisiológico da monitorização respiratória?"<br></li>
+                    <li>  - "Quais os riscos de não comunicar alterações ao médico?"<br></li>
+                    <li>  - "Por que é importante orientar pacientes sobre sinais de alerta?"<br></li>
+                    <li>  - "Qual o impacto da documentação no prontuário?"<br></li>
+                </ul>
             </div>
             """, unsafe_allow_html=True)
 
@@ -248,6 +252,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
