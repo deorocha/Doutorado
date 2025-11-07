@@ -19,14 +19,14 @@ st.markdown("""
   <style>
      /* Streamlit class name of the div that holds the expander's title*/
     .css-q8sbsg p {
-      font-size: 32px;
+      font-size: 12px;
       color: red;
       }
     
      /* Streamlit class name of the div that holds the expander's text*/
     .css-nahz7x p {
       font-family: bariol;
-      font-size: 20px;
+      font-size: 10px;
       }
   </style>
 """, unsafe_allow_html=True)
@@ -243,5 +243,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
