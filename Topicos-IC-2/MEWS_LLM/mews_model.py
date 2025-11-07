@@ -1,4 +1,4 @@
-# mews_model.py (mantido igual)
+# mews_model.py
 import json
 import numpy as np
 from sentence_transformers import SentenceTransformer
@@ -113,3 +113,4 @@ def load_model(model_path):
     
     print(f"✅ Modelo carregado: {len(mews_model.data)} documentos")
     return mews_model
+
