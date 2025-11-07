@@ -170,6 +170,7 @@ def main():
 
         with st.expander("** 🎯 Como funciono:"):
             with st.container():
+                st.markdown("""
                 - Forneço respostas **estruturadas** com base científica
                 - Apresento informações em **4 categorias** específicas:
                   1. **Fundamento Fisiológico** - Base científica do procedimento
@@ -183,6 +184,7 @@ def main():
                 - "Quais os riscos de não comunicar alterações ao médico?"
                 - "Por que é importante orientar pacientes sobre sinais de alerta?"
                 - "Qual o impacto da documentação no prontuário?"
+                """)
 
     
     # Inicializa conversa
@@ -225,6 +227,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
