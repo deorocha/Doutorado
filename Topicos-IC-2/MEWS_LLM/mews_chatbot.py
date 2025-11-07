@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from mews_model import load_model
 from pathlib import Path
+import os
 
 class MEWSChatbot:
     def __init__(self):
@@ -123,3 +124,4 @@ class MEWSChatbot:
                 "threshold_similaridade": self.similarity_threshold,
                 "modelo_carregado": False
             }
+
