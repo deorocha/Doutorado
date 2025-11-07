@@ -188,8 +188,8 @@ def main():
             st.markdown("""
             <style>
             .small-font {
-                font-size: 10px;
-                line-height: 1.1;
+                font-size: 12px;
+                line-height: 1.2;
             }
             </style>
             
@@ -251,6 +251,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
