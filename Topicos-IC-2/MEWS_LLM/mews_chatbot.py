@@ -3,7 +3,8 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from mews_model import load_model
 from pathlib import Path
-import os
+
+PROJECT_ROOT = Path(__file__).parent
 
 class MEWSChatbot:
     def __init__(self):
@@ -16,7 +17,7 @@ class MEWSChatbot:
     def load_model(self, model_path=None):
         """Carrega o modelo treinado"""
         if model_path is None:
-            model_path = Path(__file__).parent / "models" / "mews_model.pkl"
+            model_path = PROJECT_ROOT / "models" / "mews_model.pkl"
         
         try:
             if model_path.exists():
@@ -124,4 +125,5 @@ class MEWSChatbot:
                 "threshold_similaridade": self.similarity_threshold,
                 "modelo_carregado": False
             }
+
 
