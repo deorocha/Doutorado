@@ -15,6 +15,22 @@ st.set_page_config(
 st.title("🤖 ChatBot MEWS-LLM")
 st.markdown("Consulta informações detalhadas sobre procedimentos hospitalares com **respostas estruturadas**")
 
+st.markdown("""
+  <style>
+     /* Streamlit class name of the div that holds the expander's title*/
+    .css-q8sbsg p {
+      font-size: 32px;
+      color: red;
+      }
+    
+     /* Streamlit class name of the div that holds the expander's text*/
+    .css-nahz7x p {
+      font-family: bariol;
+      font-size: 20px;
+      }
+  </style>
+""", unsafe_allow_html=True)
+
 # Definir o caminho base do projeto
 PROJECT_ROOT = Path(__file__).parent
 
@@ -227,4 +243,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
