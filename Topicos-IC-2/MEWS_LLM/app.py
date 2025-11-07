@@ -133,8 +133,8 @@ def main():
         
         model_info = chatbot.get_model_info()
         if model_info["modelo_carregado"]:
-            #st.success(f"✅ Modelo IA Carregado")
-            #st.info(f"📚 {model_info['documentos_carregados']} procedimentos")
+            # st.success(f"✅ Modelo IA Carregado")
+            # st.info(f"📚 {model_info['documentos_carregados']} procedimentos")
             
             # Controle de sensibilidade
             threshold = st.slider(
@@ -149,8 +149,6 @@ def main():
         else:
             st.warning("⚠️ Modo Básico")
             st.info("Execute train_model.py para ativar a IA")
-        
-        st.markdown("---")
         
         if st.button("🗑️ Limpar Conversa", use_container_width=True, type="secondary"):
             if 'conversation' in st.session_state:
@@ -170,23 +168,24 @@ def main():
         else:
             st.error("❌ Arquivo procedimentos.json não encontrado")
 
-        st.markdown("""
-        **🎯 Como funciono:**
-        - Forneço respostas **estruturadas** com base científica
-        - Apresento informações em **4 categorias** específicas:
-          1. **Fundamento Fisiológico** - Base científica do procedimento
-          2. **Riscos da Omissão** - Consequências de não realizar o procedimento  
-          3. **Evidências Clínicas** - Comprovações baseadas em estudos
-          4. **Impacto no Paciente** - Efeitos diretos no bem-estar
-        
-        **💡 Exemplos de perguntas:**
-        - "Por que devo verificar sinais vitais regularmente?"
-        - "Qual o fundamento fisiológico da monitorização respiratória?"
-        - "Quais os riscos de não comunicar alterações ao médico?"
-        - "Por que é importante orientar pacientes sobre sinais de alerta?"
-        - "Qual o impacto da documentação no prontuário?"
-        """)
-    
+        with st.container():
+            st.caption("""
+            **🎯 Como funciono:**
+            - Forneço respostas **estruturadas** com base científica;
+            - Apresento informações em **4 categorias** específicas:
+                1. **Fundamento Fisiológico** - Base científica do procedimento
+                2. **Riscos da Omissão** - Consequências de não realizar o procedimento  
+                3. **Evidências Clínicas** - Comprovações baseadas em estudos
+                4. **Impacto no Paciente** - Efeitos diretos no bem-estar
+            
+            **💡 Exemplos de perguntas:**
+                - "Por que devo verificar sinais vitais regularmente?"
+                - "Qual o fundamento fisiológico da monitorização respiratória?"
+                - "Quais os riscos de não comunicar alterações ao médico?"
+                - "Por que é importante orientar pacientes sobre sinais de alerta?"
+                - "Qual o impacto da documentação no prontuário?"
+            """)
+
     # Inicializa conversa
     if 'conversation' not in st.session_state:
         st.session_state.conversation = []
@@ -227,6 +226,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
