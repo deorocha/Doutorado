@@ -131,8 +131,6 @@ def main():
         - 🔴 Vermelho - Emergência
         """)
         
-        st.markdown("---")
-        
         model_info = chatbot.get_model_info()
         if model_info["modelo_carregado"]:
             #st.success(f"✅ Modelo IA Carregado")
@@ -229,6 +227,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
