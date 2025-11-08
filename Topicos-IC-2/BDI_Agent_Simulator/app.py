@@ -514,6 +514,8 @@ def create_communication_diagram(agent_messages, agents):
     
     # Processa TODAS as mensagens para criar comunicações
     communications = []
+    # Conjunto para evitar comunicações duplicadas
+    seen_communications = set()
     
     for i, msg in enumerate(comm_messages):
         message_text = msg['Mensagem']
@@ -527,26 +529,32 @@ def create_communication_diagram(agent_messages, agents):
                 if match:
                     target_agent = match.group(1)
                     if target_agent in agents:
-                        communications.append({
-                            'from': agent,
-                            'to': target_agent,
-                            'message': message_text,
-                            'time': msg['Hora'],
-                            'type': 'SEND',
-                            'y_pos': y_pos
-                        })
+                        # Cria uma chave única para identificar comunicação duplicada
+                        comm_key = (agent, target_agent, 'SEND', message_text)
+                        if comm_key not in seen_communications:
+                            communications.append({
+                                'from': agent,
+                                'to': target_agent,
+                                'message': message_text,
+                                'time': msg['Hora'],
+                                'type': 'SEND',
+                                'y_pos': y_pos
+                            })
+                            seen_communications.add(comm_key)
         
         elif '[BROADCAST]' in message_text:
-            for target_agent in agents:
-                if target_agent != agent:
-                    communications.append({
-                        'from': agent,
-                        'to': target_agent,
-                        'message': message_text,
-                        'time': msg['Hora'],
-                        'type': 'BROADCAST',
-                        'y_pos': y_pos
-                    })
+            # Para broadcast, usamos uma única comunicação com 'ALL'
+            comm_key = (agent, 'ALL', 'BROADCAST', message_text)
+            if comm_key not in seen_communications:
+                communications.append({
+                    'from': agent,
+                    'to': 'ALL',
+                    'message': message_text,
+                    'time': msg['Hora'],
+                    'type': 'BROADCAST',
+                    'y_pos': y_pos
+                })
+                seen_communications.add(comm_key)
         
         elif '[RECV]' in message_text:
             if 'de' in message_text:
@@ -554,24 +562,44 @@ def create_communication_diagram(agent_messages, agents):
                 if match:
                     source_agent = match.group(1)
                     if source_agent in agents:
-                        communications.append({
-                            'from': source_agent,
-                            'to': agent,
-                            'message': message_text,
-                            'time': msg['Hora'],
-                            'type': 'RECV',
-                            'y_pos': y_pos
-                        })
+                        comm_key = (source_agent, agent, 'RECV', message_text)
+                        if comm_key not in seen_communications:
+                            communications.append({
+                                'from': source_agent,
+                                'to': agent,
+                                'message': message_text,
+                                'time': msg['Hora'],
+                                'type': 'RECV',
+                                'y_pos': y_pos
+                            })
+                            seen_communications.add(comm_key)
+            else:
+                # Se não conseguiu extrair o remetente, cria uma comunicação genérica
+                comm_key = ('UNKNOWN', agent, 'RECV', message_text)
+                if comm_key not in seen_communications:
+                    communications.append({
+                        'from': 'UNKNOWN',
+                        'to': agent,
+                        'message': message_text,
+                        'time': msg['Hora'],
+                        'type': 'RECV',
+                        'y_pos': y_pos
+                    })
+                    seen_communications.add(comm_key)
         
         elif '[INFORM]' in message_text:
-            communications.append({
-                'from': agent,
-                'to': 'ALL',
-                'message': message_text,
-                'time': msg['Hora'],
-                'type': 'INFORM',
-                'y_pos': y_pos
-            })
+            # Para INFORM, tratamos como broadcast
+            comm_key = (agent, 'ALL', 'INFORM', message_text)
+            if comm_key not in seen_communications:
+                communications.append({
+                    'from': agent,
+                    'to': 'ALL',
+                    'message': message_text,
+                    'time': msg['Hora'],
+                    'type': 'INFORM',
+                    'y_pos': y_pos
+                })
+                seen_communications.add(comm_key)
         
         elif '[REQUEST]' in message_text:
             if 'para' in message_text:
@@ -579,14 +607,17 @@ def create_communication_diagram(agent_messages, agents):
                 if match:
                     target_agent = match.group(1)
                     if target_agent in agents:
-                        communications.append({
-                            'from': agent,
-                            'to': target_agent,
-                            'message': message_text,
-                            'time': msg['Hora'],
-                            'type': 'REQUEST',
-                            'y_pos': y_pos
-                        })
+                        comm_key = (agent, target_agent, 'REQUEST', message_text)
+                        if comm_key not in seen_communications:
+                            communications.append({
+                                'from': agent,
+                                'to': target_agent,
+                                'message': message_text,
+                                'time': msg['Hora'],
+                                'type': 'REQUEST',
+                                'y_pos': y_pos
+                            })
+                            seen_communications.add(comm_key)
     
     # Cores para diferentes tipos de mensagens
     arrow_colors = {
@@ -604,13 +635,19 @@ def create_communication_diagram(agent_messages, agents):
         if comm['type'] == 'BROADCAST':
             y_pos = y_pos + 0.8
         
+        # Verifica se os agentes existem antes de adicionar setas
+        if comm['from'] not in agent_positions and comm['from'] != 'UNKNOWN':
+            continue
+        if comm['to'] != 'ALL' and comm['to'] not in agent_positions:
+            continue
+        
         if comm['to'] == 'ALL':
             for target_agent in agents:
-                if target_agent != comm['from']:
+                if target_agent != comm['from'] and target_agent in agent_positions:
                     fig.add_annotation(
                         x=agent_positions[target_agent],
                         y=y_pos,
-                        ax=agent_positions[comm['from']],
+                        ax=agent_positions.get(comm['from'], 0),
                         ay=y_pos,
                         xref="x",
                         yref="y",
@@ -623,6 +660,10 @@ def create_communication_diagram(agent_messages, agents):
                         arrowcolor=arrow_colors.get(comm['type'], 'black')
                     )
         else:
+            # Para mensagens de RECV com remetente desconhecido, não desenha seta
+            if comm['from'] == 'UNKNOWN':
+                continue
+                
             fig.add_annotation(
                 x=agent_positions[comm['to']],
                 y=y_pos,
@@ -641,19 +682,33 @@ def create_communication_diagram(agent_messages, agents):
     
     # Adiciona texto das mensagens EM UMA CAMADA SEPARADA para evitar sobreposição
     text_annotations = []
-    broadcast_texts_added = set()  # Para evitar duplicação de textos de broadcast
+    # Conjunto para evitar textos duplicados
+    seen_texts = set()
 
     for comm in communications:
         y_pos = comm['y_pos']
         
         message_short = comm['message'].split(':')[-1].strip().replace("'", "")[:50]
         
+        # Para mensagens de RECV, ajusta o texto para ficar mais claro
+        if comm['type'] == 'RECV':
+            if 'de' in comm['message']:
+                # Extrai apenas a parte da mensagem após "de X:"
+                match = re.search(r'de \w+:\s*(.+)', comm['message'])
+                if match:
+                    message_short = f"Recebido: {match.group(1)}"[:50]
+                else:
+                    message_short = f"Recebido: {message_short}"[:50]
+            else:
+                message_short = f"Recebido: {message_short}"[:50]
+        
         if comm['to'] == 'ALL':
-            # Para BROADCAST, adiciona apenas UMA vez o texto centralizado
-            if comm['message'] not in broadcast_texts_added:
+            # Para BROADCAST/INFORM, adiciona apenas UMA vez o texto centralizado
+            text_key = ('BROADCAST', comm['from'], message_short)
+            if text_key not in seen_texts:
                 # Atribui posições Y sequenciais para broadcasts
-                broadcast_count = len(broadcast_texts_added)
-                text_y = y_pos + 15.0 + (broadcast_count * 6.0)  # Espaçamento garantido
+                broadcast_count = len([t for t in seen_texts if t[0] == 'BROADCAST'])
+                text_y = y_pos + 8.0 + (broadcast_count * 4.0)  # Espaçamento garantido
                 
                 text_annotations.append(dict(
                     x=len(agents) / 2 - 0.5,
@@ -663,17 +718,29 @@ def create_communication_diagram(agent_messages, agents):
                     font=dict(size=10, color="darkblue", family="Arial"),
                     opacity=1.0
                 ))
-                broadcast_texts_added.add(comm['message'])
+                seen_texts.add(text_key)
         else:
-            # Para mensagens ponto-a-ponto
-            text_annotations.append(dict(
-                x=(agent_positions[comm['from']] + agent_positions[comm['to']]) / 2,
-                y=y_pos + 4.0,
-                text=message_short,
-                showarrow=False,
-                font=dict(size=10, color="darkblue", family="Arial"),
-                opacity=1.0
-            ))
+            # Para mensagens ponto-a-ponto (SEND, RECV, REQUEST)
+            text_key = (comm['from'], comm['to'], comm['type'], message_short)
+            if text_key not in seen_texts:
+                # Posiciona o texto acima da seta
+                text_y = y_pos + 4.0
+                
+                # Para RECV, ajusta a posição X para ficar mais próximo do destinatário
+                if comm['type'] == 'RECV':
+                    x_pos = (agent_positions[comm['from']] * 0.3 + agent_positions[comm['to']] * 0.7)
+                else:
+                    x_pos = (agent_positions[comm['from']] + agent_positions[comm['to']]) / 2
+                
+                text_annotations.append(dict(
+                    x=x_pos,
+                    y=text_y,
+                    text=message_short,
+                    showarrow=False,
+                    font=dict(size=10, color="darkblue", family="Arial"),
+                    opacity=1.0
+                ))
+                seen_texts.add(text_key)
     
     # Adiciona todas as anotações de texto de uma vez (SEM CAIXAS)
     for annotation in text_annotations:
@@ -728,7 +795,7 @@ def create_communication_diagram(agent_messages, agents):
             range=[-1, max_height + 6]
         ),
         showlegend=True,
-        height=1000,
+        height=1500,
         width=max(1200, len(agents) * 200),
         plot_bgcolor='white',
         margin=dict(l=50, r=50, t=100, b=50)
@@ -757,6 +824,7 @@ def create_communication_diagram(agent_messages, agents):
     )
     
     return fig
+
 
 def create_sniffer_table(agent_messages, agents):
     """Cria uma tabela estilo sniffer agent"""
