@@ -13,6 +13,13 @@ PROJECT_ROOT = Path(__file__).parent
 st.set_page_config(page_title="Simulador MAS2J", layout="wide")
 st.title("🔍 Analisador de Projetos MAS2J")
 
+def clear_simulation_state():
+    """Limpa o estado da simulação quando um novo projeto é selecionado"""
+    keys_to_clear = ['run_simulation', 'agent_history', 'agent_messages', 'current_project']
+    for key in keys_to_clear:
+        if key in st.session_state:
+            del st.session_state[key]
+
 def get_project_folders():
     """Obtém a lista de pastas de projetos dentro da pasta projects"""
     project_dir = PROJECT_ROOT / "projects"
@@ -820,10 +827,18 @@ if projects:
     
     # Selectbox para escolher o projeto
     selected_project_name = st.sidebar.selectbox("Selecione um projeto:", project_names, index=0)
-    
+
+    # Verifica se o projeto foi alterado
+    if 'current_project' not in st.session_state:
+        st.session_state.current_project = selected_project_name
+    elif st.session_state.current_project != selected_project_name:
+        # Projeto foi alterado - limpa o estado da simulação
+        clear_simulation_state()
+        st.session_state.current_project = selected_project_name
+
     # Encontra o projeto selecionado
     selected_project = next((p for p in projects if p['name'] == selected_project_name), None)
-    
+
     if selected_project:
         # Mostra informações do projeto selecionado
         st.subheader(f"📄 Projeto: {selected_project_name}")
