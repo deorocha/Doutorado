@@ -1,13 +1,17 @@
 import streamlit as st
-import xml.etree.ElementTree as ET
 import re
 import os
 from pathlib import Path
 import time
 from datetime import datetime
 import pandas as pd
+import plotly.graph_objects as go
 
 PROJECT_ROOT = Path(__file__).parent
+
+# Configuração da página
+st.set_page_config(page_title="Simulador MAS2J", layout="wide")
+st.title("🔍 Analisador de Projetos MAS2J")
 
 def get_project_folders():
     """Obtém a lista de pastas de projetos dentro da pasta projects"""
@@ -171,6 +175,84 @@ def parse_mas2j(file_content):
     agents = [agent for agent in agents if agent not in keywords and len(agent) > 1]
     
     return agents
+
+def parse_asl_files(project_info, project_content=None):
+    """Extrai agentes de arquivos .asl - nova função para detectar agentes nos arquivos ASL"""
+    asl_agents = []
+    
+    # Obtém todos os arquivos do projeto
+    all_files = get_all_project_files(project_info, project_content)
+    
+    # Filtra apenas arquivos .asl
+    asl_files = [f for f in all_files if f.suffix.lower() == '.asl']
+    
+    for asl_file in asl_files:
+        try:
+            # Tenta ler o arquivo com diferentes encodings
+            try:
+                with open(asl_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
+            except UnicodeDecodeError:
+                with open(asl_file, 'r', encoding='latin-1') as f:
+                    content = f.read()
+            
+            # Remove comentários para facilitar o parsing
+            content_no_comments = re.sub(r'//.*?$|/\*.*?\*/', '', content, flags=re.MULTILINE | re.DOTALL)
+            
+            # Padrão 1: Busca por definições de agentes no formato Jason/AgentSpeak
+            # Procura por padrões como: !agent_name ou +!goal
+            agent_patterns = [
+                r'!(\w+)',  # Goals que podem indicar nomes de agentes
+                r'\+\s*!(\w+)',  # Adição de goals
+                r'@(\w+)',  # Annotations que podem conter nomes de agentes
+                r'agent\s*:\s*(\w+)',  # Definição explícita de agente
+                r'(\w+)\s*\{',  # Possível definição de agente com chaves
+            ]
+            
+            for pattern in agent_patterns:
+                matches = re.findall(pattern, content_no_comments)
+                asl_agents.extend(matches)
+            
+            # Padrão 2: Busca por includes que podem referenciar agentes
+            include_pattern = r'include\s*"([^"]+)"'
+            includes = re.findall(include_pattern, content_no_comments)
+            for include in includes:
+                # Se o include não tem extensão ou tem extensão .asl, pode ser um agente
+                if '.' not in include or include.endswith('.asl'):
+                    agent_name = include.replace('.asl', '')
+                    asl_agents.append(agent_name)
+            
+            # Padrão 3: O nome do arquivo sem extensão pode ser o nome do agente
+            agent_name_from_file = asl_file.stem
+            if agent_name_from_file and agent_name_from_file not in ['environment', 'utils', 'common']:
+                asl_agents.append(agent_name_from_file)
+                
+        except Exception as e:
+            st.warning(f"Erro ao processar arquivo {asl_file.name}: {e}")
+    
+    # Remove duplicatas e limpa resultados
+    asl_agents = list(set(asl_agents))
+    
+    # Filtra palavras que não são agentes
+    keywords = ['true', 'false', 'not', 'and', 'or', 'if', 'then', 'else', 'forall', 
+                'bel', 'goal', 'test', 'plan', 'source', 'self', 'percept', 'action',
+                'internal', 'external', 'init', 'main', 'stop', 'print', 'send', 'broadcast']
+    asl_agents = [agent for agent in asl_agents if agent not in keywords and len(agent) > 1]
+    
+    return asl_agents
+
+def get_all_agents(project_info, project_content):
+    """Combina agentes do arquivo .mas2j e dos arquivos .asl"""
+    mas2j_agents = parse_mas2j(project_content)
+    asl_agents = parse_asl_files(project_info, project_content)
+    
+    # Combina as listas e remove duplicatas
+    all_agents = list(set(mas2j_agents + asl_agents))
+    
+    # Ordena alfabeticamente para consistência
+    all_agents.sort()
+    
+    return all_agents
 
 def simulate_communication(agents):
     """Simula a comunicação entre agentes e retorna logs, histórico e mensagens"""
@@ -390,9 +472,345 @@ def get_file_language(file_path):
     }
     return language_map.get(extension, 'text')
 
-# Configuração da página
-st.set_page_config(page_title="Simulador MAS2J", layout="wide")
-st.title("🔍 Analisador de Projetos MAS2J")
+def create_communication_diagram(agent_messages, agents):
+    """Cria um diagrama de comunicação entre agentes que mostra TODAS as comunicações"""
+    
+    if not agent_messages:
+        return None
+    
+    # Filtra apenas mensagens de comunicação relevantes
+    comm_messages = [
+        msg for msg in agent_messages 
+        if any(tag in msg['Mensagem'] for tag in ['[SEND]', '[RECV]', '[BROADCAST]', '[INFORM]', '[REQUEST]'])
+    ]
+    
+    if not comm_messages:
+        return None
+    
+    # Cria a figura do diagrama
+    fig = go.Figure()
+    
+    # Posições dos agentes no eixo X
+    agent_positions = {agent: i for i, agent in enumerate(agents)}
+    
+    # Espaçamento vertical entre as setas
+    vertical_spacing = 10.0
+    max_height = max(len(comm_messages) * vertical_spacing, 25)
+    
+    # Adiciona linhas verticais para cada agente
+    for agent, x_pos in agent_positions.items():
+        fig.add_shape(
+            type="line",
+            x0=x_pos, y0=0, x1=x_pos, y1=max_height,
+            line=dict(color="lightgray", width=3)
+        )
+    
+    # Processa TODAS as mensagens para criar comunicações
+    communications = []
+    
+    for i, msg in enumerate(comm_messages):
+        message_text = msg['Mensagem']
+        agent = msg['Agente']
+        y_pos = i * vertical_spacing + 1
+        
+        # Extrai informações da mensagem
+        if '[SEND]' in message_text:
+            if 'para' in message_text:
+                match = re.search(r'para (\w+):', message_text)
+                if match:
+                    target_agent = match.group(1)
+                    if target_agent in agents:
+                        communications.append({
+                            'from': agent,
+                            'to': target_agent,
+                            'message': message_text,
+                            'time': msg['Hora'],
+                            'type': 'SEND',
+                            'y_pos': y_pos
+                        })
+        
+        elif '[BROADCAST]' in message_text:
+            for target_agent in agents:
+                if target_agent != agent:
+                    communications.append({
+                        'from': agent,
+                        'to': target_agent,
+                        'message': message_text,
+                        'time': msg['Hora'],
+                        'type': 'BROADCAST',
+                        'y_pos': y_pos
+                    })
+        
+        elif '[RECV]' in message_text:
+            if 'de' in message_text:
+                match = re.search(r'de (\w+):', message_text)
+                if match:
+                    source_agent = match.group(1)
+                    if source_agent in agents:
+                        communications.append({
+                            'from': source_agent,
+                            'to': agent,
+                            'message': message_text,
+                            'time': msg['Hora'],
+                            'type': 'RECV',
+                            'y_pos': y_pos
+                        })
+        
+        elif '[INFORM]' in message_text:
+            communications.append({
+                'from': agent,
+                'to': 'ALL',
+                'message': message_text,
+                'time': msg['Hora'],
+                'type': 'INFORM',
+                'y_pos': y_pos
+            })
+        
+        elif '[REQUEST]' in message_text:
+            if 'para' in message_text:
+                match = re.search(r'para (\w+):', message_text)
+                if match:
+                    target_agent = match.group(1)
+                    if target_agent in agents:
+                        communications.append({
+                            'from': agent,
+                            'to': target_agent,
+                            'message': message_text,
+                            'time': msg['Hora'],
+                            'type': 'REQUEST',
+                            'y_pos': y_pos
+                        })
+    
+    # Cores para diferentes tipos de mensagens
+    arrow_colors = {
+        'SEND': 'blue',
+        'RECV': 'green', 
+        'BROADCAST': 'orange',
+        'INFORM': 'purple',
+        'REQUEST': 'red'
+    }
+    
+    # Adiciona setas para cada comunicação
+    for comm in communications:
+        y_pos = comm['y_pos']
+        
+        if comm['type'] == 'BROADCAST':
+            y_pos = y_pos + 0.8
+        
+        if comm['to'] == 'ALL':
+            for target_agent in agents:
+                if target_agent != comm['from']:
+                    fig.add_annotation(
+                        x=agent_positions[target_agent],
+                        y=y_pos,
+                        ax=agent_positions[comm['from']],
+                        ay=y_pos,
+                        xref="x",
+                        yref="y",
+                        axref="x",
+                        ayref="y",
+                        showarrow=True,
+                        arrowhead=2,
+                        arrowsize=1.2,
+                        arrowwidth=2.5,
+                        arrowcolor=arrow_colors.get(comm['type'], 'black')
+                    )
+        else:
+            fig.add_annotation(
+                x=agent_positions[comm['to']],
+                y=y_pos,
+                ax=agent_positions[comm['from']],
+                ay=y_pos,
+                xref="x",
+                yref="y",
+                axref="x",
+                ayref="y",
+                showarrow=True,
+                arrowhead=2,
+                arrowsize=1.2,
+                arrowwidth=2.5,
+                arrowcolor=arrow_colors.get(comm['type'], 'black')
+            )
+    
+    # Adiciona texto das mensagens EM UMA CAMADA SEPARADA para evitar sobreposição
+    text_annotations = []
+    broadcast_texts_added = set()  # Para evitar duplicação de textos de broadcast
+
+    for comm in communications:
+        y_pos = comm['y_pos']
+        
+        message_short = comm['message'].split(':')[-1].strip().replace("'", "")[:50]
+        
+        if comm['to'] == 'ALL':
+            # Para BROADCAST, adiciona apenas UMA vez o texto centralizado
+            if comm['message'] not in broadcast_texts_added:
+                # Atribui posições Y sequenciais para broadcasts
+                broadcast_count = len(broadcast_texts_added)
+                text_y = y_pos + 15.0 + (broadcast_count * 6.0)  # Espaçamento garantido
+                
+                text_annotations.append(dict(
+                    x=len(agents) / 2 - 0.5,
+                    y=text_y,
+                    text=message_short,
+                    showarrow=False,
+                    font=dict(size=10, color="darkblue", family="Arial"),
+                    opacity=1.0
+                ))
+                broadcast_texts_added.add(comm['message'])
+        else:
+            # Para mensagens ponto-a-ponto
+            text_annotations.append(dict(
+                x=(agent_positions[comm['from']] + agent_positions[comm['to']]) / 2,
+                y=y_pos + 4.0,
+                text=message_short,
+                showarrow=False,
+                font=dict(size=10, color="darkblue", family="Arial"),
+                opacity=1.0
+            ))
+    
+    # Adiciona todas as anotações de texto de uma vez (SEM CAIXAS)
+    for annotation in text_annotations:
+        fig.add_annotation(annotation)
+    
+    # Adiciona retângulos para cada agente
+    for agent, x_pos in agent_positions.items():
+        # Adiciona retângulo como shape
+        fig.add_shape(
+            type="rect",
+            x0=x_pos - 0.4,
+            y0=max_height + 0.5,
+            x1=x_pos + 0.4,
+            y1=max_height + 10.0,
+            line=dict(color="darkblue", width=1),
+            fillcolor="lightblue",
+            opacity=0.8
+        )
+        
+        # Adiciona texto do agente sem caixa
+        fig.add_annotation(
+            x=x_pos,
+            y=max_height + 5,
+            text=agent,
+            showarrow=False,
+            font=dict(size=10, color="black", family="Arial", weight="bold"),
+            opacity=1.0
+        )
+    
+    # Configura o layout
+    fig.update_layout(
+        title={
+            'text': "Diagrama de Comunicação entre Agentes - Sniffer Agent",
+            'x': 0.5,
+            'xanchor': 'center',
+            'font': {'size': 22, 'family': 'Arial'}
+        },
+        xaxis=dict(
+            title="Agentes",
+            tickmode='array',
+            tickvals=list(agent_positions.values()),
+            ticktext=[],
+            showgrid=False,
+            zeroline=False,
+            range=[-0.5, len(agents) - 0.5]
+        ),
+        yaxis=dict(
+            title="Tempo (Sequência de Comunicação)",
+            showgrid=True,
+            gridcolor="lightgray",
+            zeroline=False,
+            range=[-1, max_height + 6]
+        ),
+        showlegend=True,
+        height=1000,
+        width=max(1200, len(agents) * 200),
+        plot_bgcolor='white',
+        margin=dict(l=50, r=50, t=100, b=50)
+    )
+    
+    # Adiciona legenda manual
+    legend_elements = []
+    for msg_type, color in arrow_colors.items():
+        legend_elements.append(
+            f"<span style='color:{color}; font-weight:bold;'>■</span> {msg_type}"
+        )
+    
+    fig.add_annotation(
+        x=0.02,
+        y=0.55,
+        xref="paper",
+        yref="paper",
+        text="<br>".join(legend_elements),
+        showarrow=False,
+        bgcolor="white",
+        bordercolor="black",
+        borderwidth=1,
+        borderpad=4,
+        font=dict(size=12, family="Arial"),
+        xanchor="left"
+    )
+    
+    return fig
+
+def create_sniffer_table(agent_messages, agents):
+    """Cria uma tabela estilo sniffer agent"""
+    
+    if not agent_messages:
+        return None
+    
+    # Filtra mensagens de comunicação
+    comm_messages = [
+        msg for msg in agent_messages 
+        if any(tag in msg['Mensagem'] for tag in ['[SEND]', '[RECV]', '[BROADCAST]', '[REQUEST]', '[INFORM]'])
+    ]
+    
+    # Cria DataFrame para a tabela
+    data = []
+    for i, msg in enumerate(comm_messages):
+        row = {'Step': i + 1}
+        
+        # Determina o tipo e conteúdo da mensagem
+        message_text = msg['Mensagem']
+        agent = msg['Agente']
+        
+        # Extrai informações específicas
+        msg_type = "UNKNOWN"
+        msg_content = message_text
+        
+        if '[SEND]' in message_text:
+            msg_type = "SEND"
+            if ']:' in message_text:
+                msg_content = message_text.split(']:')[1].strip()
+        elif '[RECV]' in message_text:
+            msg_type = "RECV"
+            if ']:' in message_text:
+                msg_content = message_text.split(']:')[1].strip()
+        elif '[BROADCAST]' in message_text:
+            msg_type = "BROADCAST"
+            if ']:' in message_text:
+                msg_content = message_text.split(']:')[1].strip()
+        elif '[REQUEST]' in message_text:
+            msg_type = "REQUEST"
+            if ']:' in message_text:
+                msg_content = message_text.split(']:')[1].strip()
+        elif '[INFORM]' in message_text:
+            msg_type = "INFORM"
+            if ']:' in message_text:
+                msg_content = message_text.split(']:')[1].strip()
+        
+        # Adiciona a mensagem na coluna do agente correspondente
+        for a in agents:
+            if a == agent:
+                row[a] = f"{msg_type}: {msg_content}"
+            else:
+                row[a] = ""
+        
+        data.append(row)
+    
+    # Cria DataFrame
+    if data:
+        df = pd.DataFrame(data)
+        return df
+    return None
 
 # Obtém lista de projetos (pastas)
 projects = get_project_folders()
@@ -492,7 +910,7 @@ if projects:
             
             with tab3:
                 st.subheader("Agentes Identificados")
-                agents = parse_mas2j(project_content)
+                agents = get_all_agents(selected_project, project_content)
                 
                 if agents:
                     col1, col2 = st.columns([2, 1])
@@ -501,17 +919,39 @@ if projects:
                         st.write("**Lista de Agentes:**")
                         for i, agent in enumerate(agents, 1):
                             st.write(f"{i}. `{agent}`")
+                        
+                        # Mostra estatísticas de detecção
+                        mas2j_agents = parse_mas2j(project_content)
+                        asl_agents = parse_asl_files(selected_project, project_content)
+                        
+                        st.write("**Origem dos Agentes:**")
+                        st.write(f"- Do arquivo .mas2j: {len(mas2j_agents)} agentes")
+                        st.write(f"- Dos arquivos .asl: {len(asl_agents)} agentes")
+                        st.write(f"- **Total único:** {len(agents)} agentes")
                     
                     with col2:
                         st.write("**Estatísticas:**")
                         st.metric("Total de Agentes", len(agents))
+                        
+                        # Mostra contagem de arquivos .asl
+                        all_files = get_all_project_files(selected_project, project_content)
+                        asl_files = [f for f in all_files if f.suffix.lower() == '.asl']
+                        st.metric("Arquivos .asl", len(asl_files))
                 else:
-                    st.warning("⚠️ Nenhum agente identificado no arquivo!")
-                    st.info("💡 Dica: Verifique se o arquivo segue o formato .mas2j correto")
+                    st.warning("⚠️ Nenhum agente identificado no projeto!")
+                    st.info("""
+                    💡 Dicas para identificação de agentes:
+                    - Verifique se o arquivo .mas2j segue o formato correto
+                    - Os arquivos .asl devem conter definições de agentes
+                    - Nomes de agentes são geralmente detectados de:
+                      * Definições no arquivo .mas2j
+                      * Goals (!nome_do_agente) nos arquivos .asl
+                      * Nomes dos arquivos .asl (sem extensão)
+                    """)
             
             with tab4:
                 st.subheader("Simulação de Execução")
-                agents = parse_mas2j(project_content)
+                agents = get_all_agents(selected_project, project_content)
                 
                 if agents:
                     # Controles de simulação
@@ -535,7 +975,7 @@ if projects:
                     if st.session_state.get('run_simulation', False):
                         logs, agent_history, agent_messages = simulate_communication(agents)
                         
-                        # Container para logs com rolagem
+                        # Container para logs
                         log_container = st.container()
                         with log_container:
                             st.write("**Logs de Execução:**")
@@ -572,8 +1012,6 @@ if projects:
                                 history_df = create_agent_history_table(st.session_state.agent_history, agent)
                                 if not history_df.empty:
                                     st.write(f"**Histórico do Agente {agent}**")
-                                    
-                                    # Exibe a tabela sem estilização
                                     st.dataframe(history_df, use_container_width=True)
                                     
                                     # Estatísticas do agente
@@ -581,11 +1019,9 @@ if projects:
                                     with col1:
                                         st.metric("Total de Ciclos", len(history_df))
                                     with col2:
-                                        # Contar crenças (separadas por vírgula)
                                         total_beliefs = sum(len(beliefs.split(',')) for beliefs in history_df['Crenças'])
                                         st.metric("Total de Crenças", total_beliefs)
                                     with col3:
-                                        # Contar metas (separadas por vírgula)
                                         total_goals = sum(len(goals.split(',')) for goals in history_df['Metas'])
                                         st.metric("Total de Metas", total_goals)
                                 else:
@@ -609,7 +1045,6 @@ if projects:
                             unique_agents = messages_df['Agente'].nunique()
                             st.metric("Agentes Ativos", unique_agents)
                         with col3:
-                            # Contar tipos de mensagens
                             send_count = messages_df['Mensagem'].str.contains('\\[SEND\\]').sum()
                             recv_count = messages_df['Mensagem'].str.contains('\\[RECV\\]').sum()
                             st.metric("Env/Recv", f"{send_count}/{recv_count}")
@@ -619,12 +1054,10 @@ if projects:
                         col1, col2 = st.columns(2)
                         
                         with col1:
-                            # Filtro por agente
                             all_agents = ["Todos"] + list(messages_df['Agente'].unique())
                             selected_agent = st.selectbox("Filtrar por agente:", all_agents)
                         
                         with col2:
-                            # Filtro por tipo de mensagem
                             message_types = ["Todos", "INIT", "SEND", "RECV", "BROADCAST", "INFO"]
                             selected_type = st.selectbox("Filtrar por tipo:", message_types)
                         
@@ -657,8 +1090,99 @@ if projects:
             with tab6:
                 st.subheader("📊 Sniffer Agent")
                 
-        else:
-            st.error(f"❌ Erro ao carregar o arquivo do projeto: {selected_project_name}")
+                if 'agent_messages' in st.session_state and st.session_state.agent_messages:
+                    agents = get_all_agents(selected_project, project_content)
+                    
+                    if agents:
+                        # Cria o diagrama de comunicação
+                        st.subheader("Diagrama de Comunicação")
+                        comm_diagram = create_communication_diagram(st.session_state.agent_messages, agents)
+                        
+                        if comm_diagram:
+                            # Renderizar o gráfico
+                            st.plotly_chart(comm_diagram, use_container_width=True, config={
+                                'scrollZoom': True,
+                                'displayModeBar': True,
+                                'responsive': True
+                            })
+                            
+                            # Legenda detalhada
+                            st.markdown("""
+                            **Legenda do Diagrama:**
+                            - 🔵 **SEND**: Mensagem enviada de um agente para outro
+                            - 🟢 **RECV**: Mensagem recebida de outro agente  
+                            - 🟠 **BROADCAST**: Mensagem enviada para todos os agentes
+                            - 🟣 **INFORM**: Mensagem informativa geral
+                            - 🔴 **REQUEST**: Mensagem de requisição
+                            - Cada linha vertical representa um agente
+                            - As setas mostram a direção da comunicação
+                            - A posição vertical representa a sequência temporal
+                            """)
+                            
+                            # Tabela estilo sniffer
+                            st.subheader("Tabela de Comunicação - Sniffer Agent")
+                            sniffer_table = create_sniffer_table(st.session_state.agent_messages, agents)
+                            
+                            if sniffer_table is not None:
+                                # Renderizar a tabela
+                                st.dataframe(sniffer_table, use_container_width=True)
+                                
+                                # Estatísticas de comunicação
+                                st.subheader("Estatísticas de Comunicação")
+                                
+                                total_messages = len([m for m in st.session_state.agent_messages 
+                                                    if any(tag in m['Mensagem'] for tag in ['SEND', 'RECV', 'BROADCAST', 'INFORM', 'REQUEST'])])
+                                
+                                send_count = len([m for m in st.session_state.agent_messages if '[SEND]' in m['Mensagem']])
+                                recv_count = len([m for m in st.session_state.agent_messages if '[RECV]' in m['Mensagem']])
+                                broadcast_count = len([m for m in st.session_state.agent_messages if '[BROADCAST]' in m['Mensagem']])
+                                inform_count = len([m for m in st.session_state.agent_messages if '[INFORM]' in m['Mensagem']])
+                                request_count = len([m for m in st.session_state.agent_messages if '[REQUEST]' in m['Mensagem']])
+                                
+                                col1, col2, col3, col4, col5 = st.columns(5)
+                                with col1:
+                                    st.metric("Total Mensagens", total_messages)
+                                with col2:
+                                    st.metric("Envios (SEND)", send_count)
+                                with col3:
+                                    st.metric("Recebimentos (RECV)", recv_count)
+                                with col4:
+                                    st.metric("Broadcasts", broadcast_count)
+                                with col5:
+                                    st.metric("Inform/Request", f"{inform_count}/{request_count}")
+                                
+                                # Análise de padrões de comunicação
+                                st.subheader("Análise de Padrões de Comunicação")
+                                
+                                # Calcula matriz de comunicação
+                                comm_matrix = {}
+                                for agent in agents:
+                                    comm_matrix[agent] = {}
+                                    for other_agent in agents:
+                                        comm_matrix[agent][other_agent] = 0
+                                
+                                # Preenche a matriz
+                                for msg in st.session_state.agent_messages:
+                                    if '[SEND]' in msg['Mensagem'] and 'para' in msg['Mensagem']:
+                                        match = re.search(r'para (\w+):', msg['Mensagem'])
+                                        if match:
+                                            target_agent = match.group(1)
+                                            if target_agent in agents:
+                                                comm_matrix[msg['Agente']][target_agent] += 1
+                                
+                                # Mostra matriz de comunicação
+                                st.write("**Matriz de Comunicação (envios):**")
+                                comm_df = pd.DataFrame(comm_matrix).fillna(0).astype(int)
+                                st.dataframe(comm_df, use_container_width=True)
+                                
+                            else:
+                                st.info("Nenhuma mensagem de comunicação encontrada para exibir na tabela sniffer.")
+                        else:
+                            st.info("Não foi possível gerar o diagrama de comunicação.")
+                    else:
+                        st.warning("Nenhum agente encontrado no projeto para exibir o sniffer.")
+                else:
+                    st.info("Execute a simulação primeiro para visualizar o Sniffer Agent.")
 
 else:
     st.error("📂 Nenhum projeto encontrado na pasta './projects'")
