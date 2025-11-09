@@ -1,0 +1,899 @@
+Cuidado Ubíquo de Pacientes com Doenças Crônicas Através de
+um Modelo de Análise do Comportamento Humano
+Lucas Pfeiffer Salomão Dias∗
+L.P.S. Dias∗
+lucaspfsd@gmail.com
+Universidade do Vale do Rio dos Sinos (UNISINOS)
+São Leopoldo, RS
+Jorge Luis Victória Barbosa
+J.L.V. Barbosa
+jbarbosa@unisinos.br
+Universidade do Vale do Rio dos Sinos (UNISINOS)
+São Leopoldo, RS
+4. A Seção 5 apresenta as
+questões éticas envolvendo a avaliação do modelo e por fim na
+seção 6, são apresentadas as conclusões e trabalhos futuros.
+TRABALHOS RELACIONADOS
+Este artigo revisou trabalhos da literatura que tinham por objetivo
+desenvolver modelos para inferir comportamentos humanos rela-
+cionados às DCNTs. Essa seção aborda esses trabalhos relacionados,
+os quais foram selecionados de acordo com a metodologia descrita
+na Subseção 2.1.
+2.1
+Metodologia
+Os trabalhos relacionados foram obtidos através de um mapea-
+mento sistemático [7]. Este mapeamento seguiu a metodologia de
+Petersen et al. [21] a qual executa um processo de pesquisa dividida
+em três etapas principais: especificação da string de busca, seleção
+WebMedia’2024, Juiz de Fora, Brazil
+Dias and Barbosa
+das bases de pesquisa e coleta de resultados. A primeira etapa re-
+alizou a identificação dos principais termos da área de estudo e
+seus sinônimos mais relevantes. Este estudo define os termos prin-
+cipais como Behavior, Noncommunicable Diseases e Data Analysis. A
+Tabela 1 apresenta esses termos e seus sinônimos relacionados. Os
+sinônimos para o termo “Behavior” estão relacionados ao comporta-
+mento humano. Por sua vez, os sinônimos para “Noncommunicable
+Diseases” foram selecionados por meio de termos que permitissem
+a cobertura das variações do termo “DCNT" e das DCNTs mais
+comuns [33]. Finalmente, os sinônimos para o termo “Data Anal-
+ysis” abrangem tópicos relacionados à ciência de dados. Algumas
+bases possuem limites de termos na string de busca e, portanto,
+esses termos precisam ter baixa ambiguidade para fazer uma busca
+assertiva.
+Tabela 1: Estrutura da string de busca
+Termos principais
+Termos da Busca
+Behavior
+(behavior OR personality OR habit OR attitude)
+AND
+Noncommunicable Diseases
+(“noncommunicable diseases” OR “chronic diseases” OR “risk
+factors” OR “chronic conditions” OR diabetes OR cancer OR
+“cardiovascular diseases” OR “respiratory diseases” OR depres-
+sion)
+AND
+Data Analysis
+(“data analysis” OR “data analytics” OR “statistical learning”
+OR “machine learning” OR “deep learning” OR “data mining”)
+Depois de construir a string de busca, a próxima etapa selecionou
+as bases de pesquisa para consulta de artigos. Este estudo considerou
+as seguintes bases: PsycArticles, PsycInfo, PubMed Central, Bib-
+lioteca Digital ACM, Biblioteca Digital IEEE Xplore, Science Direct,
+Biblioteca Springer e Wiley.
+A etapa de coleta de resultados obteve 41 trabalhos, mas ape-
+nas oito artigos estão relacionados à mesma área de estudo desta
+pesquisa. Estes trabalhos propuseram modelos para a análise de
+comportamentos relacionados a hábitos alimentares e atividades
+físicas, para o tratamento e acompanhamento de indivíduos com
+DCNTs.
+2.2
+Descrição dos Trabalhos relacionados
+Esta subseção descreve os trabalhos relacionados que foram utiliza-
+dos como base de comparação para o desenvolvimento do trabalho
+proposto.
+Bohanec et al. [3] desenvolveu um sistema de apoio à decisão
+chamado HeartMan. Este sistema serve como suporte ao paciente
+para auxiliar no tratamento, como gerenciamento de medicamentos,
+exercícios, nutrição e automonitoramento.
+Meegahapola et al. [13] estudou o nível de consumo alimentar
+de 84 estudantes universitários no México por meio do uso de sen-
+sores de smartphones e autorrelatos passivos. Este estudo encontrou
+relação entre consumo alimentar e fatores de sociabilidade, tipos e
+níveis de atividades.
+Krzyzanowski et al. [12] desenvolveu um sistema para moni-
+torar a atividade física e a ingestão de frutas e vegetais chamado
+Rams Have Heart para apoiar um curso de intervenção em doenças
+cardiovasculares.
+Pérez-Rodríguez et al. [20] propôs uma nova metodologia para
+analisar rotinas e recursos comportamentais por contexto para
+detectar depressão em estudantes universitários. Por meio de in-
+terações sociais, a metodologia identifica e interpreta o compor-
+tamento, as percepções e as apreciações dos pacientes e parentes
+próximos sobre uma condição de saúde.
+Ismail et al. [10] propôs um modelo de saúde baseado em redes
+neurais convolucionais para analisar fatores de saúde no ambiente
+da Internet das Coisas (IoT). O modelo realiza a classificação dos
+dados, selecionando primeiro os fatores mais importantes relaciona-
+dos à saúde.
+Ramsingh e Bhuvaneswari [24] desenvolveram um algoritmo
+para análise de postagens relacionadas ao diabetes em redes soci-
+ais. A classificação é realizada por meio da frequência de uso das
+palavras com base na pontuação de polaridade de cada frase nos
+dados das mídias sociais.
+Chen et al. [4] propôs o Smart Web Aid para prevenção de
+Diabetes Tipo 2 (SWAP-DM2), um sistema baseado na web para
+prevenção e tratamento do diabetes. O sistema identifica hábitos
+propensos ao desenvolvimento de diabetes por meio de perguntas
+e apresenta material educativo.
+Bentley et al. [2] desenvolveu um sistema chamado Health Mashups
+para promover mudanças de comportamento. A proposta era iden-
+tificar padrões estatísticos entre dados de bem-estar e contexto
+em linguagem natural. O sistema coleta manualmente informações
+sobre agenda do usuário, atividades físicas, sono, humor e dados
+alimentares, entre outros.
+Para todos os trabalhos selecionados foram explorados aspectos
+de pesquisa, a fim de analisar os seguintes critérios:
+• Doença Crônica: este critério visa identificar quais são as
+doenças crônicas tratadas pelas obras;
+• Mobile: este item tem como objetivo identificar se o usuário
+pode acessar em um dispositivo móvel, permitindo atendi-
+mento em tempo real e acesso rápido quando necessário;
+• Histórico de Contexto: este critério busca determinar foram
+armazenadas informações de contexto do usuário ao longo
+do tempo para fazer inferências baseadas em contextos ante-
+riores;
+• Perfil: este critério visa identificar se as obras utilizam perfis
+para customizar a experiência do usuário [27]. Considerar a
+utilização de recursos que agrupem características e infor-
+mações únicas do usuário;
+• Análise de Dados: o objetivo deste critério é identificar qual
+técnica de análise de dados de comportamento humano o
+trabalho aplicou;
+• Dados Coletados: esse critério busca determinar quais tipos
+de dados são coletados, como atividades físicas, hábitos al-
+imentares e número de passos, entre outros dados que o
+paciente pode fornecer;
+• Modular: este critério visa identificar se os trabalhos possuem
+alguma forma de extensão de módulos, podendo agregar
+recursos ou novas competências;
+• Base de Conhecimento: este critério busca determinar se
+o trabalho contém ou não uma base de conhecimento ou
+ontologia;
+• Análise de Conselhos: este critério visa identificar quais tra-
+balhos analisam se os usuários estão praticando comporta-
+mentos recomendados.
+Cuidado Ubíquo de Pacientes com Doenças Crônicas Através de um Modelo de Análise do Comportamento Humano
+WebMedia’2024, Juiz de Fora, Brazil
+Tabela 2: Trabalhos Relacionados
+Artigos
+DCNTs
+Móvel
+Histórico de
+Contexto
+Perfil Análise de Dados
+Dados Coletados
+Modular Base de Conhecimento
+Análise de
+Conselhos
+Bohanec et al. [3]
+Insuficiência
+Cardíaca
+Sim
+Não
+Sim
+DEX (Decision EXpert)
+Hábitos alimentares, atividades físicas
+Não
+Não
+Não
+Meegahapola et al.
+[13]
+Obesidade
+Sim
+Não
+Não
+Não
+Hábitos alimentares, uso de celular,
+atividades físicas
+Não
+Não
+Não
+Krzyzanowski et al.
+[12]
+Obesidade
+Sim
+Não
+Não
+Não
+Hábitos alimentares, atividades físicas
+Não
+Não
+Não
+Pérez-Rodríguez et
+al. [20]
+Diabetes
+Não
+Não
+Não
+Natural Language Processing,
+Machine Learning, Graph Mining
+Hábitos alimentares, atividades físicas
+Sim
+Knowledge Graph
+Não
+Ismail et al. [10]
+Obesidade
+Não
+Não
+Não
+Double-layer CNN structure
+Hábitos alimentares, atividades físicas
+Sim
+CNN-Based
+Health
+Knowledge Model
+Não
+Ramsingh and Bhu-
+vaneswari [24]
+Diabetes
+Não
+Não
+Não
+Hybrid NBC TFIDF, Naive Bayes,
+MapReduce
+Hábitos alimentares, atividades físicas
+Sim
+Não
+Não
+Chen et al. [4]
+Diabetes
+Não
+Não
+Não
+SPSS 16.0
+Hábitos alimentares, atividades físicas
+Não
+Não
+Não
+Bentley et al. [2]
+Geral
+Sim
+Não
+Não
+Não
+Comportamento diário, atividades
+físicas, hábitos alimentares
+Não
+Não
+Não
+B-Track
+Geral
+Sim
+Sim
+Sim
+Data Fusion
+Dados relacionados com
+comportamentos humanos
+Sim
+Ontologia
+Sim
+A Tabela 2 apresenta cada um dos critérios comparando os tra-
+balhos relacionados e o modelo. A maioria dos trabalhos possui
+pelo menos um dos critérios definidos. Além disso, nenhum dos
+trabalhos utilizou os critérios histórico de contextos e análise de
+conselhos. Além disso, nenhum trabalho suportou todos os itens
+simultaneamente. A análise de aconselhamento tem o papel de com-
+parar os comportamentos dos utilizadores com as recomendações
+feitas durante o acompanhamento dos utilizadores e analisar ao
+longo do tempo se houve uma mudança de comportamento re-
+sultante da recomendação feita. Esta característica está presente
+apenas no modelo B-Track. Em geral, os estudos focam na edu-
+cação de hábitos saudáveis e acompanhando, muitos por meio de
+questionários e sensores disponíveis em smartphones.
+A análise dos trabalhos relacionados revelou que a contribuição
+científica do modelo B-Track é a análise dos comportamentos hu-
+manos diretamente associados aos fatores de risco e sua suscetibili-
+dade ao desenvolvimento de DCNTs.
+MODELO
+O B-Track é um modelo para assistência no cuidado das DCNTs
+por meio da análise do comportamento humano e sua relação com
+os fatores de risco associados às doenças.
+3.1
+Arquitetura
+A arquitetura B-Track é organizada em tipos de componentes, como
+módulos, agentes, aplicações e ontologias. A Figura 1 mostra o Dia-
+grama de Componentes expandindo-se em um contêiner individual
+do B-Track e mostrando os componentes dentro dele.
+A Figura 1 apresenta no canto superior esquerdo os módulos da
+Mobile Application. Os módulos estão listados a seguir:
+• Behavior Tips Module: este item tem como objetivo fornecer
+ao usuário dicas para praticar comportamentos preventivos;
+• Account Module: este módulo tem como objetivo identificar
+os usuários, permitindo-lhes acessar o sistema, visualizar e
+editar seus dados gerais;
+• Gamification Module: este item busca engajar o usuário na
+execução das tarefas, mostra as pontuações e faz com que as
+interações da pontuação e os comportamentos dos usuários
+mudem;
+• Context Module: este módulo tem como objetivo coletar o con-
+texto do usuário minuto a minuto, construindo um contexto
+histórico que permite ao usuário entender suas atividades e
+hábitos;
+• Sync Module: o objetivo deste item é enviar dados do banco de
+dados local para a API e recuperar dicas de comportamento
+e métricas do usuário, enviando-os para o BD local.
+A Figura 1 apresenta no canto superior direito os módulos da
+Web Application e eles estão listados a seguir:
+• Account Module: este módulo tem como objetivo identificar
+os profissionais de saúde, permitindo-lhes acessar o sistema,
+visualizar e editar seus dados gerais;
+• Patient Influence Analysis Module: este item permite ao profis-
+sional de saúde compreender os hábitos de cada paciente e o
+impacto dos comportamentos;
+• Patient Profile Module: este módulo tem como objetivo per-
+mitir a visualização do perfil do paciente, das DCNTs e dos
+fatores de risco específicos de suscetibilidade do paciente.
+Finalmente, a Figura 1 apresenta os controladores da API Appli-
+cation na parte inferior central. Os controladores deste aplicativo
+estão listados a seguir:
+• User Controller: este item permite que a aplicação do usuário
+e a aplicação administrativa gerenciem os dados pessoais dos
+usuários, como perfis, comportamento humano, contextos,
+entre outros;
+• Context Controller: este controlador tem como objetivo ajudar
+o controlador do usuário e o agente de análise de comporta-
+mento a gerenciar o contexto coletado pelo usuário;
+• Influence Controller: este item tem como objetivo permitir
+que a aplicação administrativa e o agente de monitoramento
+de influência gerenciem a influência da dica no comporta-
+mento do usuário;
+• Behavior Controller: este controlador permite que o agente de
+análise de comportamento e o agente de monitoramento de
+influência gerenciem comportamentos humanos coletados
+dos usuários;
+WebMedia’2024, Juiz de Fora, Brazil
+Dias and Barbosa
+Figura 1: Diagrama de Componentes
+• Profile Controller: este item tem como objetivo permitir que o
+agente de análise de fatores de risco e a aplicação administra-
+tiva gerenciem os perfis dos usuários, onde são feitas DCNTs,
+fatores de risco, comportamentos e dicas aos usuários;
+• Ontology Controller: este item permite que o agente extensor
+de ontologia gerencie consultas de ontologias, adicionando
+novos conhecimentos de inferência de comportamentos hu-
+manos e fatores de risco.
+3.2
+Aplicações do modelo
+O modelo B-Track é composto por duas aplicações: a Aplicação do
+Usuário, que interage com os pacientes, e a Aplicação Administra-
+tiva, que interage com os profissionais de saúde. Essas aplicações
+são detalhadas nas subseções a seguir.
+3.2.1
+Aplicação do Usuário. A Aplicação do Usuário permite o
+acesso a alguns dados pessoais do usuário, como e-mail, nome,
+idade, doença e lista de seus profissionais de saúde. O usuário pode
+usar essas informações se sentir piora dos sintomas de DCNT. Inter-
+namente, em B-Track, essas informações são armazenadas em um
+banco de dados de forma que não seja possível identificar o usuário,
+e para o sistema, são reconhecidas através de uma identificação
+única.
+Portanto, este aplicativo poderá sempre acompanhar o usuário e
+recomendar a prática de atividades saudáveis. Portanto, entende-
+se como a Aplicação do Usuário de um ou mais dispositivos que
+garantam as características descritas acima.
+3.2.2
+Aplicação Administrativa. O modelo B-Track permite que
+agentes públicos e profissionais de saúde obtenham insights sobre
+o comportamento dos usuários. Os agentes públicos podem pro-
+mover a saúde pública aos seus cidadãos e os profissionais de saúde
+podem monitorizar o desempenho dos seus pacientes, configurando
+recomendações personalizadas. Assim, o Aplicativo Administrativo
+tem como objetivo informar os profissionais de saúde com relatórios
+de evolução dos usuários. Este aplicativo apresenta os comporta-
+mentos identificados, o nível de intensidade na associação com os
+fatores de risco para DCNTs, as recomendações oferecidas e uma
+análise da mudança de comportamento.
+Diferentemente do Aplicativo do Usuário, o profissional de saúde
+utilizará o Aplicativo de Administração somente quando achar
+conveniente acessar os dados do usuário ou desejar atualizar seu
+perfil.
+3.3
+Agentes
+O modelo proposto possui ações autônomas na análise de con-
+texto, análise de fatores de risco, monitoramento da influência das
+recomendações e análise de extensão da ontologia. Essas ações
+acontecem de forma contínua e simultânea para se adaptarem de
+acordo com os hábitos comportamentais dos usuários coletados.
+Por esta razão, o modelo B-Track possui agentes.
+O agente tem como características ser autônomo, proativo e
+inteligente. Esses conceitos são abstratos, permitindo muitas ferra-
+mentas para modelá-los. As abstrações da Prometheus Design Tool
+(PDT) [17] representam os agentes de B-Track.
+A Figura 2 apresenta uma visão geral dos agentes em B-Track,
+mostrando os quatro agentes presentes no modelo, nomeadamente
+o Behavior Analysis Agent, o Risk Factor Analysis Agent, o Influence
+Monitoring Agent e Ontology Extender Agent. Cada um dos agentes
+será descrito detalhadamente nas próximas subseções.
+3.3.1
+Behavior Analysis Agent. Para que B-Track analise adequada-
+mente os hábitos comportamentais diários dos usuários, o modelo
+precisa estar ciente do contexto deles, bem como se adaptar às mu-
+danças neste contexto. A figura 1 mostra os módulos do Behavior
+Analysis Agent no canto central esquerdo. O contexto é percebido
+por este agente através do Context Module, que recebe da Core API
+Cuidado Ubíquo de Pacientes com Doenças Crônicas Através de um Modelo de Análise do Comportamento Humano
+WebMedia’2024, Juiz de Fora, Brazil
+Figura 2: Visão geral dos agentes do B-Track
+os dados de contexto coletados da User Application e constrói um
+histórico de contexto para cada usuário específico.
+O Módulo de Análise de Dados possui algoritmos de aprendizado
+de máquina e fusão de dados, que analisam os históricos de contexto
+e reconhecem os comportamentos humanos neles contidos. Por-
+tanto, o Behavior Module identifica esses comportamentos humanos
+especificamente para cada usuário e envia esses dados para a Core
+API.
+3.3.2
+Risk Factor Analysis Agent. Um dos objetivos do B-Track é
+identificar os comportamentos dos usuários que estão associados
+aos fatores de risco de DCNTs, portanto esta tarefa é realizada pelo
+Agente de Análise de Fatores de Risco. A Figura 1 apresenta os mó-
+dulos deste agente no canto inferior esquerdo. Ao identificar os
+comportamentos dos usuários, o Risk Factor Module deste agente
+realiza a análise através de inferências realizadas pela ontologia
+B-Track. Essas inferências identificam a relação entre os compor-
+tamentos e os fatores de risco. O NCD Module identifica a quais
+DCNTs um usuário está suscetível após a identificação dos fatores
+de risco. Assim, o Preventive Behavior Module pode recomendar
+comportamentos preventivos a serem realizados pelo usuário.
+3.3.3
+Influence Monitoring Agent. Além de analisar o comporta-
+mento dos usuários para identificar o risco de desenvolver uma
+DCNT, o modelo B-Track recomenda a prática de hábitos saudáveis,
+portanto o modelo verifica a influência dessas recomendações. A
+Figura 1 apresenta os módulos do Influence Monitoring Agent no
+canto central direito. A influência acontece comparando os com-
+portamentos anteriores dos usuários com os novos. Assim, a expec-
+tativa é que os comportamentos não preventivos diminuam e os
+preventivos aumentem, indicando que o usuário está seguindo as
+recomendações de hábitos saudáveis.
+3.3.4
+Ontology Extender Agent. O modelo B-Track utiliza como
+base de conhecimento uma ontologia chamada B-Track Onto. O
+modelo proposto pode adquirir novos conhecimentos sobre a asso-
+ciação entre comportamento humano e fatores de risco. A Figura 1
+apresenta os módulos do Ontology Extender Agent no canto inferior
+direito. A abordagem utilizada por esse agente depende da curado-
+ria de um especialista para definir os novos fatores de risco de
+DCNTs e associá-los aos comportamentos existentes identificados
+pelo modelo B-Track. A tarefa de agregar esse novo conhecimento
+à ontologia é de responsabilidade do Ontology Extender Agent.
+3.4
+B-Track Onto
+A ontologia utilizada contempla as classes necessárias para recon-
+hecer os comportamentos relacionados aos fatores de risco [22, 23],
+como por exemplo consumo de tabaco, sódio ou exposição ao sol,
+que foram mapeados pela Organização Mundial da Saúde [33].
+A Figura 3 apresenta a ontologia, suas relações entre os conceitos
+envolvendo comportamentos humanos, fatores de risco e DCNTs.
+A modelagem foi realizada de forma a categorizar comportamentos,
+suas frequências, suscetibilidade com os fatores de risco, possibili-
+tando novas correlações. Desta forma, a ontologia possui a classe
+HumanAction à qual são atribuídas as ações humanas. A frequên-
+cia dessas ações são atribuídas à classe HumanActionFrequency. A
+classe HumanBehavior representa o comportamento humano na
+Ontologia. O comportamento é composto pela associação de uma
+ação humana e uma frequência.
+A Organização Mundial da Saúde categoriza os fatores de risco
+como fatores metabólicos ou modificáveis [32], que são atribuídos
+pela classe RiskFactor e suas subclasses Metabolic e ModifiableBe-
+havioral. A suscetibilidade do fator de risco acontecer é descrita na
+classe Susceptibility e possui 3 subclasses PossibleLowSusceptibility,
+PossibleNormalSusceptibility e PossibleHighSusceptibility.
+A classe NonCommunicableDisease possui 5 subclasses a qual são
+atribuídas as doenças crônicas, sendo elas: Cancer, Cardiac, Mental,
+Respiratory e Sanguineous. Uma pessoa sem doenças crônicas é
+representada na ontologia pela classe Person. Quando uma pessoa
+estiver associada a uma doença crônica, ela é atribuída à subclasse
+Patient.
+A classe Profile representa os perfis que reúnem pessoas com com-
+portamentos similares e possui recomendações de comportamentos
+preventivos oriundas da classe Recommendation. O nível de influên-
+cia dessa recomendação é representada pela classe InfluenceLevel, e
+WebMedia’2024, Juiz de Fora, Brazil
+Dias and Barbosa
+Figura 3: Visão hierárquica da B-Track Onto.
+possui 3 subclasses: AcceptSuggestion, Neutral e NotAcceptSugges-
+tion.
+No B-Track, um comportamento humano está associado a uma
+ação e uma frequência. Além disso, este comportamento possui
+uma suscetibilidade relacionada a um fator de risco, que está rela-
+cionado com doenças crônicas. As recomendações possuem níveis
+de influência e estão associados a perfis de pessoas. A B-Track Onto
+infere comportamentos humanos a partir das regras estabeleci-
+das, classificando esses comportamentos. Assim, essa classificação
+permite identificar os fatores de risco relacionados com estes com-
+portamentos humanos de forma automática.
+AVALIAÇÃO E RESULTADOS
+Para avaliar o modelo proposto neste trabalho, foi implementado
+um protótipo baseado no B-Track. Após a criação do protótipo,
+foram selecionados 10 pacientes com alguma DCNT para utilizar o
+protótipo por pelo menos duas semanas. Esses pacientes utilizaram
+o protótipo para informar suas atividades físicas praticadas diaria-
+mente e dieta alimentar, preenchendo questionários visuais, infor-
+mando quantidade e tipos de cada item. Essas informações foram
+utilizadas pelo protótipo para analisar comportamentos humanos e
+recomendar comportamentos saudáveis.
+A avaliação mostrou a capacidade do modelo em analisar com-
+portamentos, identificar comportamentos não preventivos e sugerir
+comportamentos benéficos à saúde. Para preservar a identidade dos
+pacientes que utilizaram B-Track serão identificados como P1, P2,
+P3, P4, P5, P6, P7, P8, P9 e P10.
+4.1
+Hábitos dos Pacientes
+O B-Track coleta hábitos dos pacientes para analisar e classificar
+os comportamentos que atenuam (preventivos) ou pioram (não
+preventivos) os fatores de risco associados às DCNTs. Usando os
+dados de hábitos coletados dos pacientes ao longo de uma semana,
+o modelo B-Track determina se um comportamento específico é
+"Raramente", "Normal", "Frequente" ou "Excessivo".
+Esta definição utiliza tanto a quantidade quanto a frequência de
+um hábito. Os hábitos alimentares são categorizados como “Nen-
+hum”, “Muito Pouco”, “Pouco”, “Moderado”, “Alto” e “Muito Alto”.
+Os hábitos de exercício são categorizados como “Nenhum”, “Mod-
+erado” e “Forte”. A frequência é definida pelo número de dias da
+semana de ocorrências. "Raramente" é definido como 2 ou menos
+ocorrências, "Normal" como 3 ou 4, "Frequente" como 5 ou 6 e "Ex-
+cessivo" como 7 dias por semana. A mesma definição de frequência
+se aplica tanto à dieta quanto aos hábitos de exercício.
+A Figura 4 apresenta os 10 principais comportamentos preven-
+tivos dos pacientes, o modelo B-Track define hábitos preventivos
+como aqueles que não estão associados a nenhum fator de risco.
+Praticar Aeróbico Excessivo foi o hábito mais preventivo com 31%,
+seguido por Beber Álcool Raramente e Comer Proteínas do Mar
+Raramente com 9%, com Comer Frituras Raramente, Comer Gor-
+dura Raramente e Comer Açúcar Raramente com 8%. Comer sal
+raramente, comer pimenta raramente, beber suco raramente e beber
+leite raramente a 7%.
+Figura 4: Comportamentos preventivos dos pacientes
+Cuidado Ubíquo de Pacientes com Doenças Crônicas Através de um Modelo de Análise do Comportamento Humano
+WebMedia’2024, Juiz de Fora, Brazil
+O B-Track coleta hábitos dos pacientes para analisar e classificar
+os comportamentos que atenuam (preventivos) ou pioram (não
+preventivos) os fatores de risco associados às DCNTs. Usando os
+dados de hábitos coletados dos pacientes ao longo de uma semana,
+o modelo B-Track determina se um comportamento específico é
+"Raramente", "Normal", "Frequente" ou "Excessivo".
+Esta definição utiliza tanto a quantidade quanto a frequência de
+um hábito. Os hábitos alimentares são categorizados como “Nen-
+hum”, “Muito Pouco”, “Pouco”, “Moderado”, “Alto” e “Muito Alto”.
+Os hábitos de exercício são categorizados como “Nenhum”, “Mod-
+erado” e “Forte”. A frequência é definida pelo número de dias da
+semana de ocorrências. “Raramente” é definido como 2 ou menos
+ocorrências, “Normal” como 3 ou 4, “Frequente” como 5 ou 6 e “Ex-
+cessivo” como 7 dias por semana. A mesma definição de frequência
+se aplica tanto à dieta quanto aos hábitos de exercício.
+Figura 5: Comportamentos não preventivos dos pacientes
+A figura 5 apresenta os 10 principais comportamentos não pre-
+ventivos dos pacientes, que estão associados a fatores de risco.
+Praticar Aeróbico Raramente foi o hábito mais não preventivo com
+34%, seguido de Comer Raramente Grãos e Comer Legumes Rara-
+mente com 12%, e Praticar Fortalecimento Muscular Raramente com
+10%. Comer sementes de proteínas e nozes raramente e comer base
+de soja raramente em 7%, enquanto beber água raramente em 6%.
+Pratique o equilíbrio raramente e pratique a flexibilidade raramente
+em 5%. Comer Gordura Normal tem a menor representação em 1%.
+Em geral, os pacientes tendem a adotar hábitos mais prejudiciais
+à saúde relacionados à atividade física do que à dieta alimentar. Isto
+pode incluir não praticar exercício suficiente, levar um estilo de
+vida sedentário ou não praticar atividade física regular.
+4.2
+Doenças Crônicas Suscetíveis
+O B-Track Onto infere os fatores de risco com base nos compor-
+tamentos humanos dos pacientes, permitindo a compreensão das
+DCNTs às quais os pacientes estão suscetíveis. A figura 6 apresenta
+as 9 principais DCNTs às quais os pacientes são suscetíveis com
+base nos fatores de risco relacionados aos seus comportamentos.
+A diabetes foi a DCNT susceptível mais prevalente com 21%,
+seguida pela doença coronária com 20%, com demência e câncer do
+cólon com 15%. O AVC representa 10%, enquanto o câncer gástrico,
+as doenças cardiovasculares e a hipertensão representam 5% cada.
+A Doença Renal Crônica tem a menor representação, 2%.
+Figura 6: DCNTs suscetíveis aos pacientes
+4.3
+Análises de Hábitos
+O modelo B-Track analisa hábitos dos pacientes e os armazena
+gerando históricos contextuais, com ações, frequência, comporta-
+mento associado aos fatores de risco e quais DCNTs são suscetíveis.
+Este histórico de contexto dos usuários foi analisado para entender
+o impacto das recomendações nas mudanças de comportamento
+dos usuários.
+Dos dez pacientes que participaram do experimento, nove de-
+les haviam feito mudanças em seus hábitos pouco saudáveis em
+algum momento. O paciente P1 não apresentou nenhuma mudança
+de comportamento. Os pacientes P2, P3, P5, P7, P9 e P10 tiveram
+mudanças de hábitos em curto prazo, enquanto os pacientes P4, P6
+e P8 tiveram mudanças em longo prazo.
+A experiência sugere uma tendência para melhorias nos padrões
+comportamentais, mas é incerto se estas mudanças seriam eficazes
+a longo prazo. É necessária uma monitorização adicional dos pa-
+cientes durante um período prolongado para determinar a eficácia
+destas alterações.
+4.4
+Avaliação TAM
+No modelo TAM, a satisfação do usuário é medida em duas cat-
+egorias: utilidade percebida e facilidade de uso percebida [5]. A
+utilidade percebida é utilizada para determinar se a tecnologia pro-
+posta pode ajudar o usuário a realizar uma atividade de forma mais
+adequada, enquanto a facilidade de uso avalia se a tecnologia pode
+ser utilizada com o mínimo esforço. Desta forma, o questionário de
+avaliação é dividido em duas categorias, uma quanto à sua utilidade
+e outra quanto à sua facilidade de uso. O questionário consiste
+em itens Likert de cinco níveis: “discordo totalmente”, “discordo
+parcialmente”, “indiferente”, “concordo parcialmente” e “concordo
+totalmente”.
+Tabela 3: Itens relacionados à avaliação da utilidade
+Questão
+Descrição
+O conhecimento de quais hábitos estão associados a fatores de risco é
+relevante.
+As opções de atividade física são úteis para registar hábitos de exercício
+físico.
+As opções alimentares são úteis para registrar hábitos alimentares.
+A possibilidade de reportar hábitos a qualquer momento é relevante.
+Os hábitos saudáveis fornecidos nos materiais educativos são úteis.
+Notificações ajudam a aumentar a conscientização sobre os hábitos
+diários.
+WebMedia’2024, Juiz de Fora, Brazil
+Dias and Barbosa
+Para avaliar os resultados, foi computado o percentual de se-
+leção de cada opção (‘discordo totalmente’, ‘discordo parcialmente’,
+’indiferente’, ’concordo parcialmente’ ou ’concordo totalmente’)
+por questão. Nesse sentido, será calculada a média dos percentuais
+obtidos para cada opção de acordo com a categoria em questão
+(utilidade ou facilidade de uso). A média dos percentuais de cada
+opção será equivalente ao índice médio de satisfação avaliado pelos
+usuários voluntários para cada categoria.
+Tabela 4: Itens relacionados à avaliação da usabilidade
+Questão
+Descrição
+Os hábitos associados aos fatores de risco são claramente apresentados.
+As opções de atividade física são facilmente utilizadas.
+As opções de comida são usadas sem esforço.
+As notificações são simples de entender.
+O material educativo pode ser consultado facilmente.
+O número de notificações solicitando a realização de hábitos é adequado.
+As respostas para cada categoria, utilidade e usabilidade, foram
+geralmente positivas. Os resultados das médias dos pacientes que
+usaram o TAM para questões relacionadas à utilidade do B-Track
+são apresentados na Figura 7, mostrando que 61% dos pacientes que
+usaram o B-Track concordam completamente que o aplicativo é útil
+em seu rotina de tratamento, 22% concordam parcialmente, 7% são
+indiferentes, 8% discordam parcialmente e 2% discordam totalmente.
+Em relação à usabilidade do B-Track 53% dos pacientes concordam
+completamente que o B-Track é fácil de usar, 27% concordam par-
+cialmente, 5% são indiferentes, 8% discordam parcialmente e 7%
+discordam totalmente (Figura 8).
+Figura 7: Utilidade geral percebida pelos pacientes
+Figura 8: Usabilidade geral percebida pelos pacientes
+Analisando o TAM é possível perceber que, em uma visão geral,
+o B-Track obteve uma boa avaliação de utilidade e usabilidade pelos
+pacientes.
+DECLARAÇÃO DE ÉTICA
+A presente pesquisa atende à Resolução 510/2016 do Ministério da
+Saúde, que regula a pesquisa com seres humanos no Brasil. O proto-
+colo da pesquisa foi aprovado pelo Comitê de Ética em Pesquisa da
+Universidade do Vale do Rio dos Sinos (CAAE 67413623.3.0000.5344,
+disponível na Plataforma Brasil 1). Todos os participantes assinaram
+o Termo de Consentimento Livre e Esclarecido (TCLE), contendo
+a especificação sobre os objetivos, riscos e benefícios da pesquisa.
+Durante todo o estudo, os pesquisadores estiveram disponíveis
+para resolver dúvidas dos participantes, bem como para fornecer
+qualquer suporte adicional necessário.
+CONCLUSÃO
+Os resultados obtidos através dos experimentos indicam que a uti-
+lização do B-Track para apoio ao tratamento das DCNTs é possível
+e útil ao paciente, porém, ainda é necessária uma avaliação com um
+grupo maior de pacientes e por um período mais longo para uma
+análise mais detalhada e precisa.
+Os pacientes participantes do experimento apresentavam hábitos
+associados a fatores de risco com suscetibilidade ao desenvolvi-
+mento de DCNTs, como doença coronariana, diabetes e demência.
+Alguns pacientes já apresentavam doenças cardíacas, hipertensão e
+diabetes, onde seus hábitos poderiam piorar o quadro atual.
+Através da análise do comportamento dos pacientes, foram feitas
+recomendações de hábitos saudáveis por meio de material educativo.
+Os pacientes P4, P6 e P8 obtiveram mudanças em alguns comporta-
+mentos por um período mais longo. Para o paciente P1 não foram
+observadas alterações e os demais pacientes tiveram alterações
+comportamentais por curtos períodos. O paciente P4 alterou seu
+consumo de vegetais e alimentos à base de soja de raro para normal,
+para P6 notou-se que a frequência da prática aeróbica mudou de
+pouco frequente para excessiva e para P8 a frequência da prática de
+exercícios aeróbicos mudou de raramente para normal, frequente e
+excessivo.
+Através da avaliação do TAM foi possível perceber pontos de mel-
+horia no B-Track, principalmente nos materiais educativos, onde
+20% dos pacientes não acharam útil, na facilidade em encontrar os
+fatores de risco associados aos hábitos, onde 20% dos pacientes apon-
+taram dificuldades, na usabilidade percebida pelos pacientes nas
+opções alimentares, onde 20% relataram dificuldades, e no número
+de notificações solicitando a implementação de hábitos, onde 20%
+não consideraram adequado.
+AGRADECIMENTOS
+Os autores agradecem à Fundação de Amparo à Pesquisa do Estado
+do Rio Grande do Sul (FAPERGS), à Coordenação de Aperfeiçoa-
+mento de Pessoal de Nível Superior - Brasil (CAPES) - Código de
+Financiamento 001, ao Conselho Nacional de Desenvolvimento
+Científico e Tecnológico (CNPq) e à Universidade do Vale do Rio
+dos Sinos (Unisinos) pelo apoio ao desenvolvimento desse trabalho.
+Os autores reconhecem especialmente o apoio do Programa de Pós-
+Graduação em Computação Aplicada (PPGCA) e do Laboratório de
+Computação Móvel (Mobilab) da Unisinos.
+1ℎ𝑡𝑡𝑝: //𝑝𝑙𝑎𝑡𝑎𝑓𝑜𝑟𝑚𝑎𝑏𝑟𝑎𝑠𝑖𝑙.𝑠𝑎𝑢𝑑𝑒.𝑔𝑜𝑣.𝑏𝑟
+Cuidado Ubíquo de Pacientes com Doenças Crônicas Através de um Modelo de Análise do Comportamento Humano
+WebMedia’2024, Juiz de Fora, Brazil
+REFERÊNCIAS
+[1] Rodrigo Simon Bavaresco and Jorge Luis Victória Barbosa. 2023. Ubiquitous com-
+puting in light of human phenotypes: foundations, challenges, and opportunities.
+Journal of Ambient Intelligence and Humanized Computing 14, 3 (01 Mar 2023),
+2341–2349. https://doi.org/10.1007/s12652-022-04489-2
+[2] Frank Bentley, Konrad Tollmar, Peter Stephenson, Laura Levy, Brian Jones, Scott
+Robertson, Ed Price, Richard Catrambone, and Jeff Wilson. 2013. Health mashups:
+Presenting statistical patterns between wellbeing data and context in natural
+language to promote behavior change. ACM Transactions on Computer-Human
+Interaction 20, 5 (nov 2013), 27 pages. https://doi.org/10.1145/2503823
+[3] Marko Bohanec, Gennaro Tartarisco, Flavia Marino, Giovanni Pioggia,
+Paolo Emilio Puddu, Michele Salvatore Schiariti, Anneleen Baert, Sofie Pardaens,
+Els Clays, Aljoša Vodopija, and Mitja Luštrek. 2021. HeartMan DSS: A decision
+support system for self-management of congestive heart failure. Expert Systems
+with Applications 186 (2021), 115688. https://doi.org/10.1016/j.eswa.2021.115688
+[4] Penglai Chen, Jing Chai, Jing Cheng, Kaichun Li, Shaoyu Xie, Han Liang, Xin-
+grong Shen, Rui Feng, and Debin Wang. 2014. A smart web aid for preventing
+diabetes in rural china: Preliminary findings and lessons. Journal of Medical
+Internet Research 16, 4 (2014), 0. https://doi.org/10.2196/jmir.3228
+[5] Fred D Davis. 1989. Perceived usefulness, perceived ease of use, and user accep-
+tance of information technology. MIS quarterly 1, 1 (1989), 319–340.
+[6] Lucas Pfeiffer Salomão Dias, Jorge Luis Victória Barbosa, Luan Paris Feijó, and
+Henrique Damasceno Vianna. 2020. Development and testing of iAware model
+for ubiquitous care of patients with symptoms of stress, anxiety and depression.
+Computer Methods and Programs in Biomedicine 187 (2020), 105113. https://doi.
+org/10.1016/j.cmpb.2019.105113
+[7] Lucas Pfeiffer Salomão Dias, Henrique Damasceno Vianna, and Jorge Luis Victória
+Barbosa. 2022. Human behaviour data analysis and noncommunicable diseases: a
+systematic mapping study. Behaviour & Information Technology 0, 0 (2022), 1–19.
+https://doi.org/10.1080/0144929X.2022.2128422
+[8] James C. Griffiths, Jan De Vries, Michael I. McBurney, Suzan Wopereis, Samet
+Serttas, and Daniel S. Marsman. 2020. Measuring health promotion: translating
+science into policy. European Journal of Nutrition 59, 2 (01 Sep 2020), 11–23.
+https://doi.org/10.1007/s00394-020-02359-1
+[9] Wesllei Felipe Heckler, Luan Paris Feijó, Juliano Varella de Carvalho, and Jorge
+Luis Victória Barbosa. 2023. Thoth: An intelligent model for assisting individuals
+with suicidal ideation.
+Expert Systems with Applications 233 (2023), 120918.
+https://doi.org/10.1016/j.eswa.2023.120918
+[10] Walaa N. Ismail, Mohammad Mehedi Hassan, Hessah A. Alsalamah, and Giancarlo
+Fortino. 2020. CNN-based health model for regular health factors analysis in
+internet-of-medical things environment. IEEE Access 8 (2020), 52541–52549.
+https://doi.org/10.1109/ACCESS.2020.2980938
+[11] Si Si Jia, Rebecca Raeside, Emma Sainsbury, Sara Wardak, Philayrath
+Phongsavan, Julie Redfern, Margaret Allman-Farinelli, Melissa A. Fernan-
+dez, Stephanie R. Partridge, and Alice A. Gibson. 2024. Use of online food
+retail platforms throughout the COVID-19 pandemic and associated diet-
+related chronic disease risk factors: A systematic review of emerging evi-
+dence. Obesity Reviews 25, 6 (2024), e13720. https://doi.org/10.1111/obr.13720
+arXiv:https://onlinelibrary.wiley.com/doi/pdf/10.1111/obr.13720
+[12] Michelle C Krzyzanowski, Paul N Kizakevich, Vanessa Duren-Winfield, Randall
+Eckhoff, Joel Hampton, Loneke T Blackman Carr, Georgia McCauley, Kristina B
+Roberson, Elijah O Onsomu, John Williams, and Amanda Alise Price. 2020.
+Rams Have Heart, a Mobile App Tracking Activity and Fruit and Vegetable
+Consumption to Support the Cardiovascular Health of College Students: Devel-
+opment and Usability Study. JMIR Mhealth Uhealth 8, 8 (5 Aug 2020), e15156.
+https://doi.org/10.2196/15156
+[13] Lakmal Meegahapola, Salvador Ruiz-Correa, Viridiana del Carmen Robledo-
+Valero, Emilio Ernesto Hernandez-Huerfano, Leonardo Alvarez-Rivera, Ronald
+Chenu-Abente, and Daniel Gatica-Perez. 2021. One More Bite? Inferring Food
+Consumption Level of College Students Using Smartphone Sensing and Self-
+Reports. Proc. ACM Interact. Mob. Wearable Ubiquitous Technol. 5, 1, Article 26
+(March 2021), 28 pages. https://doi.org/10.1145/3448120
+[14] L. Mertz. 2016. Convergence Revolution Comes to Wearables: Multiple Advances
+are Taking Biosensor Networks to the Next Level in Health Care. IEEE Pulse 7, 1
+(Jan 2016), 13–17. https://doi.org/10.1109/MPUL.2015.2498475
+[15] Madison Milne-Ives, Ching Lam, Caroline De Cock, Michelle Helena
+Van Velthoven, and Edward Meinert. 2020. Mobile Apps for Health Behav-
+ior Change in Physical Activity, Diet, Drug and Alcohol Use, and Mental
+Health: Systematic Review. JMIR Mhealth Uhealth 8, 3 (18 Mar 2020), e17046.
+https://doi.org/10.2196/17046
+[16] Sara Nasiri and Mohammad Reza Khosravani. 2020. Progress and challenges in
+fabrication of wearable sensors for health monitoring. Sensors and Actuators A:
+Physical 312 (2020), 112105. https://doi.org/10.1016/j.sna.2020.112105
+[17] Lin Padgham and Michael Winikoff. 2005. Developing intelligent agent systems: A
+practical guide. Vol. 13. John Wiley & Sons, UK.
+[18] Leonardo dos Santos Paula, Jorge Luis Victória Barbosa, and Lucas Pfeiffer Sa-
+lomão Dias. 2022.
+A model for assisting in the treatment of anxiety disor-
+der. Universal Access in the Information Society 21, 2 (01 Jun 2022), 533–543.
+https://doi.org/10.1007/s10209-020-00786-9
+[19] Leonardo dos Santos Paula, Lucas Pfeiffer Salomão Dias, Rosemary Francisco,
+and Jorge Luis Victória Barbosa. 2022. Analysing IoT Data for Anxiety and Stress
+Monitoring: A Systematic Mapping Study and Taxonomy. International Journal of
+Human–Computer Interaction 0, 0 (2022), 1–21. https://doi.org/10.1080/10447318.
+2022.2132361
+[20] Gael Pérez-Rodríguez, Martín Pérez-Pérez, Florentino Fdez-Riverola, and Anália
+Lourenço. 2020. Mining the sociome for Health Informatics: Analysis of therapeu-
+tic lifestyle adherence of diabetic patients in Twitter. Future Generation Computer
+Systems 110 (sep 2020), 214–232. https://doi.org/10.1016/j.future.2020.04.025
+[21] Kai Petersen, Robert Feldt, Shahid Mujtaba, and Michael Mattsson. 2008. Sys-
+tematic Mapping Studies in Software Engineering. In Proceedings of the 12th
+International Conference on Evaluation and Assessment in Software Engineering
+(EASE ’08). British Computer Society, Swinton, UK, 68–77.
+[22] Lucas Pfeiffer Salomão Dias, Henrique Damasceno Vianna, Wesllei Heckler,
+and Jorge Luis Victória Barbosa. 2023. Ontology-Based Reasoning to Classify
+Behaviors Associated with Chronic Disease Risk Factors. In Proceedings of the
+XIX Brazilian Symposium on Information Systems (Maceió, Brazil) (SBSI ’23).
+Association for Computing Machinery, New York, NY, USA, 292–299.
+https:
+//doi.org/10.1145/3592813.3592917
+[23] Lucas Pfeiffer Salomão Dias, Henrique Damasceno Vianna, Wesllei Heckler, and
+Jorge Luis Victória Barbosa. 2024. Identifying Chronic Disease Risk Behaviors:
+An ontology-based approach. iSys - Brazilian Journal of Information Systems 17,
+1 (Jun. 2024), 7:1 – 7:31. https://doi.org/10.5753/isys.2024.3762
+[24] J. Ramsingh and V. Bhuvaneswari. 2018. An efficient Map Reduce-Based Hybrid
+NBC-TFIDF algorithm to mine the public sentiment on diabetes mellitus – A
+big data approach. Journal of King Saud University - Computer and Information
+Sciences 0, 0 (2018), 0. https://doi.org/10.1016/j.jksuci.2018.06.011
+[25] L. Rehackova, V. Araújo-Soares, S. Steven, A. J. Adamson, R. Taylor, and F. F.
+Sniehotta. 2020. Behaviour change during dietary Type 2 diabetes remission: a
+longitudinal qualitative evaluation of an intervention using a very low energy
+diet. Diabetic Medicine 37, 6 (2020), 953–962. https://doi.org/10.1111/dme.14066
+[26] Carolina C Silva, Justin Presseau, Zack van Allen, Paulina M Schenk,
+Maiara Moreto, John Dinsmore, and Marta M Marques. 2024.
+Effec-
+tiveness of Interventions for Changing More Than One Behavior at a
+Time to Manage Chronic Conditions: A Systematic Review and Meta-
+analysis.
+Annals of Behavioral Medicine 58, 6 (05 2024), 432–444.
+https:
+//doi.org/10.1093/abm/kaae021
+arXiv:https://academic.oup.com/abm/article-
+pdf/58/6/432/57830880/kaae021.pdf
+[27] Mona Tanwar, Sunil Kumar Khatri, and Ravi Pendse. 2022. Semantic Term-
+Term Coupling-Based Feature Enhancement of User Profiles in Recommendation
+Systems. Journal of Cases on Information Technology (JCIT) 24, 03 (2022), 1–16.
+https://doi.org/10.4018/JCIT.20220701.oa1
+[28] Jan Torpus, Cedric Julian Spindler, and Jonas Kellermeyer. 2023. Detecting Human
+Attitudes through Interactions with Responsive Environments. In Proceedings of
+the 2023 ACM International Conference on Interactive Media Experiences (Nantes,
+France) (IMX ’23). Association for Computing Machinery, New York, NY, USA,
+1–13. https://doi.org/10.1145/3573381.3596160
+[29] Fabian Wahle, Tobias Kowatsch, Elgar Fleisch, Michael Rufer, and Steffi Weidt.
+2016. Mobile Sensing and Support for People With Depression: A Pilot Trial in
+the Wild. JMIR mHealth and uHealth 4, 3 (Sep 2016), e111.
+[30] Mark Weiser. 1999. The Computer for the 21st Century. SIGMOBILE Mob. Comput.
+Commun. Rev. 3, 3 (jul 1999), 3–11. https://doi.org/10.1145/329124.329126
+[31] WHO.
+2020.
+Global
+Action
+Plan
+for
+the
+Prevention
+and
+Con-
+trol of Noncommunicable Diseases.
+Available in: ℎ𝑡𝑡𝑝𝑠
+:
+//𝑎𝑝𝑝𝑠.𝑤ℎ𝑜.𝑖𝑛𝑡/𝑖𝑟𝑖𝑠/𝑏𝑖𝑡𝑠𝑡𝑟𝑒𝑎𝑚/ℎ𝑎𝑛𝑑𝑙𝑒/10665/94384/9789241506236𝑒𝑛𝑔.𝑝𝑑𝑓,
+access: Jan 19 2023..
+[32] WHO. 2021.
+Risk factors - Noncommunicable diseases.
+Avail-
+able
+in:
+ℎ𝑡𝑡𝑝
+:
+//𝑤𝑤𝑤.𝑒𝑚𝑟𝑜.𝑤ℎ𝑜.𝑖𝑛𝑡/𝑛𝑜𝑛𝑐𝑜𝑚𝑚𝑢𝑛𝑖𝑐𝑎𝑏𝑙𝑒
+−
+𝑑𝑖𝑠𝑒𝑎𝑠𝑒𝑠/𝑐𝑎𝑢𝑠𝑒𝑠/𝑖𝑛𝑑𝑒𝑥.ℎ𝑡𝑚𝑙, access: Jan 19 2023..
+[33] WHO.
+2022.
+Noncommunicable
+diseases.
+Avail-
+able
+in:
+ℎ𝑡𝑡𝑝𝑠
+:
+//𝑤𝑤𝑤.𝑤ℎ𝑜.𝑖𝑛𝑡/𝑛𝑒𝑤𝑠
+−
+𝑟𝑜𝑜𝑚/𝑓𝑎𝑐𝑡
+−
+𝑠ℎ𝑒𝑒𝑡𝑠/𝑑𝑒𝑡𝑎𝑖𝑙/𝑛𝑜𝑛𝑐𝑜𝑚𝑚𝑢𝑛𝑖𝑐𝑎𝑏𝑙𝑒−𝑑𝑖𝑠𝑒𝑎𝑠𝑒𝑠, access: Jan 19 2023..
+[34] Han Zhang, Leijie Wang, Yilun Sheng, Xuhai Xu, Jennifer Mankoff, and Anind K.
+Dey. 2023. A Framework for Designing Fair Ubiquitous Computing Systems.
+In Adjunct Proceedings of the 2023 ACM International Joint Conference on Per-
+vasive and Ubiquitous Computing & the 2023 ACM International Symposium on
+Wearable Computing (Cancun, Quintana Roo, Mexico) (UbiComp/ISWC ’23 Ad-
+junct). Association for Computing Machinery, New York, NY, USA, 366–373.
+https://doi.org/10.1145/3594739.3610677

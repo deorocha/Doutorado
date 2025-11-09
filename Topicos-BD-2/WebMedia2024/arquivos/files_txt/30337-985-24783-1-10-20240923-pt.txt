@@ -1,0 +1,545 @@
+Evidências de disseminação de conteúdo no Telegram durante o
+ataque aos órgãos públicos brasileiros em 2023
+Otávio R. Venâncio
+otavio.venancio@dcc.ufmg.br
+Departamento de Ciência da Computação
+Universidade Federal de Minas Gerais
+Gabriel H. S. Gonçalves
+gabrielgoncalces@dcc.ufmg.br
+Departamento de Ciência da Computação
+Universidade Federal de Minas Gerais
+Carlos H. G. Ferreira
+chgferreira@ufop.edu.br
+Departamento de Computação e Sistemas
+Universidade Federal de Ouro Preto
+Ana Paula C. da Silva
+ana.coutosilva@dcc.ufmg.br
+Departamento de Ciência da Computação
+Universidade Federal de Minas Gerais
+20231.
+Neste contexto, este trabalho complementa resultados anteriores
+[28], focando no uso do Telegram como ferramenta de coordena-
+ção e difusão de conteúdo no período pós-eleição presidencial no
+Brasil, especificamente em torno dos eventos de 8 de janeiro de
+2023. Compilamos mensagens textuais de aproximadamente 270
+grupos com orientação política no Telegram, cobrindo um inter-
+valo de 15 dias, de 01/01/2023 a 15/01/2023, em torno dos ataques
+em Brasília ocorridos no dia 8 de janeiro. Inspirados por pesqui-
+sas precedentes [11, 19–21], buscamos indícios de coordenação na
+promoção de conteúdo por meio de uma abordagem metodológica
+composta pelos seguintes passos. Inicialmente, modelamos a disse-
+minação de informação no período em questão por meio de uma
+rede media-centric, conectando usuários que replicaram o mesmo
+conteúdo entre os grupos analisados. Posteriormente, recorremos
+a técnicas avançadas de extração de backbone [24] para destacar
+conexões de rede que demonstram indícios de potencial coordena-
+ção (diferenciando-se de usuários que compartilharam conteúdo de
+maneira independente). Finalizamos aplicando algoritmos de de-
+tecção de comunidades para identificar agrupamentos de usuários
+com forte interconexão, evidenciando padrões de coordenação e os
+descrevemos em termos de características topológicas, participação
+na disseminação de informações e conteúdo compartilhado.
+TRABALHOS RELACIONADOS
+Nos últimos anos, um conjunto amplo de trabalhos na literatura
+estudou evidências de coordenação para impulsionamento de infor-
+mações a partir de modelos orientados a redes [4, 7, 12, 19–21].
+Considerando o WhatsApp, o trabalho de Kiran et al. analisa os
+padrões de mensagens em grupos politicamente orientados [12].
+Bursztyn et al. ampliaram o escopo desse estudo e analisaram como
+1https://www.nytimes.com/live/2023/01/09/world/brazil-congress-riots-bolsonaro
+WebMedia’2024, Juiz de Fora, Brazil
+Venâncio et al.
+a afiliação política de um grupo influencia a dinâmica da dissemina-
+ção de grandes mensagens [4]. Nobre et al. mostraram a existência
+de comunidades do WhatsApp ativamente envolvidas na dissemina-
+ção coordenada de informações, especialmente durante as eleições
+brasileiras de 2018 [20, 21]. Chagas et al. abordaram a crescente
+preocupação com a propaganda digital e identificaram grupos te-
+máticos e grupos funcionais consistentes com as estratégias de
+influência e redes de desinformação de agentes políticos [7].
+O aumento significativo do uso do Telegram como meio de co-
+municação motivou diferentes estudos de como o processo de disse-
+minação de informação ocorre entre os seus grupos. Por exemplo,
+Urman et. al. investigaram redes de extrema-direita e suas caracte-
+rísticas de comunidade [27], enquanto Nobati et. al. adotaram uma
+abordagem diferente e analisaram arestas de rede para identificar
+mensagens de spam [9]. Adicionalmente, Slobozhan et al. [25] es-
+tudaram o uso de diferentes mídias de comunicação no Telegram
+durante os protestos em Belarus em 2020, revelando diferentes
+papéis e tipos de conteúdo para cada meio. Os autores de [6] rea-
+lizaram uma caracterização e análise das redes de apoiadores do
+ex-presidente Jair Bolsonaro no período que englobou as manifesta-
+ções de 7 de setembro de 2021 e 7 de setembro de 2022, analisando
+as mudanças na estrutura da rede, similaridades e diferenças nas
+discussões realizadas. Por fim, Rossini et al. exploraram a complexa
+relação entre a participação política via aplicativos de mensagens
+privadas e a disseminação descontrolada de desinformação eleito-
+ral, enfatizando a maior probabilidade de que membros de grupos
+políticos acreditem em desinformação [23].
+Em complemento aos trabalhos encontrados na literatura, o ob-
+jetivo principal deste artigo é mostrar o papel do Telegram como
+impulsionador de informação no período subsequente às eleições
+presidenciais de 2022, período este marcado por uma forte tensão
+política que culminou nos ataques ocorridos em Brasília em 8 de
+janeiro de 2023. Mais precisamente, revelamos o papel de diferentes
+comunidades-chave na movimentação dos grupos analisados no
+período de interesse.
+METODOLOGIA
+Esta seção descreve a abordagem metodológica adotada neste es-
+tudo, abrangendo desde a coleta e modelagem de dados até a extra-
+ção dos backbones das redes e a análise das comunidades e caracte-
+rísticas textuais das mensagens disseminadas.
+3.1
+Coleta dos Dados
+As mensagens analisadas neste trabalho foram coletadas a partir de
+diversos grupos públicos políticos do Telegram, no período compre-
+endido entre 01/01/2023 a 15/01/2023. Para encontrar estes grupos,
+utilizamos uma estratégia que envolveu a utilização da API do X
+(anteriormente conhecido como Twitter).2 que consistiu em seleci-
+onar tweets que continham o termo t.me — indicativo de convites
+para o Telegram — acompanhado por palavras-chave representando
+regiões do Brasil (Norte, Sudeste, Centro-Oeste, Sul, Nordeste), es-
+pectros políticos (Esquerda, Direita, Centro) e todos os candidatos
+presidenciais de 2022.
+Após a coleta dos grupos, acessamos as mensagens enviadas
+nestes com o auxílio da biblioteca Telethon, que opera com base na
+2https://developer.twitter.com/en/docs/twitter-api/
+Tabela 1: Metadados usados na análise.
+Campo
+Descrição
+message_id
+ID da mensagem, único por grupo/canal
+channel_id
+ID do grupo/canal
+retrieved_utc
+Data de coleta da mensagem
+updated_utc
+Data hora da última atualização
+message
+Conteúdo textual da mensagem
+views
+Número de visualizações
+forwards
+Número de compartilhamentos
+from_id
+ID do autor
+post_author
+Nome de usuário do autor
+message_utc
+Data hora de envio da mensagem
+API do Telegram.3,4 Adicionalmente, realizamos a exploração das
+mensagens dos grupos por mais convites a outros grupos, resultado
+em uma cobertura total de 274 grupos e de 524.498 mensagens.
+Para a análise de conteúdos representativos do debate político,
+excluímos mensagens padrão, tais como saudações curtas (por exem-
+plo,’Bom dia’, ’Oi’ e ’Ok’). Aplicamos um critério de exclusão para
+mensagens com menos de 30 caracteres e aquelas compostas exclu-
+sivamente por caracteres não latinos. Ao final, temos um conjunto
+de 226.679 mensagens provenientes de 17.661 usuários (from_ids
+únicos), cada um tendo contribuído com pelo menos uma mensa-
+gem.
+A Tabela 1 detalha os metadados coletados. Importante ressaltar
+que, segundo o Telegram.5, a contagem de visualizações pode não
+refletir precisão absoluta, uma vez que o contador pode ser reinici-
+ado caso o conteúdo seja replicado manualmente e visualizações
+pelo mesmo usuário em momentos diferentes podem ser contadas
+como distintas.
+3.2
+Modelagem da Rede
+Para investigar a presença de padrões de coordenação entre usuários
+na disseminação de conteúdo em grupos do Telegram, aplicamos o
+modelo media-centric, utilizado anteriormente na literatura [20, 21].
+Este modelo visa evidenciar possíveis atividades de coordenação
+entre usuários que compartilham e promovem conteúdos seme-
+lhantes em diferentes plataformas online, tais como WhatsApp e
+Twitter. Mais especificamente, para a janela de tempo de interesse,
+modelamos o grafo 𝐺(𝑉, 𝐸), onde um nó 𝑣∈𝑉corresponde a um
+usuário que postou uma mensagem em um dos grupos do Telegram.
+Adicionalmente, uma aresta não direcionada (𝑣𝑖, 𝑣𝑗) ∈𝐸é formada
+entre pares de usuários que compartilharam a mesma mensagem
+(i.e., o mesmo conteúdo textual) pelo menos uma vez.
+3.3
+Extração dos Backbones
+A rede modelada permite identificar usuários com fortes evidências
+de disseminação conjunta de um grande volume de mensagens nos
+grupos observados. No entanto, o desafio é identificar as arestas
+que ocorrem de forma esporádica (ou arestas fracas), que podem
+esconder a verdadeira estrutura de rede relacionada ao fenômeno de
+interesse, ou seja, evidências de coordenação. Assim, para identificar
+e filtrar arestas esporádicas e, ao mesmo tempo, preservar as arestas
+que provavelmente sugerem coordenação, utilizamos dois métodos
+de extração de backbone [24]. Estes métodos foram previamente
+3https://docs.telethon.dev/en/stable/
+4https://core.telegram.org/
+5https://telegram.org/faq_channels
+Evidências de disseminação de conteúdo no Telegram durante o ataque aos órgãos públicos brasileiros em 2023
+WebMedia’2024, Juiz de Fora, Brazil
+utilizados para o estudo de coordenação de usuários em várias
+plataformas [11, 17, 20, 21].
+O primeiro método Disparity Filter (DF) identifica e preserva
+arestas significativamente mais fortes que outras conexões dos
+mesmos nós, focando em usuários que compartilham um número
+de mensagens muito maior do que o esperado, indicando possível
+coordenação. Uma aresta 𝑣𝑖, 𝑣𝑗é preservada no backbone se seu
+peso difere do modelo de referência tanto para 𝑣𝑖quanto para 𝑣𝑗.
+O segundo método DF+NB, proposto em [17], combina o DF com
+o conceito de Neighborhood Overlap (NB) para superar a limitação
+do DF de manter arestas periféricas ou pontes, desconsiderando
+padrões de vizinhança. DF+NB foca em arestas que indicam co-
+ordenação e conectam usuários com muitos vizinhos em comum,
+facilitando a descoberta de comunidades não triviais e mais forte-
+mente conectadas.
+Considerando os parâmetros dos modelos, ambos os métodos
+utilizam um p-value (𝛼= 0, 05) para testar a independência das
+arestas entre usuários, sendo este o parâmetro do modelo nulo do
+DF, enquanto o DF+NB também requer a definição de um limiar
+para a métrica de Neighborhood Overlap, assumindo o percentil 95𝑡ℎ
+conforme o artigo original [17], permitindo a análise do backbone
+sob diferentes perspectivas de possíveis esforços de coordenação.
+3.4
+Detecção de Comunidades
+A partir da extração dos backbones, visamos identificar como essas
+arestas com fortes evidências de coordenação formam comunidades
+representativas de usuários que compartilham de maneira persis-
+tente o mesmo conteúdo, sugerindo uma possível coordenação para
+o impulsionamento em massa deste conteúdo.
+Assim, aplicamos o algoritmo Louvain para encontrar as comu-
+nidades que formam os backbones. O algoritmo Louvain maximiza a
+modularidade das comunidades [2], sendo que este valor representa
+a densidade de conexões nas comunidades em comparação com
+uma rede aleatória. Os valores de modularidade variam de -0,5 a +1,
+com pontuações mais altas (acima de 0,4) indicando estruturas de
+comunidade bem definidas [18]. Em outras palavras, valores mais
+altos de modularidade indicam redes mais densas e valores entre
+0,3 e 0,7 sugerem comunidades bem definidas.
+3.5
+Análise de Tópicos
+Para analisar o conteúdo político disseminado pelas comunidades
+de usuários identificadas, utilizamos o framework BERTopic [13],
+que extrai tópicos de discussão a partir de grandes conjuntos de
+dados textuais, incluindo análises de discussões em plataformas
+de mídia social [8, 10]. O BERTopic combina modelos de repre-
+sentação vetorial com técnicas de agrupamento para identificar
+temas recorrentes nas mensagens. Configuramos o BERTopic para
+usar o modelo BERTimbau [26], eficaz na captura da semântica do
+português.6 Após gerar as representações vetoriais das mensagens,
+o BERTopic reduz a dimensionalidade desses vetores com UMAP
+e aplica o algoritmo HDBSCAN para agrupá-los por similaridade
+semântica. Os tópicos são definidos aplicando a técnica c-TF-IDF,
+que identifica palavras-chave distintivas para cada grupo.
+Para a parametrização do BERTopic, adotamos as diretrizes es-
+pecificadas na documentação do framework para encontrar um
+6https://huggingface.co/neuralmind/bert-base-portuguese-cased
+Tabela 2: Dados topológicos das redes analisadas.
+Rede
+# Nós
+# Arestas
+Densi.
+Comu.
+Mod.
+Completa
+4.692
+72.629
+0,0066
+0,3473
+DF
+0,0134
+0,4695
+DF+NB
+0,0342
+0,8718
+Tabela 3: Análise da distribuição de padrões de coordenação.
+Rede
+# Usu.
+(%)
+# Mens.
+(%)
+# Com.
+(%)
+# Visu.
+(%)
+# Grupos
+(%)
+Completa
+4.692
+33.966
+2M
+422M
+DF
+316 (6,73%)
+9.385 (27,63%)
+985K (38,7%)
+203M (48,09%)
+132 (68,39%)
+DF+NB
+64 (1,36%)
+2.447 (7,2%)
+245K (9,65%)
+91M (21,53%)
+70 (36,27%)
+equilíbrio ótimo entre o número de tópicos e o tamanho do con-
+junto de dados [13].7 Como resultado encontramos: (i) número
+de vizinhos e componentes para UMAP igual a 3 e; (ii) tamanho
+mínimo de tópico igual a 80, que determina o menor conjunto de
+mensagens únicas que um determinado tópico pode representar e
+garante que apenas tópicos significativos e bem definidos sejam
+considerados para análise.
+RESULTADOS
+Nesta seção, apresentamos e discutimos nossas análises.
+4.1
+Análise Topológica e de Comunidades
+A Tabela 2 apresenta as propriedades topológicas e de disseminação
+de conteúdo da rede completa e dos respectivos backbones extraí-
+dos a partir das técnicas DF e DF+NB. Nota-se que as técnicas DF
+e DF+NB eliminam, respectivamente, 93,63% e 98,63% dos nós e
+99,08% e 99,90% das arestas. Apesar disso, os valores da modulari-
+dade (Mod.) resultantes da execução do algoritmo Louvain, em cada
+uma das topologias reveladas aumenta, especialmente no DF+NB
+que chega a 0,87. Em ambos os casos, as comunidades detectadas
+nos backbones extraídos são bem mais estruturadas do que a rede
+originalmente modelada. Na prática, estes resultados mostram que
+os backbones revelam grupos de usuários bem definidos e coesos
+que podem, potencialmente, representar esforços coordenados de
+disseminação de informação ou mobilização.
+A Tabela 3 apresenta as principais estatísticas referentes ao po-
+tencial de disseminação de conteúdo dos usuários dos backbones
+comparados a rede completa. Notavelmente, no backbone DF+NB,
+composto por pouco mais de 1% dos usuários, observa-se que 7,2%
+das mensagens únicas foram disseminadas por eles. Tais mensagens
+receberam 9,65% dos compartilhamentos totais (# Com.) e 21,53%
+das visualizações (# Visu.). Analisamos a porcentagem de grupos (#
+Grupos) que receberam mensagens diretas dos usuários dos backbo-
+nes, revelando que 68,39% dos grupos receberam informações dos
+usuários do DF e 36,27% do DF+NB. Essas estatísticas revelam como
+um contingente reduzido de usuários pode não só de disseminar,
+mas também de introduzir novas informações nos grupos.
+A Figura 1 mostra a topologia do backbone DF, onde as cores
+indicam as comunidades e o tamanho dos nós é proporcional ao
+número de mensagens disseminadas, destacando que algumas co-
+munidades, como a 2, 3 e 5, têm usuários com volumes significa-
+tivamente maiores de informações disseminadas. No entanto, o
+7https://maartengr.github.io/BERTopic/getting_started/quickstart/quickstart.html
+WebMedia’2024, Juiz de Fora, Brazil
+Venâncio et al.
+Figura 1: Visualização das maiores comunidades do DF e suas
+características.
+Tabela 4: Descrição dos tópicos e padrões de disseminação.
+# Compart.
+# Visu.
+Palavras Características
+1M
+209M
+militar, intervenção, patriotas, 2023
+3M
+39M
+poder, armadas, anos, ainda
+1M
+21M
+2023, dia, patriotas, atenção, congresso
+96K
+27M
+sigam, canal, guerra, urgente, deus
+58K
+6M
+manifestantes, esplanada, intervenção
+104K
+10M
+posse, urgente, federal
+80K
+8M
+tomar, esplanada, dia, militares
+29K
+3M
+canal, anos, porque, sigam
+57K
+8M
+grupos, todas, aqui, pode, patriotas
+58K
+6M
+paralisação, sendo, STF, sistema
+85K
+9M
+sigam, canal, agir, polícia
+63K
+10M
+atenção, 55, aqui, ainda, sistema
+44K
+11M
+federal, manifestantes, frente
+39K
+4M
+deus, pois, guerra, armadase
+138K
+15M
+polícia, federal, manifestantes
+padrão predominante seja de usuários com um número de men-
+sagens compartilhadas uniforme.Por fim, notam-se desconexas da
+maior componente, compostas majoritariamente por 2 e 3 usuários.
+4.2
+Análise dos Tópicos Disseminados
+A seguir, focamos na análise dos tópicos de discussão a partir das
+mensagens disseminadas como descrito na Seção 3. A Tabela 4
+apresenta os tópicos mais populares, isto é, que tiveram pelo menos
+100 mensagens únicas.
+Observa-se que vários tópicos se relacionam com os eventos
+políticos subsequentes ao ocorrido em 8 de janeiro, destacando-se o
+tópico 1, com o maior volume de mensagens, que enfatiza chamados
+para intervenção militar e tentativas de tomada de poder, exemplifi-
+cado por mensagens que demandam ações das forças armadas e da
+população. Tais mensagens concentram-se especialmente em torno
+do dia 8 e nos dias subsequentes, quando ocorre o pico de mensa-
+gens como, por exemplo: “As forças armadas estão aguardando nosso
+comando! O povo de forma ordeira tem que invadir o congresso! No
+recesso de janeiro não tem ninguém! Temos que ocupar agora!”
+Já o tópico 5, concentrou mensagens a respeito do dia oito de
+janeiro, dia dos ataques compostos por uma série de vandalismos,
+manifestações e depredações do patrimônio público em Brasília.
+Manifestantes invadiram edifícios do governo federal visando ins-
+tigar um golpe militar contra o governo eleito de Luiz Inácio Lula
+n.° Comunidade
+ID T´opico
+−2
+Mensagens nos T´opicos[Normalizado]
+(a) DF
+n.° Comunidade
+ID T´opico
+−2
+Mensagens nos T´opicos[Normalizado]
+(b) DF+NB
+Figura 2: Percentual das mensagens nos tópicos das quatro
+maiores comunidades dos backbones extraídos.
+da Silva e restabelecer Jair Bolsonaro como presidente do Brasil8.
+Várias mensagens instigavam a organização e ida de apoiadores
+para Brasília, “Quem precisar de ônibus para Brasília, só chamar no
+WhatsApp OMITIDO, OMITIDO está disponibilizando 3.000 Ônibus.”
+Em resumo, os demais tópicos exploram uma variedade de temas,
+cada um refletindo diferentes facetas da discussão política na rede.
+Finalmente, buscando entender a operação das comunidades nos
+backbones sobre a disseminação de tópicos, calculamos a distri-
+buição das mensagens das 4 maiores comunidades nos 15 tópicos
+principais, exibidos na Figura 2. Cada célula representa o total de
+mensagens únicas disseminadas pela comunidade com normaliza-
+ção 𝑧−𝑠𝑐𝑜𝑟𝑒por coluna. Podemos observar que no DF, Figura 2(a),
+a comunidade 1 abordou vários tópicos, enquanto as comunidades
+2, 3 e 4 focaram em tópicos específicos. No DF+NB, Figura 2(b), as
+comunidades 1 e 4 foram ativas em muitos tópicos, enquanto as
+comunidades 2 e 3 não se desviaram da média. Em resumo, nos-
+sos resultados mostram que comunidades específicas do Telegram
+podem emergir como influenciadoras centrais em determinadas
+discussões, refletindo uma dinâmica complexa de comunicação.
+CONCLUSÕES E TRABALHOS FUTUROS
+Neste trabalho apresentamos um conjunto de análises iniciais das
+mensagens compartilhadas no Telegram pós-eleições de 2022 vi-
+sando identificar evidências de coordenação em comunidades que
+potencialmente favoreceram a propagação de conteúdos antide-
+mocráticos. Concentramos os esforços em três análises principais:
+identificação de padrões de coordenação, investigação das comuni-
+dades envolvidas e análise do conteúdo disseminado. Os resultados
+mostram como uma parcela de usuários do Telegram manifestou
+indícios de coordenação durante o período analisado, sendo respon-
+sáveis pela ampla disseminação de mensagens no período.
+Para futuras investigações, pretendemos: (i) explorar outras ma-
+nifestações de coordenação, como a utilização de hashtags e links,
+visando um entendimento mais completo dessas dinâmicas; (ii) exa-
+minar o papel das mídias alternativas nesse contexto; (iii) analisar o
+posicionamento político das mensagens coletadas e (iv) desenvolver
+métodos para prever a popularidade e o impacto de determinados
+conteúdos com base em suas características textuais.
+Agradecimentos: Este trabalho foi parcialmente financiado pela
+FAPEMIG, CAPES e CNPq.
+8https://jornal.usp.br/artigos/o-que-foi-o-8-de-janeiro/
+Evidências de disseminação de conteúdo no Telegram durante o ataque aos órgãos públicos brasileiros em 2023
+WebMedia’2024, Juiz de Fora, Brazil
+REFERÊNCIAS
+[1] Marina Azzimonti and Marcos Fernandes. 2023. Social media networks, fake
+news, and polarization. European journal of political economy 76 (2023), 102256.
+[2] Vincent D Blondel, Jean-Loup Guillaume, Renaud Lambiotte, and Etienne Le-
+febvre. 2008. Fast unfolding of comm. in large networks. Journal of Statistical
+Mechanics: Theory and Experiment (2008).
+[3] Alexandre Bovet and Peter Grindrod. 2022. Organization and evolution of the
+UK far-right network on Telegram. Applied Network Science 7, 1 (2022), 76.
+[4] Victor S. Bursztyn and Larry Birnbaum. 2019. Thousands of Small, Constant Ral-
+lies: A Large-Scale Analysis of Partisan WhatsApp Groups. In Proc. of ASONAM.
+484–488.
+[5] Dominik Bär, Nicolas Pröllochs, and Stefan Feuerriegel. 2023. New threats to
+society from free-speech social media platforms. arXiv:2302.01229 [cs.SI]
+[6] Athus Cavalini, Fabio Malini, Fabio Gouveia, and Giovanni Comarela. 2023.
+Politics and disinf.: Analyzing the use of Telegram’s inf. disorder network in
+Brazil for political mobilization. First Monday (2023).
+[7] Viktor Chagas. 2022. WhatsApp and digital astroturfing: a social network analysis
+of Brazilian political discussion groups of Bolsonaro’s supporters. International
+journal of communication 16 (2022).
+[8] Jose Martins da Rosa, Renan Saldanha Linhares, Carlos Henrique Gomes Ferreira,
+Gabriel P. Nobre, Fabricio Murai, and Jussara M. Almeida. 2022. Uncovering
+Discussion Groups on Claims of Election Fraud from Twitter. In Proc. of 13th
+International Conference Social Informatics.
+[9] Arash Dargahi Nobari, Negar Reshadatmand, and Mahmood Neshati. 2017. Analy-
+sis of Telegram, An Instant Messaging Service. In Proc. of CIKM.
+[10] Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. 2019. BERT:
+Pre-training of Deep Bidirectional Transformers for Language Understanding. In
+Proc.of NAACL, Jill Burstein, Christy Doran, and Thamar Solorio (Eds.). 4171–4186.
+https://doi.org/10.18653/v1/N19-1423
+[11] Carlos H. G. Ferreira, Fabricio Murai, Ana P. C. Silva, Martino Trevisan, Luca
+Vassio, Idilio Drago, Marco Mellia, and Jussara M. Almeida. 2022. On network
+backbone extraction for modeling online collective behavior. PLOS ONE 17, 9 (09
+2022), 1–36. https://doi.org/10.1371/journal.pone.0274218
+[12] Kiran Garimella and Gareth Tyson. 2018. WhatApp Doc? A First Look at What-
+sApp Public Group Data. Proc.of ICWSM (2018).
+[13] Maarten Grootendorst. 2022. BERTopic: Neural topic modeling with a class-based
+TF-IDF procedure. arXiv preprint arXiv:2203.05794 (2022).
+[14] Aliaksandr Herasimenka, Jonathan Bright, Aleksi Knuutila, and Philip N Howard.
+2023. Misinformation and professional news on largely unmoderated platforms:
+The case of telegram. Journal of Information Technology & Politics 20, 2 (2023),
+198–212.
+[15] Mohamad Hoseini, Philipe Melo, Fabricio Benevenuto, Anja Feldmann, and
+Savvas Zannettou. 2023. On the globalization of the QAnon conspiracy theory
+through Telegram. In Proceedings of the 15th ACM Web Science Conference 2023.
+75–85.
+[16] Manoel Júnior, Philipe Melo, Ana Paula Couto da Silva, Fabrício Benevenuto, and
+Jussara Almeida. 2021. Towards understanding the use of telegram by political
+groups in brazil. In Proceedings of the Brazilian Symposium on Multimedia and
+the Web. 237–244.
+[17] Renan S. Linhares, José M. Rosa, Carlos H. G. Ferreira, Fabricio Murai, Gabriel
+Nobre, and Jussara Almeida. 2022. Uncovering Coordinated Communities on
+Twitter During the 2020 U.S. Election. In Proc. of ASONAM.
+[18] M. E. J. Newman and M. Girvan. 2004. Finding and evaluating community
+structure in networks. Phys. Rev. E 69 (Feb 2004), 026113. Issue 2. https://doi.
+org/10.1103/PhysRevE.69.026113
+[19] Leonardo Nizzoli, Serena Tardelli, Marco Avvenuti, Stefano Cresci, and Maurizio
+Tesconi. 2021. Coordinated Behavior on Social Media in 2019 UK General Election.
+Proc.of ICWSM 15, 1 (May 2021), 443–454. https://doi.org/10.1609/icwsm.v15i1.
+18074
+[20] Gabriel Nobre, Carlos Ferreira, and Jussara Almeida. 2020. Beyond Groups:
+Uncovering Dynamic Communities on the WhatsApp Network of Information
+Dissemination. In Proc. of SocInfo.
+[21] Gabriel Peres Nobre, Carlos H.G. Ferreira, and Jussara M. Almeida. 2022. A
+Hierarchical Network-Oriented Analysis of User Participation in Misinforma-
+tion Spread on WhatsApp. Information Processing and Management (jan 2022),
+21 pages.
+[22] PANORAMA. 2023. Panorama Mobile Time/Opinion Box - Mensageria no Brasil
+- Janeiro de 2023.
+https://www.mobiletime.com.br/pesquisas/mensageria-no-
+brasil-fevereiro-de-2023/ Published: Publicações EPE.
+[23] Patrícia Rossini, Camila Mont’Alverne, and Antonis Kalogeropoulos. 2023. Explai-
+ning beliefs in electoral misinformation in the 2022 Brazilian election: The role
+of ideology, political trust, social media, and messaging apps. Harvard Kennedy
+School (HKS). (2023).
+[24] M. Angeles Serrano, Marián Boguna, and Alessandro Vespignani. 2009. Extracting
+the multiscale backbone of complex weighted networks. Proc.of the National
+Academy of Sciences 106, 16 (April 2009), 6483–6488.
+https://doi.org/10.1073/
+pnas.0808904106
+[25] Ivan Slobozhan, Tymofii Brik, and Rajesh Sharma. 2023. Differentiable charac-
+teristics of Telegram mediums during protests in Belarus 2020. Social Network
+Analysis and Mining (2023).
+[26] Fábio Souza, Rodrigo Nogueira, and Roberto Lotufo. 2020. BERTimbau: Pretrained
+BERT Models for Brazilian Portuguese. In Intelligent Systems, Ricardo Cerri and
+Ronaldo C. Prati (Eds.). Springer International Publishing, Cham, 403–417.
+[27] Aleksandra Urman and Stefan Katz. 2022. What they do in the shadows: exami-
+ning the far-right networks on Telegram. Information, communication & society
+25, 7 (2022), 904–923.
+[28] Otavio R Venâncio, Carlos HG Ferreira, Jussara M Almeida, and Ana Paula C
+da Silva. 2024. Unraveling User Coordination on Telegram: A Comprehensive
+Analysis of Political Mobilization during the 2022 Brazilian Presidential Election.
+In Proceedings of the International AAAI Conference on Web and Social Media,
+Vol. 18. 1545–1556.
