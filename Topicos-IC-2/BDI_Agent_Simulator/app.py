@@ -939,7 +939,7 @@ if projects:
                     st.info("Nenhum arquivo adicional encontrado")
             
             # Abas para organizar as informações
-            tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["📋 Código", "📁 Arquivos", "🤖 Agentes", "🔄 Simulação", "📝 Logs dos Agentes", "📊 Sniffer Agent"])
+            tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["📋 Código", "📁 Arquivos", "🤖 Agentes", "🔄 Simulação", "📝 Logs dos Agentes", "📊 Sniffer Agent", "🖧 Tropos Modeler"])
             
             with tab1:
                 st.subheader("Conteúdo do Arquivo Principal")
@@ -1266,6 +1266,9 @@ if projects:
                         st.warning("Nenhum agente encontrado no projeto para exibir o sniffer.")
                 else:
                     st.info("Execute a simulação primeiro para visualizar o Sniffer Agent.")
+
+            with tab7:
+                st.subheader("🖧 Tropos Modeler")
 
 else:
     st.error("📂 Nenhum projeto encontrado na pasta './projects'")
