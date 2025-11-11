@@ -1059,6 +1059,7 @@ if projects:
             
             with tab4:
                 st.subheader("Simulação de Execução")
+
                 agents = get_all_agents(selected_project, project_content)
                 
                 if agents:
@@ -1068,7 +1069,8 @@ if projects:
                     with col1:
                         simulation_speed = st.select_slider(
                             "Velocidade da simulação:",
-                            options=["Lenta", "Normal", "Rápida"]
+                            options=["Lenta", "Normal", "Rápida"],
+                            value="Rápida"
                         )
                         
                         if st.button("▶️ Iniciar Simulação", type="primary"):
@@ -1293,7 +1295,153 @@ if projects:
                     st.info("Execute a simulação primeiro para visualizar o Sniffer Agent.")
 
             with tab7:
-                st.subheader("🖧 Tropos Modeler")
+                st.subheader("🖧 Tropos Modeler - SVG Symbols")
+
+                agents = get_all_agents(selected_project, project_content)
+                if not agents:
+                    st.warning("Nenhum agente encontrado.")
+                else:
+                    st.write("### Diagrama Tropos – ícones SVG com zoom/pan/download")
+
+                    # ---------- coleta ----------
+                    tropos = {k: [] for k in ("agents", "roles", "goals", "softgoals", "tasks", "dependencies")}
+                    all_files = get_all_project_files(selected_project, project_content)
+                    asl_files = [f for f in all_files if f.suffix.lower() == '.asl']
+
+                    for asl_file in asl_files:
+                        try:
+                            with open(asl_file, 'r', encoding='utf-8') as f:
+                                content = f.read()
+                            content = re.sub(r'//.*?$|/\*.*?\*/', '', content, flags=re.MULTILINE | re.DOTALL)
+                            agent_name = asl_file.stem
+                            tropos["agents"].append(agent_name)
+
+                            role = "Manager" if "manager" in agent_name.lower() else "Provider" if "provider" in agent_name.lower() else "Worker"
+                            tropos["roles"].append((agent_name, role))
+
+                            goals = re.findall(r'!(\w+)', content)
+                            softgoals = re.findall(r'!(\w+_\w+)', content)
+                            tasks = re.findall(r'\+!(\w+).*?<-', content, re.DOTALL)
+                            tropos["goals"].extend([(g, agent_name) for g in goals])
+                            tropos["softgoals"].extend([(sg, agent_name) for sg in softgoals])
+                            tropos["tasks"].extend([(t, agent_name) for t in tasks])
+
+                            sends = re.findall(r'send\((\w+),', content)
+                            for target in sends:
+                                if target != agent_name and target in agents:
+                                    tropos["dependencies"].append((agent_name, target, "depends-on"))
+                        except Exception as e:
+                            st.warning(f"Erro ao processar {asl_file.name}: {e}")
+
+                    for k in tropos:
+                        if isinstance(tropos[k], list):
+                            tropos[k] = list(set(tropos[k]))
+
+                    # ---------- SVG embutido em base64 ----------
+                    import base64
+
+                    def svg_b64(name):
+                        path = Path("symbols") / f"{name}.svg"
+                        if not path.exists():
+                            # SVG placeholder
+                            svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><rect width="60" height="60" fill="lightblue"/><text x="50%" y="50%" text-anchor="middle" dy=".3em">{name}</text></svg>'
+                        else:
+                            svg = path.read_text(encoding="utf-8")
+                        return base64.b64encode(svg.encode()).decode()
+
+                    # ---------- posições fixas (sem sobreposição) ----------
+                    COL_W, ROW_H = 200, 150
+                    svg_width = max(len(tropos["agents"]) * COL_W, 800)
+                    fig = go.Figure()
+
+                    # ícones como images
+                    dy = 70
+                    dx = 30
+                    for i, agent in enumerate(tropos["agents"]):
+                        x, y = i * COL_W + COL_W/2, ROW_H/2
+                        fig.add_layout_image(x=x, y=y, sizex=60, sizey=60, xref="x", yref="y", opacity=1,
+                                             source=f"data:image/svg+xml;base64,{svg_b64('agent')}")
+                        fig.add_annotation(x=x+dx, y=y-dy, text=f"<b>{agent}</b>", showarrow=False, font=dict(size=14), bgcolor="rgba(255,255,255,0)")
+
+                    for i, (agent, role) in enumerate(tropos["roles"]):
+                        x, y = i * COL_W + COL_W/2, ROW_H + ROW_H/2
+                        fig.add_layout_image(x=x, y=y, sizex=60, sizey=60, xref="x", yref="y", opacity=1,
+                                             source=f"data:image/svg+xml;base64,{svg_b64('role')}")
+                        fig.add_annotation(x=x+dx, y=y-dy, text=f"<b>{role}</b>", showarrow=False, font=dict(size=14), bgcolor="rgba(255,255,255,0)")
+
+                    for i, (goal, agent) in enumerate(tropos["goals"]):
+                        x, y = i * COL_W + COL_W/2, 2*ROW_H + ROW_H/2
+                        fig.add_layout_image(x=x, y=y, sizex=120, sizey=60, xref="x", yref="y", opacity=1,
+                                             source=f"data:image/svg+xml;base64,{svg_b64('goal')}")
+                        fig.add_annotation(x=x+dx, y=y-dy, text=f"<b>{goal}</b>", showarrow=False, font=dict(size=14), bgcolor="rgba(255,255,255,0)")
+
+                    for i, (sg, agent) in enumerate(tropos["softgoals"]):
+                        x, y = i * COL_W + COL_W/2, 3*ROW_H + ROW_H/2
+                        fig.add_layout_image(x=x, y=y, sizex=120, sizey=60, xref="x", yref="y", opacity=1,
+                                             source=f"data:image/svg+xml;base64,{svg_b64('softgoal')}")
+                        fig.add_annotation(x=x+dx, y=y-dy, text=f"<b>{sg}</b>", showarrow=False, font=dict(size=14), bgcolor="rgba(255,255,255,0)")
+
+                    for i, (task, agent) in enumerate(tropos["tasks"]):
+                        x, y = i * COL_W + COL_W/2, 4*ROW_H + ROW_H/2
+                        fig.add_layout_image(x=x, y=y, sizex=120, sizey=60, xref="x", yref="y", opacity=1,
+                                             source=f"data:image/svg+xml;base64,{svg_b64('task')}")
+                        fig.add_annotation(x=x+dx, y=y-dy, text=f"<b>{task}</b>", showarrow=False, font=dict(size=14), bgcolor="rgba(255,255,255,0)")
+
+                    # setas de dependência
+                    # ---------- setas de dependência (corrigido) ----------
+                    for src, dst, dep in tropos["dependencies"]:
+                        if src in tropos["agents"] and dst in tropos["agents"]:
+                            x0 = tropos["agents"].index(src) * COL_W + COL_W/2
+                            x1 = tropos["agents"].index(dst) * COL_W + COL_W/2
+                            y = ROW_H/2
+                            fig.add_annotation(
+                                x=x1, y=y, ax=x0, ay=y,
+                                xref="x", yref="y", axref="x", ayref="y",
+                                showarrow=True, arrowhead=2, arrowcolor="gray",
+                                arrowwidth=3, arrowsize=1.2, standoff=3
+                            )
+            
+                    # layout sem sobreposição
+                    fig.update_xaxes(range=[-COL_W/2, svg_width + COL_W/2], visible=False)
+                    fig.update_yaxes(range=[-50, 5*ROW_H + 50], visible=False)
+                    fig.update_layout(title="Diagrama Tropos – Plotly + SVG", height=5*ROW_H + 120,
+                                      margin=dict(l=40, r=40, t=60, b=40),
+                                      plot_bgcolor="white", dragmode="zoom", showlegend=False)
+
+                    st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': True, 'scrollZoom': True})
+
+                    # ---------- exportações ----------
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.download_button("📥 Exportar Tropos TXT", data=str(tropos).encode('utf-8'),
+                                           file_name=f"tropos_{selected_project_name}.txt", mime="text/plain")
+                    with col2:
+                        import csv, io
+                        csv_buffer = io.StringIO()
+                        writer = csv.writer(csv_buffer)
+                        writer.writerow(["Categoria", "Elemento", "Agente"])
+                        for cat, lista in tropos.items():
+                            if cat in {"goals", "softgoals", "tasks"}:
+                                for elem, agent in lista:
+                                    writer.writerow([cat, elem, agent])
+                            elif cat in {"roles"}:
+                                for agent, role in lista:
+                                    writer.writerow([cat, role, agent])
+                            elif cat in {"agents", "actors"}:
+                                for agent in lista:
+                                    writer.writerow([cat, agent, ""])
+                            elif cat in {"dependencies"}:
+                                for src, dst, dep in lista:
+                                    writer.writerow([cat, f"{src} -> {dst}", dep])
+                            elif cat in {"contributions"}:
+                                for src, dst, contrib in lista:
+                                    writer.writerow([cat, f"{src} -{contrib}-> {dst}", ""])
+                        st.download_button("📥 Exportar Tropos CSV", data=csv_buffer.getvalue().encode('utf-8'),
+                                           file_name=f"tropos_{selected_project_name}.csv", mime="text/csv")
+                    with col3:
+                        # SVG único (caso queira download do desenho inteiro)
+                        st.download_button("📥 Exportar SVG", data=f'<svg xmlns="http://www.w3.org/2000/svg" width="{svg_width}" height="{5*ROW_H+120}">...</svg>'.encode('utf-8'),
+                                           file_name=f"tropos_{selected_project_name}.svg", mime="image/svg+xml")
 
 else:
     st.error("📂 Nenhum projeto encontrado na pasta './projects'")
