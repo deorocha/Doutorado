@@ -13,5 +13,6 @@ nltk>=3.8.1
 unidecode
 pdfplumber
 plotly
+scikit-learn
 https://github.com/explosion/spacy-models/releases/download/pt_core_news_lg-3.8.0/pt_core_news_lg-3.8.0-py3-none-any.whl
 https://github.com/explosion/spacy-models/releases/download/pt_core_news_sm-3.8.0/pt_core_news_sm-3.8.0-py3-none-any.whl
