@@ -1,0 +1,12 @@
+MAS ProjetoTroposDemo {
+
+    infrastructure: Centralised
+
+    environment: c4jason.C4JasonEnvironment
+
+    agents:
+        alice agentArchClass c4jason.C4AgentArchitecture;
+        bob agentArchClass c4jason.C4AgentArchitecture;
+        charlie agentArchClass c4jason.C4AgentArchitecture;
+        dana agentArchClass c4jason.C4AgentArchitecture;
+}
