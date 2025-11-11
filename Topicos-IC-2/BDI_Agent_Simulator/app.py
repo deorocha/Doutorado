@@ -500,8 +500,8 @@ def create_communication_diagram(agent_messages, agents):
     # Posições dos agentes no eixo X
     agent_positions = {agent: i for i, agent in enumerate(agents)}
     
-    # Espaçamento vertical entre as setas
-    vertical_spacing = 10.0
+    # CORREÇÃO: Espaçamento vertical mais consistente
+    vertical_spacing = 8.0  # Reduzido para melhor distribuição
     max_height = max(len(comm_messages) * vertical_spacing, 25)
     
     # Adiciona linhas verticais para cada agente
@@ -517,10 +517,16 @@ def create_communication_diagram(agent_messages, agents):
     # Conjunto para evitar comunicações duplicadas
     seen_communications = set()
     
+    # CORREÇÃO: Contadores separados para diferentes tipos de comunicação
+    broadcast_count = 0
+    point_to_point_count = 0
+    
     for i, msg in enumerate(comm_messages):
         message_text = msg['Mensagem']
         agent = msg['Agente']
-        y_pos = i * vertical_spacing + 1
+        
+        # CORREÇÃO: Posição Y baseada no índice da mensagem com espaçamento consistente
+        y_pos = i * vertical_spacing + 2
         
         # Extrai informações da mensagem
         if '[SEND]' in message_text:
@@ -538,23 +544,29 @@ def create_communication_diagram(agent_messages, agents):
                                 'message': message_text,
                                 'time': msg['Hora'],
                                 'type': 'SEND',
-                                'y_pos': y_pos
+                                'y_pos': y_pos,
+                                'index': point_to_point_count
                             })
                             seen_communications.add(comm_key)
+                            point_to_point_count += 1
         
         elif '[BROADCAST]' in message_text:
             # Para broadcast, usamos uma única comunicação com 'ALL'
             comm_key = (agent, 'ALL', 'BROADCAST', message_text)
             if comm_key not in seen_communications:
+                # CORREÇÃO: Posição Y específica para broadcasts para evitar sobreposição
+                # broadcast_y_pos = broadcast_count * vertical_spacing + 1
                 communications.append({
                     'from': agent,
                     'to': 'ALL',
                     'message': message_text,
                     'time': msg['Hora'],
                     'type': 'BROADCAST',
-                    'y_pos': y_pos
+                    'y_pos': y_pos, # broadcast_y_pos,
+                    'index': i
                 })
                 seen_communications.add(comm_key)
+                broadcast_count += 1
         
         elif '[RECV]' in message_text:
             if 'de' in message_text:
@@ -570,9 +582,11 @@ def create_communication_diagram(agent_messages, agents):
                                 'message': message_text,
                                 'time': msg['Hora'],
                                 'type': 'RECV',
-                                'y_pos': y_pos
+                                'y_pos': y_pos,
+                                'index': point_to_point_count
                             })
                             seen_communications.add(comm_key)
+                            point_to_point_count += 1
             else:
                 # Se não conseguiu extrair o remetente, cria uma comunicação genérica
                 comm_key = ('UNKNOWN', agent, 'RECV', message_text)
@@ -583,23 +597,29 @@ def create_communication_diagram(agent_messages, agents):
                         'message': message_text,
                         'time': msg['Hora'],
                         'type': 'RECV',
-                        'y_pos': y_pos
+                        'y_pos': y_pos,
+                        'index': point_to_point_count
                     })
                     seen_communications.add(comm_key)
+                    point_to_point_count += 1
         
         elif '[INFORM]' in message_text:
             # Para INFORM, tratamos como broadcast
             comm_key = (agent, 'ALL', 'INFORM', message_text)
             if comm_key not in seen_communications:
+                # CORREÇÃO: Posição Y específica para broadcasts
+                broadcast_y_pos = broadcast_count * vertical_spacing + 1
                 communications.append({
                     'from': agent,
                     'to': 'ALL',
                     'message': message_text,
                     'time': msg['Hora'],
                     'type': 'INFORM',
-                    'y_pos': y_pos
+                    'y_pos': broadcast_y_pos,
+                    'index': i
                 })
                 seen_communications.add(comm_key)
+                broadcast_count += 1
         
         elif '[REQUEST]' in message_text:
             if 'para' in message_text:
@@ -615,9 +635,14 @@ def create_communication_diagram(agent_messages, agents):
                                 'message': message_text,
                                 'time': msg['Hora'],
                                 'type': 'REQUEST',
-                                'y_pos': y_pos
+                                'y_pos': y_pos,
+                                'index': point_to_point_count
                             })
                             seen_communications.add(comm_key)
+                            point_to_point_count += 1
+    
+    # CORREÇÃO: Ordena comunicações pela posição Y para melhor organização
+    communications.sort(key=lambda x: x['y_pos'])
     
     # Cores para diferentes tipos de mensagens
     arrow_colors = {
@@ -631,9 +656,6 @@ def create_communication_diagram(agent_messages, agents):
     # Adiciona setas para cada comunicação
     for comm in communications:
         y_pos = comm['y_pos']
-        
-        if comm['type'] == 'BROADCAST':
-            y_pos = y_pos + 0.8
         
         # Verifica se os agentes existem antes de adicionar setas
         if comm['from'] not in agent_positions and comm['from'] != 'UNKNOWN':
@@ -680,9 +702,8 @@ def create_communication_diagram(agent_messages, agents):
                 arrowcolor=arrow_colors.get(comm['type'], 'black')
             )
     
-    # Adiciona texto das mensagens EM UMA CAMADA SEPARADA para evitar sobreposição
+    # CORREÇÃO: Adiciona texto das mensagens com espaçamento consistente
     text_annotations = []
-    # Conjunto para evitar textos duplicados
     seen_texts = set()
 
     for comm in communications:
@@ -706,9 +727,8 @@ def create_communication_diagram(agent_messages, agents):
             # Para BROADCAST/INFORM, adiciona apenas UMA vez o texto centralizado
             text_key = ('BROADCAST', comm['from'], message_short)
             if text_key not in seen_texts:
-                # Atribui posições Y sequenciais para broadcasts
-                broadcast_count = len([t for t in seen_texts if t[0] == 'BROADCAST'])
-                text_y = y_pos + 8.0 + (broadcast_count * 4.0)  # Espaçamento garantido
+                # CORREÇÃO: Posição Y mais consistente para broadcasts
+                text_y = y_pos + 3.0  # Espaçamento fixo acima da seta
                 
                 text_annotations.append(dict(
                     x=len(agents) / 2 - 0.5,
@@ -723,8 +743,8 @@ def create_communication_diagram(agent_messages, agents):
             # Para mensagens ponto-a-ponto (SEND, RECV, REQUEST)
             text_key = (comm['from'], comm['to'], comm['type'], message_short)
             if text_key not in seen_texts:
-                # Posiciona o texto acima da seta
-                text_y = y_pos + 4.0
+                # CORREÇÃO: Posiciona o texto com espaçamento consistente
+                text_y = y_pos + 3.0  # Espaçamento fixo acima da seta
                 
                 # Para RECV, ajusta a posição X para ficar mais próximo do destinatário
                 if comm['type'] == 'RECV':
@@ -746,6 +766,11 @@ def create_communication_diagram(agent_messages, agents):
     for annotation in text_annotations:
         fig.add_annotation(annotation)
     
+    # CORREÇÃO: Ajusta a altura máxima baseada nas comunicações
+    if communications:
+        max_comm_y = max(comm['y_pos'] for comm in communications)
+        max_height = max(max_comm_y + 15, 25)  # Garante espaço mínimo
+    
     # Adiciona retângulos para cada agente
     for agent, x_pos in agent_positions.items():
         # Adiciona retângulo como shape
@@ -754,7 +779,7 @@ def create_communication_diagram(agent_messages, agents):
             x0=x_pos - 0.4,
             y0=max_height + 0.5,
             x1=x_pos + 0.4,
-            y1=max_height + 10.0,
+            y1=max_height + 6.0,
             line=dict(color="darkblue", width=1),
             fillcolor="lightblue",
             opacity=0.8
@@ -763,7 +788,7 @@ def create_communication_diagram(agent_messages, agents):
         # Adiciona texto do agente sem caixa
         fig.add_annotation(
             x=x_pos,
-            y=max_height + 5,
+            y=max_height+3, # max_height + 5,
             text=agent,
             showarrow=False,
             font=dict(size=10, color="black", family="Arial", weight="bold"),
