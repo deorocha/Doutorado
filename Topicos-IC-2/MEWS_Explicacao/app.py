@@ -56,6 +56,35 @@ if json_path.exists():
 else:
     st.error(f"Arquivo JSON não encontrado em: {json_path}")
 
+# Função para obter motivos de forma segura
+def obter_motivos(procedimento):
+    """Obtém os motivos de um procedimento, lidando com diferentes estruturas do JSON"""
+    motivos = {}
+    
+    # Verifica se há motivos diretamente no procedimento
+    if 'motivos' in procedimento and procedimento['motivos']:
+        motivos = procedimento['motivos']
+    
+    # Se não encontrou motivos diretamente, verifica na primeira ação
+    elif 'acoes' in procedimento and procedimento['acoes']:
+        primeira_acao = procedimento['acoes'][0]
+        if 'motivos' in primeira_acao and primeira_acao['motivos']:
+            motivos = primeira_acao['motivos']
+    
+    return motivos
+
+# Função para obter todas as ações com motivos
+def obter_acoes_com_motivos(procedimento):
+    """Obtém todas as ações que possuem motivos"""
+    acoes_com_motivos = []
+    
+    if 'acoes' in procedimento:
+        for acao in procedimento['acoes']:
+            if 'motivos' in acao and acao['motivos']:
+                acoes_com_motivos.append(acao)
+    
+    return acoes_com_motivos
+
 # Sidebar
 with st.sidebar:
     st.header("⚙️ Configuração da Consulta")
@@ -164,10 +193,11 @@ if 'procedimento_selecionado' in st.session_state:
     # Procedimento
     st.markdown(f'<div class="procedure-header">🏥 Procedimento: {proc["procedimento"]["procedimento"]}</div>', unsafe_allow_html=True)
 
-    # Motivos (se disponíveis)
-    if proc['procedimento']['motivos']:
-        motivos = proc['procedimento']['motivos']
+    # Obter motivos de forma segura
+    motivos = obter_motivos(proc['procedimento'])
 
+    # Exibir motivos se disponíveis
+    if motivos:
         col1, col2 = st.columns(2)
 
         with col1:
@@ -187,19 +217,15 @@ if 'procedimento_selecionado' in st.session_state:
             if motivos.get('impacto'):
                 st.markdown('<div class="section-header">🤒 Impacto no Paciente</div>', unsafe_allow_html=True)
                 st.markdown(f'<div class="section-content impact-section">{motivos["impacto"]}</div>', unsafe_allow_html=True)
-        
-        # Botão Limpar Explicação
-        col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
-        with col_btn2:
-            if st.button("🧹 Limpar Explicação", type="primary", use_container_width=True):
-                del st.session_state.procedimento_selecionado
-                st.rerun()
     
-    # Se houver ações, mostrar como subseções
-    if proc['procedimento']['acoes']:
+    # Obter ações com motivos
+    acoes_com_motivos = obter_acoes_com_motivos(proc['procedimento'])
+    
+    # Se houver ações com motivos, mostrar como subseções
+    if acoes_com_motivos:
         st.markdown('<div class="section-header">Ações Específicas</div>', unsafe_allow_html=True)
         
-        for acao in proc['procedimento']['acoes']:
+        for acao in acoes_com_motivos:
             with st.expander(f"🔹 {acao['acao']}"):
                 if acao['motivos']:
                     col5, col6 = st.columns(2)
@@ -221,6 +247,13 @@ if 'procedimento_selecionado' in st.session_state:
                         if acao['motivos'].get('impacto'):
                             st.markdown('<div class="section-header">Impacto</div>', unsafe_allow_html=True)
                             st.markdown(f'<div class="section-content impact-section">{acao["motivos"]["impacto"]}</div>', unsafe_allow_html=True)
+
+    # Botão Limpar Explicação
+    col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
+    with col_btn2:
+        if st.button("🧹 Limpar Explicação", type="primary", use_container_width=True):
+            del st.session_state.procedimento_selecionado
+            st.rerun()
 
 else:
     col1, col2, col3 = st.columns(3)
