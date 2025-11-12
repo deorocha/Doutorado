@@ -1,0 +1,142 @@
+{
+    "faixas_mews": [
+        {
+            "id": 1,
+            "nome": "nome faixa 1 (verde)",
+            "atores": [
+                {
+                    "ator": "ator 1 (enfermagem)",
+                    "condutas": [
+                        {
+                            "conduta": "ator 1 - conduta 1 (MONITORAMENTO DE ROTINA)",
+                            "procedimentos": [
+                                {
+                                    "procedimento": "ator 1 - conduta 1 - procedimento 1 (verificar sinais vitais...)",
+                                    "acoes": [
+                                        {
+                                            "acao": "ator 1 - conduta 1 - procedimento 1 - acao 1",
+                                            "motivos": {
+                                                "fundamento": "ator 1 - conduta 1 - procedimento 1 - acao 1 - fundamento",
+                                                "evidencias": "ator 1 - conduta 1 - procedimento 1 - acao 1 - evidencias",
+                                                "riscos": "ator 1 - conduta 1 - procedimento 1 - acao 1 - riscos",
+                                                "impacto": "ator 1 - conduta 1 - procedimento 1 - acao 1 - impacto"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "procedimento": "ator 1 - conduta 1 - procedimento 2 (manter observação...)",
+                                    "acoes": [
+                                        {
+                                            "acao": "ator 1 - conduta 1 - procedimento 2 - acao 1",
+                                            "motivos": {
+                                                "fundamento": "ator 1 - conduta 1 - procedimento 2 - acao 1 - fundamento",
+                                                "evidencias": "ator 1 - conduta 1 - procedimento 2 - acao 1 - evidencias",
+                                                "riscos": "ator 1 - conduta 1 - procedimento 2 - acao 1 - riscos",
+                                                "impacto": "ator 1 - conduta 1 - procedimento 2 - acao 1 - impacto"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "procedimento": "ator 1 - conduta 1 - procedimento 3 (documentar evolução...)",
+                                    "acoes": [
+                                        {
+                                            "acao": "ator 1 - conduta 1 - procedimento 3 - acao 1",
+                                            "motivos": {
+                                                "fundamento": "ator 1 - conduta 1 - procedimento 3 - acao 1 - fundamento",
+                                                "evidencias": "ator 1 - conduta 1 - procedimento 3 - acao 1 - evidencias",
+                                                "riscos": "ator 1 - conduta 1 - procedimento 3 - acao 1 - riscos",
+                                                "impacto": "ator 1 - conduta 1 - procedimento 3 - acao 1 - impacto"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "procedimento": "ator 1 - conduta 1 - procedimento 4 (manter comunicação...)",
+                                    "acoes": [
+                                        {
+                                            "acao": "ator 1 - conduta 1 - procedimento 4 - acao 1",
+                                            "motivos": {
+                                                "fundamento": "ator 1 - conduta 1 - procedimento 4 - acao 1 - fundamento",
+                                                "evidencias": "ator 1 - conduta 1 - procedimento 4 - acao 1 - evidencias",
+                                                "riscos": "ator 1 - conduta 1 - procedimento 4 - acao 1 - riscos",
+                                                "impacto": "ator 1 - conduta 1 - procedimento 4 - acao 1 - impacto"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "procedimento": "ator 1 - conduta 1 - procedimento 5 (orientar paciente/família...)",
+                                    "acoes": [
+                                        {
+                                            "acao": "ator 1 - conduta 1 - procedimento 5 - acao 1",
+                                            "motivos": {
+                                                "fundamento": "ator 1 - conduta 1 - procedimento 5 - acao 1 - fundamento",
+                                                "evidencias": "ator 1 - conduta 1 - procedimento 5 - acao 1 - evidencias",
+                                                "riscos": "ator 1 - conduta 1 - procedimento 5 - acao 1 - riscos",
+                                                "impacto": "ator 1 - conduta 1 - procedimento 5 - acao 1 - impacto"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "ator": "ator 2 (médicos)",
+                    "condutas": [
+                        {
+                            "conduta": "ator 2 - conduta 1",
+                            "procedimentos": [
+                                {
+                                    "procedimento": "ator 2 - conduta 1 - procedimento 1 (manter plano terapêutico...)",
+                                    "acoes": [
+                                        {
+                                            "acao": "ator 2 - conduta 1 - procedimento 1 - acao 1",
+                                            "motivos": {
+                                                "fundamento": "ator 2 - conduta 1 - procedimento 1 - acao 1 - fundamento",
+                                                "evidencias": "ator 2 - conduta 1 - procedimento 1 - acao 1 - evidencias",
+                                                "riscos": "ator 2 - conduta 1 - procedimento 1 - acao 1 - riscos",
+                                                "impacto": "ator 2 - conduta 1 - procedimento 1 - acao 1 - impacto"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "procedimento": "ator 2 - conduta 1 - procedimento 2 (reavaliar prescrições...)",
+                                    "acoes": [
+                                        {
+                                            "acao": "ator 2 - conduta 1 - procedimento 2 - acao 1",
+                                            "motivos": {
+                                                "fundamento": "ator 2 - conduta 1 - procedimento 2 - acao 1 - fundamento",
+                                                "evidencias": "ator 2 - conduta 1 - procedimento 2 - acao 1 - evidencias",
+                                                "riscos": "ator 2 - conduta 1 - procedimento 2 - acao 1 - riscos",
+                                                "impacto": "ator 2 - conduta 1 - procedimento 2 - acao 1 - impacto"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "procedimento": "ator 2 - conduta 1 - procedimento 3 (considerar necessidade...)",
+                                    "acoes": [
+                                        {
+                                            "acao": "ator 2 - conduta 1 - procedimento 3 - acao 1",
+                                            "motivos": {
+                                                "fundamento": "ator 2 - conduta 1 - procedimento 3 - acao 1 - fundamento",
+                                                "evidencias": "ator 2 - conduta 1 - procedimento 3 - acao 1 - evidencias",
+                                                "riscos": "ator 2 - conduta 1 - procedimento 3 - acao 1 - riscos",
+                                                "impacto": "ator 2 - conduta 1 - procedimento 3 - acao 1 - impacto"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
