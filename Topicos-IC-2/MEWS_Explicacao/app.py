@@ -73,9 +73,9 @@ def obter_motivos(procedimento):
     
     return motivos
 
-# Função para obter todas as ações com motivos
+# Função para obter ações com derivação (Pós-relacional)
 def obter_acoes_com_motivos(procedimento):
-    """Obtém todas as ações que possuem motivos"""
+    """ Obtém ações com derivação """
     acoes_com_motivos = []
     
     if 'acoes' in procedimento:
@@ -306,3 +306,4 @@ else:
                 6. RDC nº 214/2018
                 7. RDC nº 158/2021
         ''')
+
