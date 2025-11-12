@@ -12,53 +12,73 @@
               "procedimentos": [
                 {
                   "procedimento": "Verificar sinais vitais a cada 4-8 horas conforme protocolo",
-                  "acoes": [],
-                  "motivos": {
-                    "fundamento": "Em pacientes estáveis, os sistemas homeostáticos estão compensados. A verificação em intervalos padronizados estabelece uma linha de base individual e permite a detecção de desvios sutis dessa linha de base, que são os primeiros sinais de uma possível deterioração. Intervalos superiores a 8 horas podem não capturar uma tendência de agravamento que ainda é lenta e silenciosa.",
-                    "evidencias": "O Programa Nacional de Segurança do Paciente (PNSP) e protocolos baseados na RDC 36/2013 recomendam a monitorização vital periódica como a espinha dorsal da detecção precoce. Estudos de validação do MEWS mostram que a frequência de coleta de dados impacta diretamente sua sensibilidade. A faixa de 4-8h é considerada o equilíbrio ideal entre segurança e alocação eficiente de recursos para pacientes de baixo risco.",
-                    "riscos": "A omissão ou a extensão excessiva do intervalo permitiria que uma deterioração inicial progredisse sem ser notada, potencialmente evoluindo para uma situação de emergência que poderia ter sido evitada com uma intervenção simples e oportuna.",
-                    "impacto": "Proporciona segurança contínua e não invasiva. O paciente se sente cuidado e monitorado, e a equipe tem dados objetivos para sustentar a conduta de baixo risco."
-                  }
+                  "acoes": [
+                    {
+                      "acao": "MONITORAMENTO DE ROTINA",
+                      "motivos": {
+                        "fundamento": "Em pacientes estáveis, os sistemas homeostáticos estão compensados. A verificação em intervalos padronizados estabelece uma linha de base individual e permite a detecção de desvios sutis dessa linha de base, que são os primeiros sinais de uma possível deterioração. Intervalos superiores a 8 horas podem não capturar uma tendência de agravamento que ainda é lenta e silenciosa.",
+                        "evidencias": "O Programa Nacional de Segurança do Paciente (PNSP) e protocolos baseados na RDC 36/2013 recomendam a monitorização vital periódica como a espinha dorsal da detecção precoce. Estudos de validação do MEWS mostram que a frequência de coleta de dados impacta diretamente sua sensibilidade. A faixa de 4-8h é considerada o equilíbrio ideal entre segurança e alocação eficiente de recursos para pacientes de baixo risco.",
+                        "riscos": "A omissão ou a extensão excessiva do intervalo permitiria que uma deterioração inicial progredisse sem ser notada, potencialmente evoluindo para uma situação de emergência que poderia ter sido evitada com uma intervenção simples e oportuna.",
+                        "impacto": "Proporciona segurança contínua e não invasiva. O paciente se sente cuidado e monitorado, e a equipe tem dados objetivos para sustentar a conduta de baixo risco."
+                      }
+                    }
+                  ]
                 },
                 {
                   "procedimento": "Manter observação para mudanças no padrão respiratório",
-                  "acoes": [],
-                  "motivos": {
-                    "fundamento": "O sistema respiratório é um dos primeiros a apresentar sinais de descompensação em diversas condições (infecciosas, metabólicas, cardíacas). Alterações na frequência, ritmo ou profundidade (taquipneia, bradipneia, respiração laboriosa) são marcadores sensíveis de estresse fisiológico.",
-                    "evidencias": "A alteração da frequência respiratória é um dos componentes mais sensíveis e precocemente alterados no MEWS e em outros escores de alerta precoce. A observação contínua vai além da mensuração numérica pontual, captando sinais clínicos de sofrimento respiratório.",
-                    "riscos": "Ignorar uma taquipneia progressiva, por exemplo, pode significar não identificar uma pneumonia incipiente, uma acidose metabólica ou uma insuficiência cardíaca inicial.",
-                    "impacto": "Permite a identificação precoce de problemas que, se tratados rapidamente, têm uma resolução muito mais simples e com menor morbidade."
-                  }
+                  "acoes": [
+                    {
+                      "acao": "MONITORAMENTO DE ROTINA",
+                      "motivos": {
+                        "fundamento": "O sistema respiratório é um dos primeiros a apresentar sinais de descompensação em diversas condições (infecciosas, metabólicas, cardíacas). Alterações na frequência, ritmo ou profundidade (taquipneia, bradipneia, respiração laboriosa) são marcadores sensíveis de estresse fisiológico.",
+                        "evidencias": "A alteração da frequência respiratória é um dos componentes mais sensíveis e precocemente alterados no MEWS e em outros escores de alerta precoce. A observação contínua vai além da mensuração numérica pontual, captando sinais clínicos de sofrimento respiratório.",
+                        "riscos": "Ignorar uma taquipneia progressiva, por exemplo, pode significar não identificar uma pneumonia incipiente, uma acidose metabólica ou uma insuficiência cardíaca inicial.",
+                        "impacto": "Permite a identificação precoce de problemas que, se tratados rapidamente, têm uma resolução muito mais simples e com menor morbidade."
+                      }
+                    }
+                  ]
                 },
                 {
                   "procedimento": "Documentar evolução no prontuário",
-                  "acoes": [],
-                  "motivos": {
-                    "fundamento": "A documentação serial constrói uma \"linha do tempo fisiológica\" do paciente. Ela transforma observações pontuais em uma narrativa clínica que permite identificar padrões e tendências.",
-                    "evidencias": "A documentação é um requisito de qualidade e segurança previsto em manuais de acreditação hospitalar (como ONA e JCI) e é implícita na RDC 36/2013 como parte da comunicação efetiva da equipe. É uma ferramenta legal que comprova os cuidados prestados.",
-                    "riscos": "A falta de documentação gera descontinuidade do cuidado. A próxima equipe não terá informações precisas sobre a evolução do paciente, podendo ignorar uma mudança sutil, mas significativa. Fragiliza a defesa legal em caso de eventos adversos.",
-                    "impacto": "Garante a continuidade do cuidado e que qualquer alteração seja percebida por todos os membros da equipe ao longo do tempo, assegurando uma abordagem coerente e integrada."
-                  }
+                  "acoes": [
+                    {
+                      "acao": "MONITORAMENTO DE ROTINA",
+                      "motivos": {
+                        "fundamento": "A documentação serial constrói uma \"linha do tempo fisiológica\" do paciente. Ela transforma observações pontuais em uma narrativa clínica que permite identificar padrões e tendências.",
+                        "evidencias": "A documentação é um requisito de qualidade e segurança previsto em manuais de acreditação hospitalar (como ONA e JCI) e é implícita na RDC 36/2013 como parte da comunicação efetiva da equipe. É uma ferramenta legal que comprova os cuidados prestados.",
+                        "riscos": "A falta de documentação gera descontinuidade do cuidado. A próxima equipe não terá informações precisas sobre a evolução do paciente, podendo ignorar uma mudança sutil, mas significativa. Fragiliza a defesa legal em caso de eventos adversos.",
+                        "impacto": "Garante a continuidade do cuidado e que qualquer alteração seja percebida por todos os membros da equipe ao longo do tempo, assegurando uma abordagem coerente e integrada."
+                      }
+                    }
+                  ]
                 },
                 {
                   "procedimento": "Manter comunicação com equipe sobre qualquer alteração subjetiva",
-                  "acoes": [],
-                  "motivos": {
-                    "fundamento": "Muitas vezes, o próprio paciente é o primeiro a perceber que \"algo não está certo\". Sintomas subjetivos como mal-estar, tontura, dor, ansiedade ou \"sensação de febre\" podem preceder em horas as alterações objetivas nos sinais vitais.",
-                    "evidencias": "O PNSP e os protocolos de segurança enfatizam a cultura de comunicação e trabalho em equipe. A valorização da queixa do paciente e sua rápida comunicação são barreiras cruciais para prevenir eventos adversos.",
-                    "riscos": "Desconsiderar o relato do paciente é perder um sinal de alerta precoce e valioso. Pode levar a um atraso significativo no diagnóstico e tratamento.",
-                    "impacto": "Empodera o paciente, valoriza sua experiência e fortalece a relação de confiança com a equipe. É uma intervenção de custo zero e alto impacto na segurança."
-                  }
+                  "acoes": [
+                    {
+                      "acao": "MONITORAMENTO DE ROTINA",
+                      "motivos": {
+                        "fundamento": "Muitas vezes, o próprio paciente é o primeiro a perceber que \"algo não está certo\". Sintomas subjetivos como mal-estar, tontura, dor, ansiedade ou \"sensação de febre\" podem preceder em horas as alterações objetivas nos sinais vitais.",
+                        "evidencias": "O PNSP e os protocolos de segurança enfatizam a cultura de comunicação e trabalho em equipe. A valorização da queixa do paciente e sua rápida comunicação são barreiras cruciais para prevenir eventos adversos.",
+                        "riscos": "Desconsiderar o relato do paciente é perder um sinal de alerta precoce e valioso. Pode levar a um atraso significativo no diagnóstico e tratamento.",
+                        "impacto": "Empodera o paciente, valoriza sua experiência e fortalece a relação de confiança com a equipe. É uma intervenção de custo zero e alto impacto na segurança."
+                      }
+                    }
+                  ]
                 },
                 {
                   "procedimento": "Orientar paciente/família sobre sinais de alerta",
-                  "acoes": [],
-                  "motivos": {
-                    "fundamento": "O paciente e seus acompanhantes tornam-se vigilantes extensionistas da equipe, 24 horas por dia. Eles podem alertar a equipe no momento exato em que um sinal surgir, e não apenas no momento da verificação de rotina.",
-                    "evidencias": "É uma das ações centrais do protocolo \"O Paciente pela Sua Própria Segurança\", do PNSP. Envolver o paciente e a família é uma estratégia baseada em fortes evidências para aumentar a adesão aos protocolos e a detecção precoce de problemas.",
-                    "riscos": "Sem o conhecimento dos sinais de alerta, o paciente ou familiar pode não perceber a importância de um sintoma novo ou pode hesitar em chamar a equipe, perdendo a janela de oportunidade para uma intervenção precoce.",
-                    "impacto": "Aumenta drasticamente a sensibilidade do sistema de vigilância, transformando o paciente de um receptor passivo em um agente ativo de sua própria segurança."
-                  }
+                  "acoes": [
+                    {
+                      "acao": "MONITORAMENTO DE ROTINA",
+                      "motivos": {
+                        "fundamento": "O paciente e seus acompanhantes tornam-se vigilantes extensionistas da equipe, 24 horas por dia. Eles podem alertar a equipe no momento exato em que um sinal surgir, e não apenas no momento da verificação de rotina.",
+                        "evidencias": "É uma das ações centrais do protocolo \"O Paciente pela Sua Própria Segurança\", do PNSP. Envolver o paciente e a família é uma estratégia baseada em fortes evidências para aumentar a adesão aos protocolos e a detecção precoce de problemas.",
+                        "riscos": "Sem o conhecimento dos sinais de alerta, o paciente ou familiar pode não perceber a importância de um sintoma novo ou pode hesitar em chamar a equipe, perdendo a janela de oportunidade para uma intervenção precoce.",
+                        "impacto": "Aumenta drasticamente a sensibilidade do sistema de vigilância, transformando o paciente de um receptor passivo em um agente ativo de sua própria segurança."
+                      }
+                    }
+                  ]
                 }
               ]
             }
@@ -72,33 +92,45 @@
               "procedimentos": [
                 {
                   "procedimento": "Manter plano terapêutico estabelecido",
-                  "acoes": [],
-                  "motivos": {
-                    "fundamento": "O paciente na faixa verde está respondendo adequadamente ao tratamento instituído. Manter a conduta garante a continuidade do suporte fisiológico e terapêutico que está sustentando sua estabilidade (ex.: antibioticoterapia, controle glicêmico, terapia de reposição volêmica).",
-                    "evidencias": "A prática médica baseada em evidências prega a estabilidade e a avaliação contínua. Alterar um plano que está funcionando sem uma indicação clara pode introduzir riscos desnecessários e interromper um processo de recuperação adequado.",
-                    "riscos": "A descontinuação inadvertida de uma terapia efetiva pode levar à recidiva da doença de base. Alterações frequentes e não justificadas podem confundir a equipe e desestabilizar o paciente.",
-                    "impacto": "Garante a continuidade e a previsibilidade do tratamento, essenciais para a recuperação e para a sensação de segurança do paciente."
-                  }
+                  "acoes": [
+                    {
+                      "acao": "CONDUTA MÉDICA",
+                      "motivos": {
+                        "fundamento": "O paciente na faixa verde está respondendo adequadamente ao tratamento instituído. Manter a conduta garante a continuidade do suporte fisiológico e terapêutico que está sustentando sua estabilidade (ex.: antibioticoterapia, controle glicêmico, terapia de reposição volêmica).",
+                        "evidencias": "A prática médica baseada em evidências prega a estabilidade e a avaliação contínua. Alterar um plano que está funcionando sem uma indicação clara pode introduzir riscos desnecessários e interromper um processo de recuperação adequado.",
+                        "riscos": "A descontinuação inadvertida de uma terapia efetiva pode levar à recidiva da doença de base. Alterações frequentes e não justificadas podem confundir a equipe e desestabilizar o paciente.",
+                        "impacto": "Garante a continuidade e a previsibilidade do tratamento, essenciais para a recuperação e para a sensação de segurança do paciente."
+                      }
+                    }
+                  ]
                 },
                 {
                   "procedimento": "Reavaliar prescrições nas próximas 24h",
-                  "acoes": [],
-                  "motivos": {
-                    "fundamento": "A condição clínica é dinâmica. Uma reavaliação programada dentro de um prazo clinicamente relevante (24h para pacientes estáveis) visa antecipar necessidades futuras e ajustar profilaxias, suportes e medicações de acordo com a evolução esperada.",
-                    "evidencias": "Boas práticas de prescrição, recomendadas pela ANVISA e conselhos de medicina, envolvem a revisão periódica de todos os medicamentos, especialmente antimicrobianos, analgésicos e sedativos, para evitar tratamentos desnecessariamente longos e seus efeitos colaterais.",
-                    "riscos": "Prescrições \"estáticas\" podem se tornar rapidamente obsoletas, levando à administração de medicamentos não mais indicados, aumento do risco de eventos adversos e resistência microbiana.",
-                    "impacto": "Assegura que a terapia permaneça apropriada, efetiva e segura, otimizando a recuperação e minimizando danos."
-                  }
+                  "acoes": [
+                    {
+                      "acao": "CONDUTA MÉDICA",
+                      "motivos": {
+                        "fundamento": "A condição clínica é dinâmica. Uma reavaliação programada dentro de um prazo clinicamente relevante (24h para pacientes estáveis) visa antecipar necessidades futuras e ajustar profilaxias, suportes e medicações de acordo com a evolução esperada.",
+                        "evidencias": "Boas práticas de prescrição, recomendadas pela ANVISA e conselhos de medicina, envolvem a revisão periódica de todos os medicamentos, especialmente antimicrobianos, analgésicos e sedativos, para evitar tratamentos desnecessariamente longos e seus efeitos colaterais.",
+                        "riscos": "Prescrições \"estáticas\" podem se tornar rapidamente obsoletas, levando à administração de medicamentos não mais indicados, aumento do risco de eventos adversos e resistência microbiana.",
+                        "impacto": "Assegura que a terapia permaneça apropriada, efetiva e segura, otimizando a recuperação e minimizando danos."
+                      }
+                    }
+                  ]
                 },
                 {
                   "procedimento": "Considerar necessidade de exames complementares de rotina",
-                  "acoes": [],
-                  "motivos": {
-                    "fundamento": "Em pacientes estáveis, a solicitação de exames deve ser guiada por uma questão clínica específica. A \"rotina\" aqui se refere aos exames necessários para monitorar a doença de base ou os efeitos do tratamento, e não a um pedido indiscriminado. O objetivo é obter dados objetivos para embasar a alta hospitalar ou a continuidade do plano.",
-                    "evidencias": "Diretrizes clínicas e políticas de uso racional de recursos (como as da ANVISA para uso de antibióticos, que exigem reeavaliação) recomendam evitar a medicina defensiva e a solicitação de exames sem uma clara indicação, devido aos riscos de resultados falso-positivos, ansiedade do paciente e custos.",
-                    "riscos": "Solicitação desnecessária: Pode levar a \"cascata de diagnósticos\", onde um resultado anormal leve a mais exames invasivos e tratamentos desnecessários, causando iatrogenia. Não solicitar um exame necessário: Pode deixar de identificar uma complicação silenciosa (ex.: anemia, distúrbio eletrolítico) que, se não corrigida, pode atrasar a recuperação ou levar à deterioração.",
-                    "impacto": "Garante que a investigação e o monitoramento sejam racionais, seguros e direcionados para o benefício direto do paciente, preparando-o de forma adequada para a continuidade do cuidado ou para a alta."
-                  }
+                  "acoes": [
+                    {
+                      "acao": "CONDUTA MÉDICA",
+                      "motivos": {
+                        "fundamento": "Em pacientes estáveis, a solicitação de exames deve ser guiada por uma questão clínica específica. A \"rotina\" aqui se refere aos exames necessários para monitorar a doença de base ou os efeitos do tratamento, e não a um pedido indiscriminado. O objetivo é obter dados objetivos para embasar a alta hospitalar ou a continuidade do plano.",
+                        "evidencias": "Diretrizes clínicas e políticas de uso racional de recursos (como as da ANVISA para uso de antibióticos, que exigem reeavaliação) recomendam evitar a medicina defensiva e a solicitação de exames sem uma clara indicação, devido aos riscos de resultados falso-positivos, ansiedade do paciente e custos.",
+                        "riscos": "Solicitação desnecessária: Pode levar a \"cascata de diagnósticos\", onde um resultado anormal leve a mais exames invasivos e tratamentos desnecessários, causando iatrogenia. Não solicitar um exame necessário: Pode deixar de identificar uma complicação silenciosa (ex.: anemia, distúrbio eletrolítico) que, se não corrigida, pode atrasar a recuperação ou levar à deterioração.",
+                        "impacto": "Garante que a investigação e o monitoramento sejam racionais, seguros e direcionados para o benefício direto do paciente, preparando-o de forma adequada para a continuidade do cuidado ou para a alta."
+                      }
+                    }
+                  ]
                 }
               ]
             }
@@ -118,63 +150,87 @@
               "procedimentos": [
                 {
                   "procedimento": "Aumentar frequência de observações para CADA 2 HORAS",
-                  "acoes": [],
-                  "motivos": {
-                    "fundamento": "Um escore MEWS elevado indica que os sistemas homeostáticos estão sob estresse e a condição clínica é dinâmica. Intervalos de 2 horas permitem capturar a velocidade de deterioração, diferenciando uma anormalidade transitória de uma tendência de agravamento sustentada, que exigiria intervenção mais urgente.",
-                    "evidencias": "Protocolos de resposta a escores de alerta precoce, baseados na RDC 36/2013, estabelecem que a elevação do escore deve desencadear um aumento proporcional na frequência de monitorização. Estudos mostram que a taxa de mudança nos parâmetros vitais é um preditor tão importante quanto o valor absoluto.",
-                    "riscos": "Com intervalos de 4-8 horas, um paciente pode deteriorar-se significativamente e atingir um estado crítico (ex.: choque séptico) sem que a equipe perceba a trajetória de agravamento, perdendo a \"janela de oportunidade\" para intervenções simples.",
-                    "impacto": "Fornece um \"colchão de segurança\" temporal, garantindo que qualquer piora será identificada rapidamente, permitindo uma correção de curso antes que o quadro se torne uma emergência."
-                  }
+                  "acoes": [
+                    {
+                      "acao": "AÇÕES IMEDIATAS",
+                      "motivos": {
+                        "fundamento": "Um escore MEWS elevado indica que os sistemas homeostáticos estão sob estresse e a condição clínica é dinâmica. Intervalos de 2 horas permitem capturar a velocidade de deterioração, diferenciando uma anormalidade transitória de uma tendência de agravamento sustentada, que exigiria intervenção mais urgente.",
+                        "evidencias": "Protocolos de resposta a escores de alerta precoce, baseados na RDC 36/2013, estabelecem que a elevação do escore deve desencadear um aumento proporcional na frequência de monitorização. Estudos mostram que a taxa de mudança nos parâmetros vitais é um preditor tão importante quanto o valor absoluto.",
+                        "riscos": "Com intervalos de 4-8 horas, um paciente pode deteriorar-se significativamente e atingir um estado crítico (ex.: choque séptico) sem que a equipe perceba a trajetória de agravamento, perdendo a \"janela de oportunidade\" para intervenções simples.",
+                        "impacto": "Fornece um \"colchão de segurança\" temporal, garantindo que qualquer piora será identificada rapidamente, permitindo uma correção de curso antes que o quadro se torne uma emergência."
+                      }
+                    }
+                  ]
                 },
                 {
                   "procedimento": "Verificar saturação periférica de oxigênio (SpO2)",
-                  "acoes": [],
-                  "motivos": {
-                    "fundamento": "A hipóxia é um insulto final comum em diversas síndromes de deterioração (séptica, cardíaca, pulmonar). A SpO2 é uma medida não-invasiva e contínua da oxigenação do sangue, funcionando como um sinal vital essencial. Uma SpO2 em queda é um marcador precoce de insuficiência respiratória ou baixo débito cardíaco.",
-                    "evidencias": "A SpO2 é um componente chave em todos os escores de alerta precoce modernos. Sua verificação é mandatória na avaliação de qualquer paciente com alteração aguda do estado geral, conforme reforçado por diretrizes de sociedades médicas internacionais e protocolos do PNSP.",
-                    "riscos": "Não identificar hipóxia precoce resulta em atraso na suplementação de oxigênio, levando a danos tissulares por hipóxia, piora da função cardíaca e potencial parada respiratória.",
-                    "impacto": "Permite a correção imediata de um dos distúrbios mais letais, a hipóxia, com uma intervenção simples (oxigenoterapia), melhorando dramaticamente o prognóstico."
-                  }
+                  "acoes": [
+                    {
+                      "acao": "AÇÕES IMEDIATAS",
+                      "motivos": {
+                        "fundamento": "A hipóxia é um insulto final comum em diversas síndromes de deterioração (séptica, cardíaca, pulmonar). A SpO2 é uma medida não-invasiva e contínua da oxigenação do sangue, funcionando como um sinal vital essencial. Uma SpO2 em queda é um marcador precoce de insuficiência respiratória ou baixo débito cardíaco.",
+                        "evidencias": "A SpO2 é um componente chave em todos os escores de alerta precoce modernos. Sua verificação é mandatória na avaliação de qualquer paciente com alteração aguda do estado geral, conforme reforçado por diretrizes de sociedades médicas internacionais e protocolos do PNSP.",
+                        "riscos": "Não identificar hipóxia precoce resulta em atraso na suplementação de oxigênio, levando a danos tissulares por hipóxia, piora da função cardíaca e potencial parada respiratória.",
+                        "impacto": "Permite a correção imediata de um dos distúrbios mais letais, a hipóxia, com uma intervenção simples (oxigenoterapia), melhorando dramaticamente o prognóstico."
+                      }
+                    }
+                  ]
                 },
                 {
                   "procedimento": "Realizar glicemia capilar",
-                  "acoes": [],
-                  "motivos": {
-                    "fundamento": "O estresse fisiológico (ex.: infecção, dor, desidratação) eleva os níveis de hormônios contra-reguladores (cortisol, adrenalina), podendo causar hiperglicemia. Alternativamente, o paciente pode estar em hipoglicemia por baixa ingesta ou efeito de medicamentos. Ambos os extremos (hiper e hipo) causam descompensação clínica, confusão mental e pioram os desfechos.",
-                    "evidencias": "A hiperglicemia é um marcador independente de pior prognóstico em pacientes hospitalizados. A triagem de distúrbios glicêmicos é uma ação padrão em protocolos de deterioração, pois é uma causa comum e facilmente tratável de alteração do estado mental e agravamento clínico.",
-                    "riscos": "Deixar uma hipoglicemia sem tratamento pode levar a convulsões, coma e morte em poucas horas. Ignorar uma hiperglicemia grave predispõe o paciente a desidratação, acidose metabólica e maior risco infeccioso.",
-                    "impacto": "Identifica e permite a correção rápida de um distúrbio metabólico que, por si só, pode ser a causa da deterioração ou um fator agravante significativo."
-                  }
+                  "acoes": [
+                    {
+                      "acao": "AÇÕES IMEDIATAS",
+                      "motivos": {
+                        "fundamento": "O estresse fisiológico (ex.: infecção, dor, desidratação) eleva os níveis de hormônios contra-reguladores (cortisol, adrenalina), podendo causar hiperglicemia. Alternativamente, o paciente pode estar em hipoglicemia por baixa ingesta ou efeito de medicamentos. Ambos os extremos (hiper e hipo) causam descompensação clínica, confusão mental e pioram os desfechos.",
+                        "evidencias": "A hiperglicemia é um marcador independente de pior prognóstico em pacientes hospitalizados. A triagem de distúrbios glicêmicos é uma ação padrão em protocolos de deterioração, pois é uma causa comum e facilmente tratável de alteração do estado mental e agravamento clínico.",
+                        "riscos": "Deixar uma hipoglicemia sem tratamento pode levar a convulsões, coma e morte em poucas horas. Ignorar uma hiperglicemia grave predispõe o paciente a desidratação, acidose metabólica e maior risco infeccioso.",
+                        "impacto": "Identifica e permite a correção rápida de um distúrbio metabólico que, por si só, pode ser a causa da deterioração ou um fator agravante significativo."
+                      }
+                    }
+                  ]
                 },
                 {
                   "procedimento": "Comunicar ao enfermeiro sênior IMEDIATAMENTE",
-                  "acoes": [],
-                  "motivos": {
-                    "fundamento": "Um MEWS na faixa amarelo sinaliza uma instabilidade fisiológica que exige uma validação clínica imediata e uma priorização de ações; a comunicação instantânea com o enfermeiro sênior mobiliza a experiência e a capacidade de julgamento clínico avançado da liderança de enfermagem para confirmar os dados, interpretar nuances e coordenar as primeiras condutas de estabilização enquanto se prepara a notificação médica.",
-                    "evidencias": "Esta prática é uma barreira crítica de segurança, operacionalizando o princípio de trabalho em equipe e supervisão clínica do Programa Nacional de Segurança do Paciente (PNSP) e da RDC 36/2013, as quais enfatizam a necessidade de uma cultura de comunicação hierárquica efetiva para evitar a subvalorização de um quadro em deterioração.",
-                    "riscos": "Omitir esta comunicação immediate expõe o paciente ao julgamento clínico isolado de um profissional potencialmente menos experiente, podendo levar a uma subestimação do risco, a uma demora na implementação de cuidados stabilizadores e a uma falha na primeira e mais rápida barreira de resgate.",
-                    "impacto": "Garante que a expertise máxima da equipe de enfermagem seja instantaneamente aplicada, resultando em uma avaliação mais qualificada, ações de estabilização mais rápidas e uma notificação médica mais precisa, interrompendo precocemente a cadeia de deterioração."
-                  }
+                  "acoes": [
+                    {
+                      "acao": "AÇÕES IMEDIATAS",
+                      "motivos": {
+                        "fundamento": "Um MEWS na faixa amarelo sinaliza uma instabilidade fisiológica que exige uma validação clínica imediata e uma priorização de ações; a comunicação instantânea com o enfermeiro sênior mobiliza a experiência e a capacidade de julgamento clínico avançado da liderança de enfermagem para confirmar os dados, interpretar nuances e coordenar as primeiras condutas de estabilização enquanto se prepara a notificação médica.",
+                        "evidencias": "Esta prática é uma barreira crítica de segurança, operacionalizando o princípio de trabalho em equipe e supervisão clínica do Programa Nacional de Segurança do Paciente (PNSP) e da RDC 36/2013, as quais enfatizam a necessidade de uma cultura de comunicação hierárquica efetiva para evitar a subvalorização de um quadro em deterioração.",
+                        "riscos": "Omitir esta comunicação immediate expõe o paciente ao julgamento clínico isolado de um profissional potencialmente menos experiente, podendo levar a uma subestimação do risco, a uma demora na implementação de cuidados stabilizadores e a uma falha na primeira e mais rápida barreira de resgate.",
+                        "impacto": "Garante que a expertise máxima da equipe de enfermagem seja instantaneamente aplicada, resultando em uma avaliação mais qualificada, ações de estabilização mais rápidas e uma notificação médica mais precisa, interrompendo precocemente a cadeia de deterioração."
+                      }
+                    }
+                  ]
                 },
                 {
                   "procedimento": "Notificar médico responsável dentro de 2 HORAS",
-                  "acoes": [],
-                  "motivos": {
-                    "fundamento": "A notificação ao médico dentro da janela de 2 horas é fundamental porque a deterioração moderada exige uma reavaliação diagnóstica e uma redefinição do plano terapêutico; este prazo equilibra a urgência clínica com a viabilidade operacional, garantindo que o único profissional habilitado a prescrever medicamentos, solicitar exames e alterar condutas avalie o paciente em tempo hábil para intervir na causa raiz do agravamento.",
-                    "evidencias": "O prazo de 2 horas é um padrão estabelecido em sistemas de alerta precoce internacionais (como o NEWS) e adotado pelos protocolos nacionais baseados na RDC 36/2013, que exige uma resposta \"compatível com a necessidade do paciente\", sendo este intervalo associado na literatura com a prevenção de desfechos adversos e a redução de mortalidade.",
-                    "riscos": "Atrasos além de 2 horas na notificação médica resultam em atrasos terapêuticos críticos (como a demora na administração de antibióticos na sepse), permitem a progressão silenciosa do agravamento para um estado crítico e configuram uma \"falha de resgate\" do sistema, onde a detecção precoce não é seguida pela intervenção necessária.",
-                    "impacto": "Esta notificação no prazo correto é o elo que transforma a detecção precoce em ação médica salvadora, sendo a diferença entre conter um problema de forma simples e enfrentar uma complicação grave, impactando diretamente na redução da mortalidade, do tempo de internação e da necessidade de cuidados intensivos."
-                  }
+                  "acoes": [
+                    {
+                      "acao": "AÇÕES IMEDIATAS",
+                      "motivos": {
+                        "fundamento": "A notificação ao médico dentro da janela de 2 horas é fundamental porque a deterioração moderada exige uma reavaliação diagnóstica e uma redefinição do plano terapêutico; este prazo equilibra a urgência clínica com a viabilidade operacional, garantindo que o único profissional habilitado a prescrever medicamentos, solicitar exames e alterar condutas avalie o paciente em tempo hábil para intervir na causa raiz do agravamento.",
+                        "evidencias": "O prazo de 2 horas é um padrão estabelecido em sistemas de alerta precoce internacionais (como o NEWS) e adotado pelos protocolos nacionais baseados na RDC 36/2013, que exige uma resposta \"compatível com a necessidade do paciente\", sendo este intervalo associado na literatura com a prevenção de desfechos adversos e a redução de mortalidade.",
+                        "riscos": "Atrasos além de 2 horas na notificação médica resultam em atrasos terapêuticos críticos (como a demora na administração de antibióticos na sepse), permitem a progressão silenciosa do agravamento para um estado crítico e configuram uma \"falha de resgate\" do sistema, onde a detecção precoce não é seguida pela intervenção necessária.",
+                        "impacto": "Esta notificação no prazo correto é o elo que transforma a detecção precoce em ação médica salvadora, sendo a diferença entre conter um problema de forma simples e enfrentar uma complicação grave, impactando diretamente na redução da mortalidade, do tempo de internação e da necessidade de cuidados intensivos."
+                      }
+                    }
+                  ]
                 },
                 {
                   "procedimento": "Reavaliar score MEWS em 1 HORA",
-                  "acoes": [],
-                  "motivos": {
-                    "fundamento": "A reavaliação do escore MEWS em 1 hora é fundamental porque a condição de um paciente em alerta (faixa amarela) é dinâmica; este curto intervalo permite capturar a **trajetória clínica**, diferenciando uma alteração transitória de uma deterioração sustentada, e avalia a eficácia das condutas iniciais de enfermagem, fornecendo dados cruciais em tempo real para decidir se é necessário escalonar o cuidado ou se o paciente está se estabilizando.",
-                    "evidencias": "Protocolos de resposta a escores de alerta precoce, baseados na RDC 36/2013 e em diretrizes internacionais como o NEWS, estabelecem a reavaliação em curtos intervalos como um pilar para a segurança; estudos demonstram que a taxa de mudança dos parâmetros vitais é um preditor forte de desfechos adversos, e essa reavaliação sistemática é uma ação barreira para prevenir a \"falha de resgate\".",
-                    "riscos": "Omitir a reavaliação em 1 hora deixa a equipe com uma visão obsoleta do paciente, podendo resultar na não identificação de um agravamento rápido; isso causa um atraso perigoso na notificação médica e na implementação de terapias essenciais, permitindo que uma deterioração moderada evolua para uma emergência que exigirá intervenções muito mais complexas.",
-                    "impacto": "Esta prática assegura que a resposta clínica seja proporcional e ágil à evolução do quadro, permitindo intervenções corretivas precoces que interrompem a cadeia de deterioração; para o paciente, isso se traduz diretamente em maior segurança, menor risco de complicações graves e redução da probabilidade de transferência para unidades de terapia intensiva."
-                  }
+                  "acoes": [
+                    {
+                      "acao": "AÇÕES IMEDIATAS",
+                      "motivos": {
+                        "fundamento": "A reavaliação do escore MEWS em 1 hora é fundamental porque a condição de um paciente em alerta (faixa amarela) é dinâmica; este curto intervalo permite capturar a **trajetória clínica**, diferenciando uma alteração transitória de uma deterioração sustentada, e avalia a eficácia das condutas iniciais de enfermagem, fornecendo dados cruciais em tempo real para decidir se é necessário escalonar o cuidado ou se o paciente está se estabilizando.",
+                        "evidencias": "Protocolos de resposta a escores de alerta precoce, baseados na RDC 36/2013 e em diretrizes internacionais como o NEWS, estabelecem a reavaliação em curtos intervalos como um pilar para a segurança; estudos demonstram que a taxa de mudança dos parâmetros vitais é um preditor forte de desfechos adversos, e essa reavaliação sistemática é uma ação barreira para prevenir a \"falha de resgate\".",
+                        "riscos": "Omitir a reavaliação em 1 hora deixa a equipe com uma visão obsoleta do paciente, podendo resultar na não identificação de um agravamento rápido; isso causa um atraso perigoso na notificação médica e na implementação de terapias essenciais, permitindo que uma deterioração moderada evolua para uma emergência que exigirá intervenções muito mais complexas.",
+                        "impacto": "Esta prática assegura que a resposta clínica seja proporcional e ágil à evolução do quadro, permitindo intervenções corretivas precoces que interrompem a cadeia de deterioração; para o paciente, isso se traduz diretamente em maior segurança, menor risco de complicações graves e redução da probabilidade de transferência para unidades de terapia intensiva."
+                      }
+                    }
+                  ]
                 }
               ]
             }
@@ -202,7 +258,7 @@
                       "acao": "Estado volêmico",
                       "motivos": {
                         "fundamento": "O estado volêmico (hidratação) é central para a perfusão tissular; a desidratação causa hipotensão, taquicardia e pré-insuficiência renal, enquanto a sobrecarga de fluidos pode precipitar edema agudo de pulmão, sendo essencial avaliar a volemia para guiar a reposição hídrica de forma segura e eficaz.",
-                        "evidencias": "A avaliação clínica do estado volêmico (mucosas, enchimento capilar, turgor da pele, edemas) é um componente fundamental da avaliação de pacientes agudos, recomendada em manuais de medicina hospitalar e protocolos de tratamento de sepse para orientar a terapia hídrica inicial.",
+                        "evidencias": "A avaliação clínica do estado volêmico (mucosas, enchimento capilar, turgor da peau, edemas) é um componente fundamental da avaliação de pacientes agudos, recomendada em manuais de medicina hospitalar e protocolos de tratamento de sepse para orientar a terapia hídrica inicial.",
                         "riscos": "A falha em corrigir a desidratação perpetua a hipoperfusão e pode levar à injúria renal aguda, enquanto a administração indiscriminada de fluidos em um paciente normo ou hipervolêmico pode causar congestão pulmonar e piora do quadro respiratório.",
                         "impacto": "A correta avaliação e correção do estado volêmico restaura a perfusão vital aos órgãos, melhora o estado mental, normaliza os sinais vitais e previne complicações renais e cardiopulmonares."
                       }
@@ -225,8 +281,7 @@
                         "impacto": "A proteção da função renal assegura o equilíbrio hidroeletrolítico e ácido-básico do organismo, previne a acumulação de toxinas e medicamentos, e é um determinante crucial para a sobrevida e recuperação do paciente grave."
                       }
                     }
-                  ],
-                  "motivos": {}
+                  ]
                 },
                 {
                   "procedimento": "Solicitar exames complementares:",
@@ -249,8 +304,7 @@
                         "impacto": "Permite a identificação precoce de acidose metabólica, um sinal de alerta máximo para hipoperfusão tissular, direcionando uma ressuscitação volêmica mais vigorosa e melhorando a oxigenação periférica e a função orgânica."
                       }
                     }
-                  ],
-                  "motivos": {}
+                  ]
                 },
                 {
                   "procedimento": "Intervenções específicas:",
@@ -291,8 +345,7 @@
                         "impacto": "Melhora imediatamente a oxigenação, alivia a dispneia, reduz a ansiedade e protege os órgãos vitais de danos por hipóxia, estabilizando o paciente enquanto a causa da deterioração é investigada e tratada."
                       }
                     }
-                  ],
-                  "motivos": {}
+                  ]
                 }
               ]
             }
@@ -331,8 +384,7 @@
                         "impacto": "Garante a prontidão do sistema, assegurando que, quando a equipe médica chegar, todas as ferramentas para salvar a vida do paciente estarão ao seu alcance, maximizando a eficácia da resposta."
                       }
                     }
-                  ],
-                  "motivos": {}
+                  ]
                 },
                 {
                   "procedimento": "Monitoração Contínua",
@@ -364,8 +416,7 @@
                         "impacto": "Eleva drasticamente a saturação de oxigênio, comprando tempo precioso para a equipe médica diagnosticar e tratar a causa subjacente da deterioração, e é a intervenção mais rápida para proteger o cérebro e o coração de danos por falta de oxigênio."
                       }
                     }
-                  ],
-                  "motivos": {}
+                  ]
                 },
                 {
                   "procedimento": "Preparação de Acessos",
@@ -397,8 +448,7 @@
                         "impacto": "Esta medida simples e proativa garante que a \"ponte\" entre a terapia salvadora e a circulação do paciente permaneça sempre aberta, assegurando a entrega imediata e sem interrupções de qualquer medicamento ou fluido que possa ser decisivo para reverter o quadro de risco de vida."
                       }
                     }
-                  ],
-                  "motivos": {}
+                  ]
                 },
                 {
                   "procedimento": "Documentação Crítica",
@@ -430,8 +480,7 @@
                         "impacto": "Esta ação final de documentação é um ato de **cuidado colaborativo** que garante a continuidade segura e ininterrupta do tratamento intensivo, assegurando que todo o esforço de reanimação realizado não seja comprometido por uma falha de comunicação na transição entre as equipes."
                       }
                     }
-                  ],
-                  "motivos": {}
+                  ]
                 }
               ]
             }
@@ -487,12 +536,11 @@
                       "motivos": {
                         "fundamento": "Esta etapa final busca a **causa subjacente** da deterioração que pode não ser óbvia. O paciente deve ser **totalmente despido** (respeitando a dignidade e a hipotermia) para uma inspeção completa da superfície corporal. Isso permite identificar fontes ocultas de **sangramento** (ex.: hematomas expansivos em pelve ou abdômen, feridas nas costas) e **sinais de infecção** (ex.: erisipela, celulite necrotizante, sítio cirúrgico infectado) que podem ser a fonte de uma sepse.",
                         "evidencias": "A exposição completa é um padrão no Primary Survey do ATLS (Suporte Avançado de Vida no Trauma) e na avaliação do paciente séptico. A falha em expor o paciente adequadamente é uma causa conhecida de diagnósticos perdidos, como hemorragias internas que se manifestam apenas por hematomas ou infecções de pele graves.",
-                        "riscos": "Não expor o paciente significa potencialmente ignorar a causa tratável da deterioração. Um sangramento interno contínuo ou uma fasciite necrotizante não diagnosticada levarão à morte do paciente, mesmo que o ABC tenha sido temporariamente estabilizado.",
+                        "riscos": "Não expor o paciente significa potencialmente ignorar a causa tratável da deterioração. Um sangramento interno contínuo ou uma fasciite necrotizante não diagnosticada levarão à morte do paciente, mesmo que o ABC tenha sido temporariamente stabilizado.",
                         "impacto": "É a etapa do diagnóstico visual. Encontrar uma fonte de sangramento direciona para o controle hemodinâmico e cirúrgico; identificar um foco infeccioso guia a antibioticoterapia empírica e o desbridamento cirúrgico. É a ação que permite tratar a causa, e não apenas os sintomas, da crise."
                       }
                     }
-                  ],
-                  "motivos": {}
+                  ]
                 },
                 {
                   "procedimento": "Investigação Diagnóstica Rápida",
@@ -542,8 +590,7 @@
                         "impacto": "Transforma o manejo de \"um tratamento para todos\" em uma terapia personalizada e direcionada. Permite, por exemplo, iniciar inotrópicos imediatamente para uma cardiomiopatia grave ou identificar uma veia cava colabada que demanda volume agressivo, otimizando a ressuscitação de forma guiada."
                       }
                     }
-                  ],
-                  "motivos": {}
+                  ]
                 },
                 {
                   "procedimento": "Intervenções Específicas",
@@ -584,8 +631,7 @@
                         "impacto": "É a ação que pode levar um paciente do limiar da morte neurológica para uma recuperação completa, ao identificar uma lesão cirúrgica reversível. Para condições isquêmicas, direciona a trombólise ou trombectomia."
                       }
                     }
-                  ],
-                  "motivos": {}
+                  ]
                 },
                 {
                   "procedimento": "Preparação para Transferência",
@@ -617,8 +663,7 @@
                         "impacto": "Fornece um \"colchão de segurança\" durante a fase de transição física. Permite que a equipe responda imediatamente a qualquer deterioração durante o transporte, assegurando que o paciente chegue vivo e estável à UTI."
                       }
                     }
-                  ],
-                  "motivos": {}
+                  ]
                 }
               ]
             }
