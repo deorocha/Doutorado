@@ -955,7 +955,7 @@ if projects:
                             tropos[k] = list(set(tropos[k]))
                     import base64
                     def svg_b64(name):
-                        path = Path("symbols") / f"{name}.svg"
+                        path = PROJECT_ROOT / "symbols" / f"{name}.svg"
                         if not path.exists():
                             svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><rect width="60" height="60" fill="lightblue"/><text x="50%" y="50%" text-anchor="middle" dy=".3em">{name}</text></svg>'
                         else:
