@@ -183,8 +183,9 @@ def main():
                 "Precisão da Busca",
                 min_value=0.3,
                 max_value=0.7,
-                value=chatbot.similarity_threshold,
-                step=0.05,
+                # value=chatbot.similarity_threshold,
+                value=0.45,
+                step=0.01,
                 help="Ajuste quão precisa deve ser a correspondência"
             )
             chatbot.set_similarity_threshold(threshold)
@@ -289,6 +290,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
