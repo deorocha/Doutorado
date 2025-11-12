@@ -41,31 +41,31 @@ st.markdown("""
 st.sidebar.header("🔣 Entrada de Parâmetros Clínicos")
 
 # Criar cada linha com label e input lado a lado
-fc_col1, fc_col2 = st.sidebar.columns([2, 1])
+fc_col1, fc_col2 = st.sidebar.columns([6, 4])
 with fc_col1:
     st.write("Frequência Cardíaca (bpm):")
 with fc_col2:
-    fc = st.number_input("", min_value=0, value=80, key="fc_input", label_visibility="collapsed")
+    fc = st.number_input("", min_value=0.0, max_value=150.0, value=80.0, step=0.5, key="fc_input", label_visibility="collapsed")
 
-pas_col1, pas_col2 = st.sidebar.columns([2, 1])
+pas_col1, pas_col2 = st.sidebar.columns([6, 4])
 with pas_col1:
     st.write("Pressão Arterial Sistólica (mmHg):")
 with pas_col2:
-    pas = st.number_input("", min_value=0, value=120, key="pas_input", label_visibility="collapsed")
+    pas = st.number_input("", min_value=0.0, max_value=220.0, value=120.0, step=0.5, key="pas_input", label_visibility="collapsed")
 
-fr_col1, fr_col2 = st.sidebar.columns([2, 1])
+fr_col1, fr_col2 = st.sidebar.columns([6, 4])
 with fr_col1:
     st.write("Frequência Respiratória (rpm):")
 with fr_col2:
-    fr = st.number_input("", min_value=0, value=16, key="fr_input", label_visibility="collapsed")
+    fr = st.number_input("", min_value=0.0, max_value=40.0, value=16.0, step=0.1, key="fr_input", label_visibility="collapsed")
 
-tc_col1, tc_col2 = st.sidebar.columns([2, 1])
+tc_col1, tc_col2 = st.sidebar.columns([6, 4])
 with tc_col1:
     st.write("Temperatura Corporal (°C):")
 with tc_col2:
-    tc = st.number_input("", min_value=30.0, value=36.5, step=0.1, key="tc_input", label_visibility="collapsed")
+    tc = st.number_input("", min_value=30.0, max_value=45.0, value=36.5, step=0.1, key="tc_input", label_visibility="collapsed")
 
-avpu_col1, avpu_col2 = st.sidebar.columns([2, 1])
+avpu_col1, avpu_col2 = st.sidebar.columns([6, 4])
 with avpu_col1:
     st.write("Nível de Consciência (AVPU):")
 with avpu_col2:
