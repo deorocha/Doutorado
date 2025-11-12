@@ -2,6 +2,7 @@
 
 import streamlit as st
 import os
+import pandas as pd
 from pathlib import Path
 
 # Configuração da página
@@ -27,15 +28,40 @@ else:
 
 # Exibir tabela de pontuação na área principal
 st.header("Tabela de Pontuação MEWS")
-st.markdown("""
-| Parâmetro                               | 3     | 2     | 1         | 0         | 1         | 2     | 3         |
-|-----------------------------------------|-------|-------|-----------|-----------|-----------|-------|-----------|
-| FC - Frequência Cardíaca (bpm)          | ≤40   | 41-50 | 51-100    | 101-110   | 111-129   | ≥130  |           |
-| PAS - Pressão Arterial Sistólica (mmHg) | ≤70   | 71-80 | 81-100    | 101-199   |           | ≥200  |           |
-| FR - Frequência Respiratória (rpm)      | ≤8    |       | 9-14      | 15-20     | 21-29     | ≥30   |           |
-| TC - Temperatura Corporal (°C)          | ≤35.0 |       | 35.1-36.0 | 36.1-38.0 | 38.1-38.5 | ≥38.6 |           |
-| AVPU - Nível de Consciência             |       |       |           |     A     |     V     |   P   |     U     |
-""")
+
+#st.markdown("""
+#| Parâmetro                               | 3     | 2     | 1         | 0         | 1         | 2     | 3         |
+#|-----------------------------------------|-------|-------|-----------|-----------|-----------|-------|-----------|
+#| FC - Frequência Cardíaca (bpm)          | ≤40   | 41-50 | 51-100    | 101-110   | 111-129   | ≥130  |           |
+#| PAS - Pressão Arterial Sistólica (mmHg) | ≤70   | 71-80 | 81-100    | 101-199   |           | ≥200  |           |
+#| FR - Frequência Respiratória (rpm)      | ≤8    |       | 9-14      | 15-20     | 21-29     | ≥30   |           |
+#| TC - Temperatura Corporal (°C)          | ≤35.0 |       | 35.1-36.0 | 36.1-38.0 | 38.1-38.5 | ≥38.6 |           |
+#| AVPU - Nível de Consciência             |       |       |           |     A     |     V     |   P   |     U     |
+#""")
+
+data = pd.DataFrame({
+    'Parâmetro': ['FC - Frequência Cardíaca (bpm)', 'PAS - Pressão Arterial Sistólica (mmHg)', 'FR - Frequência Respiratória (rpm)', 'TC - Temperatura Corporal (°C)', 'AVPU - Nível de Consciência'],
+    '3': ['≤40', '≤70', '≤8', '≤35.0', ''],
+    '2': ['41-50', '71-80', '', '35.1-36.0', ''],
+    '1': ['51-100', '81-100', '9-14', '36.1-38.0', ''],
+    '0': ['101-110', '101-199', '15-20', '38.1-38.5', 'A'],
+    '1 ': ['111-129', '', '21-29', '≥38.6', 'V'],
+    '2 ': ['≥130', '≥200', '≥30', '', 'P'],
+    '3 ': ['', '', '', '', 'U']
+})
+
+st.dataframe(data, column_config={
+    "Parâmetro": st.column_config.Column(width=330),
+    "3": st.column_config.Column(width=60),
+    "2": st.column_config.Column(width=60),
+    "1": st.column_config.Column(width=60),
+    "0": st.column_config.Column(width=60),
+    "1 ": st.column_config.Column(width=60),
+    "2 ": st.column_config.Column(width=60),
+    "3 ": st.column_config.Column(width=60)
+})
+
+#st.table(data)
 
 # Sidebar para entrada de dados
 st.sidebar.header("🔣 Entrada de Parâmetros Clínicos")
