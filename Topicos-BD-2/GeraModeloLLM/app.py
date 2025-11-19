@@ -498,7 +498,7 @@ def main():
             formato = "com espaços" if gerar_com_espacos else "sem espaços"
             st.caption(f"Texto gerado {formato} ({num_words} palavras) - Geração #{st.session_state.generation_counter}")
             
-            st.text_area("Texto Gerado:", value=st.session_state.generated_text, height=150, key="display_generated")
+            st.text_area("Texto Gerado:", value=st.session_state.generated_text, height=300, key="display_generated")
 
 if __name__ == "__main__":
     main()
@@ -507,6 +507,7 @@ if __name__ == "__main__":
 #texto_sem_espaco = "scenfigura3médiaembleudodesempenhodastécnicasde"
 #texto_com_espacos = inserir_espacos_automatico(texto_sem_espaco)
 #print(texto_com_espacos)
+
 
 
 
