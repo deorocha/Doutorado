@@ -10,7 +10,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent
 MODELS_PATH = PROJECT_ROOT / "saved_models"
-DICT_PATH = PROJECT_ROOT / "saved_models" / "dicionario.txt"
+DICT_PATH = PROJECT_ROOT / "dicionario.txt"
 
 def separar_palavras(texto):
     # Carrega o dicionário
@@ -507,6 +507,7 @@ if __name__ == "__main__":
 #texto_sem_espaco = "scenfigura3médiaembleudodesempenhodastécnicasde"
 #texto_com_espacos = inserir_espacos_automatico(texto_sem_espaco)
 #print(texto_com_espacos)
+
 
 
 
