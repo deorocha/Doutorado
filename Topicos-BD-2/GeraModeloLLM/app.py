@@ -10,10 +10,11 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent
 MODELS_PATH = PROJECT_ROOT / "saved_models"
+DICT_PATH = PROJECT_ROOT / "saved_models" / "dicionario.txt"
 
 def separar_palavras(texto):
     # Carrega o dicionário
-    with open('dicionario.txt', 'r', encoding='utf-8') as f:
+    with open(DICT_PATH, 'r', encoding='utf-8') as f:
         palavras = set(linha.strip().lower() for linha in f)
     
     # Adiciona palavras específicas do seu texto que podem estar faltando
@@ -506,6 +507,7 @@ if __name__ == "__main__":
 #texto_sem_espaco = "scenfigura3médiaembleudodesempenhodastécnicasde"
 #texto_com_espacos = inserir_espacos_automatico(texto_sem_espaco)
 #print(texto_com_espacos)
+
 
 
 
