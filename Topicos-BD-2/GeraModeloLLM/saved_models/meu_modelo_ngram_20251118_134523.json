@@ -1,0 +1,13 @@
+{
+  "model_name": "meu_modelo_ngram",
+  "training_date": "2025-11-18T13:45:23.629644",
+  "corpus_stats": {
+    "total_tokens": 26155,
+    "vocabulary_size": 18539,
+    "training_date": "2025-11-18T13:45:23.539645"
+  },
+  "vocabulary_size": 18539,
+  "unigram_count": 18539,
+  "bigram_count": 18538,
+  "trigram_count": 24429
+}
