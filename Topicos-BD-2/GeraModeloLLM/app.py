@@ -5,13 +5,10 @@ import plotly.express as px
 import random
 import math
 import numpy as np
-
-import nltk
-from nltk.tokenize import word_tokenize
-nltk.download('punkt')
-
-# Importar a classe do modelo
 from gera_modelo import SavableTextGenerator
+
+PROJECT_ROOT = Path(__file__).parent
+MODELS_PATH = PROJECT_ROOT / "saved_models"
 
 def separar_palavras(texto):
     # Carrega o dicionário
@@ -58,7 +55,7 @@ def separar_palavras(texto):
     
     return ' '.join(reversed(segments))
 
-def load_saved_models(models_folder="./saved_models"):
+def load_saved_models(models_folder):
     """Carrega a lista de modelos salvos"""
     if not os.path.exists(models_folder):
         return []
@@ -320,8 +317,7 @@ def main():
     with st.sidebar:
         st.header("🔧 Configurações do Modelo")
         
-        saved_models = load_saved_models()
-        
+        saved_models = load_saved_models(MODELS_PATH)
         if not saved_models:
             st.warning("⚠️ Nenhum modelo salvo encontrado!")
             st.info("Execute primeiro o `gera_modelo.py` para treinar um modelo.")
@@ -509,4 +505,5 @@ if __name__ == "__main__":
 #texto_sem_espaco = "scenfigura3médiaembleudodesempenhodastécnicasde"
 #texto_com_espacos = inserir_espacos_automatico(texto_sem_espaco)
 #print(texto_com_espacos)
+
 
