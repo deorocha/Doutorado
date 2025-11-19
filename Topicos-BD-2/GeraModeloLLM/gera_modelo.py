@@ -9,6 +9,10 @@ import pickle
 import json
 from datetime import datetime
 
+PROJECT_ROOT = Path(__file__).parent
+MODELS_PATH = PROJECT_ROOT / "saved_models"
+PDF_PATH = PROJECT_ROOT / "pdf_path"
+
 class SavableTextGenerator:
     def __init__(self, model_name="text_generator_model"):
         self.unigram_probs = {}
@@ -380,11 +384,8 @@ class SavableTextGenerator:
 def main():
     generator = SavableTextGenerator("meu_modelo_ngram")
     
-    pdf_folder = './pdf_files'
-    models_folder = './saved_models'
-    
-    if not os.path.exists(pdf_folder):
-        print(f"❌ Pasta '{pdf_folder}' não encontrada!")
+    if not os.path.exists(PDF_PATH):
+        print(f"❌ Pasta '{PDF_PATH}' não encontrada!")
         return
     
     while True:
@@ -401,13 +402,13 @@ def main():
         
         if choice == '1':
             # Treinar novo modelo
-            model_filename = generator.train_and_save(pdf_folder, models_folder)
+            model_filename = generator.train_and_save(pdf_folder, MODELS_PATH)
             if model_filename:
                 print(f"✅ Modelo '{model_filename}' treinado e salvo com sucesso!")
         
         elif choice == '2':
             # Carregar modelo existente
-            models = generator.list_saved_models(models_folder)
+            models = generator.list_saved_models(MODELS_PATH)
             if models:
                 try:
                     model_num = int(input("Digite o número do modelo para carregar: ")) - 1
@@ -420,7 +421,7 @@ def main():
         
         elif choice == '3':
             # Listar modelos
-            generator.list_saved_models(models_folder)
+            generator.list_saved_models(MODELS_PATH)
         
         elif choice == '4':
             # Gerar texto
@@ -443,3 +444,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
