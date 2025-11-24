@@ -386,7 +386,8 @@ def main():
         
         # Inicializar a sidebar apenas uma vez
         if not st.session_state.sidebar_initialized:
-            saved_models = load_saved_models()
+            # saved_models = load_saved_models()
+            saved_models = load_saved_models(MODELS_PATH)
             st.session_state.saved_models = saved_models
             st.session_state.sidebar_initialized = True
         else:
@@ -724,4 +725,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
