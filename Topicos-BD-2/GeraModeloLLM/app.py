@@ -22,7 +22,8 @@ DICT_PATH = PROJECT_ROOT / "dicionario.txt"
 
 def separar_palavras(texto):
     # Carrega o dicionário
-    with open('dicionario.txt', 'r', encoding='utf-8') as f:
+    # with open('dicionario.txt', 'r', encoding='utf-8') as f:
+    with open(DICT_PATH, 'r', encoding='utf-8') as f:
         palavras = set(linha.strip().lower() for linha in f)
     
     texto_lower = texto.lower()
@@ -725,5 +726,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
