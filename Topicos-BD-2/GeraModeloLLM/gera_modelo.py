@@ -8,11 +8,6 @@ import re
 import pickle
 import json
 from datetime import datetime
-from pathlib import Path
-
-PROJECT_ROOT = Path(__file__).parent
-MODELS_PATH = PROJECT_ROOT / "saved_models"
-PDF_PATH = PROJECT_ROOT / "pdf_path"
 
 class SavableTextGenerator:
     def __init__(self, model_name="text_generator_model"):
@@ -23,7 +18,37 @@ class SavableTextGenerator:
         self.model_name = model_name
         self.training_date = None
         self.corpus_stats = {}
-        
+    
+    def extract_text_from_json(self, json_file_path):
+        """Extrai texto do arquivo JSON da tag 'artigo_completo'"""
+        try:
+            with open(json_file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+        except Exception as e:
+            print(f"Erro ao carregar o arquivo JSON: {e}")
+            return []
+
+        # Verifica se é uma lista de artigos ou um único artigo
+        if isinstance(data, list):
+            # É uma lista de artigos
+            texts = []
+            for article in data:
+                if 'artigo_completo' in article:
+                    texts.append(article['artigo_completo'])
+                else:
+                    print("Aviso: Artigo sem chave 'artigo_completo' encontrado")
+            return texts
+        elif isinstance(data, dict):
+            # É um único artigo
+            if 'artigo_completo' in data:
+                return [data['artigo_completo']]
+            else:
+                print("Erro: Arquivo JSON não contém a chave 'artigo_completo'")
+                return []
+        else:
+            print("Erro: Formato de JSON não reconhecido")
+            return []
+
     def extract_text_from_pdfs(self, pdf_folder):
         """Extrai texto dos PDFs"""
         texts = []
@@ -340,13 +365,13 @@ class SavableTextGenerator:
         
         return math.exp(-log_sum / count) if count > 0 else float('inf')
 
-    def train_and_save(self, pdf_folder, save_folder="./saved_models"):
-        """Treina e salva o modelo"""
-        print("📚 Lendo e processando PDFs...")
-        texts = self.extract_text_from_pdfs(pdf_folder)
+    def train_and_save(self, json_file_path, save_folder="./saved_models"):
+        """Treina e salva o modelo a partir de um arquivo JSON"""
+        print("📚 Lendo e processando JSON...")
+        texts = self.extract_text_from_json(json_file_path)
         
         if not texts:
-            print("❌ Nenhum PDF válido encontrado!")
+            print("❌ Nenhum texto válido encontrado no JSON!")
             return None
         
         all_tokens = []
@@ -385,15 +410,18 @@ class SavableTextGenerator:
 def main():
     generator = SavableTextGenerator("meu_modelo_ngram")
     
-    if not os.path.exists(PDF_PATH):
-        print(f"❌ Pasta '{PDF_PATH}' não encontrada!")
+    json_file_path = './json_files/corpus_webmedia_2024.json'
+    models_folder = './saved_models'
+    
+    if not os.path.exists(json_file_path):
+        print(f"❌ Arquivo JSON '{json_file_path}' não encontrado!")
         return
     
     while True:
         print("\n" + "="*50)
         print("🤖 GERADOR DE TEXTO COM MODELOS SALVOS")
         print("="*50)
-        print("1. Treinar novo modelo com PDFs")
+        print("1. Treinar novo modelo com JSON")
         print("2. Carregar modelo existente")
         print("3. Listar modelos salvos")
         print("4. Gerar texto com modelo atual")
@@ -403,13 +431,13 @@ def main():
         
         if choice == '1':
             # Treinar novo modelo
-            model_filename = generator.train_and_save(pdf_folder, MODELS_PATH)
+            model_filename = generator.train_and_save(json_file_path, models_folder)
             if model_filename:
                 print(f"✅ Modelo '{model_filename}' treinado e salvo com sucesso!")
         
         elif choice == '2':
             # Carregar modelo existente
-            models = generator.list_saved_models(MODELS_PATH)
+            models = generator.list_saved_models(models_folder)
             if models:
                 try:
                     model_num = int(input("Digite o número do modelo para carregar: ")) - 1
@@ -422,7 +450,7 @@ def main():
         
         elif choice == '3':
             # Listar modelos
-            generator.list_saved_models(MODELS_PATH)
+            generator.list_saved_models(models_folder)
         
         elif choice == '4':
             # Gerar texto
@@ -445,5 +473,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
