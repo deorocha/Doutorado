@@ -16,6 +16,10 @@ nltk.download('punkt')
 # Importar a classe do modelo
 from gera_modelo import SavableTextGenerator
 
+PROJECT_ROOT = Path(__file__).parent
+MODELS_PATH = PROJECT_ROOT / "saved_models"
+DICT_PATH = PROJECT_ROOT / "dicionario.txt"
+
 def separar_palavras(texto):
     # Carrega o dicionário
     with open('dicionario.txt', 'r', encoding='utf-8') as f:
@@ -720,3 +724,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
