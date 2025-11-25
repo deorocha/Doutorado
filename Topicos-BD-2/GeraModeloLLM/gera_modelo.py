@@ -237,30 +237,39 @@ class SavableTextGenerator:
         
         return models
 
-    def smart_generation(self, num_words=100):
-        """Geração de texto inteligente"""
+    def smart_generation(self, num_words=100, initial_context=None):
+        """Geração de texto inteligente com contexto inicial opcional"""
         if not self.vocab:
             return "Modelo não treinado ou carregado adequadamente."
         
         generated = []
         
-        # Escolhe um início
-        possible_starts = []
-        for context in self.trigram_cond.keys():
-            possible_starts.append(context)
+        # NOVO: Se há contexto inicial, usá-lo
+        if initial_context:
+            # Pré-processa o contexto inicial
+            initial_tokens = self.preprocess_text(initial_context)
+            if initial_tokens:
+                generated.extend(initial_tokens)
         
-        if possible_starts:
-            start_context = random.choice(possible_starts)
-            generated.extend(start_context)
-        else:
-            if self.bigram_cond:
-                start_word = random.choice(list(self.bigram_cond.keys()))[0]
-                generated.append(start_word)
+        # Se não há contexto inicial ou o contexto era vazio, escolhe um início aleatório
+        if not generated:
+            # Escolhe um início
+            possible_starts = []
+            for context in self.trigram_cond.keys():
+                possible_starts.append(context)
+            
+            if possible_starts:
+                start_context = random.choice(possible_starts)
+                generated.extend(start_context)
             else:
-                start_word = random.choice(list(self.unigram_probs.keys()))[0]
-                generated.append(start_word)
+                if self.bigram_cond:
+                    start_word = random.choice(list(self.bigram_cond.keys()))[0]
+                    generated.append(start_word)
+                else:
+                    start_word = random.choice(list(self.unigram_probs.keys()))[0]
+                    generated.append(start_word)
         
-        # Continua a geração
+        # Continua a geração apenas se precisar de mais palavras
         while len(generated) < num_words:
             current_len = len(generated)
             
@@ -390,14 +399,14 @@ class SavableTextGenerator:
         print("💾 Salvando modelo...")
         return self.save_model(save_folder)
 
-    def generate_from_loaded_model(self, num_words=100):
-        """Gera texto a partir de um modelo carregado"""
+    def generate_from_loaded_model(self, num_words=100, initial_context=None):
+        """Gera texto a partir de um modelo carregado com contexto inicial opcional"""
         if not self.vocab:
             print("❌ Nenhum modelo carregado!")
             return None
         
         print("🔄 Gerando texto...")
-        paragraph = self.smart_generation(num_words)
+        paragraph = self.smart_generation(num_words, initial_context)
         
         print("\n" + "="*60)
         print("📝 TEXTO GERADO:")
