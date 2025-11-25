@@ -616,6 +616,7 @@ def main():
             
             st.caption(f"Texto gerado {formato} ({num_words} palavras){palavra_inicial_info} - Geração #{st.session_state.generation_counter}")
             
+            text_height = num_words
             st.text_area("Texto Gerado:", value=st.session_state.generated_text, height=150, key="display_generated")
         
         # SEÇÃO: Geração de Matriz de Coocorrência
