@@ -374,7 +374,8 @@ def main():
         'matrix_size': 10,
         'stopwords_text': "as, da, de, do, em, que, os, um, uma, para, no, na, não, com, por, se, mais, mas, como, ou, ser, seu, sua, seus, suas, ao, aos, pela, pelas, isto, isso, aquilo, este, esta, estes, estas, esse, essa, esses, essas, aquele, aquela, aqueles, aquelas, todo, todos, toda, todas, outro, outros, outra, outras, mesmo, mesma, mesmos, mesmas, tal, tais, cada, qual, quais, qualquer, quaisquer, certo, certa, certos, certas, vários, várias, muito, muita, muitos, muitas, pouco, pouca, poucos, poucas, algo, alguém, algum, alguma, alguns, algumas, nenhum, nenhuma, nenhuns, nenhumas, todo, todos, toda, todas, outro, outros, outra, outras, mesmo, mesma, mesmos, mesmas, tal, tais, cada, qual, quais, qualquer, quaisquer, certo, certa, certos, certas, vários, várias, muito, muita, muitos, muitas, pouco, pouca, poucos, poucas, algo, alguém, algum, alguma, alguns, algumas, nenhum, nenhuma, nenhuns, nenhumas",
         'remove_numbers': True,
-        'sidebar_initialized': False
+        'sidebar_initialized': False,
+        'initial_word': ""  # NOVO: Estado para palavra inicial
     }
     
     for key, default in session_defaults.items():
@@ -523,29 +524,45 @@ def main():
         elif st.session_state.model_loaded:
             st.info("💡 Pressione **espaço** após digitar uma palavra para ver sugestões!")
     
-    # Seção de geração de texto
+    # Seção de geração de texto - MODIFICADA
     if st.session_state.model_loaded:
         st.markdown("---")
         st.subheader("🎲 Geração de Texto")
         
         # Usar um formulário para evitar refresh completo da página
         with st.form("geracao_texto_form", clear_on_submit=False):
-            col1, col2, col3 = st.columns([1, 1, 1])
-            
+            # NOVO: Campo para palavra inicial
+            col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
+
             with col1:
-                num_words = st.slider("Número de palavras:", 10, 200, 50, key="num_words_slider")
+                initial_word = st.text_input(
+                    "Palavra inicial:",
+                    placeholder="Digite uma palavra inicial...",
+                    key="initial_word_input"
+                )
             
             with col2:
+                num_words = st.slider("Número de palavras:", 10, 200, 50, key="num_words_slider")
+            
+            with col3:
                 gerar_com_espacos = st.checkbox("Com espaços", value=True, key="gerar_com_espacos_checkbox")
                 
-            with col3:
+            with col4:
                 gerar_texto_submit = st.form_submit_button("✨ Gerar Texto", use_container_width=True)
             
             if gerar_texto_submit:
                 with st.spinner("Gerando texto..."):
                     try:
-                        # Usar o método smart_generation do modelo
-                        texto_gerado = st.session_state.model.smart_generation(num_words)
+                        # MODIFICAÇÃO: Usar palavra inicial se fornecida
+                        if initial_word.strip():
+                            # Se há palavra inicial, usar ela como contexto
+                            texto_gerado = st.session_state.model.smart_generation(
+                                num_words, 
+                                initial_context=initial_word.strip()
+                            )
+                        else:
+                            # Comportamento original se não há palavra inicial
+                            texto_gerado = st.session_state.model.smart_generation(num_words)
                         
                         # Aplicar separação de palavras se necessário
                         if not gerar_com_espacos:
@@ -557,12 +574,13 @@ def main():
                         
                         st.session_state.generated_text = texto_gerado
                         st.session_state.generation_counter += 1
+                        st.session_state.initial_word = initial_word  # Salvar a palavra inicial
                         
                     except Exception as e:
                         st.error(f"❌ Erro ao gerar texto: {e}")
                         st.session_state.generated_text = ""
 
-        # Controles para texto gerado
+        # Controles para texto gerado - MODIFICADO para mostrar palavra inicial usada
         if st.session_state.generated_text:
             col_copy, col_clear = st.columns(2)
             
@@ -575,6 +593,7 @@ def main():
             with col_clear:
                 if st.button("🗑️ Limpar texto", use_container_width=True, key="limpar_gerado_btn"):
                     st.session_state.generated_text = ""
+                    st.session_state.initial_word = ""
                     st.rerun()
             
             # Adicionar espaços se necessário
@@ -589,9 +608,13 @@ def main():
                         )
                         st.rerun()
             
-            # Mostrar texto gerado
+            # Mostrar texto gerado - MODIFICADO para incluir informação da palavra inicial
             formato = "com espaços" if gerar_com_espacos else "sem espaços"
-            st.caption(f"Texto gerado {formato} ({num_words} palavras) - Geração #{st.session_state.generation_counter}")
+            palavra_inicial_info = ""
+            if st.session_state.initial_word:
+                palavra_inicial_info = f" | Iniciado com: '{st.session_state.initial_word}'"
+            
+            st.caption(f"Texto gerado {formato} ({num_words} palavras){palavra_inicial_info} - Geração #{st.session_state.generation_counter}")
             
             st.text_area("Texto Gerado:", value=st.session_state.generated_text, height=150, key="display_generated")
         
@@ -599,8 +622,7 @@ def main():
         st.markdown("---")
         st.subheader("📊 Geração de Matriz de Coocorrência")
         
-        st.markdown("""
-        Esta matriz mostra a frequência com que as palavras aparecem juntas no corpus.
+        st.markdown("""Esta matriz mostra a frequência com que as palavras aparecem juntas no corpus.
         **Todos os valores são mostrados**, incluindo zeros (sem coocorrência).
         Valores mais altos indicam que as palavras coocorrem com mais frequência.
         """)
@@ -726,7 +748,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
