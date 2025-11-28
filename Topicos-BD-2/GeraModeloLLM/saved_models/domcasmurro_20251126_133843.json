@@ -1,0 +1,16 @@
+{
+  "model_name": "domcasmurro",
+  "training_date": "2025-11-26T13:38:43.310817",
+  "corpus_stats": {
+    "total_tokens": 58081,
+    "vocabulary_size": 13388,
+    "training_date": "2025-11-26T13:38:43.122975",
+    "unigramas_unicos": 13388,
+    "bigramas_unicos": 44233,
+    "trigramas_unicos": 55981
+  },
+  "vocabulary_size": 13388,
+  "unigram_count": 13388,
+  "bigram_count": 44233,
+  "trigram_count": 55981
+}
