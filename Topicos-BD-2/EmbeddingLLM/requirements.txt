@@ -1,3 +1,6 @@
+# Atualizar pip primeiro
+--upgrade pip
+
 # Core dependencies - versões compatíveis com Python 3.13
 streamlit>=1.28.0,<1.30.0
 pandas>=2.1.0,<2.2.0
@@ -33,3 +36,4 @@ tqdm>=4.65.0,<4.66.0
 # Streamlit components (opcional)
 # streamlit-option-menu>=0.3.0,<0.4.0
 # streamlit-extras>=0.3.0,<0.4.0
+
