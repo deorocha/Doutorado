@@ -28,13 +28,66 @@ class Doc2VecModelManager:
         self._download_nltk_resources()
     
     def _download_nltk_resources(self):
-        """Baixa recursos necessários do NLTK"""
+        """Baixa recursos necessários do NLTK com tratamento de erros"""
+        import nltk
+        import ssl
+        
         try:
-            nltk.download('punkt', quiet=True)
-            nltk.download('stopwords', quiet=True)
-        except:
-            pass
-    
+            # Tentar criar contexto SSL para evitar erros de certificado
+            try:
+                _create_unverified_https_context = ssl._create_unverified_context
+            except AttributeError:
+                pass
+            else:
+                ssl._create_default_https_context = _create_unverified_https_context
+            
+            # Tentar baixar recursos com múltiplas tentativas
+            resources = ['punkt', 'stopwords', 'punkt_tab']
+            
+            for resource in resources:
+                try:
+                    nltk.download(resource, quiet=True)
+                    print(f"NLTK resource '{resource}' baixado com sucesso")
+                except Exception as e:
+                    print(f"Erro ao baixar '{resource}': {e}")
+                    # Tentar método alternativo
+                    try:
+                        nltk.data.find(f'tokenizers/{resource}')
+                    except LookupError:
+                        # Se falhar, tentar manualmente
+                        import urllib.request
+                        import os
+                        
+                        # URLs dos recursos (pode precisar ajustar)
+                        resource_urls = {
+                            'punkt': 'https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.zip',
+                            'stopwords': 'https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/stopwords.zip'
+                        }
+                        
+                        if resource in resource_urls:
+                            try:
+                                # Criar diretório para dados do NLTK
+                                nltk_dir = os.path.join(os.path.expanduser('~'), 'nltk_data')
+                                os.makedirs(nltk_dir, exist_ok=True)
+                                
+                                # Baixar e extrair
+                                import zipfile
+                                import io
+                                
+                                url = resource_urls[resource]
+                                response = urllib.request.urlopen(url)
+                                data = response.read()
+                                
+                                with zipfile.ZipFile(io.BytesIO(data)) as zf:
+                                    zf.extractall(nltk_dir)
+                                
+                                print(f"Resource '{resource}' baixado manualmente")
+                            except Exception as download_error:
+                                print(f"Erro no download manual: {download_error}")
+        
+        except Exception as e:
+            print(f"Erro geral no download do NLTK: {e}")
+        
     def list_pdf_files(self):
         """Lista todos os arquivos PDF na pasta especificada"""
         if not os.path.exists(self.pdf_folder):
@@ -184,4 +237,5 @@ class Doc2VecModelManager:
             'text_length': len(text),
             'num_pages': num_pages
         }
+
 
