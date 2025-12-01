@@ -12,6 +12,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import sent_tokenize
 import PyPDF2
+import Path
 
 PROJECT_ROOT = Path(__file__).parent
 FILES_PDF = PROJECT_ROOT / "files_pdf"
@@ -183,4 +184,3 @@ class Doc2VecModelManager:
             'text_length': len(text),
             'num_pages': num_pages
         }
-
