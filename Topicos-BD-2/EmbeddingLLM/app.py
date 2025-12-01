@@ -2,7 +2,6 @@
 
 import streamlit as st
 import os
-from pathlib import Path
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
@@ -16,6 +15,7 @@ import warnings
 warnings.filterwarnings('ignore')
 # Importar o gerenciador de modelos
 from model_trainer import Doc2VecModelManager
+from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent
 FILES_PDF = PROJECT_ROOT / "files_pdf"
@@ -808,3 +808,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
