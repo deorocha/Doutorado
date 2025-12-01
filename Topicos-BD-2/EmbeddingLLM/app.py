@@ -164,6 +164,140 @@ def analyze_documents():
     
     return df_results, stats_dict, base_stats
 
+def calculate_detailed_statistics(df_results, base_stats):
+    """Calcula estatísticas detalhadas da análise"""
+    
+    stats = {}
+    
+    # 1. Estatísticas Gerais da Similaridade
+    stats['geral_similaridade'] = {
+        'Média': float(df_results['similaridade'].mean()),
+        'Mediana': float(df_results['similaridade'].median()),
+        'Moda': float(df_results['similaridade'].mode().iloc[0] if not df_results['similaridade'].mode().empty else 0),
+        'Desvio Padrão': float(df_results['similaridade'].std()),
+        'Variância': float(df_results['similaridade'].var()),
+        'Coeficiente de Variação': float((df_results['similaridade'].std() / df_results['similaridade'].mean()) * 100) if df_results['similaridade'].mean() > 0 else 0,
+        'Assimetria (Skewness)': float(df_results['similaridade'].skew()),
+        'Curtose (Kurtosis)': float(df_results['similaridade'].kurtosis()),
+        'Mínimo': float(df_results['similaridade'].min()),
+        'Máximo': float(df_results['similaridade'].max()),
+        'Amplitude': float(df_results['similaridade'].max() - df_results['similaridade'].min()),
+        '1º Quartil (Q1)': float(df_results['similaridade'].quantile(0.25)),
+        '3º Quartil (Q3)': float(df_results['similaridade'].quantile(0.75)),
+        'Intervalo Interquartil (IQR)': float(df_results['similaridade'].quantile(0.75) - df_results['similaridade'].quantile(0.25))
+    }
+    
+    # 2. Categorização das Similaridades
+    similaridade_values = df_results['similaridade']
+    stats['categorizacao_similaridade'] = {
+        'Muito Baixa (<0.2)': int(((similaridade_values < 0.2).sum())),
+        'Baixa (0.2-0.4)': int(((similaridade_values >= 0.2) & (similaridade_values < 0.4)).sum()),
+        'Média (0.4-0.6)': int(((similaridade_values >= 0.4) & (similaridade_values < 0.6)).sum()),
+        'Alta (0.6-0.8)': int(((similaridade_values >= 0.6) & (similaridade_values < 0.8)).sum()),
+        'Muito Alta (≥0.8)': int(((similaridade_values >= 0.8)).sum())
+    }
+    
+    # 3. Estatísticas das Páginas
+    stats['estatisticas_paginas'] = {
+        'Total de Páginas': int(df_results['paginas'].sum()),
+        'Média de Páginas por Documento': float(df_results['paginas'].mean()),
+        'Documento com Mais Páginas': df_results.loc[df_results['paginas'].idxmax(), 'arquivo'],
+        'Máximo de Páginas': int(df_results['paginas'].max()),
+        'Documento com Menos Páginas': df_results.loc[df_results['paginas'].idxmin(), 'arquivo'],
+        'Mínimo de Páginas': int(df_results['paginas'].min())
+    }
+    
+    # 4. Estatísticas do Tamanho do Texto
+    stats['estatisticas_tamanho_texto'] = {
+        'Total de Caracteres': int(df_results['tamanho_texto'].sum()),
+        'Média de Caracteres por Documento': float(df_results['tamanho_texto'].mean()),
+        'Documento Maior': df_results.loc[df_results['tamanho_texto'].idxmax(), 'arquivo'],
+        'Tamanho Máximo (caracteres)': int(df_results['tamanho_texto'].max()),
+        'Documento Menor': df_results.loc[df_results['tamanho_texto'].idxmin(), 'arquivo'],
+        'Tamanho Mínimo (caracteres)': int(df_results['tamanho_texto'].min())
+    }
+    
+    # 5. Estatísticas das Sentenças
+    stats['estatisticas_sentencas'] = {
+        'Total de Sentenças': int(df_results['sentencas'].sum()),
+        'Média de Sentenças por Documento': float(df_results['sentencas'].mean()),
+        'Documento com Mais Sentenças': df_results.loc[df_results['sentencas'].idxmax(), 'arquivo'],
+        'Máximo de Sentenças': int(df_results['sentencas'].max()),
+        'Documento com Menos Sentenças': df_results.loc[df_results['sentencas'].idxmin(), 'arquivo'],
+        'Mínimo de Sentenças': int(df_results['sentencas'].min())
+    }
+    
+    # 6. Correlações
+    correlation_matrix = df_results[['similaridade', 'paginas', 'tamanho_texto', 'sentencas']].corr()
+    stats['correlacoes'] = {
+        'Similaridade-Páginas': float(correlation_matrix.loc['similaridade', 'paginas']),
+        'Similaridade-Tamanho': float(correlation_matrix.loc['similaridade', 'tamanho_texto']),
+        'Similaridade-Sentenças': float(correlation_matrix.loc['similaridade', 'sentencas']),
+        'Páginas-Tamanho': float(correlation_matrix.loc['paginas', 'tamanho_texto']),
+        'Páginas-Sentenças': float(correlation_matrix.loc['paginas', 'sentencas']),
+        'Tamanho-Sentenças': float(correlation_matrix.loc['tamanho_texto', 'sentencas'])
+    }
+    
+    # 7. Distribuição Percentual
+    stats['distribuicao_percentual'] = {
+        'Top 10% Mais Similares': float(df_results.head(int(len(df_results) * 0.1))['similaridade'].mean()),
+        'Top 25% Mais Similares': float(df_results.head(int(len(df_results) * 0.25))['similaridade'].mean()),
+        'Bottom 10% Menos Similares': float(df_results.tail(int(len(df_results) * 0.1))['similaridade'].mean()),
+        'Bottom 25% Menos Similares': float(df_results.tail(int(len(df_results) * 0.25))['similaridade'].mean())
+    }
+    
+    # 8. Comparação com Documento Base
+    stats['comparacao_base'] = {
+        'Páginas Base': base_stats['num_pages'],
+        'Tamanho Texto Base': base_stats['text_length'],
+        'Sentenças Base': base_stats['num_sentences'],
+        'Documentos com Mais Páginas que Base': int((df_results['paginas'] > base_stats['num_pages']).sum()),
+        'Documentos com Menos Páginas que Base': int((df_results['paginas'] < base_stats['num_pages']).sum()),
+        'Documentos Maiores que Base': int((df_results['tamanho_texto'] > base_stats['text_length']).sum()),
+        'Documentos Menores que Base': int((df_results['tamanho_texto'] < base_stats['text_length']).sum())
+    }
+    
+    # 9. Outliers (baseado no IQR)
+    Q1 = df_results['similaridade'].quantile(0.25)
+    Q3 = df_results['similaridade'].quantile(0.75)
+    IQR = Q3 - Q1
+    limite_inferior = Q1 - 1.5 * IQR
+    limite_superior = Q3 + 1.5 * IQR
+    
+    outliers = df_results[(df_results['similaridade'] < limite_inferior) | (df_results['similaridade'] > limite_superior)]
+    
+    stats['outliers'] = {
+        'Número de Outliers': len(outliers),
+        'Outliers (documentos)': outliers['arquivo'].tolist() if len(outliers) > 0 else [],
+        'Limite Inferior (IQR)': float(limite_inferior),
+        'Limite Superior (IQR)': float(limite_superior)
+    }
+    
+    # 10. Estatísticas de Agrupamento
+    from sklearn.cluster import KMeans
+    if len(df_results) >= 3:
+        try:
+            kmeans = KMeans(n_clusters=min(3, len(df_results)), random_state=42)
+            clusters = kmeans.fit_predict(df_results[['similaridade']])
+            df_results['cluster'] = clusters
+            
+            cluster_stats = {}
+            for cluster_num in range(min(3, len(df_results))):
+                cluster_docs = df_results[df_results['cluster'] == cluster_num]
+                cluster_stats[f'Cluster {cluster_num+1}'] = {
+                    'Tamanho': len(cluster_docs),
+                    'Média Similaridade': float(cluster_docs['similaridade'].mean()),
+                    'Documentos': cluster_docs['arquivo'].tolist()[:5]  # Primeiros 5 documentos
+                }
+            
+            stats['agrupamento'] = cluster_stats
+        except:
+            stats['agrupamento'] = {'info': 'Não foi possível realizar agrupamento'}
+    else:
+        stats['agrupamento'] = {'info': 'Número insuficiente de documentos para agrupamento'}
+    
+    return stats
+
 def create_visualizations(df_results):
     """Cria visualizações dos resultados"""
     figs = []
@@ -417,6 +551,9 @@ def main():
         stats_dict = st.session_state.stats_dict
         base_stats = st.session_state.base_stats
         
+        # Calcular estatísticas detalhadas
+        detailed_stats = calculate_detailed_statistics(df_results, base_stats)
+        
         # Informações do documento base
         st.write("#### 📄 Documento Base")
         col1, col2, col3 = st.columns(3)
@@ -487,6 +624,154 @@ def main():
                 st.write("##### 6. Comparação Radar - Top 5 Documentos")
                 st.pyplot(figs[4])
         
+        # NOVA SEÇÃO: ESTATÍSTICAS DETALHADAS
+        with st.expander("📊 **Estatísticas Detalhadas da Análise**", expanded=False):
+            st.write("##### 1. Estatísticas Gerais da Similaridade")
+            col1, col2, col3, col4 = st.columns(4)
+            geral = detailed_stats['geral_similaridade']
+            
+            with col1:
+                st.metric("Média", f"{geral['Média']:.4f}")
+                st.metric("Mediana", f"{geral['Mediana']:.4f}")
+                st.metric("Moda", f"{geral['Moda']:.4f}")
+            
+            with col2:
+                st.metric("Desvio Padrão", f"{geral['Desvio Padrão']:.4f}")
+                st.metric("Variância", f"{geral['Variância']:.6f}")
+                st.metric("Coef. Variação", f"{geral['Coeficiente de Variação']:.2f}%")
+            
+            with col3:
+                st.metric("Assimetria", f"{geral['Assimetria (Skewness)']:.4f}")
+                st.metric("Curtose", f"{geral['Curtose (Kurtosis)']:.4f}")
+                st.metric("Amplitude", f"{geral['Amplitude']:.4f}")
+            
+            with col4:
+                st.metric("Q1", f"{geral['1º Quartil (Q1)']:.4f}")
+                st.metric("Q3", f"{geral['3º Quartil (Q3)']:.4f}")
+                st.metric("IQR", f"{geral['Intervalo Interquartil (IQR)']:.4f}")
+            
+            st.markdown("---")
+            
+            # 2. Categorização das Similaridades
+            st.write("##### 2. Categorização das Similaridades")
+            categorizacao = detailed_stats['categorizacao_similaridade']
+            col1, col2, col3, col4, col5 = st.columns(5)
+            
+            with col1:
+                st.metric("Muito Baixa (<0.2)", categorizacao['Muito Baixa (<0.2)'])
+            with col2:
+                st.metric("Baixa (0.2-0.4)", categorizacao['Baixa (0.2-0.4)'])
+            with col3:
+                st.metric("Média (0.4-0.6)", categorizacao['Média (0.4-0.6)'])
+            with col4:
+                st.metric("Alta (0.6-0.8)", categorizacao['Alta (0.6-0.8)'])
+            with col5:
+                st.metric("Muito Alta (≥0.8)", categorizacao['Muito Alta (≥0.8)'])
+            
+            st.markdown("---")
+            
+            # 3. Estatísticas por Característica
+            st.write("##### 3. Estatísticas por Característica")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.write("**📄 Páginas**")
+                paginas = detailed_stats['estatisticas_paginas']
+                st.write(f"Total: {paginas['Total de Páginas']:,} páginas")
+                st.write(f"Média: {paginas['Média de Páginas por Documento']:.1f} páginas/doc")
+                st.write(f"Máximo: {paginas['Máximo de Páginas']} ({paginas['Documento com Mais Páginas'][:30]}...)")
+                st.write(f"Mínimo: {paginas['Mínimo de Páginas']} ({paginas['Documento com Menos Páginas'][:30]}...)")
+            
+            with col2:
+                st.write("**📝 Tamanho do Texto**")
+                tamanho = detailed_stats['estatisticas_tamanho_texto']
+                st.write(f"Total: {tamanho['Total de Caracteres']:,} caracteres")
+                st.write(f"Média: {tamanho['Média de Caracteres por Documento']:,.0f} caracteres/doc")
+                st.write(f"Máximo: {tamanho['Tamanho Máximo (caracteres)']:,} ({tamanho['Documento Maior'][:30]}...)")
+                st.write(f"Mínimo: {tamanho['Tamanho Mínimo (caracteres)']:,} ({tamanho['Documento Menor'][:30]}...)")
+            
+            st.markdown("---")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.write("**📝 Sentenças**")
+                sentencas = detailed_stats['estatisticas_sentencas']
+                st.write(f"Total: {sentencas['Total de Sentenças']:,} sentenças")
+                st.write(f"Média: {sentencas['Média de Sentenças por Documento']:.1f} sentenças/doc")
+                st.write(f"Máximo: {sentencas['Máximo de Sentenças']:,} ({sentencas['Documento com Mais Sentenças'][:30]}...)")
+                st.write(f"Mínimo: {sentencas['Mínimo de Sentenças']} ({sentencas['Documento com Menos Sentenças'][:30]}...)")
+            
+            with col2:
+                st.write("**📊 Comparação com Documento Base**")
+                comparacao = detailed_stats['comparacao_base']
+                st.write(f"Páginas Base: {comparacao['Páginas Base']}")
+                st.write(f"Tamanho Base: {comparacao['Tamanho Texto Base']:,} caracteres")
+                st.write(f"Sentenças Base: {comparacao['Sentenças Base']}")
+                st.write(f"Documentos maiores: {comparacao['Documentos Maiores que Base']}")
+                st.write(f"Documentos menores: {comparacao['Documentos Menores que Base']}")
+            
+            st.markdown("---")
+            
+            # 4. Correlações
+            st.write("##### 4. Correlações entre Variáveis")
+            correlacoes = detailed_stats['correlacoes']
+            
+            # Criar DataFrame para mostrar as correlações
+            corr_df = pd.DataFrame({
+                'Variáveis': ['Similaridade-Páginas', 'Similaridade-Tamanho', 'Similaridade-Sentenças',
+                             'Páginas-Tamanho', 'Páginas-Sentenças', 'Tamanho-Sentenças'],
+                'Correlação': [correlacoes['Similaridade-Páginas'], correlacoes['Similaridade-Tamanho'],
+                              correlacoes['Similaridade-Sentenças'], correlacoes['Páginas-Tamanho'],
+                              correlacoes['Páginas-Sentenças'], correlacoes['Tamanho-Sentenças']]
+            })
+            
+            st.dataframe(
+                corr_df.style.format({'Correlação': '{:.4f}'})
+                .bar(subset=['Correlação'], align='mid', color=['#d65f5f', '#5fba7d']),
+                use_container_width=True,
+                hide_index=True
+            )
+            
+            st.markdown("---")
+            
+            # 5. Distribuição Percentual e Outliers
+            st.write("##### 5. Distribuição Percentual e Outliers")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.write("**📈 Distribuição Percentual**")
+                distribuicao = detailed_stats['distribuicao_percentual']
+                st.write(f"Top 10% mais similares: {distribuicao['Top 10% Mais Similares']:.4f}")
+                st.write(f"Top 25% mais similares: {distribuicao['Top 25% Mais Similares']:.4f}")
+                st.write(f"Bottom 10% menos similares: {distribuicao['Bottom 10% Menos Similares']:.4f}")
+                st.write(f"Bottom 25% menos similares: {distribuicao['Bottom 25% Menos Similares']:.4f}")
+            
+            with col2:
+                st.write("**📊 Outliers (Método IQR)**")
+                outliers = detailed_stats['outliers']
+                st.write(f"Número de outliers: {outliers['Número de Outliers']}")
+                st.write(f"Limite inferior: {outliers['Limite Inferior (IQR)']:.4f}")
+                st.write(f"Limite superior: {outliers['Limite Superior (IQR)']:.4f}")
+                if outliers['Outliers (documentos)']:
+                    st.write(f"Documentos outliers: {', '.join([doc[:20] + '...' for doc in outliers['Outliers (documentos)']])}")
+                else:
+                    st.write("Nenhum outlier identificado")
+            
+            st.markdown("---")
+            
+            # 6. Agrupamento (se disponível)
+            if 'agrupamento' in detailed_stats and 'info' not in detailed_stats['agrupamento']:
+                st.write("##### 6. Agrupamento por Similaridade")
+                agrupamento = detailed_stats['agrupamento']
+                
+                for cluster_name, cluster_info in agrupamento.items():
+                    with st.expander(f"**{cluster_name}** ({cluster_info['Tamanho']} documentos)"):
+                        st.write(f"Média de similaridade: {cluster_info['Média Similaridade']:.4f}")
+                        st.write(f"Documentos representativos: {', '.join([doc[:20] + '...' for doc in cluster_info['Documentos']])}")
+        
         # Exportar
         st.write("### 💾 Exportar Resultados")
         col1, col2 = st.columns(2)
@@ -501,29 +786,59 @@ def main():
             )
         
         with col2:
+            # Criar relatório completo com estatísticas detalhadas
             report = f"""
-            RELATÓRIO DOC2VEC
+            RELATÓRIO DOC2VEC - ESTATÍSTICAS DETALHADAS
             Data: {datetime.now().strftime('%d/%m/%Y %H:%M')}
             
-            Documento base: {st.session_state.base_doc}
+            ===== DOCUMENTO BASE =====
+            Nome: {st.session_state.base_doc}
+            Tamanho: {base_stats['text_length']:,} caracteres
+            Páginas: {base_stats['num_pages']}
+            Sentenças: {base_stats['num_sentences']}
+            
+            ===== RESUMO DA ANÁLISE =====
             Documentos analisados: {len(df_results)}
             
-            Estatísticas:
-            Média: {stats_dict['Média']:.4f}
-            Mediana: {stats_dict['Mediana']:.4f}
-            Desvio: {stats_dict['Desvio Padrão']:.4f}
-            Mínimo: {stats_dict['Mínimo']:.4f}
-            Máximo: {stats_dict['Máximo']:.4f}
+            ===== ESTATÍSTICAS DE SIMILARIDADE =====
+            Média: {detailed_stats['geral_similaridade']['Média']:.4f}
+            Mediana: {detailed_stats['geral_similaridade']['Mediana']:.4f}
+            Desvio Padrão: {detailed_stats['geral_similaridade']['Desvio Padrão']:.4f}
+            Variância: {detailed_stats['geral_similaridade']['Variância']:.6f}
+            Mínimo: {detailed_stats['geral_similaridade']['Mínimo']:.4f}
+            Máximo: {detailed_stats['geral_similaridade']['Máximo']:.4f}
+            Amplitude: {detailed_stats['geral_similaridade']['Amplitude']:.4f}
+            Q1: {detailed_stats['geral_similaridade']['1º Quartil (Q1)']:.4f}
+            Q3: {detailed_stats['geral_similaridade']['3º Quartil (Q3)']:.4f}
+            IQR: {detailed_stats['geral_similaridade']['Intervalo Interquartil (IQR)']:.4f}
             
-            Top 5:
+            ===== CATEGORIZAÇÃO =====
+            Muito Baixa (<0.2): {detailed_stats['categorizacao_similaridade']['Muito Baixa (<0.2)']}
+            Baixa (0.2-0.4): {detailed_stats['categorizacao_similaridade']['Baixa (0.2-0.4)']}
+            Média (0.4-0.6): {detailed_stats['categorizacao_similaridade']['Média (0.4-0.6)']}
+            Alta (0.6-0.8): {detailed_stats['categorizacao_similaridade']['Alta (0.6-0.8)']}
+            Muito Alta (≥0.8): {detailed_stats['categorizacao_similaridade']['Muito Alta (≥0.8)']}
+            
+            ===== CORRELAÇÕES =====
+            Similaridade-Páginas: {detailed_stats['correlacoes']['Similaridade-Páginas']:.4f}
+            Similaridade-Tamanho: {detailed_stats['correlacoes']['Similaridade-Tamanho']:.4f}
+            Similaridade-Sentenças: {detailed_stats['correlacoes']['Similaridade-Sentenças']:.4f}
+            
+            ===== TOP 5 DOCUMENTOS MAIS SIMILARES =====
             {chr(10).join([f'{i+1}. {row["arquivo"]}: {row["similaridade"]:.4f}' 
                           for i, row in df_results.head(5).iterrows()])}
+            
+            ===== INFORMAÇÕES DO MODELO =====
+            Tamanho do Vetor: {st.session_state.model_params['vector_size']}
+            Janela: {st.session_state.model_params['window']}
+            Min Count: {st.session_state.model_params['min_count']}
+            Épocas: {st.session_state.model_params['epochs']}
             """
             
             st.download_button(
-                label="📥 Relatório",
+                label="📥 Relatório Completo",
                 data=report,
-                file_name=f"relatorio_{datetime.now().strftime('%Y%m%d_%H%M')}.txt",
+                file_name=f"relatorio_completo_{datetime.now().strftime('%Y%m%d_%H%M')}.txt",
                 mime="text/plain"
             )
         
