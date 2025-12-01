@@ -14,9 +14,12 @@ import plotly.express as px
 from io import BytesIO
 import warnings
 warnings.filterwarnings('ignore')
-
 # Importar o gerenciador de modelos
 from model_trainer import Doc2VecModelManager
+
+PROJECT_ROOT = Path(__file__).parent
+FILES_PDF = PROJECT_ROOT / "files_pdf"
+FILES_TARGET = PROJECT_ROOT / "files_target"
 
 # Configurar página do Streamlit
 st.set_page_config(
@@ -505,7 +508,7 @@ def main():
         st.header("⚙️ Configurações")
         
         # Listar PDFs disponíveis na pasta files_target (documentos base)
-        base_pdf_files = list_pdf_files_from_folder('./files_target')
+        base_pdf_files = list_pdf_files_from_folder(FILES_TARGET)
         
         if not base_pdf_files:
             st.warning("Nenhum arquivo PDF encontrado na pasta './files_target'.")
@@ -542,7 +545,7 @@ def main():
         # Botão para iniciar análise
         analyze_button = st.button("🔍 Iniciar Análise", type="primary", use_container_width=True)
         
-    comparison_pdf_files = list_pdf_files_from_folder('./files_pdf')
+    comparison_pdf_files = list_pdf_files_from_folder(FILES_PDF)
     
     # Processar análise quando o botão for clicado
     if analyze_button:
@@ -805,3 +808,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
