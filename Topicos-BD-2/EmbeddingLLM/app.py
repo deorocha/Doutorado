@@ -182,7 +182,6 @@ def create_visualizations(df_results):
     ), fontsize=10)
     ax1.invert_yaxis()
     ax1.set_xlabel('Similaridade (Doc2Vec)', fontsize=12)
-    ax1.set_title('Top 10 Documentos Mais Similares', fontsize=14, fontweight='bold')
     ax1.set_xlim(0, 1)
     ax1.grid(True, axis='x', alpha=0.3)
     
@@ -192,10 +191,20 @@ def create_visualizations(df_results):
     
     figs.append(fig1)
     
-    # 2. Distribuição das similaridades
-    fig2, ax2 = plt.subplots(figsize=(10, 6))
-    ax2.hist(df_results['similaridade'], bins=15, edgecolor='black', 
-            alpha=0.7, color='skyblue')
+    # 2. Distribuição das similaridades (COM LABELS NAS BARRAS)
+    fig2, ax2 = plt.subplots(figsize=(12, 8))
+    hist_values, bins, patches = ax2.hist(df_results['similaridade'], bins=15, 
+                                          edgecolor='black', alpha=0.7, color='skyblue')
+    
+    # Adicionar labels com os valores sobre as barras
+    for i, (patch, value) in enumerate(zip(patches, hist_values)):
+        if value > 0:  # Só adicionar label se houver valor
+            ax2.text(patch.get_x() + patch.get_width()/2, 
+                    value + 0.1, 
+                    str(int(value)), 
+                    ha='center', va='bottom', 
+                    fontsize=10, fontweight='bold')
+    
     ax2.axvline(df_results['similaridade'].mean(), color='red', 
                 linestyle='--', linewidth=2, label=f'Média: {df_results["similaridade"].mean():.3f}')
     ax2.axvline(df_results['similaridade'].median(), color='green', 
@@ -203,21 +212,32 @@ def create_visualizations(df_results):
     
     ax2.set_xlabel('Similaridade', fontsize=12)
     ax2.set_ylabel('Frequência', fontsize=12)
-    ax2.set_title('Distribuição das Similaridades', fontsize=14, fontweight='bold')
     ax2.legend(fontsize=10)
     ax2.grid(True, alpha=0.3)
     
     figs.append(fig2)
     
-    # 3. Similaridade vs Tamanho do Texto
-    fig3, ax3 = plt.subplots(figsize=(10, 6))
+    # 3. Similaridade vs Tamanho do Texto (COM LABELS)
+    fig3, ax3 = plt.subplots(figsize=(12, 8))
     scatter = ax3.scatter(df_results['tamanho_texto'], df_results['similaridade'], 
                          c=df_results['similaridade'], cmap='viridis', 
-                         s=50, alpha=0.6, edgecolors='black', linewidth=0.5)
+                         s=80, alpha=0.7, edgecolors='black', linewidth=0.5)
+    
+    # Adicionar labels nos pontos (apenas para os top 10 para não poluir)
+    top_10_for_labels = df_results.head(10).copy()
+    for _, row in top_10_for_labels.iterrows():
+        ax3.annotate(
+            row['arquivo'][:15] + ('...' if len(row['arquivo']) > 15 else ''),  # Nome truncado
+            (row['tamanho_texto'], row['similaridade']),
+            xytext=(5, 5),
+            textcoords='offset points',
+            fontsize=9,
+            alpha=0.8,
+            bbox=dict(boxstyle='round,pad=0.3', facecolor='white', alpha=0.7, edgecolor='gray', linewidth=0.5)
+        )
     
     ax3.set_xlabel('Tamanho do Texto (caracteres)', fontsize=12)
     ax3.set_ylabel('Similaridade', fontsize=12)
-    ax3.set_title('Similaridade vs Tamanho do Texto', fontsize=14, fontweight='bold')
     
     cbar = plt.colorbar(scatter, ax=ax3)
     cbar.set_label('Similaridade', fontsize=10)
@@ -225,10 +245,116 @@ def create_visualizations(df_results):
     
     figs.append(fig3)
     
+    # 4. Mapa de Calor - Correlações
+    fig4, ax4 = plt.subplots(figsize=(12, 8))
+    correlation_cols = ['similaridade', 'paginas', 'tamanho_texto', 'sentencas']
+    correlation_df = df_results[correlation_cols]
+    
+    # Calcular matriz de correlação
+    corr_matrix = correlation_df.corr()
+    
+    # Criar heatmap
+    sns.heatmap(corr_matrix, annot=True, fmt='.3f', cmap='coolwarm', 
+                center=0, square=True, linewidths=1, 
+                cbar_kws={'shrink': 0.8}, ax=ax4)
+    
+    plt.tight_layout()
+    figs.append(fig4)
+    
+    # 5. Gráfico Radar - Top 5 documentos
+    fig5 = create_radar_chart(df_results)
+    figs.append(fig5)
+    
+    # 6. Gráfico de Barras - Similaridade com o Documento Base
+    fig6, ax6 = plt.subplots(figsize=(12, 8))
+    
+    # Selecionar os primeiros 15 documentos para melhor visualização
+    display_df = df_results.head(15).copy()
+    
+    bars = ax6.bar(range(len(display_df)), display_df['similaridade'], 
+                  color=plt.cm.plasma(display_df['similaridade']))
+    
+    ax6.set_xlabel('Documentos', fontsize=12)
+    ax6.set_ylabel('Similaridade', fontsize=12)
+    ax6.set_xticks(range(len(display_df)))
+    ax6.set_xticklabels(display_df['arquivo'].apply(
+        lambda x: x[:15] + '...' if len(x) > 15 else x
+    ), rotation=45, ha='right', fontsize=10)
+    ax6.set_ylim(0, 1)
+    ax6.grid(True, axis='y', alpha=0.3)
+    
+    # Adicionar valores nas barras
+    for bar, value in zip(bars, display_df['similaridade']):
+        height = bar.get_height()
+        ax6.text(bar.get_x() + bar.get_width()/2., height + 0.01,
+                f'{value:.3f}', ha='center', va='bottom', fontsize=9, fontweight='bold')
+    
+    plt.tight_layout()
+    figs.append(fig6)
+    
     return figs
 
+def create_radar_chart(df_results, top_n=5):
+    """Cria gráfico radar para os top N documentos"""
+    
+    # Selecionar top N documentos
+    top_docs = df_results.head(top_n).copy()
+    
+    # Normalizar os dados para o radar chart (0-1)
+    from sklearn.preprocessing import MinMaxScaler
+    
+    # Colunas para o radar chart
+    radar_cols = ['similaridade', 'paginas', 'tamanho_texto', 'sentencas']
+    radar_data = top_docs[radar_cols].copy()
+    
+    # Normalizar cada coluna individualmente (exceto similaridade que já está em 0-1)
+    scaler = MinMaxScaler()
+    
+    for col in radar_cols[1:]:  # Pular similaridade
+        radar_data[col] = scaler.fit_transform(radar_data[[col]]).flatten()
+    
+    # Ângulos para os eixos
+    angles = np.linspace(0, 2 * np.pi, len(radar_cols), endpoint=False).tolist()
+    angles += angles[:1]  # Fechar o círculo
+    
+    # Criar figura
+    fig, ax = plt.subplots(figsize=(12, 8), subplot_kw=dict(projection='polar'))
+    
+    # Cores diferentes para cada documento
+    colors = plt.cm.tab10(np.linspace(0, 1, len(top_docs)))
+    
+    # Plotar cada documento
+    for idx, (_, row) in enumerate(top_docs.iterrows()):
+        values = radar_data.iloc[idx].tolist()
+        values += values[:1]  # Fechar o círculo
+        
+        ax.plot(angles, values, 'o-', linewidth=2, color=colors[idx], 
+                label=row['arquivo'][:20] + ('...' if len(row['arquivo']) > 20 else ''), 
+                markersize=8)
+        ax.fill(angles, values, color=colors[idx], alpha=0.25)
+    
+    # Configurar eixos
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(['Similaridade', 'Páginas\n(norm.)', 'Tamanho\n(norm.)', 'Sentenças\n(norm.)'], 
+                      fontsize=11, fontweight='bold')
+    
+    # Configurar grade
+    ax.yaxis.grid(True, alpha=0.5)
+    ax.xaxis.grid(True, alpha=0.5)
+    
+    # Configurar limites
+    ax.set_ylim(0, 1)
+    ax.set_yticks([0.2, 0.4, 0.6, 0.8, 1.0])
+    ax.set_yticklabels(['0.2', '0.4', '0.6', '0.8', '1.0'], fontsize=9)
+    
+    # Legenda
+    ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1.0), fontsize=10)
+    
+    plt.tight_layout()
+    return fig
+
 def main():
-    st.title("📊 Análise de Similaridade com Doc2Vec")
+    st.header("📊 Análise de Similaridade com Doc2Vec")
     st.markdown("""
     Analise a similaridade semântica entre documentos PDF usando o modelo Doc2Vec.
     """)
@@ -292,7 +418,7 @@ def main():
         base_stats = st.session_state.base_stats
         
         # Informações do documento base
-        st.header("📄 Documento Base")
+        st.write("#### 📄 Documento Base")
         col1, col2, col3 = st.columns(3)
         with col1:
             st.metric("Tamanho", f"{base_stats['text_length']:,}")
@@ -302,7 +428,7 @@ def main():
             st.metric("Sentenças", base_stats['num_sentences'])
         
         # Métricas
-        st.header("📊 Métricas de Similaridade")
+        st.write("#### 📊 Métricas de Similaridade")
         cols = st.columns(4)
         metrics = [
             ("Média", f"{stats_dict['Média']:.4f}"),
@@ -316,7 +442,7 @@ def main():
                 st.metric(label, value)
         
         # Tabela
-        st.header("📋 Resultados")
+        st.write("#### 📋 Resultados")
         st.dataframe(
             df_results.style.format({
                 'similaridade': '{:.4f}',
@@ -326,15 +452,43 @@ def main():
             hide_index=True
         )
         
-        # Visualizações
-        st.header("📈 Visualizações")
-        figs = create_visualizations(df_results)
-        for fig in figs:
-            st.pyplot(fig)
-            st.markdown("---")
+        # Visualizações - UMA ÚNICA COLUNA COM 80% DE LARGURA
+        st.write("#### 📈 Visualizações")
+        
+        # Criar container centralizado com 80% de largura
+        with st.container():
+            # Criar uma coluna com largura personalizada
+            col1, col2, col3 = st.columns([1, 8, 1])
+            
+            with col2:
+                # Gerar todos os gráficos
+                figs = create_visualizations(df_results)
+                
+                st.write("##### 1. Top 10 Documentos Mais Similares")
+                st.pyplot(figs[0])
+                st.markdown("---")
+                
+                st.write("##### 2. Distribuição das Similaridades")
+                st.pyplot(figs[1])
+                st.markdown("---")
+                
+                st.write("##### 3. Similaridade com Documento Base")
+                st.pyplot(figs[5])
+                st.markdown("---")
+                
+                st.write("##### 4. Similaridade vs Tamanho do Texto")
+                st.pyplot(figs[2])
+                st.markdown("---")
+                
+                st.write("##### 5. Mapa de Calor - Correlações")
+                st.pyplot(figs[3])
+                st.markdown("---")
+                
+                st.write("##### 6. Comparação Radar - Top 5 Documentos")
+                st.pyplot(figs[4])
         
         # Exportar
-        st.header("💾 Exportar Resultados")
+        st.write("### 💾 Exportar Resultados")
         col1, col2 = st.columns(2)
         
         with col1:
