@@ -6,6 +6,8 @@ import re
 import numpy as np
 import pandas as pd
 from pathlib import Path
+import scipy
+import scipy.linalg
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from gensim.utils import simple_preprocess
 import PyPDF2
@@ -194,3 +196,4 @@ class Doc2VecModelManager:
             'text_length': len(text),
             'num_pages': num_pages
         }
+
