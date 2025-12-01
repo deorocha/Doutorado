@@ -1,4 +1,4 @@
-# app.py
+# app.py - VERSÃO ATUALIZADA COM width='stretch'
 
 import streamlit as st
 import os
@@ -8,8 +8,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime
-import plotly.graph_objects as go
-import plotly.express as px
 from io import BytesIO
 import warnings
 warnings.filterwarnings('ignore')
@@ -543,7 +541,7 @@ def main():
         }
         
         # Botão para iniciar análise
-        analyze_button = st.button("🔍 Iniciar Análise", type="primary", use_container_width=True)
+        analyze_button = st.button("🔍 Iniciar Análise", type="primary", width='stretch')
         
     comparison_pdf_files = list_pdf_files_from_folder(FILES_PDF)
     
@@ -632,17 +630,17 @@ def main():
                 "tamanho_texto": "Caracteres",
                 "sentencas": "Sentenças"
             },
-            use_container_width=True,
+            width='stretch',
             hide_index=True
         )
         
-        # Visualizações - TODOS EM UMA COLUNA COM 80% DE LARGURA
+        # Visualizações
         st.write("#### 📈 Visualizações")
         
         # Inicializar gerenciador de visualizações
         viz_manager = VisualizationManager()
         
-        # Container para os gráficos com 80% de largura
+        # Container para os gráficos
         col_left, col_center, col_right = st.columns([1, 8, 1])
         
         with col_center:
@@ -650,7 +648,7 @@ def main():
             if len(df_results) >= 3:
                 radar_fig = viz_manager.create_radar_chart_matplotlib(df_results, base_doc)
                 if radar_fig:
-                    st.pyplot(radar_fig, use_container_width=True)
+                    st.pyplot(radar_fig, width='stretch')
                 else:
                     st.info("Gráfico de radar disponível apenas para 3 ou mais documentos")
             else:
@@ -658,19 +656,19 @@ def main():
             
             # 2. Gráfico Similaridade vs Tamanho do Texto (Matplotlib)
             scatter_fig = viz_manager.create_similarity_vs_textsize_matplotlib(df_results)
-            st.pyplot(scatter_fig, use_container_width=True)
+            st.pyplot(scatter_fig, width='stretch')
             
             # 3. Gráfico de Barras Horizontais Top 10 (Matplotlib)
             top_fig = viz_manager.create_top_similarity_barchart_matplotlib(df_results)
-            st.pyplot(top_fig, use_container_width=True)
+            st.pyplot(top_fig, width='stretch')
             
             # 4. Gráfico de Distribuição (Matplotlib)
             dist_fig = viz_manager.create_similarity_distribution_matplotlib(df_results)
-            st.pyplot(dist_fig, use_container_width=True)
+            st.pyplot(dist_fig, width='stretch')
             
             # 5. Mapa de Calor de Correlações (Matplotlib)
             heatmap_fig = viz_manager.create_correlation_heatmap_matplotlib(df_results)
-            st.pyplot(heatmap_fig, use_container_width=True)
+            st.pyplot(heatmap_fig, width='stretch')
         
         # Análise Detalhada por Documento
         st.write("#### 🔍 Análise Detalhada por Documento")
@@ -761,26 +759,26 @@ def main():
         
         with steps_col1:
             st.markdown("""
-            **1. Preparação**
-            - 1 PDF em `./files_target`
+            **1. Preparação**  
+            - 1 PDF em `./files_target`  
             - PDFs em `./files_pdf`
             """)
         
         with steps_col2:
             st.markdown("""
-            **2. Configuração**
+            **2. Configuração**  
             Selecione documento base e ajuste parâmetros
             """)
         
         with steps_col3:
             st.markdown("""
-            **3. Processamento**
+            **3. Processamento**  
             Treinamento e análise automática
             """)
         
         with steps_col4:
             st.markdown("""
-            **4. Resultados**
+            **4. Resultados**  
             Visualize gráficos e estatísticas
             """)
         
@@ -808,4 +806,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
