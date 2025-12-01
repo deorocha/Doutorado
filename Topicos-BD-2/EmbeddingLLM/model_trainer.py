@@ -1,4 +1,4 @@
-# model_trainer.py - VERSÃO ATUALIZADA
+# model_trainer.py - VERSÃO SIMPLIFICADA
 
 import os
 import glob
@@ -7,13 +7,7 @@ import pandas as pd
 from pathlib import Path
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from gensim.utils import simple_preprocess
-import nltk
-import ssl
-import urllib.request
-import zipfile
-import io
-from nltk.corpus import stopwords
-from nltk.tokenize import sent_tokenize
+import re
 import PyPDF2
 
 PROJECT_ROOT = Path(__file__).parent
@@ -25,50 +19,26 @@ class Doc2VecModelManager:
     def __init__(self, pdf_folder=FILES_PDF):
         self.pdf_folder = pdf_folder
         self.models_cache = {}
-        
-        # Baixar recursos NLTK
-        self._download_nltk_resources()
+        self.portuguese_stopwords = self._get_portuguese_stopwords()
     
-    def _download_nltk_resources(self):
-        """Baixa recursos necessários do NLTK de forma robusta"""
-        try:
-            # Desativar verificação SSL se necessário
-            try:
-                _create_unverified_https_context = ssl._create_unverified_context
-            except AttributeError:
-                pass
-            else:
-                ssl._create_default_https_context = _create_unverified_https_context
-            
-            # Lista de recursos essenciais
-            essential_resources = ['punkt', 'stopwords']
-            
-            # Criar diretório personalizado para NLTK data
-            nltk_data_dir = os.path.join(os.getcwd(), 'nltk_data')
-            os.makedirs(nltk_data_dir, exist_ok=True)
-            nltk.data.path.append(nltk_data_dir)
-            
-            # Verificar e baixar cada recurso
-            for resource in essential_resources:
-                try:
-                    nltk.data.find(resource)
-                    print(f"Resource '{resource}' já disponível")
-                except LookupError:
-                    print(f"Baixando resource '{resource}'...")
-                    nltk.download(resource, quiet=True, raise_on_error=True)
-                    
-        except Exception as e:
-            print(f"Erro no download do NLTK: {e}")
-            # Tentar fallback usando dados locais se disponíveis
-            try:
-                # Configurar caminhos alternativos
-                nltk.data.path.append('/usr/share/nltk_data')
-                nltk.data.path.append('/usr/local/share/nltk_data')
-                nltk.data.path.append('/usr/lib/nltk_data')
-                nltk.data.path.append('/usr/local/lib/nltk_data')
-                nltk.data.path.append('/opt/nltk_data')
-            except:
-                pass
+    def _get_portuguese_stopwords(self):
+        """Retorna uma lista de stopwords em português (sem dependência do NLTK)"""
+        stopwords = {
+            'de', 'a', 'o', 'que', 'e', 'do', 'da', 'em', 'um', 'para',
+            'com', 'não', 'uma', 'os', 'no', 'se', 'na', 'por', 'mais',
+            'as', 'dos', 'como', 'mas', 'ao', 'ele', 'das', 'à', 'seu',
+            'sua', 'ou', 'quando', 'muito', 'nos', 'já', 'eu', 'também',
+            'só', 'pelo', 'pela', 'até', 'isso', 'ela', 'entre', 'depois',
+            'sem', 'mesmo', 'aos', 'seus', 'quem', 'nas', 'me', 'esse',
+            'eles', 'você', 'essa', 'num', 'nem', 'suas', 'meu', 'às',
+            'minha', 'numa', 'pelos', 'elas', 'qual', 'nós', 'lhe',
+            'deles', 'essas', 'esses', 'pelas', 'este', 'dele', 'tu',
+            'te', 'vocês', 'vos', 'lhes', 'meus', 'minhas', 'teu',
+            'tua', 'teus', 'tuas', 'nosso', 'nossa', 'nossos', 'nossas',
+            'dela', 'delas', 'esta', 'estes', 'estas', 'aquele', 'aquela',
+            'aqueles', 'aquelas', 'isto', 'aquilo'
+        }
+        return stopwords
     
     def list_pdf_files(self):
         """Lista todos os arquivos PDF na pasta especificada"""
@@ -87,59 +57,37 @@ class Doc2VecModelManager:
                 pdf_reader = PyPDF2.PdfReader(file)
                 for page_num in range(len(pdf_reader.pages)):
                     page = pdf_reader.pages[page_num]
-                    text += page.extract_text() or ""
+                    page_text = page.extract_text()
+                    if page_text:
+                        text += page_text + " "
             return text.strip()
         except Exception as e:
             print(f"Erro ao extrair texto do PDF {pdf_path}: {e}")
             return None
     
+    def simple_sentence_tokenize(self, text):
+        """Tokenização simples de sentenças sem NLTK"""
+        # Dividir por pontuação de final de sentença
+        sentences = re.split(r'[.!?]+', text)
+        # Limpar espaços em branco
+        sentences = [s.strip() for s in sentences if s.strip()]
+        return sentences
+    
     def preprocess_text(self, text, remove_stopwords=True, language='portuguese'):
-        """Pré-processa o texto: tokenização e limpeza com fallback"""
+        """Pré-processa o texto: tokenização e limpeza"""
         if not text:
             return []
         
-        try:
-            # Tentar usar sent_tokenize do NLTK
-            try:
-                sentences = sent_tokenize(text, language='portuguese')
-            except:
-                # Fallback para inglês
-                sentences = sent_tokenize(text, language='english')
-        except Exception as e:
-            print(f"Erro no sent_tokenize: {e}")
-            # Fallback simples: dividir por pontuação
-            import re
-            sentences = re.split(r'[.!?]+', text)
-            sentences = [s.strip() for s in sentences if s.strip()]
+        # Tokenizar sentenças
+        sentences = self.simple_sentence_tokenize(text)
         
-        # Obter stopwords
-        stop_words = set()
-        try:
-            if language == 'portuguese':
-                stop_words = set(stopwords.words('portuguese'))
-            else:
-                stop_words = set(stopwords.words('english'))
-        except:
-            # Lista básica de stopwords em português como fallback
-            stop_words = {
-                'de', 'a', 'o', 'que', 'e', 'do', 'da', 'em', 'um', 'para', 
-                'com', 'não', 'uma', 'os', 'no', 'se', 'na', 'por', 'mais', 
-                'as', 'dos', 'como', 'mas', 'ao', 'ele', 'das', 'à', 'seu', 
-                'sua', 'ou', 'quando', 'muito', 'nos', 'já', 'eu', 'também', 
-                'só', 'pelo', 'pela', 'até', 'isso', 'ela', 'entre', 'depois', 
-                'sem', 'mesmo', 'aos', 'seus', 'quem', 'nas', 'me', 'esse', 
-                'eles', 'você', 'essa', 'num', 'nem', 'suas', 'meu', 'às', 
-                'minha', 'numa', 'pelos', 'elas', 'qual', 'nós', 'lhe', 
-                'deles', 'essas', 'esses', 'pelas', 'este', 'dele', 'tu', 
-                'te', 'vocês', 'vos', 'lhes', 'meus', 'minhas', 'teu', 
-                'tua', 'teus', 'tuas', 'nosso', 'nossa', 'nossos', 'nossas', 
-                'dela', 'delas', 'esta', 'estes', 'estas', 'aquele', 'aquela', 
-                'aqueles', 'aquelas', 'isto', 'aquilo'
-            }
+        # Usar stopwords em português
+        stop_words = self.portuguese_stopwords if language == 'portuguese' else set()
         
         processed_sentences = []
         
         for sentence in sentences:
+            # Tokenização simples com gensim
             tokens = simple_preprocess(sentence, deacc=True, min_len=2)
             
             if remove_stopwords and stop_words:
@@ -247,16 +195,8 @@ class Doc2VecModelManager:
         if not text:
             return None
         
-        # Usar fallback para tokenização de sentenças
-        try:
-            sentences = sent_tokenize(text, language='portuguese')
-        except:
-            try:
-                sentences = sent_tokenize(text, language='english')
-            except:
-                import re
-                sentences = re.split(r'[.!?]+', text)
-                sentences = [s.strip() for s in sentences if s.strip()]
+        # Tokenizar sentenças
+        sentences = self.simple_sentence_tokenize(text)
         
         try:
             with open(pdf_path, 'rb') as file:
