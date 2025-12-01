@@ -13,10 +13,13 @@ from nltk.corpus import stopwords
 from nltk.tokenize import sent_tokenize
 import PyPDF2
 
+PROJECT_ROOT = Path(__file__).parent
+FILES_PDF = PROJECT_ROOT / "files_pdf"
+
 class Doc2VecModelManager:
     """Gerencia treinamento e inferência de modelos Doc2Vec"""
     
-    def __init__(self, pdf_folder="./files_pdf"):
+    def __init__(self, pdf_folder=FILES_PDF):
         self.pdf_folder = pdf_folder
         self.models_cache = {}
         
@@ -180,3 +183,4 @@ class Doc2VecModelManager:
             'text_length': len(text),
             'num_pages': num_pages
         }
+
