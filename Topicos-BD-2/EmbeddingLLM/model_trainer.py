@@ -1,18 +1,20 @@
-# model_trainer.py
+# model_trainer.py - VERSÃO ATUALIZADA
 
 import os
 import glob
-import pickle
 import numpy as np
 import pandas as pd
 from pathlib import Path
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from gensim.utils import simple_preprocess
 import nltk
+import ssl
+import urllib.request
+import zipfile
+import io
 from nltk.corpus import stopwords
 from nltk.tokenize import sent_tokenize
 import PyPDF2
-from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent
 FILES_PDF = PROJECT_ROOT / "files_pdf"
@@ -28,12 +30,9 @@ class Doc2VecModelManager:
         self._download_nltk_resources()
     
     def _download_nltk_resources(self):
-        """Baixa recursos necessários do NLTK com tratamento de erros"""
-        import nltk
-        import ssl
-        
+        """Baixa recursos necessários do NLTK de forma robusta"""
         try:
-            # Tentar criar contexto SSL para evitar erros de certificado
+            # Desativar verificação SSL se necessário
             try:
                 _create_unverified_https_context = ssl._create_unverified_context
             except AttributeError:
@@ -41,53 +40,36 @@ class Doc2VecModelManager:
             else:
                 ssl._create_default_https_context = _create_unverified_https_context
             
-            # Tentar baixar recursos com múltiplas tentativas
-            resources = ['punkt', 'stopwords', 'punkt_tab']
+            # Lista de recursos essenciais
+            essential_resources = ['punkt', 'stopwords']
             
-            for resource in resources:
+            # Criar diretório personalizado para NLTK data
+            nltk_data_dir = os.path.join(os.getcwd(), 'nltk_data')
+            os.makedirs(nltk_data_dir, exist_ok=True)
+            nltk.data.path.append(nltk_data_dir)
+            
+            # Verificar e baixar cada recurso
+            for resource in essential_resources:
                 try:
-                    nltk.download(resource, quiet=True)
-                    print(f"NLTK resource '{resource}' baixado com sucesso")
-                except Exception as e:
-                    print(f"Erro ao baixar '{resource}': {e}")
-                    # Tentar método alternativo
-                    try:
-                        nltk.data.find(f'tokenizers/{resource}')
-                    except LookupError:
-                        # Se falhar, tentar manualmente
-                        import urllib.request
-                        import os
-                        
-                        # URLs dos recursos (pode precisar ajustar)
-                        resource_urls = {
-                            'punkt': 'https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/tokenizers/punkt.zip',
-                            'stopwords': 'https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/stopwords.zip'
-                        }
-                        
-                        if resource in resource_urls:
-                            try:
-                                # Criar diretório para dados do NLTK
-                                nltk_dir = os.path.join(os.path.expanduser('~'), 'nltk_data')
-                                os.makedirs(nltk_dir, exist_ok=True)
-                                
-                                # Baixar e extrair
-                                import zipfile
-                                import io
-                                
-                                url = resource_urls[resource]
-                                response = urllib.request.urlopen(url)
-                                data = response.read()
-                                
-                                with zipfile.ZipFile(io.BytesIO(data)) as zf:
-                                    zf.extractall(nltk_dir)
-                                
-                                print(f"Resource '{resource}' baixado manualmente")
-                            except Exception as download_error:
-                                print(f"Erro no download manual: {download_error}")
-        
+                    nltk.data.find(resource)
+                    print(f"Resource '{resource}' já disponível")
+                except LookupError:
+                    print(f"Baixando resource '{resource}'...")
+                    nltk.download(resource, quiet=True, raise_on_error=True)
+                    
         except Exception as e:
-            print(f"Erro geral no download do NLTK: {e}")
-        
+            print(f"Erro no download do NLTK: {e}")
+            # Tentar fallback usando dados locais se disponíveis
+            try:
+                # Configurar caminhos alternativos
+                nltk.data.path.append('/usr/share/nltk_data')
+                nltk.data.path.append('/usr/local/share/nltk_data')
+                nltk.data.path.append('/usr/lib/nltk_data')
+                nltk.data.path.append('/usr/local/lib/nltk_data')
+                nltk.data.path.append('/opt/nltk_data')
+            except:
+                pass
+    
     def list_pdf_files(self):
         """Lista todos os arquivos PDF na pasta especificada"""
         if not os.path.exists(self.pdf_folder):
@@ -105,29 +87,55 @@ class Doc2VecModelManager:
                 pdf_reader = PyPDF2.PdfReader(file)
                 for page_num in range(len(pdf_reader.pages)):
                     page = pdf_reader.pages[page_num]
-                    text += page.extract_text()
+                    text += page.extract_text() or ""
             return text.strip()
         except Exception as e:
             print(f"Erro ao extrair texto do PDF {pdf_path}: {e}")
             return None
     
     def preprocess_text(self, text, remove_stopwords=True, language='portuguese'):
-        """Pré-processa o texto: tokenização e limpeza"""
+        """Pré-processa o texto: tokenização e limpeza com fallback"""
         if not text:
             return []
         
         try:
-            sentences = sent_tokenize(text, language='portuguese')
-        except:
-            sentences = sent_tokenize(text)
+            # Tentar usar sent_tokenize do NLTK
+            try:
+                sentences = sent_tokenize(text, language='portuguese')
+            except:
+                # Fallback para inglês
+                sentences = sent_tokenize(text, language='english')
+        except Exception as e:
+            print(f"Erro no sent_tokenize: {e}")
+            # Fallback simples: dividir por pontuação
+            import re
+            sentences = re.split(r'[.!?]+', text)
+            sentences = [s.strip() for s in sentences if s.strip()]
         
+        # Obter stopwords
+        stop_words = set()
         try:
             if language == 'portuguese':
                 stop_words = set(stopwords.words('portuguese'))
             else:
                 stop_words = set(stopwords.words('english'))
         except:
-            stop_words = set()
+            # Lista básica de stopwords em português como fallback
+            stop_words = {
+                'de', 'a', 'o', 'que', 'e', 'do', 'da', 'em', 'um', 'para', 
+                'com', 'não', 'uma', 'os', 'no', 'se', 'na', 'por', 'mais', 
+                'as', 'dos', 'como', 'mas', 'ao', 'ele', 'das', 'à', 'seu', 
+                'sua', 'ou', 'quando', 'muito', 'nos', 'já', 'eu', 'também', 
+                'só', 'pelo', 'pela', 'até', 'isso', 'ela', 'entre', 'depois', 
+                'sem', 'mesmo', 'aos', 'seus', 'quem', 'nas', 'me', 'esse', 
+                'eles', 'você', 'essa', 'num', 'nem', 'suas', 'meu', 'às', 
+                'minha', 'numa', 'pelos', 'elas', 'qual', 'nós', 'lhe', 
+                'deles', 'essas', 'esses', 'pelas', 'este', 'dele', 'tu', 
+                'te', 'vocês', 'vos', 'lhes', 'meus', 'minhas', 'teu', 
+                'tua', 'teus', 'tuas', 'nosso', 'nossa', 'nossos', 'nossas', 
+                'dela', 'delas', 'esta', 'estes', 'estas', 'aquele', 'aquela', 
+                'aqueles', 'aquelas', 'isto', 'aquilo'
+            }
         
         processed_sentences = []
         
@@ -166,32 +174,45 @@ class Doc2VecModelManager:
         # Extrair e pré-processar texto
         text = self.extract_text_from_pdf(pdf_path)
         if not text:
+            print(f"Texto não extraído de {pdf_path}")
             return None
         
         processed_sentences = self.preprocess_text(text)
+        if not processed_sentences:
+            print(f"Nenhuma sentença processada de {pdf_path}")
+            return None
+        
         tagged_docs = self.create_tagged_documents(processed_sentences, "base_document")
         
+        if not tagged_docs:
+            print(f"Nenhum documento taggeado criado de {pdf_path}")
+            return None
+        
         # Treinar modelo
-        model = Doc2Vec(
-            vector_size=vector_size,
-            window=window,
-            min_count=min_count,
-            workers=4,
-            dm=1,
-            epochs=epochs
-        )
-        
-        model.build_vocab(tagged_docs)
-        model.train(
-            tagged_docs,
-            total_examples=model.corpus_count,
-            epochs=model.epochs
-        )
-        
-        # Cache do modelo
-        self.models_cache[model_name] = model
-        
-        return model
+        try:
+            model = Doc2Vec(
+                vector_size=vector_size,
+                window=window,
+                min_count=min_count,
+                workers=4,
+                dm=1,
+                epochs=epochs
+            )
+            
+            model.build_vocab(tagged_docs)
+            model.train(
+                tagged_docs,
+                total_examples=model.corpus_count,
+                epochs=model.epochs
+            )
+            
+            # Cache do modelo
+            self.models_cache[model_name] = model
+            
+            return model
+        except Exception as e:
+            print(f"Erro ao treinar modelo: {e}")
+            return None
     
     def infer_document_embedding(self, model, text, remove_stopwords=True):
         """Infere embedding para um novo documento"""
@@ -205,8 +226,12 @@ class Doc2VecModelManager:
         if not all_tokens:
             return None
         
-        vector = model.infer_vector(all_tokens, epochs=50)
-        return vector
+        try:
+            vector = model.infer_vector(all_tokens, epochs=50)
+            return vector
+        except Exception as e:
+            print(f"Erro ao inferir embedding: {e}")
+            return None
     
     def save_model(self, model, filename):
         """Salva modelo em arquivo"""
@@ -222,7 +247,16 @@ class Doc2VecModelManager:
         if not text:
             return None
         
-        sentences = sent_tokenize(text, language='portuguese')
+        # Usar fallback para tokenização de sentenças
+        try:
+            sentences = sent_tokenize(text, language='portuguese')
+        except:
+            try:
+                sentences = sent_tokenize(text, language='english')
+            except:
+                import re
+                sentences = re.split(r'[.!?]+', text)
+                sentences = [s.strip() for s in sentences if s.strip()]
         
         try:
             with open(pdf_path, 'rb') as file:
@@ -237,5 +271,3 @@ class Doc2VecModelManager:
             'text_length': len(text),
             'num_pages': num_pages
         }
-
-
