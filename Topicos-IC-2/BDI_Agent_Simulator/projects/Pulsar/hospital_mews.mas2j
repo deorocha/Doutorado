@@ -1,0 +1,16 @@
+MAS hospital_mews {
+
+    infrastructure: Centralised
+
+    environment: HospitalEnv
+
+    agents:
+        patient_collector;
+        analyzer;
+        recommender;
+        coordinator;
+        notifier;
+        databroker;
+        // llm_agent;   // ativa depois, se quiser
+
+}
