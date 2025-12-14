@@ -1,0 +1,18 @@
+# Modelos grandes
+fine_tuned_model/model.safetensors
+fine_tuned_model/pytorch_model.bin
+fine_tuned_model/*.safetensors
+fine_tuned_model/*.bin
+organized_model/
+*.safetensors
+*.bin
+
+# Checkpoints
+checkpoint*/
+*checkpoint*
+
+# Outros
+__pycache__/
+*.pyc
+.env
+.DS_Store
