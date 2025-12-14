@@ -1,18 +1,30 @@
-# Modelos grandes
-fine_tuned_model/model.safetensors
-fine_tuned_model/pytorch_model.bin
-fine_tuned_model/*.safetensors
-fine_tuned_model/*.bin
-organized_model/
+# Modelos grandes - NUNCA subir para GitHub!
 *.safetensors
 *.bin
+*.pth
+*.pt
+*.h5
+*.ckpt
+
+# Pastas com modelos
+/fine_tuned_model/model.safetensors
+/organized_model/
+/downloaded_models/
 
 # Checkpoints
 checkpoint*/
 *checkpoint*
 
-# Outros
+# Cache e temporários
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
 .env
 .DS_Store
+*.log
+*.tmp
+
+# Streamlit
+.streamlit/secrets.toml
