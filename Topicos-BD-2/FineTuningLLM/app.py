@@ -8,9 +8,8 @@ from datetime import datetime
 from pathlib import Path
 import sys
 
-PROJECT_ROOT = Path(__file__).parent
-FILES_MODEL = PROJECT_ROOT / "fine_tuned_model"
-FILES_JSON = PROJECT_ROOT / "json_files"
+# Adicionar diretório atual ao path para importar módulos locais
+sys.path.append('.')
 
 # Configuração da página
 st.set_page_config(
@@ -19,6 +18,17 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Definir caminhos raiz
+PROJECT_ROOT = Path(__file__).parent
+FILES_MODEL = PROJECT_ROOT / "fine_tuned_model"
+FILES_JSON = PROJECT_ROOT / "json_files"
+GENERATED_TEXTS = PROJECT_ROOT / "generated_texts"
+
+# Criar diretórios se não existirem
+FILES_MODEL.mkdir(exist_ok=True)
+FILES_JSON.mkdir(exist_ok=True)
+GENERATED_TEXTS.mkdir(exist_ok=True)
 
 # CSS personalizado
 st.markdown("""
@@ -49,12 +59,20 @@ st.markdown("""
         border-radius: 8px;
         padding: 0.75rem 1rem;
     }
+    .path-info {
+        font-family: monospace;
+        background-color: #F1F5F9;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
 # Importar o carregador de modelo
 try:
-    from model_loader import LLMModelLoader
+    from model_loader import LLMModelLoader, FILES_MODEL as DEFAULT_MODEL_PATH
 except ImportError:
     st.error("❌ Módulo 'model_loader' não encontrado")
     st.stop()
@@ -73,7 +91,14 @@ def init_session_state():
     if 'generation_history' not in st.session_state:
         st.session_state.generation_history = []
     if 'model_path' not in st.session_state:
-        st.session_state.model_path = FILES_MODEL
+        st.session_state.model_path = str(DEFAULT_MODEL_PATH)
+    if 'project_paths' not in st.session_state:
+        st.session_state.project_paths = {
+            "project_root": str(PROJECT_ROOT),
+            "model_dir": str(FILES_MODEL),
+            "json_dir": str(FILES_JSON),
+            "output_dir": str(GENERATED_TEXTS)
+        }
 
 # Inicializar
 init_session_state()
@@ -82,9 +107,13 @@ def load_model(model_path):
     """Carrega o modelo finetunado"""
     try:
         with st.spinner("🔍 Carregando modelo..."):
+            # Converter para Path object
+            model_path_obj = Path(model_path)
+            
             # Verificar se o caminho existe
-            if not os.path.exists(model_path):
-                st.error(f"❌ Caminho não encontrado: {model_path}")
+            if not model_path_obj.exists():
+                st.error(f"❌ Caminho não encontrado: {model_path_obj.absolute()}")
+                st.info(f"📁 Caminho padrão: {DEFAULT_MODEL_PATH.absolute()}")
                 return False
             
             # Criar e carregar o modelo
@@ -95,7 +124,7 @@ def load_model(model_path):
                 # Armazenar no session_state
                 st.session_state.model_loader = model_loader
                 st.session_state.model_loaded = True
-                st.session_state.model_path = model_path
+                st.session_state.model_path = str(model_path_obj)
                 st.success("✅ Modelo carregado com sucesso!")
                 return True
             else:
@@ -137,7 +166,7 @@ def save_generation(prompt, text, params):
     """Salva a geração em arquivo"""
     try:
         # Criar diretório se não existir
-        output_dir = Path("generated_texts")
+        output_dir = GENERATED_TEXTS
         output_dir.mkdir(exist_ok=True)
         
         # Nome do arquivo com timestamp
@@ -155,6 +184,19 @@ def save_generation(prompt, text, params):
             f.write("-" * 50 + "\n")
             f.write(text + "\n")
         
+        # Salvar também em JSON se necessário
+        json_data = {
+            "timestamp": datetime.now().isoformat(),
+            "prompt": prompt,
+            "text": text,
+            "params": params,
+            "file_path": str(filename)
+        }
+        
+        json_filename = FILES_JSON / f"geracao_{timestamp}.json"
+        with open(json_filename, "w", encoding="utf-8") as f:
+            json.dump(json_data, f, ensure_ascii=False, indent=2)
+        
         return str(filename)
     except Exception as e:
         st.error(f"❌ Erro ao salvar: {str(e)}")
@@ -169,12 +211,31 @@ st.markdown("Gere textos criativos usando modelos de linguagem treinados em port
 with st.sidebar:
     st.markdown("### ⚙️ Configurações do Modelo")
     
+    # Mostrar caminhos do projeto
+    with st.expander("📁 Estrutura do Projeto"):
+        st.write(f"**Raiz do projeto:**")
+        st.code(PROJECT_ROOT.absolute())
+        
+        st.write(f"**Modelo padrão:**")
+        st.code(FILES_MODEL.absolute())
+        
+        st.write(f"**JSON files:**")
+        st.code(FILES_JSON.absolute())
+        
+        st.write(f"**Textos gerados:**")
+        st.code(GENERATED_TEXTS.absolute())
+    
     # Seletor de modelo
     model_path = st.text_input(
         "📁 Caminho do Modelo",
         value=st.session_state.model_path,
         help="Caminho para a pasta do modelo finetunado"
     )
+    
+    # Botão para usar caminho padrão
+    if st.button("🔄 Usar caminho padrão", key="default_path_btn"):
+        model_path = str(DEFAULT_MODEL_PATH)
+        st.rerun()
     
     # Botão para carregar modelo
     if st.button("🚀 Carregar Modelo", type="primary", use_container_width=True):
@@ -244,6 +305,12 @@ with st.sidebar:
         vocab_size = st.session_state.model_loader.get_vocab_size()
         if vocab_size:
             st.write(f"Vocabulário: {vocab_size:,} tokens")
+        
+        # Mostrar informações do modelo
+        model_info = st.session_state.model_loader.get_model_info()
+        if model_info:
+            with st.expander("📊 Informações do Modelo"):
+                st.json(model_info)
     
     st.divider()
     
@@ -433,4 +500,3 @@ if st.session_state.generation_history:
                 st.session_state.generated_text = ""
                 # Não é possível alterar diretamente o text_area, mas podemos mostrar uma mensagem
                 st.info(f"Prompt copiado: {item['prompt'][:50]}...")
-
