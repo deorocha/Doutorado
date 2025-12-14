@@ -4,16 +4,30 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import os
 import logging
+from pathlib import Path
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+# Definir caminhos raiz
+PROJECT_ROOT = Path(__file__).parent
+FILES_MODEL = PROJECT_ROOT / "fine_tuned_model"
+FILES_JSON = PROJECT_ROOT / "json_files"
+
 class LLMModelLoader:
     """Classe simplificada para carregar modelos"""
     
-    def __init__(self, model_path: str):
-        self.model_path = os.path.abspath(model_path)
+    def __init__(self, model_path: str = None):
+        # Usar caminho padrão se não especificado
+        if model_path is None:
+            self.model_path = FILES_MODEL
+        else:
+            self.model_path = Path(model_path)
+        
+        # Garantir que é um Path object
+        self.model_path = Path(self.model_path)
+        
         self.model = None
         self.tokenizer = None
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -22,15 +36,17 @@ class LLMModelLoader:
         """Carrega o modelo e tokenizer"""
         try:
             # Verificar se o caminho existe
-            if not os.path.exists(self.model_path):
+            if not self.model_path.exists():
                 logger.error(f"Diretório não encontrado: {self.model_path}")
+                logger.info(f"Caminho absoluto: {self.model_path.absolute()}")
+                logger.info(f"Caminho padrão: {FILES_MODEL.absolute()}")
                 return False
             
-            logger.info(f"Carregando modelo de: {self.model_path}")
+            logger.info(f"Carregando modelo de: {self.model_path.absolute()}")
             
             # Carregar tokenizer
             self.tokenizer = AutoTokenizer.from_pretrained(
-                self.model_path,
+                str(self.model_path),
                 local_files_only=True
             )
             
@@ -40,7 +56,7 @@ class LLMModelLoader:
             
             # Carregar modelo
             self.model = AutoModelForCausalLM.from_pretrained(
-                self.model_path,
+                str(self.model_path),
                 local_files_only=True
             )
             
@@ -105,3 +121,28 @@ class LLMModelLoader:
         if self.tokenizer:
             return len(self.tokenizer)
         return None
+    
+    def get_model_info(self):
+        """Retorna informações sobre o modelo carregado"""
+        if self.model is None:
+            return None
+        
+        info = {
+            "model_path": str(self.model_path),
+            "device": str(self.device),
+            "vocab_size": self.get_vocab_size(),
+            "model_type": type(self.model).__name__,
+        }
+        
+        # Adicionar informações do modelo se disponível
+        try:
+            config = self.model.config
+            info.update({
+                "hidden_size": getattr(config, "hidden_size", None),
+                "num_layers": getattr(config, "num_hidden_layers", None),
+                "num_heads": getattr(config, "num_attention_heads", None),
+            })
+        except:
+            pass
+        
+        return info
