@@ -8,8 +8,9 @@ from datetime import datetime
 from pathlib import Path
 import sys
 
-# Adicionar diretório atual ao path para importar módulos locais
-sys.path.append('.')
+PROJECT_ROOT = Path(__file__).parent
+FILES_MODEL = PROJECT_ROOT / "fine_tuned_model"
+FILES_JSON = PROJECT_ROOT / "json_files"
 
 # Configuração da página
 st.set_page_config(
@@ -72,7 +73,7 @@ def init_session_state():
     if 'generation_history' not in st.session_state:
         st.session_state.generation_history = []
     if 'model_path' not in st.session_state:
-        st.session_state.model_path = "./fine_tuned_model"
+        st.session_state.model_path = FILES_MODEL
 
 # Inicializar
 init_session_state()
@@ -432,3 +433,4 @@ if st.session_state.generation_history:
                 st.session_state.generated_text = ""
                 # Não é possível alterar diretamente o text_area, mas podemos mostrar uma mensagem
                 st.info(f"Prompt copiado: {item['prompt'][:50]}...")
+
