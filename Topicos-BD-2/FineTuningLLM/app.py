@@ -1,0 +1,544 @@
+# app.py - VERSÃO COM MODELO LEVE
+
+import streamlit as st
+import torch
+import os
+import json
+from datetime import datetime
+from pathlib import Path
+import sys
+
+# Adicionar diretório atual ao path para importar módulos locais
+sys.path.append('.')
+
+# Configuração da página
+st.set_page_config(
+    page_title="Gerador de Texto com LLM Finetunado",
+    page_icon="🚀",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Definir caminhos raiz
+PROJECT_ROOT = Path(__file__).parent
+FILES_MODEL = PROJECT_ROOT / "fine_tuned_model"
+FILES_JSON = PROJECT_ROOT / "json_files"
+GENERATED_TEXTS = PROJECT_ROOT / "generated_texts"
+
+# Criar diretórios se não existirem
+FILES_MODEL.mkdir(exist_ok=True)
+FILES_JSON.mkdir(exist_ok=True)
+GENERATED_TEXTS.mkdir(exist_ok=True)
+
+# CSS personalizado
+st.markdown("""
+<style>
+    /* Título principal */
+    h1 {
+        font-size: 2.0rem !important;
+        color: #1E3A8A !important;
+        font-weight: 700 !important;
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    /* Subtítulos */
+    h2 {
+        font-size: 1.6rem !important;
+        color: #374151 !important;
+        font-weight: 500 !important;
+        margin-top: 0.0rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+
+    h3, h4 {
+        color: #374151 !important;
+        font-weight: 600 !important;
+        margin-top: 1.5rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    /* Texto gerado - estilo direto para divs com data-testid */
+    div[data-testid="stExpander"] div {
+        font-size: 1.1rem !important;
+        line-height: 1.6 !important;
+    }
+    
+    /* Área de texto */
+    .stTextArea textarea {
+        font-size: 1.1rem !important;
+        line-height: 1.5 !important;
+    }
+    
+    /* Botões */
+    .stButton button {
+        width: 100% !important;
+        border-radius: 8px !important;
+        padding: 0.75rem 1rem !important;
+        font-weight: 600 !important;
+        transition: all 0.3s !important;
+    }
+    
+    .stButton button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+    }
+    
+    /* Métricas */
+    [data-testid="stMetric"] {
+        background-color: #F8FAFC !important;
+        padding: 5px !important;
+        border-radius: 5px !important;
+        border-left: 4px solid #3B82F6 !important;
+    }
+
+
+    [data-testid="stMetricLabel"] {
+        font-size: 10px !important; /* Adjust as needed */
+        color: gray;
+    }
+
+    /* Style the metric value */
+    [data-testid="stMetricValue"] {
+        font-size: 20px !important; /* Adjust as needed */
+    }
+
+    /* Sidebar */
+    .css-1d391kg {
+        background-color: #F8FAFC !important;
+    }
+    
+    /* Área de texto gerado */
+    .texto-gerado {
+        background-color: #F3F4F6 !important;
+        padding: 1.5rem !important;
+        border-radius: 10px !important;
+        border-left: 5px solid #3B82F6 !important;
+        font-size: 1.1rem !important;
+        line-height: 1.6 !important;
+        margin-top: 1rem !important;
+        font-family: 'Georgia', serif !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# Importar o carregador de modelo
+try:
+    from model_loader import LLMModelLoader, FILES_MODEL as DEFAULT_MODEL_PATH
+except ImportError:
+    st.error("❌ Módulo 'model_loader' não encontrado")
+    st.stop()
+
+# Inicializar estados da sessão
+def init_session_state():
+    """Inicializa todos os estados da sessão"""
+    if 'model_loader' not in st.session_state:
+        st.session_state.model_loader = None
+    if 'model_loaded' not in st.session_state:
+        st.session_state.model_loaded = False
+    if 'using_light_model' not in st.session_state:
+        st.session_state.using_light_model = False
+    if 'generated_text' not in st.session_state:
+        st.session_state.generated_text = ""
+    if 'generation_params' not in st.session_state:
+        st.session_state.generation_params = {}
+    if 'generation_history' not in st.session_state:
+        st.session_state.generation_history = []
+    if 'model_path' not in st.session_state:
+        st.session_state.model_path = str(DEFAULT_MODEL_PATH)
+    if 'project_paths' not in st.session_state:
+        st.session_state.project_paths = {
+            "project_root": str(PROJECT_ROOT),
+            "model_dir": str(FILES_MODEL),
+            "json_dir": str(FILES_JSON),
+            "output_dir": str(GENERATED_TEXTS)
+        }
+
+# Inicializar
+init_session_state()
+
+def load_model(model_path, use_local=True):
+    """Carrega o modelo (local ou leve online)"""
+    try:
+        with st.spinner("🔍 Carregando modelo..."):
+            model_path_obj = Path(model_path)
+            
+            # Criar e carregar o modelo
+            model_loader = LLMModelLoader(model_path)
+            
+            if use_local and model_path_obj.exists():
+                # st.info("📁 Tentando carregar modelo local...")
+                success = model_loader.load_model(use_local=True)
+            else:
+                # st.info("🌐 Carregando modelo leve online...")
+                success = model_loader.load_model(use_local=False)
+            
+            if success:
+                st.session_state.model_loader = model_loader
+                st.session_state.model_loaded = True
+                st.session_state.using_light_model = model_loader.is_light_model()
+                st.session_state.model_path = str(model_path_obj)
+                
+                return True
+            else:
+                st.error("❌ Falha ao carregar o modelo")
+                return False
+    except Exception as e:
+        st.error(f"❌ Erro ao carregar modelo: {str(e)}")
+        return False
+
+def generate_text(prompt, params):
+    """Gera texto com os parâmetros fornecidos"""
+    try:
+        if not st.session_state.model_loaded or st.session_state.model_loader is None:
+            st.warning("⚠️ Carregue um modelo primeiro!")
+            return None
+        
+        with st.spinner("✨ Gerando texto..."):
+            # Converter palavras para tokens (aproximadamente)
+            max_tokens = int(params['max_words'] * 1.5)  # Aproximação
+            
+            generated_text = st.session_state.model_loader.generate(
+                prompt=prompt,
+                max_length=max_tokens,
+                temperature=params['temperature'],
+                top_p=params['top_p'],
+                repetition_penalty=params['repetition_penalty']
+            )
+            
+            return generated_text
+    except Exception as e:
+        st.error(f"❌ Erro na geração: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return None
+
+def save_generation(prompt, text, params):
+    """Salva a geração em arquivo"""
+    try:
+        # Criar diretório se não existir
+        output_dir = GENERATED_TEXTS
+        output_dir.mkdir(exist_ok=True)
+        
+        # Nome do arquivo com timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = output_dir / f"gerado_{timestamp}.txt"
+        
+        # Salvar texto
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(f"Data: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}\n")
+            f.write(f"Prompt: {prompt}\n")
+            f.write(f"Temperatura: {params['temperature']}\n")
+            f.write(f"Top-p: {params['top_p']}\n")
+            f.write(f"Palavras máx: {params['max_words']}\n")
+            f.write(f"Penalidade repetição: {params['repetition_penalty']}\n")
+            f.write("-" * 50 + "\n")
+            f.write(text + "\n")
+        
+        # Salvar também em JSON se necessário
+        json_data = {
+            "timestamp": datetime.now().isoformat(),
+            "prompt": prompt,
+            "text": text,
+            "params": params,
+            "file_path": str(filename)
+        }
+        
+        json_filename = FILES_JSON / f"geracao_{timestamp}.json"
+        with open(json_filename, "w", encoding="utf-8") as f:
+            json.dump(json_data, f, ensure_ascii=False, indent=2)
+        
+        return str(filename)
+    except Exception as e:
+        st.error(f"❌ Erro ao salvar: {str(e)}")
+        return None
+
+# Cabeçalho
+st.markdown('<h1 class="main-header">🚀 Gerador de Texto com LLM Finetunado</h1>', 
+           unsafe_allow_html=True)
+
+# Sidebar
+with st.sidebar:
+    st.markdown("### ⚙️ Configurações do Modelo")
+    
+    model_option = st.radio(
+        "📁 Escolha a fonte do modelo:",
+        ["Modelo Leve Online (Recomendado)", "Modelo Local"],
+        index=0 if not st.session_state.model_loaded or st.session_state.using_light_model else 1
+    )
+    
+    use_light_model = model_option == "Modelo Leve Online (Recomendado)"
+    
+    if not use_light_model:
+        model_path = st.text_input(
+            "Caminho do Modelo Local:",
+            value=st.session_state.model_path,
+            help="Caminho para a pasta do modelo finetunado local"
+        )
+    else:
+        model_path = str(DEFAULT_MODEL_PATH)
+        st.info("🌐 Será usado o modelo leve online")
+    
+    # Botão para carregar modelo
+    if st.button("🚀 Carregar Modelo", type="primary", use_container_width=True):
+        if not st.session_state.model_loaded or model_option != ("Modelo Leve Online (Recomendado)" if st.session_state.using_light_model else "Modelo Local"):
+            load_model(model_path, use_local=not use_light_model)
+        else:
+            st.info("ℹ️ Modelo já está carregado")
+    
+    # Botão para descarregar modelo
+    if st.session_state.model_loaded:
+        if st.button("🗑️ Descarregar Modelo", type="secondary", use_container_width=True):
+            st.session_state.model_loader = None
+            st.session_state.model_loaded = False
+            st.session_state.using_light_model = False
+            st.rerun()
+    
+    st.divider()
+    
+    st.markdown("### 📝 Parâmetros de Geração")
+    
+    # Parâmetros de geração com valores padrão
+    temperature = st.slider(
+        "🌡️ Temperatura",
+        min_value=0.1,
+        max_value=1.5,
+        value=0.8,
+        step=0.1,
+        help="Controla a aleatoriedade (maior = mais criativo)"
+    )
+    
+    top_p = st.slider(
+        "🎯 Top-p (nucleus sampling)",
+        min_value=0.1,
+        max_value=1.0,
+        value=0.9,
+        step=0.05,
+        help="Controla a diversidade das palavras escolhidas"
+    )
+    
+    max_words = st.number_input(
+        "📏 Máximo de Palavras",
+        min_value=10,
+        max_value=1000,
+        value=100,
+        step=10,
+        help="Número máximo aproximado de palavras a gerar"
+    )
+    
+    repetition_penalty = st.slider(
+        "🔁 Penalidade de Repetição",
+        min_value=1.0,
+        max_value=2.0,
+        value=1.2,
+        step=0.1,
+        help="Evita repetição de palavras (maior = menos repetição)"
+    )
+    
+    st.divider()
+    
+    # Informações do sistema
+    st.markdown("### 💻 Sistema")
+    st.write(f"PyTorch: {torch.__version__}")
+    device = "GPU 🚀" if torch.cuda.is_available() else "CPU ⚡"
+    st.write(f"Dispositivo: {device}")
+    
+    if st.session_state.model_loaded and st.session_state.model_loader:
+        st.success("✅ Modelo carregado")
+        vocab_size = st.session_state.model_loader.get_vocab_size()
+        if vocab_size:
+            st.write(f"Vocabulário: {vocab_size:,} tokens")
+        
+        # Mostrar informações do modelo
+        model_info = st.session_state.model_loader.get_model_info()
+        if model_info:
+            with st.expander("📊 Informações do Modelo"):
+                st.json(model_info)
+    
+    # Links úteis
+    with st.expander("💡 Dicas de uso"):
+        st.markdown("""
+        - **Modelo leve online**: Recomendado para testes rápidos e sem necessidade de baixar modelos grandes
+        - **Prompt inicial**: Use frases completas para melhores resultados
+        - **Temperatura**: 0.7-0.9 para textos criativos, 0.3-0.6 para mais focados
+        - **Top-p**: 0.9-0.95 para equilíbrio entre criatividade e coerência
+        - **Palavras**: 50-150 palavras geralmente produz textos bem estruturados
+        """)
+
+# Área principal
+col1, col2 = st.columns([3, 1])
+
+with col1:
+    st.markdown('<h2 class="sub-header">📝 Entrada de Texto</h2>', 
+               unsafe_allow_html=True)
+    
+    # Prompt de entrada
+    prompt = st.text_area(
+        "Digite o início do texto (prompt):",
+        value="A inteligência artificial tem revolucionado",
+        height=150,
+        help="O texto que servirá como base para a geração",
+        key="prompt_input"
+    )
+    
+    # Botões de ação
+    col_btn1, col_btn2, col_btn3 = st.columns(3)
+    
+    with col_btn1:
+        generate_btn = st.button("✨ Gerar Texto", type="primary", 
+                                use_container_width=True, key="generate_btn")
+    
+    with col_btn2:
+        clear_btn = st.button("🗑️ Limpar", use_container_width=True, key="clear_btn")
+    
+    with col_btn3:
+        save_disabled = not st.session_state.generated_text
+        save_btn = st.button("💾 Salvar", disabled=save_disabled, 
+                            use_container_width=True, key="save_btn")
+
+with col2:
+    st.markdown('<h2 class="sub-header">📊 Estatísticas</h2>', 
+               unsafe_allow_html=True)
+    
+    if st.session_state.generated_text:
+        text = st.session_state.generated_text
+        
+        # Calcular estatísticas
+        word_count = len(text.split())
+        char_count = len(text)
+        sentence_count = text.count('.') + text.count('!') + text.count('?')
+        
+        # Exibir métricas
+        st.metric("📝 Palavras", word_count)
+        st.metric("🔤 Caracteres", char_count)
+        st.metric("📚 Sentenças", sentence_count)
+        
+        # Mostrar parâmetros usados
+        with st.expander("⚙️ Parâmetros usados"):
+            if st.session_state.generation_params:
+                params = st.session_state.generation_params
+                st.write(f"🌡️ Temperatura: {params.get('temperature', 'N/A')}")
+                st.write(f"🎯 Top-p: {params.get('top_p', 'N/A')}")
+                st.write(f"📏 Palavras máx: {params.get('max_words', 'N/A')}")
+
+# Processar ações dos botões
+if generate_btn:
+    if not st.session_state.model_loaded:
+        st.warning("⚠️ Carregue um modelo primeiro na barra lateral!")
+    else:
+        # Parâmetros de geração
+        params = {
+            'temperature': temperature,
+            'top_p': top_p,
+            'max_words': max_words,
+            'repetition_penalty': repetition_penalty
+        }
+        
+        # Gerar texto
+        generated_text = generate_text(prompt, params)
+        
+        if generated_text:
+            st.session_state.generated_text = generated_text
+            st.session_state.generation_params = params
+            
+            # Adicionar ao histórico
+            st.session_state.generation_history.append({
+                'timestamp': datetime.now(),
+                'prompt': prompt,
+                'text': generated_text[:100] + "..." if len(generated_text) > 100 else generated_text
+            })
+            
+            # Forçar rerun para atualizar a interface
+            st.rerun()
+
+# Limpar texto
+if clear_btn:
+    st.session_state.generated_text = ""
+    st.rerun()
+
+# Salvar texto
+if save_btn and st.session_state.generated_text:
+    filename = save_generation(
+        prompt,
+        st.session_state.generated_text,
+        st.session_state.generation_params
+    )
+    if filename:
+        st.success(f"✅ Texto salvo em: {filename}")
+
+# Área de exibição do texto gerado
+st.markdown('<h2 class="sub-header">📄 Texto Gerado</h2>', 
+           unsafe_allow_html=True)
+
+if st.session_state.generated_text:
+    # Container com o texto gerado
+    st.markdown(f'<div class="generated-text">{st.session_state.generated_text}</div>', 
+               unsafe_allow_html=True)
+    
+    # Botões de ação para o texto gerado
+    col_copy, col_download, col_refine = st.columns(3)
+    
+    with col_copy:
+        if st.button("📋 Copiar texto", key="copy_btn"):
+            st.code(st.session_state.generated_text)
+            st.success("Texto copiado! (Use Ctrl+C)")
+    
+    with col_download:
+        # Botão para download
+        from io import StringIO
+        text_io = StringIO(st.session_state.generated_text)
+        st.download_button(
+            label="⬇️ Baixar Texto",
+            data=text_io.getvalue(),
+            file_name=f"texto_gerado_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+            mime="text/plain",
+            key="download_btn"
+        )
+    
+    with col_refine:
+        if st.button("🎨 Usar como novo prompt", key="refine_btn"):
+            # Usar o texto gerado como novo prompt
+            st.session_state.generated_text = ""
+            st.rerun()
+
+else:
+    # Mensagem inicial
+    if not st.session_state.model_loaded:
+        st.info("👈 **Primeiro, carregue um modelo na barra lateral**")
+    else:
+        st.info("✍️ **Digite um prompt acima e clique em 'Gerar Texto'**")
+    
+    # Exemplos de prompts
+    with st.expander("💡 Exemplos de prompts para testar"):
+        st.markdown("""
+        **Inteligência Artificial:**
+        - `A inteligência artificial tem revolucionado`
+        - `Os avanços na computação quântica`
+        
+        **Tecnologias:**
+        - `Um framework de rastreamento corporal`
+        - `A aprendizagem adaptativa utiliza algoritmos para`
+        - `o Aprendizado por Reforço`
+        - `as mídias sociais ganharam importância`
+        """)
+
+# Histórico de gerações (se houver)
+if st.session_state.generation_history:
+    st.divider()
+    st.markdown('<h3 class="sub-header">📜 Histórico de Gerações</h3>', 
+               unsafe_allow_html=True)
+    
+    # Mostrar as últimas 5 gerações
+    for i, item in enumerate(reversed(st.session_state.generation_history[-5:])):
+        with st.expander(f"Geração {len(st.session_state.generation_history)-i}: {item['prompt'][:50]}..."):
+            st.write(f"**Prompt:** {item['prompt']}")
+            st.write(f"**Texto:** {item['text']}")
+            st.write(f"**Horário:** {item['timestamp'].strftime('%H:%M:%S')}")
+            
+            # Botão para reutilizar
+            if st.button(f"🔄 Reutilizar este prompt", 
+                        key=f"reuse_{i}"):
+                st.session_state.generated_text = ""
+                # Não é possível alterar diretamente o text_area, mas podemos mostrar uma mensagem
+                st.info(f"Prompt copiado: {item['prompt'][:50]}...")
