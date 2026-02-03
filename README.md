@@ -2,9 +2,9 @@
 **Mestre em Propriedade Intelectual e Transferência de Tecnologia | Doutorando em Ciência da Computação**  
 
 [![Lattes](https://img.shields.io/badge/Lattes-Currículo-blue)](https://lattes.cnpq.br/6076009743768920)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Perfil-0077B5)](https://linkedin.com/in/seu-perfil) <!-- Adicione seu link -->
-[![ORCID](https://img.shields.io/badge/ORCID-0000--0000--0000--0000-a6ce39)](https://orcid.org/seu-id) <!-- Adicione seu ORCID se tiver -->
-[![GitHub](https://img.shields.io/github/followers/seu-usuario?label=Follow&style=social)](https://github.com/seu-usuario)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Perfil-0077B5)](https://linkedin.com/in/andr%C3%A9-luiz-de-souza-rocha-56818a96)
+[![ORCID](https://img.shields.io/badge/ORCID-0000--0000--0000--0000-a6ce39)](https://orcid.org/0009-0008-2002-3126)
+[![GitHub](https://img.shields.io/github/followers/seu-usuario?label=Follow&style=social)](https://github.com/deorocha)
 
 ---
 
