@@ -10,7 +10,7 @@
 
 ## 👨‍🔬 Sobre Mim  
 
-Sou **Doutorando em Ciência da Computação** com foco em **Inteligência Artificial, IoT e Análise de Dados aplicados à Agricultura de Precisão e Hidroponia**. Com mais de 30 anos de experiência em análise e desenvolvimento de sistemas, atuei em setores como saúde, agronegócio e tecnologia, sempre aliando inovação e propriedade intelectual.  
+Sou **Doutorando em Ciência da Computação** com foco em **Inteligência Artificial, IoT e Análise de Dados aplicados à Agricultura Urbana de Precisão e Fazendas Verticais**. Com mais de 30 anos de experiência em análise e desenvolvimento de sistemas, atuei em setores como saúde, agronegócio e tecnologia, sempre aliando inovação e propriedade intelectual.  
 
 - 🎓 **Mestre em Propriedade Intelectual e Transferência de Tecnologia para a Inovação** (UFBA, 2024)  
 - 💼 Experiência em empresas como PRODEB, Hospital Português, FIEB  
