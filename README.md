@@ -12,10 +12,11 @@
 
 Sou **Doutorando em Ciência da Computação** com foco em **Inteligência Artificial, IoT e Análise de Dados aplicados à Agricultura Urbana de Precisão e Fazendas Verticais**. Com mais de 30 anos de experiência em análise e desenvolvimento de sistemas, atuei em setores como saúde, agronegócio e tecnologia, sempre aliando inovação e propriedade intelectual.  
 
+- 🎓 **Doutorando em Ciência da Computação** (UFBA, 2025)  
 - 🎓 **Mestre em Propriedade Intelectual e Transferência de Tecnologia para a Inovação** (UFBA, 2024)  
 - 💼 Experiência em empresas como PRODEB, Hospital Português, FIEB  
-- 🧠 Interesses: IA, IoT, Agricultura Urbana, Fazendas Verticais, Hidroponia, Propriedade Intelectual, Transferência de Tecnologia
-- 📚 Atualmente desenvolvendo pesquisa de doutorado, tendo como tese inicial **Sistemas computacionais aplicados a Agricultura urbana e periurbana**  
+- 🧠 Interesses: Agricultura Urbana, Fazendas Verticais, Hidroponia, Inteligência Artificial (IA), Internet das Coisas (IoT), Propriedade Intelectual, Transferência de Tecnologia
+- 📚 Atualmente desenvolvendo pesquisa de doutorado, tendo como tema de tese inicial **Sistemas computacionais aplicados a Agricultura urbana e periurbana**  
 
 ---
 
