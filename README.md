@@ -14,8 +14,8 @@ Sou **Doutorando em Ciência da Computação** com foco em **Inteligência Artif
 
 - 🎓 **Mestre em Propriedade Intelectual e Transferência de Tecnologia para a Inovação** (UFBA, 2024)  
 - 💼 Experiência em empresas como PRODEB, Hospital Português, FIEB  
-- 🧠 Interesses: IA, IoT, Hidroponia, Propriedade Intelectual, Análise de Algoritmos  
-- 📚 Atualmente desenvolvendo pesquisa de doutorado em **monitoramento inteligente de cultivos hidropônicos com IA**  
+- 🧠 Interesses: IA, IoT, Agricultura Urbana, Fazendas Verticais, Hidroponia, Propriedade Intelectual
+- 📚 Atualmente desenvolvendo pesquisa de doutorado, tendo como tese inicial **Sistemas computacionais aplicados a Agricultura urbana e periurbana**  
 
 ---
 
