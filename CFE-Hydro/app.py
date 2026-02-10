@@ -426,8 +426,8 @@ def exibir_tabela_dados(dados_combinados, info_sensor):
 
 # ================= APLICAÇÃO PRINCIPAL =================
 def main():
-    st.title("🌱 Dashboard CFE-HYDRO - Monitoramento Hidropônico")
-    st.markdown("Sistema de monitoramento em tempo real com **interpolação seletiva** conforme protocolo CFE-HYDRO.")
+    st.title("🌱 CFE-HYDRO - Monitoramento")
+    st.markdown("Sistema de monitoramento com **interpolação seletiva** usando o protocolo CFE-HYDRO.")
     
     # Inicializar estado da sessão
     if 'gerenciador_dados' not in st.session_state:
@@ -656,3 +656,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
