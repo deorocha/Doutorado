@@ -34,6 +34,22 @@ css = '''
         padding-top: 0rem !important;
         margin-top: 0rem !important;
     }
+
+    /* Change background and font color of tabs */
+    .stTabs [data-baseweb="tab-list"] {gap: 6px;}
+    .stTabs [data-baseweb="tab"] {
+        height: 50px;
+        background-color: #F0F2F6;
+        border-radius: 3px 3px 2px 2px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    /* Style the active tab */
+    .stTabs [aria-selected="true"] {
+        background-color: #FFFFFF;
+        color: #FF4B4B;
+    }
+    
 </style>
 '''
 st.markdown(css, unsafe_allow_html=True)
