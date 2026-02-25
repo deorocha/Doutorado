@@ -394,7 +394,7 @@ def informacoes_sensor(sensor_type):
             'nome': 'pH',
             'unidade': '',
             'cor': '#4ECDC4',
-            'faixa_otima': (5.50, 6.50)
+            'faixa_otima': (5.00, 6.50)
         },
         'ec': {
             'nome': 'Condutividade Elétrica',
@@ -406,7 +406,7 @@ def informacoes_sensor(sensor_type):
             'nome': 'Oxigênio Dissolvido',
             'unidade': 'mg/L',
             'cor': '#96CEB4',
-            'faixa_otima': (5.00, 8.00)
+            'faixa_otima': (4.00, 8.00)
         }
     }
     return info.get(sensor_type, {})
@@ -740,4 +740,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
