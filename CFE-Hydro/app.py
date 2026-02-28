@@ -454,8 +454,11 @@ def main():
             if st.session_state.cliente and st.session_state.cliente.connection_error:
                 st.caption(f"Erro: {st.session_state.cliente.connection_error}")
 
-        st.metric("Mensagens", st.session_state.gerenciador.messages_received)
-        st.metric("Sensores", len(st.session_state.gerenciador.tipos_sensor()))
+        col1, col2 = st.columns(2)
+        with col1:
+            st.metric("Mensagens", st.session_state.gerenciador.messages_received)
+        with col2:
+            st.metric("Sensores", len(st.session_state.gerenciador.tipos_sensor()))
 
         st.subheader("👁️ Visualização")
         
@@ -595,5 +598,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
