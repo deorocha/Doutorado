@@ -35,7 +35,7 @@ css = '''
     .stTabs [data-baseweb="tab-list"] button [data-testid="stMarkdownContainer"] p { font-size:1.2rem; }
     .block-container { padding-top: 1.5rem; padding-bottom: 0rem; margin-top: 0rem; }
     h1 { margin-top: 0rem !important; padding-top: 0rem;}
-    h2 { font-size: 30px !important; padding-top: 0rem; margin-top: 0rem !important; }
+    h2 { font-size: 30px !important; padding-top: 0rem; margin-top: -1rem !important; }
     h3 { font-size: 20px !important; padding-top: 0rem !important; margin-top: 0rem !important; }
     .stTabs [data-baseweb="tab-list"] {gap: 6px;}
     .stTabs [data-baseweb="tab"] {
@@ -49,6 +49,13 @@ css = '''
     .stTabs [aria-selected="true"] {
         background-color: #FFFFFF;
         color: #FF4B4B;
+    }
+
+    [data-testid="stMetricValue"] {
+        font-size: 20px;
+    }
+    [data-testid="stMetricLabel"] p {
+        font-size: 24px;
     }
 </style>
 '''
@@ -306,9 +313,28 @@ def testar_broker(broker, port):
     except:
         return False
 
-def obter_cor(sensor_type):
-    import hashlib
-    return "#" + hashlib.md5(sensor_type.encode()).hexdigest()[:6]
+# def obter_cor(sensor_type):
+#     import hashlib
+#     return "#" + hashlib.md5(sensor_type.encode()).hexdigest()[:6]
+def obter_cor(indice):
+    cores = [
+        '#FF4B4B',  # vermelho vivo
+        '#FFA500',  # laranja
+        '#9400D3',  # violeta escuro
+        '#1E90FF',  # azul dodger
+        '#FF1493',  # rosa profundo
+        '#32CD32',  # verde lima
+        '#00CED1',  # ciano escuro
+        '#FF4500',  # laranja vermelho
+        '#2E8B57',  # verde mar
+        '#8A2BE2',  # azul violeta
+        '#DC143C',  # carmesim
+        '#20B2AA',  # verde claro mar
+        '#FF8C00',  # laranja escuro
+        '#9932CC',  # orquídea escuro
+        '#00BFFF'   # azul céu profundo
+    ]
+    return cores[indice % len(cores)]
 
 def criar_grafico(df_raw, df_interp, nome, unidade, cor, faixa=None):
     fig = go.Figure()
@@ -317,7 +343,7 @@ def criar_grafico(df_raw, df_interp, nome, unidade, cor, faixa=None):
     if faixa and len(faixa) == 2 and faixa[0] is not None and faixa[1] is not None:
         fig.add_hrect(
             y0=faixa[0], y1=faixa[1],
-            line_width=0, fillcolor="lightgreen", opacity=0.2,
+            line_width=0, fillcolor="#EFFFEF", opacity=0.2,
             layer='below'  # Garante que fique atrás dos dados
         )
 
@@ -356,7 +382,9 @@ def criar_grafico(df_raw, df_interp, nome, unidade, cor, faixa=None):
         yaxis_title=f"{nome} ({unidade})",
         hovermode='x unified',
         height=400,
-        margin=dict(l=20, r=20, t=50, b=30)
+        margin=dict(l=20, r=20, t=50, b=30),
+        plot_bgcolor='#EFFFEF',
+        # paper_bgcolor='#EFFFEF'
     )
     fig.update_traces(line_shape='spline')
     return fig
@@ -385,7 +413,8 @@ def tabela_dados(df):
     styled_df = df_display.style.apply(colorir_linha, axis=1)
 
     # Exibe a tabela com estilo
-    st.dataframe(styled_df, use_container_width=True, height=400)
+    # st.dataframe(styled_df, use_container_width=True, height=400)
+    st.dataframe(styled_df, width='stretch', height=400)
 
     # Legenda colorida no rodapé
     st.markdown(
@@ -442,6 +471,17 @@ def main():
 
     # Sidebar
     with st.sidebar:
+        st.markdown("""
+            <style>
+                [data-testid="stSidebarContent"] {
+                    padding-top: 0rem;
+                    padding-bottom: 0rem;
+                    margin-top: -1rem;
+                    margin-bottom: 0rem;
+                }
+            </style>
+        """, unsafe_allow_html=True)
+        
         st.header("⚙️ Configurações")
         with st.expander("🔧 Broker MQTT", expanded=False):
             broker = st.text_input("Servidor", value=st.session_state.broker)
@@ -551,7 +591,8 @@ def main():
         st.header("📊 Evolução")
         if sensores:
             tabs = st.tabs([s.capitalize() for s in sensores])
-            for tab, sensor in zip(tabs, sensores):
+            # for tab, sensor in zip(tabs, sensores):
+            for i, (tab, sensor) in enumerate(zip(tabs, sensores)):
                 with tab:
                     meta = st.session_state.gerenciador.metadados(sensor)
                     unit = meta.get('unit', '')
@@ -559,14 +600,16 @@ def main():
                     opt_min = meta.get('optimal_min')
                     opt_max = meta.get('optimal_max')
                     faixa = (opt_min, opt_max) if opt_min is not None and opt_max is not None else None
-                    cor = obter_cor(sensor)
+                    #cor = obter_cor(sensor)
+                    cor = obter_cor(i)
 
                     df_raw = st.session_state.gerenciador.obter_dados_brutos(sensor, horas)
                     df_interp = st.session_state.gerenciador.obter_dados_interpolados(sensor, interp_interval, horas=horas)
 
                     if not df_raw.empty or not df_interp.empty:
                         fig = criar_grafico(df_raw, df_interp, desc, unit, cor, faixa)
-                        st.plotly_chart(fig, use_container_width=True)
+                        # st.plotly_chart(fig, use_container_width=True)
+                        st.plotly_chart(fig, width='stretch')
 
                         if not df_raw.empty:
                             vals = df_raw['value'].dropna()
@@ -618,6 +661,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
