@@ -564,7 +564,7 @@ def main():
             st.header("🔍 Qualidade da Interpolação")
             metricas_por_sensor = {}
             for sensor in sensores:
-                metricas = calcular_metricas_interpolacao(sensor, horas, interp_interval, tolerancia_percentual=5)
+                metricas = calcular_metricas_interpolacao(sensor, horas, interp_interval, tolerancia_percentual=0.5)
                 if metricas:
                     metricas_por_sensor[sensor] = metricas
 
@@ -595,3 +595,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
