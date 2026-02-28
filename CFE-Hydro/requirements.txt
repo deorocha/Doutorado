@@ -1,8 +1,8 @@
-streamlit>=1.35.0,<2
-streamlit-autorefresh>=1.0.1
-paho-mqtt>=1.6.1,<2
-pandas>=2.2.0,<3
-numpy>=1.26.0,<2
-plotly==5.18.0
-scipy==1.11.4
-pytz
+streamlit == 1.51.0
+streamlit-autorefresh == 1.0.1
+paho-mqtt == 2.1.0
+pandas == 2.2.3
+numpy == 1.26.4
+plotly == 5.23.0
+scipy == 1.16.3
+pytz == 2025.2
