@@ -1,6 +1,8 @@
 streamlit==1.29.0
+streamlit-autorefresh
 paho-mqtt==1.6.1
 pandas==2.1.4
 numpy==1.24.4
 plotly==5.18.0
 scipy==1.11.4
+pytz
