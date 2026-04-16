@@ -1,1 +1,8 @@
-screamlit
+streamlit
+geopandas
+networkx
+folium
+streamlit-folium
+geopy
+pandas
+shapely
