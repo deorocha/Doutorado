@@ -1,0 +1,359 @@
+import streamlit as st
+import osmnx as ox
+import networkx as nx
+import folium
+from streamlit_folium import st_folium
+import pandas as pd
+import heapq
+from collections import defaultdict
+import time
+
+st.set_page_config(page_title="GISAI - Pathfinder", layout="wide")
+st.title("📍 GISAI - Pathfinder (OpenStreetMap)")
+
+st.markdown("""
+Este aplicativo baixa a rede viária de qualquer cidade do mundo e calcula a **melhor rota**  
+considerando **custo de construção**, **restrições geográficas** e **tempo de viagem**.
+""")
+
+# ------------------- Cache do grafo -------------------
+@st.cache_data(ttl=3600, show_spinner=False)
+def load_city_graph(city_name, network_type='drive'):
+    """Baixa o grafo da cidade usando OSMnx (cacheado)."""
+    with st.spinner(f"Baixando dados de '{city_name}' do OpenStreetMap..."):
+        try:
+            G = ox.graph_from_place(city_name, network_type=network_type, simplify=True)
+            # Adiciona atributos customizados para cada aresta
+            for u, v, data in G.edges(data=True):
+                length = data['length']
+                highway = data.get('highway', 'unknown')
+                name = str(data.get('name', '')).lower()
+
+                # Custo de construção (R$/m)
+                if highway in ['motorway', 'trunk']:
+                    const_cost = 800.0
+                elif highway in ['primary', 'secondary']:
+                    const_cost = 1200.0
+                elif highway in ['residential', 'living_street']:
+                    const_cost = 2000.0
+                else:
+                    const_cost = 1500.0
+
+                # Penalidade geográfica
+                penalty = 0.0
+                if 'park' in name or 'garden' in name:
+                    penalty += length * 1.2
+                if any(k in name for k in ['museum', 'historic', 'monument']):
+                    penalty += length * 1.5
+                if any(k in name for k in ['hospital', 'health', 'clinic']):
+                    penalty += length * 1.0
+                if any(k in name for k in ['school', 'college', 'escola']):
+                    penalty += length * 0.8
+                if 'river' in name or 'ponte' in name:
+                    penalty += length * 2.0
+
+                # Fator de velocidade
+                speed = 1.0
+                if highway in ['motorway', 'trunk']:
+                    speed = 0.6
+                elif highway in ['primary', 'secondary']:
+                    speed = 0.8
+                elif highway in ['residential', 'living_street']:
+                    speed = 1.5
+                elif highway in ['footway', 'pedestrian']:
+                    speed = 3.0
+
+                data['construction_cost'] = const_cost
+                data['penalty_geo'] = penalty
+                data['speed_factor'] = speed
+            return G
+        except Exception as e:
+            st.error(f"Erro ao baixar cidade: {e}")
+            return None
+
+# ------------------- Funções de roteamento -------------------
+def compute_cost(edge_attrs, w_const, w_geo, w_time, underground):
+    length = edge_attrs.get('length', 0.0)
+    const_base = edge_attrs.get('construction_cost', 1000.0) * length
+    const_part = w_const * const_base * (5.0 if underground else 1.0)
+    geo_part = w_geo * edge_attrs.get('penalty_geo', 0.0)
+    time_part = w_time * (edge_attrs.get('speed_factor', 1.0) * length)
+    return const_part + geo_part + time_part
+
+def build_weighted_graph(base_graph, w_c, w_g, w_t, underground):
+    G = nx.DiGraph()
+    for n, d in base_graph.nodes(data=True):
+        G.add_node(n, y=d['y'], x=d['x'])
+    for u, v, d in base_graph.edges(data=True):
+        cost = compute_cost(d, w_c, w_g, w_t, underground)
+        G.add_edge(u, v, weight=cost, length=d['length'])
+    return G
+
+def nearest_node(graph, point):
+    min_d = float('inf')
+    best = None
+    for n, d in graph.nodes(data=True):
+        dist = ((d['y'] - point[0])**2 + (d['x'] - point[1])**2)**0.5
+        if dist < min_d:
+            min_d = dist
+            best = n
+    return best
+
+def a_star_with_tree(graph, start, goal):
+    def heuristic(u, v):
+        uy, ux = graph.nodes[u]['y'], graph.nodes[u]['x']
+        vy, vx = graph.nodes[v]['y'], graph.nodes[v]['x']
+        return ((uy - vy)**2 + (ux - vx)**2)**0.5
+
+    open_set = [(0, start)]
+    g = {start: 0}
+    f = {start: heuristic(start, goal)}
+    parent = {}
+    closed = set()
+    expanded = []
+    pruned = []
+    tree = []
+
+    while open_set:
+        cur = heapq.heappop(open_set)[1]
+        if cur in closed:
+            continue
+        expanded.append(cur)
+        if cur == goal:
+            path = []
+            while cur in parent:
+                path.append(cur)
+                cur = parent[cur]
+            path.append(start)
+            path.reverse()
+            return path, expanded, pruned, tree
+
+        closed.add(cur)
+        for nb in graph.neighbors(cur):
+            edge_data = graph.get_edge_data(cur, nb)
+            if edge_data is None:
+                continue
+            # Pega o peso (pode ser multi-aresta)
+            if isinstance(edge_data, dict) and 'weight' in edge_data:
+                w = edge_data['weight']
+            else:
+                first = next(iter(edge_data))
+                w = edge_data[first].get('weight', 1e9)
+            tentative = g[cur] + w
+            if nb in closed:
+                tree.append((cur, nb, 'pruned'))
+                pruned.append(nb)
+                continue
+            if nb not in g or tentative < g[nb]:
+                parent[nb] = cur
+                g[nb] = tentative
+                f[nb] = tentative + heuristic(nb, goal)
+                heapq.heappush(open_set, (f[nb], nb))
+                tree.append((cur, nb, 'expanded'))
+            else:
+                tree.append((cur, nb, 'pruned'))
+                pruned.append(nb)
+    return None, expanded, pruned, tree
+
+def geocode_address(address):
+    from geopy.geocoders import Nominatim
+    geolocator = Nominatim(user_agent="gisai_app")
+    try:
+        loc = geolocator.geocode(address, timeout=10)
+        if loc:
+            return (loc.latitude, loc.longitude)
+    except Exception as e:
+        st.warning(f"Erro de geocodificação: {e}")
+        return None
+    return None
+
+# ------------------- Interface -------------------
+st.sidebar.header("🌍 Seleção da Cidade")
+city_name = st.sidebar.text_input("Nome da cidade (ex: Salvador, Bahia, Brasil)", "Salvador, Bahia, Brasil")
+network_type = st.sidebar.selectbox("Tipo de rede", ["drive", "walk", "bike"], index=0)
+
+if st.sidebar.button("Carregar cidade", type="primary"):
+    base_graph = load_city_graph(city_name, network_type)
+    if base_graph:
+        st.session_state['base_graph'] = base_graph
+        st.sidebar.success(f"Grafo carregado: {base_graph.number_of_nodes()} nós, {base_graph.number_of_edges()} arestas")
+    else:
+        st.sidebar.error("Falha no carregamento")
+
+if 'base_graph' not in st.session_state or st.session_state['base_graph'] is None:
+    st.info("👈 Clique em 'Carregar cidade' para começar.")
+    st.stop()
+
+base = st.session_state['base_graph']
+
+# Sliders de pesos
+st.sidebar.header("⚙️ Configuração da Eficiência")
+w_const = st.sidebar.slider("🏗️ Peso Construção (R$/m)", 0.0, 5.0, 1.0, 0.1)
+w_geo = st.sidebar.slider("🌿 Peso Restrições Geográficas", 0.0, 5.0, 1.0, 0.1)
+w_time = st.sidebar.slider("⏱️ Peso Tempo", 0.0, 5.0, 1.0, 0.1)
+underground = st.sidebar.checkbox("🚇 Modo Subterrâneo (Metrô)", False)
+factor = 5.0 if underground else 1.0
+
+st.sidebar.header("📍 Origem / Destino")
+method = st.sidebar.radio("Método", ["Coordenadas", "Buscar endereço"])
+
+if "origin" not in st.session_state:
+    st.session_state.origin = None
+    st.session_state.dest = None
+if "route_data" not in st.session_state:
+    st.session_state.route_data = None
+if "search_tree" not in st.session_state:
+    st.session_state.search_tree = None
+
+if method == "Coordenadas":
+    col1, col2 = st.sidebar.columns(2)
+    with col1:
+        o_lat = st.number_input("Origem latitude", -12.9714, format="%.6f")
+        o_lon = st.number_input("Origem longitude", -38.5014, format="%.6f")
+        if st.button("Definir Origem"):
+            st.session_state.origin = (o_lat, o_lon)
+    with col2:
+        d_lat = st.number_input("Destino latitude", -13.0089, format="%.6f")
+        d_lon = st.number_input("Destino longitude", -38.5322, format="%.6f")
+        if st.button("Definir Destino"):
+            st.session_state.dest = (d_lat, d_lon)
+else:
+    addr_o = st.sidebar.text_input("Origem (endereço)", "Luiz Anselmo")
+    addr_d = st.sidebar.text_input("Destino (endereço)", "Vila Laura")
+    if st.sidebar.button("Geocodificar"):
+        with st.spinner("Buscando coordenadas..."):
+            st.session_state.origin = geocode_address(addr_o)
+            st.session_state.dest = geocode_address(addr_d)
+        if st.session_state.origin:
+            st.sidebar.success(f"Origem: {st.session_state.origin}")
+        else:
+            st.sidebar.error("Origem não encontrada")
+        if st.session_state.dest:
+            st.sidebar.success(f"Destino: {st.session_state.dest}")
+        else:
+            st.sidebar.error("Destino não encontrado")
+
+st.sidebar.markdown("---")
+if st.session_state.origin:
+    st.sidebar.write(f"📍 Origem: {st.session_state.origin[0]:.4f}, {st.session_state.origin[1]:.4f}")
+if st.session_state.dest:
+    st.sidebar.write(f"🎯 Destino: {st.session_state.dest[0]:.4f}, {st.session_state.dest[1]:.4f}")
+
+# Abas
+tab1, tab2, tab3, tab4 = st.tabs(["🗺️ Rota", "🌳 Árvore de Busca", "📊 Dados da Rede", "ℹ️ Sobre"])
+
+with tab1:
+    if st.button("🔄 Calcular Melhor Rota", key="calc"):
+        if not st.session_state.origin or not st.session_state.dest:
+            st.warning("Defina origem e destino primeiro.")
+        else:
+            with st.spinner("Calculando rota..."):
+                G_w = build_weighted_graph(base, w_const, w_geo, w_time, underground)
+                start = nearest_node(G_w, st.session_state.origin)
+                goal = nearest_node(G_w, st.session_state.dest)
+                if start is None or goal is None:
+                    st.error("Não foi possível encontrar nós próximos.")
+                else:
+                    path, exp, pruned, tree = a_star_with_tree(G_w, start, goal)
+                    if path:
+                        coords = [(G_w.nodes[n]['y'], G_w.nodes[n]['x']) for n in path]
+                        # Distância real
+                        total_len = 0
+                        for i in range(len(path)-1):
+                            u, v = path[i], path[i+1]
+                            edge_data = base.get_edge_data(u, v)
+                            if edge_data:
+                                first = next(iter(edge_data))
+                                total_len += edge_data[first].get('length', 0)
+                        tempo = total_len / (50000/60)
+                        st.success("✅ Rota encontrada!")
+                        col1, col2 = st.columns(2)
+                        col1.metric("Distância", f"{total_len/1000:.2f} km")
+                        col2.metric("Tempo estimado", f"{tempo:.1f} min")
+                        st.session_state.route_data = {'coords': coords, 'path': path}
+                        st.session_state.search_tree = (tree, start, goal, exp, pruned)
+                        # Mapa
+                        mid = ((coords[0][0]+coords[-1][0])/2, (coords[0][1]+coords[-1][1])/2)
+                        m = folium.Map(location=mid, zoom_start=13)
+                        folium.PolyLine(coords, color='red', weight=5).add_to(m)
+                        folium.Marker(coords[0], popup='Origem', icon=folium.Icon(color='green')).add_to(m)
+                        folium.Marker(coords[-1], popup='Destino', icon=folium.Icon(color='blue')).add_to(m)
+                        st_folium(m, width=None, height=500, key="route_map")
+                    else:
+                        st.error("Nenhuma rota encontrada.")
+    if st.session_state.route_data:
+        # mostra mapa novamente se já calculado
+        rc = st.session_state.route_data['coords']
+        mid = ((rc[0][0]+rc[-1][0])/2, (rc[0][1]+rc[-1][1])/2)
+        m = folium.Map(location=mid, zoom_start=13)
+        folium.PolyLine(rc, color='red', weight=5).add_to(m)
+        folium.Marker(rc[0], popup='Origem', icon=folium.Icon(color='green')).add_to(m)
+        folium.Marker(rc[-1], popup='Destino', icon=folium.Icon(color='blue')).add_to(m)
+        st_folium(m, width=None, height=500, key="route_map_again")
+
+with tab2:
+    if st.session_state.search_tree:
+        tree_edges, start, goal, expanded, pruned = st.session_state.search_tree
+        st.write(f"**Nós expandidos:** {len(expanded)} | **Nós podados:** {len(pruned)}")
+        max_show = st.slider("Limite de arestas na árvore", 50, 500, 150, 10)
+        limited = tree_edges[:max_show]
+        # Exibição textual (sem Graphviz)
+        children = defaultdict(list)
+        for p, c, s in limited:
+            children[p].append((c, s))
+        path_set = set(st.session_state.route_data['path'])
+        lines = []
+        stack = [(start, "", True, 0)]
+        seen = set()
+        while stack:
+            node, pref, last, depth = stack.pop()
+            if node in seen:
+                continue
+            seen.add(node)
+            if node == start:
+                lines.append(f"{pref}{'└── ' if last else '├── '}🔵 {node} (ORIGEM)")
+            elif node == goal:
+                lines.append(f"{pref}{'└── ' if last else '├── '}🟠 {node} (DESTINO)")
+            elif node in path_set:
+                lines.append(f"{pref}{'└── ' if last else '├── '}🟢 {node}")
+            else:
+                is_pruned = any(s == 'pruned' for (p, c, s) in tree_edges if c == node)
+                if is_pruned:
+                    lines.append(f"{pref}{'└── ' if last else '├── '}🔴 {node}")
+                else:
+                    lines.append(f"{pref}{'└── ' if last else '├── '}⚪ {node}")
+            new_pref = pref + ("    " if last else "│   ")
+            ch_list = children.get(node, [])
+            for i, (ch, _) in enumerate(reversed(ch_list)):
+                last_ch = (i == len(ch_list)-1)
+                stack.append((ch, new_pref, last_ch, depth+1))
+        st.code("\n".join(lines), language="text")
+        st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | ⚪ Expandidos | 🔴 Podados")
+    else:
+        st.info("Calcule uma rota na aba 'Rota' para ver a árvore.")
+
+with tab3:
+    st.subheader("Amostra das arestas da rede")
+    sample = []
+    for u, v, data in list(base.edges(data=True))[:100]:
+        sample.append({
+            "origem": u,
+            "destino": v,
+            "comprimento (m)": data.get('length', 0),
+            "tipo": data.get('highway', 'unknown'),
+            "custo_construção (R$/m)": data.get('construction_cost', 0),
+            "penalidade_geo": data.get('penalty_geo', 0),
+            "fator_velocidade": data.get('speed_factor', 1.0)
+        })
+    df = pd.DataFrame(sample)
+    st.dataframe(df, use_container_width=True)
+
+with tab4:
+    st.markdown("""
+    **GISAI - Pathfinder**  
+    - Utiliza dados do OpenStreetMap via OSMnx  
+    - Roteamento multicritério (custo, ambiente, tempo)  
+    - Modo subterrâneo simula metrô (custo ×5)  
+    - Interface adaptada para Streamlit Cloud  
+    - **Nota:** A árvore de busca é exibida em formato textual (Graphviz não disponível no cloud)  
+    """)
