@@ -1,9 +1,0 @@
-pip --upgrade
-streamlit
-geopandas
-networkx
-folium
-streamlit-folium
-geopy
-pandas
-shapely
