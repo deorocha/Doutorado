@@ -548,23 +548,30 @@ with tab2:
         for u, v, data in G_tree.edges(data=True):
             edge_colors.append('blue' if data['status'] == 'expanded' else 'red')
 
-        # Slider de zoom (tamanho da figura)
-        figsize_scale = st.slider("Zoom da árvore (tamanho da figura)", 0.5, 2.0, 1.0, 0.1)
-        fig, ax = plt.subplots(figsize=(14 * figsize_scale, 10 * figsize_scale))
+        # Slider de zoom (escala proporcional)
+        scale = st.slider("Zoom (escala visual)", 0.5, 2.0, 1.0, 0.1,
+                         help="Aumenta/diminui todos os elementos do gráfico (nós, fontes, setas).")
+        # Parâmetros base
+        base_node_size = 800
+        base_font_size = 8
+        base_arrowsize = 10
+        base_width = 1.5
+        
+        fig, ax = plt.subplots(figsize=(14 * scale, 10 * scale))
         nx.draw(G_tree, pos,
                 node_color=node_colors,
                 edge_color=edge_colors,
-                node_size=800,
-                font_size=8,
+                node_size=base_node_size * scale,
+                font_size=base_font_size * scale,
+                arrowsize=base_arrowsize * scale,
+                width=base_width * scale,
                 arrows=True,
                 arrowstyle='-|>',
-                arrowsize=10,
-                width=1.5,
                 with_labels=True,
                 ax=ax)
-        ax.set_title("Árvore de Busca (níveis hierárquicos)", fontsize=14)
+        ax.set_title("Árvore de Busca (níveis hierárquicos)", fontsize=14 * scale)
         ax.set_aspect('equal')
-        ax.margins(x=0.2, y=0.2)   # margens para evitar cortes
+        ax.margins(x=0.2, y=0.2)
         ax.autoscale_view()
         plt.tight_layout()
         st.pyplot(fig)
