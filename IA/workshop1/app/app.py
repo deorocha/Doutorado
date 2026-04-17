@@ -495,26 +495,10 @@ with tab2:
         # Tenta usar pyvis (interativo, hierárquico)
         try:
             from pyvis.network import Network
-            import json
             net = Network(height="600px", width="100%", directed=True)
-            # Configuração hierárquica com JSON válido (aspas duplas)
-            options = {
-                "layout": {
-                    "hierarchical": {
-                        "enabled": True,
-                        "direction": "UD",
-                        "sortMethod": "directed"
-                    }
-                },
-                "edges": {
-                    "arrows": {
-                        "to": {"enabled": True}
-                    },
-                    "smooth": False
-                },
-                "physics": False
-            }
-            net.set_options(json.dumps(options))
+            # Configura layout hierárquico simples
+            net.set_hierarchical(True, direction="UD", sort_method="directed")
+            net.toggle_physics(False)  # desliga física para posição fixa
             
             path_set = set(st.session_state.route_data['path'])
             nodes_added = set()
@@ -531,14 +515,13 @@ with tab2:
                             color = '#90EE90'   # lightgreen
                             title = f"{node}"
                         else:
-                            # Verifica se é podado
                             is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
                             color = '#FFB6C1' if is_pruned else '#D3D3D3'  # lightcoral / lightgray
                             title = f"{node} (podado)" if is_pruned else f"{node}"
                         net.add_node(node, label=str(node), title=title, color=color)
                         nodes_added.add(node)
                 edge_color = 'blue' if status == 'expanded' else 'red'
-                net.add_edge(parent, child, color=edge_color, title=status)
+                net.add_edge(parent, child, color=edge_color, title=status, arrows='to')
             
             html_content = net.generate_html()
             st.components.v1.html(html_content, height=650)
@@ -547,7 +530,7 @@ with tab2:
         
         except ImportError:
             st.warning("Biblioteca 'pyvis' não instalada. Instale com: pip install pyvis")
-            # Fallback para matplotlib (gráfico estático)
+            # Fallback para matplotlib
             import matplotlib.pyplot as plt
             tree_graph = nx.DiGraph()
             for p, c, _ in limited:
