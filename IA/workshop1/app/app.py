@@ -492,16 +492,14 @@ with tab2:
         max_show = st.slider("Limite de arestas na árvore", 50, 500, 150, 10)
         limited = tree_edges[:max_show]
 
-        # --- Construir árvore hierárquica manualmente ---
-        # Criar um grafo direcionado
+        # Construir grafo
         G_tree = nx.DiGraph()
         for parent, child, status in limited:
             G_tree.add_edge(parent, child, status=status)
 
-        # Calcular profundidade (nível) de cada nó a partir da origem
+        # Calcular profundidades (BFS a partir da origem)
         depths = {}
         if start in G_tree:
-            # Usa BFS para definir níveis
             queue = [(start, 0)]
             depths[start] = 0
             visited = {start}
@@ -511,29 +509,24 @@ with tab2:
                         visited.add(child)
                         depths[child] = depth + 1
                         queue.append((child, depth + 1))
-
-        # Se algum nó não foi visitado (desconectado), atribui nível grande
         for node in G_tree.nodes():
             if node not in depths:
                 depths[node] = 0
 
-        # Agrupar nós por nível
+        # Agrupar por nível
         levels = {}
         for node, d in depths.items():
             levels.setdefault(d, []).append(node)
-
-        # Ordenar nós dentro de cada nível (para evitar cruzamentos)
         for lvl in levels:
             levels[lvl].sort()
 
-        # Calcular posições: x baseado na ordem dentro do nível, y baseado no nível
+        # Posições: y baseado no nível (0 no topo, negativo para baixo), x espaçado
         pos = {}
         for lvl, nodes_in_level in levels.items():
-            # Espaçamento horizontal proporcional ao número de nós
             spacing = 2.0 / (len(nodes_in_level) + 1)
             for i, node in enumerate(nodes_in_level):
                 x = -1.0 + (i + 1) * spacing
-                y = -lvl  # nível 0 no topo (y=0), níveis mais profundos y negativo
+                y = -lvl
                 pos[node] = (x, y)
 
         # Cores dos nós
@@ -547,7 +540,6 @@ with tab2:
             elif node in path_set:
                 node_colors.append('lightgreen')
             else:
-                # verifica se o nó aparece como child de uma aresta 'pruned'
                 is_pruned = any(status == 'pruned' for (_, c, status) in limited if c == node)
                 node_colors.append('lightcoral' if is_pruned else 'lightgray')
 
@@ -556,9 +548,9 @@ with tab2:
         for u, v, data in G_tree.edges(data=True):
             edge_colors.append('blue' if data['status'] == 'expanded' else 'red')
 
-        # Desenhar
-        import matplotlib.pyplot as plt
-        fig, ax = plt.subplots(figsize=(14, 10))
+        # Slider de zoom (tamanho da figura)
+        figsize_scale = st.slider("Zoom da árvore (tamanho da figura)", 0.5, 2.0, 1.0, 0.1)
+        fig, ax = plt.subplots(figsize=(14 * figsize_scale, 10 * figsize_scale))
         nx.draw(G_tree, pos,
                 node_color=node_colors,
                 edge_color=edge_colors,
@@ -572,9 +564,10 @@ with tab2:
                 ax=ax)
         ax.set_title("Árvore de Busca (níveis hierárquicos)", fontsize=14)
         ax.set_aspect('equal')
+        ax.margins(x=0.2, y=0.2)   # margens para evitar cortes
+        ax.autoscale_view()
         plt.tight_layout()
         st.pyplot(fig)
-        st.caption("Estrutura hierárquica: origem no topo, nós expandidos em níveis sucessivos. Setas indicam direção da busca.")
         st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
     else:
         st.info("Calcule uma rota na aba 'Rota' para ver a árvore.")
