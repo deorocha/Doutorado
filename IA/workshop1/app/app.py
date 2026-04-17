@@ -492,66 +492,102 @@ with tab2:
         max_show = st.slider("Limite de arestas na árvore", 50, 500, 150, 10)
         limited = tree_edges[:max_show]
 
-        # --- Visualização interativa com pyvis ---
+        # Tenta usar pyvis (interativo, hierárquico)
         try:
             from pyvis.network import Network
+            import json
             net = Network(height="600px", width="100%", directed=True)
-            # Configuração do layout hierárquico (cima para baixo)
-            net.set_options("""
-            var options = {
-                layout: {
-                    hierarchical: {
-                        enabled: true,
-                        direction: "UD",
-                        sortMethod: "directed"
+            # Configuração hierárquica com JSON válido (aspas duplas)
+            options = {
+                "layout": {
+                    "hierarchical": {
+                        "enabled": True,
+                        "direction": "UD",
+                        "sortMethod": "directed"
                     }
                 },
-                edges: {
-                    arrows: { to: { enabled: true } },
-                    smooth: false
+                "edges": {
+                    "arrows": {
+                        "to": {"enabled": True}
+                    },
+                    "smooth": False
                 },
-                physics: false
+                "physics": False
             }
-            """)
-
+            net.set_options(json.dumps(options))
+            
             path_set = set(st.session_state.route_data['path'])
-            # Adiciona nós
             nodes_added = set()
             for parent, child, status in limited:
                 for node in [parent, child]:
                     if node not in nodes_added:
-                        # Define cor do nó
                         if node == start:
-                            color = '#ADD8E6'  # lightblue
+                            color = '#ADD8E6'   # lightblue
                             title = f"{node} (ORIGEM)"
                         elif node == goal:
-                            color = '#FFA500'  # orange
+                            color = '#FFA500'   # orange
                             title = f"{node} (DESTINO)"
                         elif node in path_set:
-                            color = '#90EE90'  # lightgreen
+                            color = '#90EE90'   # lightgreen
                             title = f"{node}"
                         else:
                             # Verifica se é podado
                             is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
-                            color = '#FFB6C1' if is_pruned else '#D3D3D3'  # lightcoral ou lightgray
+                            color = '#FFB6C1' if is_pruned else '#D3D3D3'  # lightcoral / lightgray
                             title = f"{node} (podado)" if is_pruned else f"{node}"
                         net.add_node(node, label=str(node), title=title, color=color)
                         nodes_added.add(node)
-
-                # Adiciona aresta com cor
                 edge_color = 'blue' if status == 'expanded' else 'red'
                 net.add_edge(parent, child, color=edge_color, title=status)
-
-            # Gera HTML e exibe no Streamlit
-            html = net.generate_html()
-            st.components.v1.html(html, height=650)
-            st.caption("🖱️ Dica: Arraste os nós para reorganizar. Use o scroll para zoom. Nós azuis são expandidos, vermelhos são podados.")
+            
+            html_content = net.generate_html()
+            st.components.v1.html(html_content, height=650)
+            st.caption("🖱️ Dica: Arraste os nós para reorganizar. Use o scroll para zoom.")
             st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
+        
         except ImportError:
-            st.error("Biblioteca 'pyvis' não instalada. Execute: pip install pyvis")
-            # Fallback para visualização textual
+            st.warning("Biblioteca 'pyvis' não instalada. Instale com: pip install pyvis")
+            # Fallback para matplotlib (gráfico estático)
+            import matplotlib.pyplot as plt
+            tree_graph = nx.DiGraph()
+            for p, c, _ in limited:
+                tree_graph.add_edge(p, c)
+            if tree_graph.number_of_nodes() > 0:
+                node_colors = []
+                path_set = set(st.session_state.route_data['path'])
+                for node in tree_graph.nodes():
+                    if node == start:
+                        node_colors.append('lightblue')
+                    elif node == goal:
+                        node_colors.append('orange')
+                    elif node in path_set:
+                        node_colors.append('lightgreen')
+                    else:
+                        is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
+                        node_colors.append('lightcoral' if is_pruned else 'lightgray')
+                pos = nx.spring_layout(tree_graph, seed=42, k=2, iterations=50)
+                fig, ax = plt.subplots(figsize=(12, 8))
+                nx.draw(tree_graph, pos,
+                        node_color=node_colors,
+                        node_size=500,
+                        font_size=8,
+                        arrows=True,
+                        arrowstyle='-|>',
+                        arrowsize=10,
+                        edge_color='black',
+                        width=1,
+                        with_labels=True,
+                        ax=ax)
+                ax.set_title("Árvore de Busca (layout forçado)")
+                st.pyplot(fig)
+                st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
+            else:
+                st.info("Nenhuma aresta para exibir.")
+        
+        except Exception as e:
+            st.error(f"Erro ao gerar árvore interativa: {e}")
+            # Fallback final: versão textual
             with st.expander("🌲 Ver árvore em formato texto"):
-                # ... (código textual igual ao anterior)
                 children = defaultdict(list)
                 for p, c, s in limited:
                     children[p].append((c, s))
@@ -582,12 +618,9 @@ with tab2:
                         last_ch = (i == len(ch_list)-1)
                         stack.append((ch, new_pref, last_ch, depth+1))
                 st.code("\n".join(lines), language="text")
-        except Exception as e:
-            st.error(f"Erro ao gerar árvore: {e}")
-            st.info("Exibindo versão textual.")
     else:
         st.info("Calcule uma rota na aba 'Rota' para ver a árvore.")
-
+        
 with tab3:
     st.subheader("📊 Dados da Rede Viária (amostra)")
     sample = []
