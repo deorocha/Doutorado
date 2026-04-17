@@ -6,29 +6,113 @@ from streamlit_folium import st_folium
 import pandas as pd
 import heapq
 from collections import defaultdict
+from pathlib import Path
+import geopandas as gpd
 
 st.set_page_config(page_title="GISAI - Pathfinder", layout="wide")
-st.title("📍 GISAI - Pathfinder (OpenStreetMap)")
+st.title("📍 GISAI - Pathfinder (OpenStreetMap + Dados Locais)")
 
 st.markdown("""
-Este aplicativo baixa a rede viária de qualquer cidade do mundo e calcula a **melhor rota**  
-considerando **custo de construção**, **restrições geográficas** e **tempo de viagem**.
+Este aplicativo carrega a rede viária de uma cidade (primeiro de arquivos locais, se disponíveis)  
+e calcula a **melhor rota** considerando **custo de construção**, **restrições geográficas** e **tempo de viagem**.
 """)
 
-# ------------------- Cache do grafo -------------------
+# Define o diretório de dados baseado no local do script
+PROJECT_ROOT = Path(__file__).parent
+DATA_DIR = PROJECT_ROOT / "data"
+DATA_DIR.mkdir(exist_ok=True)
+
+# ------------------- Funções de cache para carregar dados locais -------------------
+@st.cache_resource(ttl=3600, show_spinner=False)
+def load_graph_from_files(city_path):
+    """Carrega o grafo a partir de Shapefile ou GeoPackage."""
+    try:
+        if city_path.is_dir():
+            edges_path = city_path / "edges.shp"
+            nodes_path = city_path / "nodes.shp"
+            if not (edges_path.exists() and nodes_path.exists()):
+                return None
+            gdf_edges = gpd.read_file(edges_path)
+            gdf_nodes = gpd.read_file(nodes_path)
+        elif city_path.suffix == ".gpkg":
+            gdf_edges = gpd.read_file(city_path, layer="edges")
+            gdf_nodes = gpd.read_file(city_path, layer="nodes")
+        else:
+            return None
+    except Exception as e:
+        st.error(f"Erro ao ler arquivos locais: {e}")
+        return None
+
+    G = nx.DiGraph()
+    for _, node in gdf_nodes.iterrows():
+        G.add_node(node['osmid'], y=node.geometry.y, x=node.geometry.x)
+
+    for _, edge in gdf_edges.iterrows():
+        u = edge['u']
+        v = edge['v']
+        length = edge['length']
+        highway = edge.get('highway', 'unknown')
+        name = str(edge.get('name', '')).lower()
+
+        if highway in ['motorway', 'trunk']:
+            const_cost = 800.0
+        elif highway in ['primary', 'secondary']:
+            const_cost = 1200.0
+        elif highway in ['residential', 'living_street']:
+            const_cost = 2000.0
+        else:
+            const_cost = 1500.0
+
+        penalty = 0.0
+        if 'park' in name or 'garden' in name:
+            penalty += length * 1.2
+        if any(k in name for k in ['museum', 'historic', 'monument']):
+            penalty += length * 1.5
+        if any(k in name for k in ['hospital', 'health', 'clinic']):
+            penalty += length * 1.0
+        if any(k in name for k in ['school', 'college', 'escola']):
+            penalty += length * 0.8
+        if 'river' in name or 'ponte' in name:
+            penalty += length * 2.0
+
+        speed = 1.0
+        if highway in ['motorway', 'trunk']:
+            speed = 0.6
+        elif highway in ['primary', 'secondary']:
+            speed = 0.8
+        elif highway in ['residential', 'living_street']:
+            speed = 1.5
+        elif highway in ['footway', 'pedestrian']:
+            speed = 3.0
+
+        G.add_edge(u, v,
+                   length=length,
+                   construction_cost=const_cost,
+                   penalty_geo=penalty,
+                   speed_factor=speed,
+                   highway=highway,
+                   name=name)
+        if edge.get('oneway') != True:
+            G.add_edge(v, u,
+                       length=length,
+                       construction_cost=const_cost,
+                       penalty_geo=penalty,
+                       speed_factor=speed,
+                       highway=highway,
+                       name=name)
+    return G
+
 @st.cache_data(ttl=3600, show_spinner=False)
-def load_city_graph(city_name, network_type='drive'):
-    """Baixa o grafo da cidade usando OSMnx (cacheado)."""
-    with st.spinner(f"Baixando dados de '{city_name}' do OpenStreetMap..."):
+def load_graph_from_osm(city_name, network_type='drive'):
+    """Baixa o grafo do OpenStreetMap (fallback)."""
+    with st.spinner(f"Baixando dados de '{city_name}' do OpenStreetMap (pode demorar)..."):
         try:
             G = ox.graph_from_place(city_name, network_type=network_type, simplify=True)
-            # Adiciona atributos customizados para cada aresta
             for u, v, data in G.edges(data=True):
                 length = data['length']
                 highway = data.get('highway', 'unknown')
                 name = str(data.get('name', '')).lower()
 
-                # Custo de construção (R$/m)
                 if highway in ['motorway', 'trunk']:
                     const_cost = 800.0
                 elif highway in ['primary', 'secondary']:
@@ -38,7 +122,6 @@ def load_city_graph(city_name, network_type='drive'):
                 else:
                     const_cost = 1500.0
 
-                # Penalidade geográfica
                 penalty = 0.0
                 if 'park' in name or 'garden' in name:
                     penalty += length * 1.2
@@ -51,7 +134,6 @@ def load_city_graph(city_name, network_type='drive'):
                 if 'river' in name or 'ponte' in name:
                     penalty += length * 2.0
 
-                # Fator de velocidade
                 speed = 1.0
                 if highway in ['motorway', 'trunk']:
                     speed = 0.6
@@ -167,21 +249,48 @@ def geocode_address(address):
 
 # ------------------- Interface -------------------
 st.sidebar.header("🌍 Seleção da Cidade")
-city_name = st.sidebar.text_input("Nome da cidade (ex: Salvador, Bahia, Brasil)", "Salvador, Bahia, Brasil")
 
-# Tipo de rede fixo como 'drive' (sem combobox)
-network_type = "drive"
+# Lista cidades disponíveis localmente
+local_cities = []
+for item in DATA_DIR.iterdir():
+    if item.is_dir() and item.name.endswith("_shp"):
+        city_name = item.name.replace("_shp", "").replace("_", " ").title()
+        local_cities.append((city_name, item, "local"))
+    elif item.suffix == ".gpkg":
+        city_name = item.stem.replace("_", " ").title()
+        local_cities.append((city_name, item, "local"))
 
-if st.sidebar.button("Carregar cidade", type="primary"):
-    base_graph = load_city_graph(city_name, network_type)
-    if base_graph:
-        st.session_state['base_graph'] = base_graph
-        st.sidebar.success(f"Grafo carregado: {base_graph.number_of_nodes()} nós, {base_graph.number_of_edges()} arestas")
-    else:
-        st.sidebar.error("Falha no carregamento")
+if local_cities:
+    st.sidebar.success(f"Encontradas {len(local_cities)} cidade(s) na pasta './data'.")
+    city_options = {name: path for name, path, _ in local_cities}
+    selected_local = st.sidebar.selectbox("Escolha uma cidade disponível localmente", list(city_options.keys()))
+    use_local = st.sidebar.checkbox("Usar dados locais (rápido)", value=True)
+else:
+    st.sidebar.warning("Nenhuma cidade encontrada em './data'. Será necessário baixar do OpenStreetMap.")
+    use_local = False
+    selected_local = None
+
+if not use_local or selected_local is None:
+    city_name = st.sidebar.text_input("Nome da cidade para download (ex: Salvador, Bahia, Brasil)", "Salvador, Bahia, Brasil")
+    download_button = st.sidebar.button("Baixar cidade do OSM (lento)")
+    if download_button:
+        base_graph = load_graph_from_osm(city_name, network_type="drive")
+        if base_graph:
+            st.session_state['base_graph'] = base_graph
+            st.sidebar.success(f"Grafo baixado: {base_graph.number_of_nodes()} nós, {base_graph.number_of_edges()} arestas")
+        else:
+            st.sidebar.error("Falha no download")
+else:
+    if st.sidebar.button("Carregar cidade local", type="primary"):
+        base_graph = load_graph_from_files(city_options[selected_local])
+        if base_graph:
+            st.session_state['base_graph'] = base_graph
+            st.sidebar.success(f"Grafo carregado do disco: {base_graph.number_of_nodes()} nós, {base_graph.number_of_edges()} arestas")
+        else:
+            st.sidebar.error("Falha ao carregar dados locais")
 
 if 'base_graph' not in st.session_state or st.session_state['base_graph'] is None:
-    st.info("👈 Clique em 'Carregar cidade' para começar.")
+    st.info("👈 Selecione uma cidade local ou baixe uma do OSM para começar.")
     st.stop()
 
 base = st.session_state['base_graph']
@@ -196,7 +305,6 @@ underground = st.sidebar.checkbox("🚇 Modo Subterrâneo (Metrô)", False)
 st.sidebar.header("📍 Origem / Destino")
 method = st.sidebar.radio("Método", ["Coordenadas", "Buscar endereço", "Clicar no mapa"])
 
-# Inicialização de estados
 if "origin" not in st.session_state:
     st.session_state.origin = None
     st.session_state.dest = None
@@ -205,7 +313,7 @@ if "route_data" not in st.session_state:
 if "search_tree" not in st.session_state:
     st.session_state.search_tree = None
 if "map_points" not in st.session_state:
-    st.session_state.map_points = []      # lista de (lat, lon, tipo)
+    st.session_state.map_points = []
     st.session_state.map_origin = None
     st.session_state.map_dest = None
 
@@ -250,13 +358,12 @@ else:  # Clicar no mapa
         st.session_state.search_tree = None
         st.rerun()
 
-    # Centro do mapa baseado nos nós do grafo
     all_y = [data['y'] for _, data in base.nodes(data=True)]
     all_x = [data['x'] for _, data in base.nodes(data=True)]
     if all_y and all_x:
         map_center = [sum(all_y)/len(all_y), sum(all_x)/len(all_x)]
     else:
-        map_center = [-12.9714, -38.5014]  # fallback Salvador
+        map_center = [-12.9714, -38.5014]
 
     click_map = folium.Map(location=map_center, zoom_start=12)
     for lat, lon, tipo in st.session_state.map_points:
@@ -312,7 +419,6 @@ with tab1:
                     path, exp, pruned, tree = a_star_with_tree(G_w, start, goal)
                     if path:
                         coords = [(G_w.nodes[n]['y'], G_w.nodes[n]['x']) for n in path]
-                        # Distância real
                         total_len = 0
                         for i in range(len(path)-1):
                             u, v = path[i], path[i+1]
@@ -327,7 +433,6 @@ with tab1:
                         col2.metric("Tempo estimado", f"{tempo:.1f} min")
                         st.session_state.route_data = {'coords': coords, 'path': path}
                         st.session_state.search_tree = (tree, start, goal, exp, pruned)
-                        # Mapa
                         mid = ((coords[0][0]+coords[-1][0])/2, (coords[0][1]+coords[-1][1])/2)
                         m = folium.Map(location=mid, zoom_start=13)
                         folium.PolyLine(coords, color='red', weight=5).add_to(m)
@@ -351,7 +456,6 @@ with tab2:
         st.write(f"**Nós expandidos:** {len(expanded)} | **Nós podados:** {len(pruned)}")
         max_show = st.slider("Limite de arestas na árvore", 50, 500, 150, 10)
         limited = tree_edges[:max_show]
-        # Exibição textual
         children = defaultdict(list)
         for p, c, s in limited:
             children[p].append((c, s))
@@ -405,9 +509,15 @@ with tab3:
 with tab4:
     st.markdown("""
     **GISAI - Pathfinder**  
-    - Utiliza dados do OpenStreetMap via OSMnx  
+    - Utiliza dados locais (Shapefile/GeoPackage) se disponíveis – **muito mais rápido**  
+    - Fallback para download do OpenStreetMap (lento, apenas se necessário)  
     - Roteamento multicritério (custo, ambiente, tempo)  
     - Modo subterrâneo simula metrô (custo ×5)  
     - Interface adaptada para Streamlit Cloud  
-    - **Nota:** A árvore de busca é exibida em formato textual (Graphviz não disponível no cloud)  
+
+    **Como preparar dados locais:**  
+    1. Execute o aplicativo de download localmente (primeiro app)  
+    2. Baixe a cidade desejada em Shapefile ou GeoPackage  
+    3. Copie a pasta/arquivo para `data/` no repositório GitHub  
+    4. Faça commit e push – o app carregará os dados instantaneamente  
     """)
