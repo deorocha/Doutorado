@@ -8,6 +8,7 @@ import heapq
 from collections import defaultdict
 from pathlib import Path
 import geopandas as gpd
+import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="GISAI - Pathfinder", layout="wide")
 st.title("📍 GISAI - Pathfinder (OpenStreetMap + Dados Locais)")
@@ -108,7 +109,15 @@ def load_graph_from_osm(city_name, network_type='drive'):
     with st.spinner(f"Baixando dados de '{city_name}' do OpenStreetMap (pode demorar)..."):
         try:
             G = ox.graph_from_place(city_name, network_type=network_type, simplify=True)
+            # OSMnx retorna um MultiDiGraph; vamos convertê-lo para DiGraph simples
+            # (já que não usamos múltiplas arestas, simplifica o tratamento)
+            G_simple = nx.DiGraph()
             for u, v, data in G.edges(data=True):
+                # Se houver múltiplas arestas entre os mesmos nós, mantemos a primeira (ou média)
+                if G_simple.has_edge(u, v):
+                    continue
+                G_simple.add_node(u, y=G.nodes[u]['y'], x=G.nodes[u]['x'])
+                G_simple.add_node(v, y=G.nodes[v]['y'], x=G.nodes[v]['x'])
                 length = data['length']
                 highway = data.get('highway', 'unknown')
                 name = str(data.get('name', '')).lower()
@@ -144,10 +153,22 @@ def load_graph_from_osm(city_name, network_type='drive'):
                 elif highway in ['footway', 'pedestrian']:
                     speed = 3.0
 
-                data['construction_cost'] = const_cost
-                data['penalty_geo'] = penalty
-                data['speed_factor'] = speed
-            return G
+                G_simple.add_edge(u, v,
+                                  length=length,
+                                  construction_cost=const_cost,
+                                  penalty_geo=penalty,
+                                  speed_factor=speed,
+                                  highway=highway,
+                                  name=name)
+                if data.get('oneway') != True:
+                    G_simple.add_edge(v, u,
+                                      length=length,
+                                      construction_cost=const_cost,
+                                      penalty_geo=penalty,
+                                      speed_factor=speed,
+                                      highway=highway,
+                                      name=name)
+            return G_simple
         except Exception as e:
             st.error(f"Erro ao baixar cidade: {e}")
             return None
@@ -214,11 +235,8 @@ def a_star_with_tree(graph, start, goal):
             edge_data = graph.get_edge_data(cur, nb)
             if edge_data is None:
                 continue
-            if isinstance(edge_data, dict) and 'weight' in edge_data:
-                w = edge_data['weight']
-            else:
-                first = next(iter(edge_data))
-                w = edge_data[first].get('weight', 1e9)
+            # Como graph é um DiGraph simples, edge_data é o dicionário de atributos
+            w = edge_data.get('weight', 1e9)
             tentative = g[cur] + w
             if nb in closed:
                 tree.append((cur, nb, 'pruned'))
@@ -261,12 +279,12 @@ for item in DATA_DIR.iterdir():
         local_cities.append((city_name, item, "local"))
 
 if local_cities:
-    st.sidebar.success(f"Encontradas {len(local_cities)} cidade(s) na pasta './data'.")
+    st.sidebar.success(f"Encontradas {len(local_cities)} cidade(s) na pasta 'data'.")
     city_options = {name: path for name, path, _ in local_cities}
     selected_local = st.sidebar.selectbox("Escolha uma cidade disponível localmente", list(city_options.keys()))
     use_local = st.sidebar.checkbox("Usar dados locais (rápido)", value=True)
 else:
-    st.sidebar.warning("Nenhuma cidade encontrada em './data'. Será necessário baixar do OpenStreetMap.")
+    st.sidebar.warning("Nenhuma cidade encontrada em 'data'. Será necessário baixar do OpenStreetMap.")
     use_local = False
     selected_local = None
 
@@ -419,14 +437,30 @@ with tab1:
                     path, exp, pruned, tree = a_star_with_tree(G_w, start, goal)
                     if path:
                         coords = [(G_w.nodes[n]['y'], G_w.nodes[n]['x']) for n in path]
+                        # Distância real (usando o grafo base)
                         total_len = 0
                         for i in range(len(path)-1):
                             u, v = path[i], path[i+1]
                             edge_data = base.get_edge_data(u, v)
                             if edge_data:
-                                first = next(iter(edge_data))
-                                total_len += edge_data[first].get('length', 0)
+                                if 'length' in edge_data:
+                                    total_len += edge_data['length']
+                                else:
+                                    first_key = next(iter(edge_data))
+                                    total_len += edge_data[first_key].get('length', 0)
                         tempo = total_len / (50000/60)
+                        # Custo total ponderado
+                        total_cost = 0
+                        for i in range(len(path)-1):
+                            u, v = path[i], path[i+1]
+                            edge_data = base.get_edge_data(u, v)
+                            if edge_data:
+                                if 'length' in edge_data:
+                                    cost = compute_cost(edge_data, w_const, w_geo, w_time, underground)
+                                else:
+                                    first_key = next(iter(edge_data))
+                                    cost = compute_cost(edge_data[first_key], w_const, w_geo, w_time, underground)
+                                total_cost += cost
                         st.success("✅ Rota encontrada!")
                         col1, col2 = st.columns(2)
                         col1.metric("Distância", f"{total_len/1000:.2f} km")
@@ -458,14 +492,12 @@ with tab2:
         max_show = st.slider("Limite de arestas na árvore", 50, 500, 150, 10)
         limited = tree_edges[:max_show]
 
-        # ---------- VISUALIZAÇÃO GRÁFICA COM MATPLOTLIB ----------
-        # Cria um grafo NetworkX a partir das arestas da árvore
+        # ----- Visualização gráfica com matplotlib (alternativa ao Graphviz) -----
         tree_graph = nx.DiGraph()
         for p, c, _ in limited:
             tree_graph.add_edge(p, c)
 
         if tree_graph.number_of_nodes() > 0:
-            # Define cores dos nós
             node_colors = []
             path_set = set(st.session_state.route_data['path'])
             for node in tree_graph.nodes():
@@ -476,14 +508,9 @@ with tab2:
                 elif node in path_set:
                     node_colors.append('lightgreen')
                 else:
-                    # verifica se é podado (nó que só aparece como destino de aresta 'pruned')
                     is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
                     node_colors.append('lightcoral' if is_pruned else 'lightgray')
-
-            # Layout (usando spring_layout – não hierárquico, mas funcional)
             pos = nx.spring_layout(tree_graph, seed=42, k=2, iterations=50)
-
-            # Desenha
             fig, ax = plt.subplots(figsize=(12, 8))
             nx.draw(tree_graph, pos,
                     node_color=node_colors,
@@ -498,11 +525,11 @@ with tab2:
                     ax=ax)
             ax.set_title("Árvore de Busca (estrutura simplificada)")
             st.pyplot(fig)
-            st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🟡 Podados | ⚪ Outros expandidos")
+            st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
         else:
             st.info("Nenhuma aresta para exibir.")
 
-        # Mantém a versão textual como expander (opcional)
+        # Versão textual dentro de expander
         with st.expander("🌲 Ver árvore em formato texto"):
             children = defaultdict(list)
             for p, c, s in limited:
@@ -538,7 +565,7 @@ with tab2:
         st.info("Calcule uma rota na aba 'Rota' para ver a árvore.")
 
 with tab3:
-    st.subheader("Amostra das arestas da rede")
+    st.subheader("📊 Dados da Rede Viária (amostra)")
     sample = []
     for u, v, data in list(base.edges(data=True))[:100]:
         sample.append({
