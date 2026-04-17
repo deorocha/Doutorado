@@ -7,3 +7,4 @@ geopy>=2.4.0
 pandas>=2.0.0
 shapely>=2.0.0
 matplotlib>=3.5.0
+pyvis>=0.3.2
