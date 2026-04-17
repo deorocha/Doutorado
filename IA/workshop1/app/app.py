@@ -492,75 +492,99 @@ with tab2:
         max_show = st.slider("Limite de arestas na árvore", 50, 500, 150, 10)
         limited = tree_edges[:max_show]
 
-        # ----- Visualização gráfica com matplotlib (alternativa ao Graphviz) -----
-        tree_graph = nx.DiGraph()
-        for p, c, _ in limited:
-            tree_graph.add_edge(p, c)
+        # --- Visualização interativa com pyvis ---
+        try:
+            from pyvis.network import Network
+            net = Network(height="600px", width="100%", directed=True)
+            # Configuração do layout hierárquico (cima para baixo)
+            net.set_options("""
+            var options = {
+                layout: {
+                    hierarchical: {
+                        enabled: true,
+                        direction: "UD",
+                        sortMethod: "directed"
+                    }
+                },
+                edges: {
+                    arrows: { to: { enabled: true } },
+                    smooth: false
+                },
+                physics: false
+            }
+            """)
 
-        if tree_graph.number_of_nodes() > 0:
-            node_colors = []
             path_set = set(st.session_state.route_data['path'])
-            for node in tree_graph.nodes():
-                if node == start:
-                    node_colors.append('lightblue')
-                elif node == goal:
-                    node_colors.append('orange')
-                elif node in path_set:
-                    node_colors.append('lightgreen')
-                else:
-                    is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
-                    node_colors.append('lightcoral' if is_pruned else 'lightgray')
-            pos = nx.spring_layout(tree_graph, seed=42, k=2, iterations=50)
-            fig, ax = plt.subplots(figsize=(12, 8))
-            nx.draw(tree_graph, pos,
-                    node_color=node_colors,
-                    node_size=500,
-                    font_size=8,
-                    arrows=True,
-                    arrowstyle='-|>',
-                    arrowsize=10,
-                    edge_color='black',
-                    width=1,
-                    with_labels=True,
-                    ax=ax)
-            ax.set_title("Árvore de Busca (estrutura simplificada)")
-            st.pyplot(fig)
+            # Adiciona nós
+            nodes_added = set()
+            for parent, child, status in limited:
+                for node in [parent, child]:
+                    if node not in nodes_added:
+                        # Define cor do nó
+                        if node == start:
+                            color = '#ADD8E6'  # lightblue
+                            title = f"{node} (ORIGEM)"
+                        elif node == goal:
+                            color = '#FFA500'  # orange
+                            title = f"{node} (DESTINO)"
+                        elif node in path_set:
+                            color = '#90EE90'  # lightgreen
+                            title = f"{node}"
+                        else:
+                            # Verifica se é podado
+                            is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
+                            color = '#FFB6C1' if is_pruned else '#D3D3D3'  # lightcoral ou lightgray
+                            title = f"{node} (podado)" if is_pruned else f"{node}"
+                        net.add_node(node, label=str(node), title=title, color=color)
+                        nodes_added.add(node)
+
+                # Adiciona aresta com cor
+                edge_color = 'blue' if status == 'expanded' else 'red'
+                net.add_edge(parent, child, color=edge_color, title=status)
+
+            # Gera HTML e exibe no Streamlit
+            html = net.generate_html()
+            st.components.v1.html(html, height=650)
+            st.caption("🖱️ Dica: Arraste os nós para reorganizar. Use o scroll para zoom. Nós azuis são expandidos, vermelhos são podados.")
             st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
-        else:
-            st.info("Nenhuma aresta para exibir.")
-
-        # Versão textual dentro de expander
-        with st.expander("🌲 Ver árvore em formato texto"):
-            children = defaultdict(list)
-            for p, c, s in limited:
-                children[p].append((c, s))
-            path_set = set(st.session_state.route_data['path'])
-            lines = []
-            stack = [(start, "", True, 0)]
-            seen = set()
-            while stack:
-                node, pref, last, depth = stack.pop()
-                if node in seen:
-                    continue
-                seen.add(node)
-                if node == start:
-                    lines.append(f"{pref}{'└── ' if last else '├── '}🔵 {node} (ORIGEM)")
-                elif node == goal:
-                    lines.append(f"{pref}{'└── ' if last else '├── '}🟠 {node} (DESTINO)")
-                elif node in path_set:
-                    lines.append(f"{pref}{'└── ' if last else '├── '}🟢 {node}")
-                else:
-                    is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
-                    if is_pruned:
-                        lines.append(f"{pref}{'└── ' if last else '├── '}🔴 {node}")
+        except ImportError:
+            st.error("Biblioteca 'pyvis' não instalada. Execute: pip install pyvis")
+            # Fallback para visualização textual
+            with st.expander("🌲 Ver árvore em formato texto"):
+                # ... (código textual igual ao anterior)
+                children = defaultdict(list)
+                for p, c, s in limited:
+                    children[p].append((c, s))
+                path_set = set(st.session_state.route_data['path'])
+                lines = []
+                stack = [(start, "", True, 0)]
+                seen = set()
+                while stack:
+                    node, pref, last, depth = stack.pop()
+                    if node in seen:
+                        continue
+                    seen.add(node)
+                    if node == start:
+                        lines.append(f"{pref}{'└── ' if last else '├── '}🔵 {node} (ORIGEM)")
+                    elif node == goal:
+                        lines.append(f"{pref}{'└── ' if last else '├── '}🟠 {node} (DESTINO)")
+                    elif node in path_set:
+                        lines.append(f"{pref}{'└── ' if last else '├── '}🟢 {node}")
                     else:
-                        lines.append(f"{pref}{'└── ' if last else '├── '}⚪ {node}")
-                new_pref = pref + ("    " if last else "│   ")
-                ch_list = children.get(node, [])
-                for i, (ch, _) in enumerate(reversed(ch_list)):
-                    last_ch = (i == len(ch_list)-1)
-                    stack.append((ch, new_pref, last_ch, depth+1))
-            st.code("\n".join(lines), language="text")
+                        is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
+                        if is_pruned:
+                            lines.append(f"{pref}{'└── ' if last else '├── '}🔴 {node}")
+                        else:
+                            lines.append(f"{pref}{'└── ' if last else '├── '}⚪ {node}")
+                    new_pref = pref + ("    " if last else "│   ")
+                    ch_list = children.get(node, [])
+                    for i, (ch, _) in enumerate(reversed(ch_list)):
+                        last_ch = (i == len(ch_list)-1)
+                        stack.append((ch, new_pref, last_ch, depth+1))
+                st.code("\n".join(lines), language="text")
+        except Exception as e:
+            st.error(f"Erro ao gerar árvore: {e}")
+            st.info("Exibindo versão textual.")
     else:
         st.info("Calcule uma rota na aba 'Rota' para ver a árvore.")
 
