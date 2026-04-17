@@ -548,31 +548,42 @@ with tab2:
         for u, v, data in G_tree.edges(data=True):
             edge_colors.append('blue' if data['status'] == 'expanded' else 'red')
 
-        # Slider de zoom (escala proporcional)
-        scale = st.slider("Zoom (escala visual)", 0.5, 2.0, 1.0, 0.1,
-                         help="Aumenta/diminui todos os elementos do gráfico (nós, fontes, setas).")
+        # Sliders de controle
+        col1, col2 = st.columns(2)
+        with col1:
+            zoom = st.slider("Zoom (tamanho dos nós/fontes)", 0.5, 2.5, 1.0, 0.1,
+                            help="Aumenta/diminui nós, textos e setas.")
+        with col2:
+            fig_w = st.slider("Largura da figura (polegadas)", 8, 20, 14, 1)
+            fig_h = st.slider("Altura da figura (polegadas)", 6, 16, 10, 1)
+
         # Parâmetros base
         base_node_size = 800
         base_font_size = 8
         base_arrowsize = 10
         base_width = 1.5
-        
-        fig, ax = plt.subplots(figsize=(14 * scale, 10 * scale))
+
+        fig, ax = plt.subplots(figsize=(fig_w, fig_h))
         nx.draw(G_tree, pos,
                 node_color=node_colors,
                 edge_color=edge_colors,
-                node_size=base_node_size * scale,
-                font_size=base_font_size * scale,
-                arrowsize=base_arrowsize * scale,
-                width=base_width * scale,
+                node_size=base_node_size * zoom,
+                font_size=base_font_size * zoom,
+                arrowsize=base_arrowsize * zoom,
+                width=base_width * zoom,
                 arrows=True,
                 arrowstyle='-|>',
                 with_labels=True,
                 ax=ax)
-        ax.set_title("Árvore de Busca (níveis hierárquicos)", fontsize=14 * scale)
+        ax.set_title("Árvore de Busca (níveis hierárquicos)", fontsize=14 * zoom)
         ax.set_aspect('equal')
-        ax.margins(x=0.2, y=0.2)
-        ax.autoscale_view()
+        # Ajusta limites com margem
+        x_vals = [p[0] for p in pos.values()]
+        y_vals = [p[1] for p in pos.values()]
+        x_margin = (max(x_vals) - min(x_vals)) * 0.2
+        y_margin = (max(y_vals) - min(y_vals)) * 0.2
+        ax.set_xlim(min(x_vals) - x_margin, max(x_vals) + x_margin)
+        ax.set_ylim(min(y_vals) - y_margin, max(y_vals) + y_margin)
         plt.tight_layout()
         st.pyplot(fig)
         st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
