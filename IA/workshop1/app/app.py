@@ -492,58 +492,13 @@ with tab2:
         max_show = st.slider("Limite de arestas na árvore", 50, 500, 150, 10)
         limited = tree_edges[:max_show]
 
-        # Tenta pyvis (interativo)
+        # --- Visualização gráfica com matplotlib (estável) ---
         try:
-            from pyvis.network import Network
-            net = Network(height="600px", width="100%", directed=True)
-            # Configuração das setas: usar um dicionário Python (pyvis aceita)
-            net.set_options("""
-            {
-                "edges": {
-                    "arrows": {
-                        "to": true
-                    },
-                    "smooth": false
-                },
-                "physics": false
-            }
-            """)
-            
-            path_set = set(st.session_state.route_data['path'])
-            nodes_added = set()
-            for parent, child, status in limited:
-                for node in [parent, child]:
-                    if node not in nodes_added:
-                        if node == start:
-                            color = '#ADD8E6'
-                            title = f"{node} (ORIGEM)"
-                        elif node == goal:
-                            color = '#FFA500'
-                            title = f"{node} (DESTINO)"
-                        elif node in path_set:
-                            color = '#90EE90'
-                            title = f"{node}"
-                        else:
-                            is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
-                            color = '#FFB6C1' if is_pruned else '#D3D3D3'
-                            title = f"{node} (podado)" if is_pruned else f"{node}"
-                        net.add_node(node, label=str(node), title=title, color=color)
-                        nodes_added.add(node)
-                edge_color = 'blue' if status == 'expanded' else 'red'
-                net.add_edge(parent, child, color=edge_color, title=status)
-            
-            html_content = net.generate_html()
-            st.components.v1.html(html_content, height=650)
-            st.caption("🖱️ Arraste os nós, zoom com scroll. As setas indicam a direção da busca.")
-            st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
-        
-        except ImportError:
-            st.warning("Biblioteca 'pyvis' não instalada. Para melhor visualização, instale: `pip install pyvis`")
-            # Fallback matplotlib
             import matplotlib.pyplot as plt
             tree_graph = nx.DiGraph()
             for p, c, _ in limited:
                 tree_graph.add_edge(p, c)
+
             if tree_graph.number_of_nodes() > 0:
                 node_colors = []
                 path_set = set(st.session_state.route_data['path'])
@@ -555,9 +510,16 @@ with tab2:
                     elif node in path_set:
                         node_colors.append('lightgreen')
                     else:
+                        # Verifica se é podado (nó que só aparece como destino de aresta 'pruned')
                         is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
                         node_colors.append('lightcoral' if is_pruned else 'lightgray')
-                pos = nx.spring_layout(tree_graph, seed=42, k=2, iterations=50)
+                # Layout hierárquico simples (não é perfeito, mas organiza melhor que spring)
+                try:
+                    # Tenta usar layout hierárquico do graphviz (se disponível)
+                    pos = nx.nx_agraph.graphviz_layout(tree_graph, prog='dot')
+                except:
+                    # Fallback para spring layout
+                    pos = nx.spring_layout(tree_graph, seed=42, k=2, iterations=50)
                 fig, ax = plt.subplots(figsize=(12, 8))
                 nx.draw(tree_graph, pos,
                         node_color=node_colors,
@@ -570,15 +532,14 @@ with tab2:
                         width=1,
                         with_labels=True,
                         ax=ax)
-                ax.set_title("Árvore de Busca (layout estático)")
+                ax.set_title("Árvore de Busca (estrutura da exploração A*)")
                 st.pyplot(fig)
                 st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
             else:
                 st.info("Nenhuma aresta para exibir.")
-        
         except Exception as e:
-            st.error(f"Erro ao gerar árvore interativa: {e}")
-            # Fallback final: texto
+            st.error(f"Erro ao gerar gráfico: {e}")
+            # Fallback para texto
             with st.expander("🌲 Ver árvore em formato texto"):
                 children = defaultdict(list)
                 for p, c, s in limited:
