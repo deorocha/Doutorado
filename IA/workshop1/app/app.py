@@ -492,85 +492,89 @@ with tab2:
         max_show = st.slider("Limite de arestas na árvore", 50, 500, 150, 10)
         limited = tree_edges[:max_show]
 
-        # --- Visualização gráfica com matplotlib (estável) ---
-        try:
-            import matplotlib.pyplot as plt
-            tree_graph = nx.DiGraph()
-            for p, c, _ in limited:
-                tree_graph.add_edge(p, c)
+        # Prepara dados para o vis-network
+        nodes = {}
+        path_set = set(st.session_state.route_data['path'])
+        for parent, child, status in limited:
+            for node in (parent, child):
+                if node not in nodes:
+                    if node == start:
+                        color = '#ADD8E6'      # lightblue
+                        label = f"{node} (origem)"
+                    elif node == goal:
+                        color = '#FFA500'      # orange
+                        label = f"{node} (destino)"
+                    elif node in path_set:
+                        color = '#90EE90'      # lightgreen
+                        label = f"{node}"
+                    else:
+                        # verifica se é podado (aparece como child de aresta 'pruned')
+                        is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
+                        color = '#FFB6C1' if is_pruned else '#D3D3D3'
+                        label = f"{node} (podado)" if is_pruned else f"{node}"
+                    nodes[node] = {"id": node, "label": label, "color": color}
+        edges = []
+        for parent, child, status in limited:
+            color = 'blue' if status == 'expanded' else 'red'
+            edges.append({"from": parent, "to": child, "color": color, "arrows": "to"})
 
-            if tree_graph.number_of_nodes() > 0:
-                node_colors = []
-                path_set = set(st.session_state.route_data['path'])
-                for node in tree_graph.nodes():
-                    if node == start:
-                        node_colors.append('lightblue')
-                    elif node == goal:
-                        node_colors.append('orange')
-                    elif node in path_set:
-                        node_colors.append('lightgreen')
-                    else:
-                        # Verifica se é podado (nó que só aparece como destino de aresta 'pruned')
-                        is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
-                        node_colors.append('lightcoral' if is_pruned else 'lightgray')
-                # Layout hierárquico simples (não é perfeito, mas organiza melhor que spring)
-                try:
-                    # Tenta usar layout hierárquico do graphviz (se disponível)
-                    pos = nx.nx_agraph.graphviz_layout(tree_graph, prog='dot')
-                except:
-                    # Fallback para spring layout
-                    pos = nx.spring_layout(tree_graph, seed=42, k=2, iterations=50)
-                fig, ax = plt.subplots(figsize=(12, 8))
-                nx.draw(tree_graph, pos,
-                        node_color=node_colors,
-                        node_size=500,
-                        font_size=8,
-                        arrows=True,
-                        arrowstyle='-|>',
-                        arrowsize=10,
-                        edge_color='black',
-                        width=1,
-                        with_labels=True,
-                        ax=ax)
-                ax.set_title("Árvore de Busca (estrutura da exploração A*)")
-                st.pyplot(fig)
-                st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
-            else:
-                st.info("Nenhuma aresta para exibir.")
-        except Exception as e:
-            st.error(f"Erro ao gerar gráfico: {e}")
-            # Fallback para texto
-            with st.expander("🌲 Ver árvore em formato texto"):
-                children = defaultdict(list)
-                for p, c, s in limited:
-                    children[p].append((c, s))
-                path_set = set(st.session_state.route_data['path'])
-                lines = []
-                stack = [(start, "", True, 0)]
-                seen = set()
-                while stack:
-                    node, pref, last, depth = stack.pop()
-                    if node in seen:
-                        continue
-                    seen.add(node)
-                    if node == start:
-                        lines.append(f"{pref}{'└── ' if last else '├── '}🔵 {node} (ORIGEM)")
-                    elif node == goal:
-                        lines.append(f"{pref}{'└── ' if last else '├── '}🟠 {node} (DESTINO)")
-                    elif node in path_set:
-                        lines.append(f"{pref}{'└── ' if last else '├── '}🟢 {node}")
-                    else:
-                        is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
-                        if is_pruned:
-                            lines.append(f"{pref}{'└── ' if last else '├── '}🔴 {node}")
-                        else:
-                            lines.append(f"{pref}{'└── ' if last else '├── '}⚪ {node}")
-                    new_pref = pref + ("    " if last else "│   ")
-                    ch_list = children.get(node, [])
-                    for i, (ch, _) in enumerate(reversed(ch_list)):
-                        last_ch = (i == len(ch_list)-1)
-                        stack.append((ch, new_pref, last_ch, depth+1))
-                st.code("\n".join(lines), language="text")
+        # Converte para JSON
+        import json
+        nodes_json = json.dumps(list(nodes.values()))
+        edges_json = json.dumps(edges)
+
+        # Gera o HTML com vis-network
+        html_template = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <script type="text/javascript" src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
+            <style>
+                #mynetwork {{
+                    width: 100%;
+                    height: 600px;
+                    border: 1px solid lightgray;
+                    background-color: #f9f9f9;
+                }}
+            </style>
+        </head>
+        <body>
+            <div id="mynetwork"></div>
+            <script>
+                var nodes = new vis.DataSet({nodes_json});
+                var edges = new vis.DataSet({edges_json});
+                var container = document.getElementById('mynetwork');
+                var data = {{ nodes: nodes, edges: edges }};
+                var options = {{
+                    layout: {{
+                        hierarchical: {{
+                            enabled: true,
+                            direction: "UD",
+                            sortMethod: "directed"
+                        }}
+                    }},
+                    edges: {{
+                        smooth: false,
+                        arrows: {{
+                            to: {{ enabled: true, scaleFactor: 0.8 }}
+                        }}
+                    }},
+                    physics: false,
+                    interaction: {{
+                        hover: true,
+                        zoomView: true,
+                        dragView: true
+                    }}
+                }};
+                var network = new vis.Network(container, data, options);
+                network.fit();
+            </script>
+        </body>
+        </html>
+        """
+        st.components.v1.html(html_template, height=650)
+        st.caption("🖱️ Dica: Arraste os nós, use o scroll para zoom. Estrutura hierárquica (origem no topo).")
+        st.caption("Legenda: 🔵 Origem | 🟢 Nós da rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
     else:
         st.info("Calcule uma rota na aba 'Rota' para ver a árvore.")
 
