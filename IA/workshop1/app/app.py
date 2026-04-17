@@ -492,94 +492,93 @@ with tab2:
         max_show = st.slider("Limite de arestas na árvore", 50, 500, 150, 10)
         limited = tree_edges[:max_show]
 
-        # Prepara dados para o vis-network
-        nodes = {}
+        # --- Construir árvore hierárquica manualmente ---
+        # Criar um grafo direcionado
+        G_tree = nx.DiGraph()
+        for parent, child, status in limited:
+            G_tree.add_edge(parent, child, status=status)
+
+        # Calcular profundidade (nível) de cada nó a partir da origem
+        depths = {}
+        if start in G_tree:
+            # Usa BFS para definir níveis
+            queue = [(start, 0)]
+            depths[start] = 0
+            visited = {start}
+            for node, depth in queue:
+                for child in G_tree.successors(node):
+                    if child not in visited:
+                        visited.add(child)
+                        depths[child] = depth + 1
+                        queue.append((child, depth + 1))
+
+        # Se algum nó não foi visitado (desconectado), atribui nível grande
+        for node in G_tree.nodes():
+            if node not in depths:
+                depths[node] = 0
+
+        # Agrupar nós por nível
+        levels = {}
+        for node, d in depths.items():
+            levels.setdefault(d, []).append(node)
+
+        # Ordenar nós dentro de cada nível (para evitar cruzamentos)
+        for lvl in levels:
+            levels[lvl].sort()
+
+        # Calcular posições: x baseado na ordem dentro do nível, y baseado no nível
+        pos = {}
+        for lvl, nodes_in_level in levels.items():
+            # Espaçamento horizontal proporcional ao número de nós
+            spacing = 2.0 / (len(nodes_in_level) + 1)
+            for i, node in enumerate(nodes_in_level):
+                x = -1.0 + (i + 1) * spacing
+                y = -lvl  # nível 0 no topo (y=0), níveis mais profundos y negativo
+                pos[node] = (x, y)
+
+        # Cores dos nós
         path_set = set(st.session_state.route_data['path'])
-        for parent, child, status in limited:
-            for node in (parent, child):
-                if node not in nodes:
-                    if node == start:
-                        color = '#ADD8E6'
-                        label = f"{node} (origem)"
-                    elif node == goal:
-                        color = '#FFA500'
-                        label = f"{node} (destino)"
-                    elif node in path_set:
-                        color = '#90EE90'
-                        label = f"{node}"
-                    else:
-                        is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
-                        color = '#FFB6C1' if is_pruned else '#D3D3D3'
-                        label = f"{node} (podado)" if is_pruned else f"{node}"
-                    nodes[node] = {"id": node, "label": label, "color": color}
-        edges = []
-        for parent, child, status in limited:
-            color = 'blue' if status == 'expanded' else 'red'
-            edges.append({"from": parent, "to": child, "color": color, "arrows": "to"})
+        node_colors = []
+        for node in G_tree.nodes():
+            if node == start:
+                node_colors.append('lightblue')
+            elif node == goal:
+                node_colors.append('orange')
+            elif node in path_set:
+                node_colors.append('lightgreen')
+            else:
+                # verifica se o nó aparece como child de uma aresta 'pruned'
+                is_pruned = any(status == 'pruned' for (_, c, status) in limited if c == node)
+                node_colors.append('lightcoral' if is_pruned else 'lightgray')
 
-        import json
-        nodes_json = json.dumps(list(nodes.values()))
-        edges_json = json.dumps(edges)
+        # Cores das arestas
+        edge_colors = []
+        for u, v, data in G_tree.edges(data=True):
+            edge_colors.append('blue' if data['status'] == 'expanded' else 'red')
 
-        # HTML com configurações aprimoradas para layout de árvore
-        html_template = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <script type="text/javascript" src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
-            <style>
-                #mynetwork {{
-                    width: 100%;
-                    height: 600px;
-                    border: 1px solid lightgray;
-                    background-color: #fafafa;
-                }}
-            </style>
-        </head>
-        <body>
-            <div id="mynetwork"></div>
-            <script>
-                var nodes = new vis.DataSet({nodes_json});
-                var edges = new vis.DataSet({edges_json});
-                var container = document.getElementById('mynetwork');
-                var data = {{ nodes: nodes, edges: edges }};
-                var options = {{
-                    layout: {{
-                        hierarchical: {{
-                            enabled: true,
-                            direction: "UD",          // Up-Down (raiz no topo)
-                            sortMethod: "directed",   // segue direção das arestas
-                            levelSeparation: 150,     // espaçamento vertical entre níveis
-                            nodeSpacing: 100,         // espaçamento horizontal entre nós do mesmo nível
-                            treeSpacing: 200          // espaçamento entre sub-árvores
-                        }}
-                    }},
-                    edges: {{
-                        smooth: false,
-                        arrows: {{
-                            to: {{ enabled: true, scaleFactor: 0.8 }}
-                        }}
-                    }},
-                    physics: false,                   // desliga física (layout fixo)
-                    interaction: {{
-                        hover: true,
-                        zoomView: true,
-                        dragView: true,
-                        dragNodes: true
-                    }}
-                }};
-                var network = new vis.Network(container, data, options);
-                network.fit();
-            </script>
-        </body>
-        </html>
-        """
-        st.components.v1.html(html_template, height=650)
-        st.caption("🖱️ Arraste nós, zoom com scroll. Estrutura hierárquica (origem no topo, filhos abaixo).")
+        # Desenhar
+        import matplotlib.pyplot as plt
+        fig, ax = plt.subplots(figsize=(14, 10))
+        nx.draw(G_tree, pos,
+                node_color=node_colors,
+                edge_color=edge_colors,
+                node_size=800,
+                font_size=8,
+                arrows=True,
+                arrowstyle='-|>',
+                arrowsize=10,
+                width=1.5,
+                with_labels=True,
+                ax=ax)
+        ax.set_title("Árvore de Busca (níveis hierárquicos)", fontsize=14)
+        ax.set_aspect('equal')
+        plt.tight_layout()
+        st.pyplot(fig)
+        st.caption("Estrutura hierárquica: origem no topo, nós expandidos em níveis sucessivos. Setas indicam direção da busca.")
         st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
     else:
         st.info("Calcule uma rota na aba 'Rota' para ver a árvore.")
-
+        
 with tab3:
     st.subheader("📊 Dados da Rede Viária (amostra)")
     sample = []
