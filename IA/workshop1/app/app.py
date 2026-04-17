@@ -492,44 +492,34 @@ with tab2:
         max_show = st.slider("Limite de arestas na árvore", 50, 500, 150, 10)
         limited = tree_edges[:max_show]
 
-        # Tenta pyvis (interativo, hierárquico)
+        # Tenta pyvis (interativo)
         try:
             from pyvis.network import Network
-            import json
-
             net = Network(height="600px", width="100%", directed=True)
-            # Configuração hierárquica (JSON válido)
-            options = {
-                "layout": {
-                    "hierarchical": {
-                        "enabled": True,
-                        "direction": "UD",      # Up-Down
-                        "sortMethod": "directed"
-                    }
-                },
+            # Configuração simplificada (sem hierarquia complexa)
+            net.set_options("""
+            {
                 "edges": {
-                    "arrows": {
-                        "to": {"enabled": True}
-                    },
-                    "smooth": False
+                    "arrows": {"to": true},
+                    "smooth": false
                 },
-                "physics": False
+                "physics": false
             }
-            net.set_options(json.dumps(options))
-
+            """)
+            
             path_set = set(st.session_state.route_data['path'])
             nodes_added = set()
             for parent, child, status in limited:
                 for node in [parent, child]:
                     if node not in nodes_added:
                         if node == start:
-                            color = '#ADD8E6'   # lightblue
+                            color = '#ADD8E6'
                             title = f"{node} (ORIGEM)"
                         elif node == goal:
-                            color = '#FFA500'   # orange
+                            color = '#FFA500'
                             title = f"{node} (DESTINO)"
                         elif node in path_set:
-                            color = '#90EE90'   # lightgreen
+                            color = '#90EE90'
                             title = f"{node}"
                         else:
                             is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
@@ -539,16 +529,15 @@ with tab2:
                         nodes_added.add(node)
                 edge_color = 'blue' if status == 'expanded' else 'red'
                 net.add_edge(parent, child, color=edge_color, title=status)
-
-            # Gera HTML e exibe
+            
             html_content = net.generate_html()
             st.components.v1.html(html_content, height=650)
-            st.caption("🖱️ Arraste os nós, zoom com scroll. Hierarquia: raiz (origem) no topo.")
+            st.caption("🖱️ Arraste os nós, zoom com scroll. As setas indicam a direção da busca.")
             st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
-
+        
         except ImportError:
-            st.warning("Biblioteca 'pyvis' não instalada. Para melhor visualização, instale: `pip install pyvis`")
-            # Fallback para matplotlib
+            st.warning("Biblioteca 'pyvis' não instalada. Instale com: pip install pyvis")
+            # Fallback matplotlib
             import matplotlib.pyplot as plt
             tree_graph = nx.DiGraph()
             for p, c, _ in limited:
@@ -584,7 +573,7 @@ with tab2:
                 st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
             else:
                 st.info("Nenhuma aresta para exibir.")
-
+        
         except Exception as e:
             st.error(f"Erro ao gerar árvore interativa: {e}")
             # Fallback final: texto
