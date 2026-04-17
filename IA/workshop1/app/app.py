@@ -499,16 +499,15 @@ with tab2:
             for node in (parent, child):
                 if node not in nodes:
                     if node == start:
-                        color = '#ADD8E6'      # lightblue
+                        color = '#ADD8E6'
                         label = f"{node} (origem)"
                     elif node == goal:
-                        color = '#FFA500'      # orange
+                        color = '#FFA500'
                         label = f"{node} (destino)"
                     elif node in path_set:
-                        color = '#90EE90'      # lightgreen
+                        color = '#90EE90'
                         label = f"{node}"
                     else:
-                        # verifica se é podado (aparece como child de aresta 'pruned')
                         is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
                         color = '#FFB6C1' if is_pruned else '#D3D3D3'
                         label = f"{node} (podado)" if is_pruned else f"{node}"
@@ -518,12 +517,11 @@ with tab2:
             color = 'blue' if status == 'expanded' else 'red'
             edges.append({"from": parent, "to": child, "color": color, "arrows": "to"})
 
-        # Converte para JSON
         import json
         nodes_json = json.dumps(list(nodes.values()))
         edges_json = json.dumps(edges)
 
-        # Gera o HTML com vis-network
+        # HTML com configurações aprimoradas para layout de árvore
         html_template = f"""
         <!DOCTYPE html>
         <html>
@@ -534,7 +532,7 @@ with tab2:
                     width: 100%;
                     height: 600px;
                     border: 1px solid lightgray;
-                    background-color: #f9f9f9;
+                    background-color: #fafafa;
                 }}
             </style>
         </head>
@@ -549,8 +547,11 @@ with tab2:
                     layout: {{
                         hierarchical: {{
                             enabled: true,
-                            direction: "UD",
-                            sortMethod: "directed"
+                            direction: "UD",          // Up-Down (raiz no topo)
+                            sortMethod: "directed",   // segue direção das arestas
+                            levelSeparation: 150,     // espaçamento vertical entre níveis
+                            nodeSpacing: 100,         // espaçamento horizontal entre nós do mesmo nível
+                            treeSpacing: 200          // espaçamento entre sub-árvores
                         }}
                     }},
                     edges: {{
@@ -559,11 +560,12 @@ with tab2:
                             to: {{ enabled: true, scaleFactor: 0.8 }}
                         }}
                     }},
-                    physics: false,
+                    physics: false,                   // desliga física (layout fixo)
                     interaction: {{
                         hover: true,
                         zoomView: true,
-                        dragView: true
+                        dragView: true,
+                        dragNodes: true
                     }}
                 }};
                 var network = new vis.Network(container, data, options);
@@ -573,8 +575,8 @@ with tab2:
         </html>
         """
         st.components.v1.html(html_template, height=650)
-        st.caption("🖱️ Dica: Arraste os nós, use o scroll para zoom. Estrutura hierárquica (origem no topo).")
-        st.caption("Legenda: 🔵 Origem | 🟢 Nós da rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
+        st.caption("🖱️ Arraste nós, zoom com scroll. Estrutura hierárquica (origem no topo, filhos abaixo).")
+        st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
     else:
         st.info("Calcule uma rota na aba 'Rota' para ver a árvore.")
 
