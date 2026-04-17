@@ -6,7 +6,6 @@ from streamlit_folium import st_folium
 import pandas as pd
 import heapq
 from collections import defaultdict
-import time
 
 st.set_page_config(page_title="GISAI - Pathfinder", layout="wide")
 st.title("📍 GISAI - Pathfinder (OpenStreetMap)")
@@ -133,7 +132,6 @@ def a_star_with_tree(graph, start, goal):
             edge_data = graph.get_edge_data(cur, nb)
             if edge_data is None:
                 continue
-            # Pega o peso (pode ser multi-aresta)
             if isinstance(edge_data, dict) and 'weight' in edge_data:
                 w = edge_data['weight']
             else:
@@ -170,7 +168,9 @@ def geocode_address(address):
 # ------------------- Interface -------------------
 st.sidebar.header("🌍 Seleção da Cidade")
 city_name = st.sidebar.text_input("Nome da cidade (ex: Salvador, Bahia, Brasil)", "Salvador, Bahia, Brasil")
-network_type = st.sidebar.selectbox("Tipo de rede", ["drive", "walk", "bike"], index=0)
+
+# Tipo de rede fixo como 'drive' (sem combobox)
+network_type = "drive"
 
 if st.sidebar.button("Carregar cidade", type="primary"):
     base_graph = load_city_graph(city_name, network_type)
@@ -192,11 +192,11 @@ w_const = st.sidebar.slider("🏗️ Peso Construção (R$/m)", 0.0, 5.0, 1.0, 0
 w_geo = st.sidebar.slider("🌿 Peso Restrições Geográficas", 0.0, 5.0, 1.0, 0.1)
 w_time = st.sidebar.slider("⏱️ Peso Tempo", 0.0, 5.0, 1.0, 0.1)
 underground = st.sidebar.checkbox("🚇 Modo Subterrâneo (Metrô)", False)
-factor = 5.0 if underground else 1.0
 
 st.sidebar.header("📍 Origem / Destino")
-method = st.sidebar.radio("Método", ["Coordenadas", "Buscar endereço"])
+method = st.sidebar.radio("Método", ["Coordenadas", "Buscar endereço", "Clicar no mapa"])
 
+# Inicialização de estados
 if "origin" not in st.session_state:
     st.session_state.origin = None
     st.session_state.dest = None
@@ -204,6 +204,10 @@ if "route_data" not in st.session_state:
     st.session_state.route_data = None
 if "search_tree" not in st.session_state:
     st.session_state.search_tree = None
+if "map_points" not in st.session_state:
+    st.session_state.map_points = []      # lista de (lat, lon, tipo)
+    st.session_state.map_origin = None
+    st.session_state.map_dest = None
 
 if method == "Coordenadas":
     col1, col2 = st.sidebar.columns(2)
@@ -217,7 +221,8 @@ if method == "Coordenadas":
         d_lon = st.number_input("Destino longitude", -38.5322, format="%.6f")
         if st.button("Definir Destino"):
             st.session_state.dest = (d_lat, d_lon)
-else:
+
+elif method == "Buscar endereço":
     addr_o = st.sidebar.text_input("Origem (endereço)", "Luiz Anselmo")
     addr_d = st.sidebar.text_input("Destino (endereço)", "Vila Laura")
     if st.sidebar.button("Geocodificar"):
@@ -233,11 +238,61 @@ else:
         else:
             st.sidebar.error("Destino não encontrado")
 
+else:  # Clicar no mapa
+    st.sidebar.info("Clique no mapa para definir **origem** (primeiro clique) e **destino** (segundo clique).")
+    if st.sidebar.button("🗑️ Limpar pontos"):
+        st.session_state.map_points = []
+        st.session_state.map_origin = None
+        st.session_state.map_dest = None
+        st.session_state.origin = None
+        st.session_state.dest = None
+        st.session_state.route_data = None
+        st.session_state.search_tree = None
+        st.rerun()
+
+    # Centro do mapa baseado nos nós do grafo
+    all_y = [data['y'] for _, data in base.nodes(data=True)]
+    all_x = [data['x'] for _, data in base.nodes(data=True)]
+    if all_y and all_x:
+        map_center = [sum(all_y)/len(all_y), sum(all_x)/len(all_x)]
+    else:
+        map_center = [-12.9714, -38.5014]  # fallback Salvador
+
+    click_map = folium.Map(location=map_center, zoom_start=12)
+    for lat, lon, tipo in st.session_state.map_points:
+        color = "green" if tipo == "origem" else "red"
+        folium.Marker([lat, lon], popup=tipo.capitalize(), icon=folium.Icon(color=color)).add_to(click_map)
+    folium.LatLngPopup().add_to(click_map)
+    output = st_folium(click_map, width='stretch', height=500, key="map_selector")
+
+    if output and output.get('last_clicked'):
+        lat = output['last_clicked']['lat']
+        lon = output['last_clicked']['lng']
+        if st.session_state.map_origin is None:
+            st.session_state.map_origin = (lat, lon)
+            st.session_state.map_points.append((lat, lon, "origem"))
+            st.session_state.origin = (lat, lon)
+            st.success(f"Origem definida: ({lat:.4f}, {lon:.4f})")
+            st.rerun()
+        elif st.session_state.map_dest is None:
+            st.session_state.map_dest = (lat, lon)
+            st.session_state.map_points.append((lat, lon, "destino"))
+            st.session_state.dest = (lat, lon)
+            st.success(f"Destino definido: ({lat:.4f}, {lon:.4f})")
+            st.rerun()
+        else:
+            st.sidebar.warning("Ambos os pontos já definidos. Use 'Limpar pontos'.")
+
+    if st.session_state.origin:
+        st.sidebar.write(f"📍 Origem: {st.session_state.origin[0]:.4f}, {st.session_state.origin[1]:.4f}")
+    if st.session_state.dest:
+        st.sidebar.write(f"🎯 Destino: {st.session_state.dest[0]:.4f}, {st.session_state.dest[1]:.4f}")
+
 st.sidebar.markdown("---")
 if st.session_state.origin:
-    st.sidebar.write(f"📍 Origem: {st.session_state.origin[0]:.4f}, {st.session_state.origin[1]:.4f}")
+    st.sidebar.write(f"📍 Origem atual: {st.session_state.origin[0]:.4f}, {st.session_state.origin[1]:.4f}")
 if st.session_state.dest:
-    st.sidebar.write(f"🎯 Destino: {st.session_state.dest[0]:.4f}, {st.session_state.dest[1]:.4f}")
+    st.sidebar.write(f"🎯 Destino atual: {st.session_state.dest[0]:.4f}, {st.session_state.dest[1]:.4f}")
 
 # Abas
 tab1, tab2, tab3, tab4 = st.tabs(["🗺️ Rota", "🌳 Árvore de Busca", "📊 Dados da Rede", "ℹ️ Sobre"])
@@ -282,7 +337,6 @@ with tab1:
                     else:
                         st.error("Nenhuma rota encontrada.")
     if st.session_state.route_data:
-        # mostra mapa novamente se já calculado
         rc = st.session_state.route_data['coords']
         mid = ((rc[0][0]+rc[-1][0])/2, (rc[0][1]+rc[-1][1])/2)
         m = folium.Map(location=mid, zoom_start=13)
@@ -297,7 +351,7 @@ with tab2:
         st.write(f"**Nós expandidos:** {len(expanded)} | **Nós podados:** {len(pruned)}")
         max_show = st.slider("Limite de arestas na árvore", 50, 500, 150, 10)
         limited = tree_edges[:max_show]
-        # Exibição textual (sem Graphviz)
+        # Exibição textual
         children = defaultdict(list)
         for p, c, s in limited:
             children[p].append((c, s))
