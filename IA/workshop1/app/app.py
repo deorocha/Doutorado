@@ -496,11 +496,13 @@ with tab2:
         try:
             from pyvis.network import Network
             net = Network(height="600px", width="100%", directed=True)
-            # Configuração simplificada (sem hierarquia complexa)
+            # Configuração das setas: usar um dicionário Python (pyvis aceita)
             net.set_options("""
             {
                 "edges": {
-                    "arrows": {"to": true},
+                    "arrows": {
+                        "to": true
+                    },
                     "smooth": false
                 },
                 "physics": false
@@ -536,7 +538,7 @@ with tab2:
             st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🔴 Podados | ⚪ Outros expandidos")
         
         except ImportError:
-            st.warning("Biblioteca 'pyvis' não instalada. Instale com: pip install pyvis")
+            st.warning("Biblioteca 'pyvis' não instalada. Para melhor visualização, instale: `pip install pyvis`")
             # Fallback matplotlib
             import matplotlib.pyplot as plt
             tree_graph = nx.DiGraph()
@@ -610,7 +612,7 @@ with tab2:
                 st.code("\n".join(lines), language="text")
     else:
         st.info("Calcule uma rota na aba 'Rota' para ver a árvore.")
-        
+
 with tab3:
     st.subheader("📊 Dados da Rede Viária (amostra)")
     sample = []
