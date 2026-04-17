@@ -451,42 +451,89 @@ with tab1:
         st_folium(m, width=None, height=500, key="route_map_again")
 
 with tab2:
+    st.subheader("🌳 Árvore de Busca (nós expandidos e podados)")
     if st.session_state.search_tree:
         tree_edges, start, goal, expanded, pruned = st.session_state.search_tree
         st.write(f"**Nós expandidos:** {len(expanded)} | **Nós podados:** {len(pruned)}")
         max_show = st.slider("Limite de arestas na árvore", 50, 500, 150, 10)
         limited = tree_edges[:max_show]
-        children = defaultdict(list)
-        for p, c, s in limited:
-            children[p].append((c, s))
-        path_set = set(st.session_state.route_data['path'])
-        lines = []
-        stack = [(start, "", True, 0)]
-        seen = set()
-        while stack:
-            node, pref, last, depth = stack.pop()
-            if node in seen:
-                continue
-            seen.add(node)
-            if node == start:
-                lines.append(f"{pref}{'└── ' if last else '├── '}🔵 {node} (ORIGEM)")
-            elif node == goal:
-                lines.append(f"{pref}{'└── ' if last else '├── '}🟠 {node} (DESTINO)")
-            elif node in path_set:
-                lines.append(f"{pref}{'└── ' if last else '├── '}🟢 {node}")
-            else:
-                is_pruned = any(s == 'pruned' for (p, c, s) in tree_edges if c == node)
-                if is_pruned:
-                    lines.append(f"{pref}{'└── ' if last else '├── '}🔴 {node}")
+
+        # ---------- VISUALIZAÇÃO GRÁFICA COM MATPLOTLIB ----------
+        # Cria um grafo NetworkX a partir das arestas da árvore
+        tree_graph = nx.DiGraph()
+        for p, c, _ in limited:
+            tree_graph.add_edge(p, c)
+
+        if tree_graph.number_of_nodes() > 0:
+            # Define cores dos nós
+            node_colors = []
+            path_set = set(st.session_state.route_data['path'])
+            for node in tree_graph.nodes():
+                if node == start:
+                    node_colors.append('lightblue')
+                elif node == goal:
+                    node_colors.append('orange')
+                elif node in path_set:
+                    node_colors.append('lightgreen')
                 else:
-                    lines.append(f"{pref}{'└── ' if last else '├── '}⚪ {node}")
-            new_pref = pref + ("    " if last else "│   ")
-            ch_list = children.get(node, [])
-            for i, (ch, _) in enumerate(reversed(ch_list)):
-                last_ch = (i == len(ch_list)-1)
-                stack.append((ch, new_pref, last_ch, depth+1))
-        st.code("\n".join(lines), language="text")
-        st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | ⚪ Expandidos | 🔴 Podados")
+                    # verifica se é podado (nó que só aparece como destino de aresta 'pruned')
+                    is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
+                    node_colors.append('lightcoral' if is_pruned else 'lightgray')
+
+            # Layout (usando spring_layout – não hierárquico, mas funcional)
+            pos = nx.spring_layout(tree_graph, seed=42, k=2, iterations=50)
+
+            # Desenha
+            fig, ax = plt.subplots(figsize=(12, 8))
+            nx.draw(tree_graph, pos,
+                    node_color=node_colors,
+                    node_size=500,
+                    font_size=8,
+                    arrows=True,
+                    arrowstyle='-|>',
+                    arrowsize=10,
+                    edge_color='black',
+                    width=1,
+                    with_labels=True,
+                    ax=ax)
+            ax.set_title("Árvore de Busca (estrutura simplificada)")
+            st.pyplot(fig)
+            st.caption("Legenda: 🔵 Origem | 🟢 Rota ótima | 🟠 Destino | 🟡 Podados | ⚪ Outros expandidos")
+        else:
+            st.info("Nenhuma aresta para exibir.")
+
+        # Mantém a versão textual como expander (opcional)
+        with st.expander("🌲 Ver árvore em formato texto"):
+            children = defaultdict(list)
+            for p, c, s in limited:
+                children[p].append((c, s))
+            path_set = set(st.session_state.route_data['path'])
+            lines = []
+            stack = [(start, "", True, 0)]
+            seen = set()
+            while stack:
+                node, pref, last, depth = stack.pop()
+                if node in seen:
+                    continue
+                seen.add(node)
+                if node == start:
+                    lines.append(f"{pref}{'└── ' if last else '├── '}🔵 {node} (ORIGEM)")
+                elif node == goal:
+                    lines.append(f"{pref}{'└── ' if last else '├── '}🟠 {node} (DESTINO)")
+                elif node in path_set:
+                    lines.append(f"{pref}{'└── ' if last else '├── '}🟢 {node}")
+                else:
+                    is_pruned = any(s == 'pruned' for (p, c, s) in limited if c == node)
+                    if is_pruned:
+                        lines.append(f"{pref}{'└── ' if last else '├── '}🔴 {node}")
+                    else:
+                        lines.append(f"{pref}{'└── ' if last else '├── '}⚪ {node}")
+                new_pref = pref + ("    " if last else "│   ")
+                ch_list = children.get(node, [])
+                for i, (ch, _) in enumerate(reversed(ch_list)):
+                    last_ch = (i == len(ch_list)-1)
+                    stack.append((ch, new_pref, last_ch, depth+1))
+            st.code("\n".join(lines), language="text")
     else:
         st.info("Calcule uma rota na aba 'Rota' para ver a árvore.")
 
