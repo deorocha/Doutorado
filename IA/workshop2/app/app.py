@@ -2,6 +2,7 @@ import streamlit as st
 from ultralytics import YOLO
 from PIL import Image
 import pandas as pd
+from pathlib import Path
 
 # Configurações da página
 st.set_page_config(page_title="Detector de Doenças em Tomates", page_icon="🍅")
@@ -10,16 +11,24 @@ st.set_page_config(page_title="Detector de Doenças em Tomates", page_icon="🍅
 st.title("🍅 Diagnóstico de Doenças em Tomates")
 st.write("Faça o upload de uma foto da folha do tomateiro para identificar possíveis doenças.")
 
+# Definir caminhos relativos à raiz do projeto
+PROJECT_ROOT = Path(__file__).parent
+MODELS_PATH = PROJECT_ROOT / "models"
+MODEL_FILE = MODELS_PATH / "best.pt"
+
 # 1. Carregar o modelo treinado
 @st.cache_resource
 def load_model():
-    model = YOLO('./models/best.pt')
+    if not MODEL_FILE.exists():
+        st.error(f"Modelo não encontrado em: {MODEL_FILE}")
+        st.stop()
+    model = YOLO(str(MODEL_FILE))
     return model
 
 try:
     model = load_model()
 except Exception as e:
-    st.error("Erro ao carregar o modelo. Verifique se o arquivo 'best.pt' está no diretório correto.")
+    st.error(f"Erro ao carregar o modelo: {e}")
     st.stop()
 
 # Dicionário de tradução (inglês -> português)
@@ -59,7 +68,7 @@ if uploaded_file is not None:
         conf_dict_pt = {}
         for i, score in enumerate(probs.data.tolist()):
             nome_ingles = names[i]
-            nome_portugues = TRADUCAO.get(nome_ingles, nome_ingles)  # fallback para inglês
+            nome_portugues = TRADUCAO.get(nome_ingles, nome_ingles)
             conf_dict_pt[nome_portugues] = score * 100
 
         # Ordenar do maior para o menor
