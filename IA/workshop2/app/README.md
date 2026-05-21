@@ -68,7 +68,7 @@ Os resultados obtidos ao término das 50 épocas confirmam a robustez do classif
 
 Abaixo está representada a matriz de classificação gerada pela execução do bloco 10 do notebook (`confusion_matrix.png`), essencial para identificar o nível de confiabilidade do modelo e possíveis padrões de confusão visual entre patologias parecidas (como a *Pinta preta* e a *Mancha-alvo*):
 
-![](./images/confusion_matrix.png width=100)
+![](./images/confusion_matrix.png | width=100)
 ---
 
 ## 🖥️ Funcionalidades do Aplicativo Streamlit (`app.py`)
