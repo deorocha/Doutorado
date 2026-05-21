@@ -68,7 +68,7 @@ Os resultados obtidos ao término das 50 épocas confirmam a robustez do classif
 
 Abaixo está representada a matriz de classificação gerada pela execução do bloco 10 do notebook (`confusion_matrix.png`), essencial para identificar o nível de confiabilidade do modelo e possíveis padrões de confusão visual entre patologias parecidas (como a *Pinta preta* e a *Mancha-alvo*):
 
-*Nota: Certifique-se de manter o arquivo `confusion_matrix.png` na raiz do seu repositório para que ele seja renderizado corretamente no GitHub.*
+![Imagem do Projeto](./images/confusion_matrix.png)
 
 ---
 
@@ -143,6 +143,6 @@ Após a inicialização, o aplicativo abrirá automaticamente uma aba no seu nav
 
 ## 📝 Autores e Referências
 
-* **Desenvolvimento do Modelo e App:** [Seu Nome / Equipe]
+* **Desenvolvimento do Modelo e App:** [André Rocha / Equipe]
 * **Artigo de Referência:** *AI-Enabled Reconfigurable Edge Device for Plant Health Assessment in Greenhouse Environment* (Prabha Sundaravadivel et al., The University of Texas at Tyler / USDA-ARS).
 * **Notebooks de Apoio Base:** Repositórios públicos de referência do Kaggle para detecção de doenças em tomates.
