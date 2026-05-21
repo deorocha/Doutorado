@@ -71,7 +71,7 @@ Abaixo está representada a matriz de classificação gerada pela execução do 
 ![
   <img
     src="./images/confusion_matrix.png"
-    width=70%
+    width=50%
     title="Matriz de confusão"
     alt="Matriz de confusão"
   />
