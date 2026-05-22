@@ -4,6 +4,12 @@ from PIL import Image
 import pandas as pd
 from pathlib import Path
 
+# Replace st.title("My Title") with st.markdown
+st.markdown(
+    '<h1 style="font-size: 20px;">My Custom Title</h1>', 
+    unsafe_allow_html=True
+)
+
 # Configurações da página
 st.set_page_config(page_title="Detector de Doenças em Tomates", page_icon="🍅")
 
