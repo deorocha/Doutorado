@@ -56,8 +56,8 @@ if uploaded_file is not None:
 
     col1, col2 = st.columns([1, 1])
 
-    with col1:
-        st.image(image, caption='Imagem Carregada', use_container_width=True)
+    #with col1:
+    #    st.image(image, caption='Imagem Carregada', use_container_width=True)
 
     # 3. Fazer a Predição
     with st.spinner('Analisando imagem...'):
@@ -76,8 +76,11 @@ if uploaded_file is not None:
         # Ordenar do maior para o menor
         sorted_probs = dict(sorted(conf_dict_pt.items(), key=lambda item: item[1], reverse=True))
 
+    with col1:
+         st.success(f"**Diagnóstico Provável:** {top_class}")
+         st.image(image, caption='Imagem Carregada', use_container_width=True)
+    
     with col2:
-        # st.subheader("Resultados:")
 
         top_class = list(sorted_probs.keys())[0]
         top_score = list(sorted_probs.values())[0]
