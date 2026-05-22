@@ -6,7 +6,7 @@ from pathlib import Path
 
 # Replace st.title("My Title") with st.markdown
 st.markdown(
-    '<h1 style="font-size: 20px;">🍅 Doenças em folhas de tomateiros</h1>', 
+    '<h1 style="font-size: 30px;">🍅 Doenças em folhas de tomateiros</h1>', 
     unsafe_allow_html=True
 )
 
