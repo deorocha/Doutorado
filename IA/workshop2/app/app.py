@@ -8,8 +8,7 @@ from pathlib import Path
 st.set_page_config(page_title="Detector de Doenças em Tomates", page_icon="🍅")
 
 # Título e Descrição
-st.title("🍅 Doenças em Folhas de Tomates")
-# st.write("Faça o upload de uma foto da folha do tomateiro para identificar possíveis doenças.")
+st.title("🍅 Doenças em folhas de tomateiros")
 
 # Definir caminhos relativos à raiz do projeto
 PROJECT_ROOT = Path(__file__).parent
@@ -81,7 +80,8 @@ if uploaded_file is not None:
         top_score = list(sorted_probs.values())[0]
 
         st.success(f"**Diagnóstico Provável:** {top_class}")
-        st.metric(label="Confiança", value=f"{top_score:.2f}%")
+        # st.metric(label="Confiança", value=f"{top_score:.2f}%")
+        st.info(f"Confiança: {top_score:.2f}%")
 
         # Gráfico de barras
         df_probs = pd.DataFrame(list(sorted_probs.items()), columns=['Doença', 'Probabilidade (%)'])
