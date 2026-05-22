@@ -84,16 +84,11 @@ if uploaded_file is not None:
          st.image(image, caption='Imagem Carregada', use_container_width=True)
     
     with col2:
+         st.info(f"Confiança: {top_score:.2f}%")
 
-        col3, col4 = st.columns([1, 1])
-        with col3:
-            st.success(f"**Diagnóstico Provável:** {top_class}")
-        with col4:
-            st.info(f"Confiança: {top_score:.2f}%")
-
-            # Gráfico de barras
-            df_probs = pd.DataFrame(list(sorted_probs.items()), columns=['Doença', 'Probabilidade (%)'])
-            st.bar_chart(df_probs.set_index('Doença'))
+         # Gráfico de barras
+         df_probs = pd.DataFrame(list(sorted_probs.items()), columns=['Doença', 'Probabilidade (%)'])
+         st.bar_chart(df_probs.set_index('Doença'))
 
     # Tabela detalhada
     with st.expander("Ver todas as probabilidades"):
