@@ -77,13 +77,13 @@ if uploaded_file is not None:
         sorted_probs = dict(sorted(conf_dict_pt.items(), key=lambda item: item[1], reverse=True))
 
     with col1:
+         top_class = list(sorted_probs.keys())[0]
+         top_score = list(sorted_probs.values())[0]
+
          st.success(f"**Diagnóstico Provável:** {top_class}")
          st.image(image, caption='Imagem Carregada', use_container_width=True)
     
     with col2:
-
-        top_class = list(sorted_probs.keys())[0]
-        top_score = list(sorted_probs.values())[0]
 
         col3, col4 = st.columns([1, 1])
         with col3:
