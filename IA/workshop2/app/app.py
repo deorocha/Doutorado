@@ -6,12 +6,12 @@ from pathlib import Path
 
 # Replace st.title("My Title") with st.markdown
 st.markdown(
-    '<h1 style="font-size: 30px;">🍅 Doenças em folhas de tomateiros</h1>', 
+    '<h1 style="font-size: 30px;">🍅 Detector de doenças em folhas de tomateiros</h1>', 
     unsafe_allow_html=True
 )
 
 # Configurações da página
-st.set_page_config(page_title="Detector de Doenças em tomateiros", page_icon="🍅")
+st.set_page_config(page_title="Detector de doenças em folhas de tomateiros", page_icon="🍅")
 
 # Definir caminhos relativos à raiz do projeto
 PROJECT_ROOT = Path(__file__).parent
