@@ -66,10 +66,10 @@ Os resultados obtidos ao término das 50 épocas confirmam a robustez do classif
 
 ### Matriz de Correlação
 
-Abaixo está representada a Matriz de Correlação gerada pela execução do bloco 10 (`confusion_matrix.png`), essencial para identificar o nível de confiabilidade do modelo e possíveis padrões de confusão visual entre patologias parecidas (como a *Pinta preta* e a *Mancha-alvo*):
+Abaixo está representada a Matriz de Correlação gerada pela execução do bloco 10 (`correlation_matrix.png`), essencial para identificar o nível de confiabilidade do modelo e possíveis padrões de confusão visual entre patologias parecidas (como a *Pinta preta* e a *Mancha-alvo*):
 
   <img
-    src="./images/confusion_matrix.png"
+    src="./images/correlation_matrix.png"
     width=50%
     title="Matriz de confusão"
     alt="Matriz de confusão"
@@ -151,3 +151,4 @@ Após a inicialização, o aplicativo abrirá automaticamente uma aba no seu nav
 * **Desenvolvimento do Modelo e App:** [André Rocha / Equipe]
 * **Artigo de Referência:** *AI-Enabled Reconfigurable Edge Device for Plant Health Assessment in Greenhouse Environment* (Prabha Sundaravadivel et al., The University of Texas at Tyler / USDA-ARS).
 * **Notebooks de Apoio Base:** Repositórios públicos de referência do Kaggle para detecção de doenças em tomates.
+* **Infoteca-E** Repositório de Informação Tecnológica da EMBRAPA. Disponível em: https://www.infoteca.cnptia.embrapa.br/infoteca/handle/doc/1135499
