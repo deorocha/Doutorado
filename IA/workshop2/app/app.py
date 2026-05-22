@@ -85,7 +85,9 @@ if uploaded_file is not None:
     
     with col2:
          # st.info(f"**Confiança:** {top_score:.2f}%")
-         st.markdown(f"**Confiança:** <span style='font-size: 22pt;'>{top_score:.2f}%</span>", unsafe_allow_html=True)
+         st.info(f"**Confiança:** ### {top_score:.2f}%") 
+         # st.markdown(f"**Confiança:** <span style='font-size: 20pt;'>{top_score:.2f}%</span>", unsafe_allow_html=True)
+         # texto = "**Confiança:** <span style='font-size: 20pt;'>{top_score:.2f}%</span>"
 
          # Gráfico de barras
          df_probs = pd.DataFrame(list(sorted_probs.items()), columns=['Doença', 'Probabilidade (%)'])
