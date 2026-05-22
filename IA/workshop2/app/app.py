@@ -9,7 +9,7 @@ st.set_page_config(page_title="Detector de Doenças em Tomates", page_icon="🍅
 
 # Título e Descrição
 st.title("🍅 Doenças em Folhas de Tomates")
-st.write("Faça o upload de uma foto da folha do tomateiro para identificar possíveis doenças.")
+# st.write("Faça o upload de uma foto da folha do tomateiro para identificar possíveis doenças.")
 
 # Definir caminhos relativos à raiz do projeto
 PROJECT_ROOT = Path(__file__).parent
@@ -47,7 +47,7 @@ TRADUCAO = {
 }
 
 # 2. Upload da Imagem
-uploaded_file = st.file_uploader("Escolha uma imagem de uma folha...", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("Faça o upload de uma foto da folha de tomateiro para identificar possíveis doenças.", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
@@ -75,7 +75,7 @@ if uploaded_file is not None:
         sorted_probs = dict(sorted(conf_dict_pt.items(), key=lambda item: item[1], reverse=True))
 
     with col2:
-        st.subheader("Resultados:")
+        # st.subheader("Resultados:")
 
         top_class = list(sorted_probs.keys())[0]
         top_score = list(sorted_probs.values())[0]
