@@ -77,7 +77,7 @@ Abaixo está representada a Matriz de Correlação gerada pela execução do blo
 
   <img
     src="./images/correlation_matrix.png"
-    width=80%
+    width=100%
     title="Matriz de correlação"
     alt="Matriz de correlação"
   />
