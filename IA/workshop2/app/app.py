@@ -143,7 +143,8 @@ with tab_detector:
             else:
                 st.warning("A confiança do maior resultado está abaixo do limiar mínimo definido.")
             
-            st.image(image_to_predict, caption='Imagem Analisada', use_container_width=True)
+            # st.image(image_to_predict, caption='Imagem Analisada', use_container_width=True)
+            st.image(image_to_predict, caption='Imagem Analisada', width=500)
         
         with col2:
             st.info(f"**Grau de Certeza:** {top_score:.2f}%")
