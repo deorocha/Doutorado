@@ -105,13 +105,17 @@ Para o correto funcionamento do ecossistema, a estrutura de pastas recomendada n
 
 ```bash
 ├── .
-├── app.py                         # Código fonte da interface Streamlit
+├── app.py                            # Código fonte da interface Streamlit
 ├── tomate_treina_modelo_yolo8n.ipynb # Notebook contendo o pipeline de treinamento
-├── confusion_matrix.png           # Imagem da matriz de confusão obtida na validação
-├── requirements.txt               # Lista de dependências do Python
+├── images
+│   ├── confusion_matrix.png          # Imagem da matriz de confusão obtida na validação
+│   ├── metrics.png                   # Grágicos de acurácia
+│   ├── figure_1.png                  # Evolução da 'Accuracy' durante o treinamento
+│   └── figure_2.png                  # Evolução do 'Loss' durante o treinamento
 ├── models/
-│   └── best.pt                    # Pesos do modelo treinado (renomear ou mapear o arquivo gerado)
-└── README.md                      # Documentação do repositório (este arquivo)
+│   └── best.pt                       # Pesos do modelo treinado (renomear ou mapear o arquivo gerado)
+├── requirements.txt                  # Lista de dependências do Python
+└── README.md                         # Documentação do repositório (este arquivo)
 
 ```
 
