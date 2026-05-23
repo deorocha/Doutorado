@@ -64,6 +64,13 @@ O modelo classifica as folhas em **11 categorias distintas**, cobrindo o estado 
 
 Os resultados obtidos ao término das 50 épocas confirmam a robustez do classificador. O script de validação gerou a matriz de confusão oficial abaixo, que avalia o acerto cruzado entre as classes reais (*True*) e as predições geradas pelo modelo (*Predicted*).
 
+  <img
+    src="./images/metrics.png"
+    width=70%
+    title="Acurracy Metrics"
+    alt="Acurracy Metrics"
+  />
+
 ### Matriz de Correlação
 
 Abaixo está representada a Matriz de Correlação gerada pela execução do bloco 10 (`correlation_matrix.png`), essencial para identificar o nível de confiabilidade do modelo e possíveis padrões de confusão visual entre patologias parecidas (como a *Pinta preta* e a *Mancha-alvo*):
@@ -71,8 +78,8 @@ Abaixo está representada a Matriz de Correlação gerada pela execução do blo
   <img
     src="./images/correlation_matrix.png"
     width=50%
-    title="Matriz de confusão"
-    alt="Matriz de confusão"
+    title="Matriz de correlação"
+    alt="Matriz de correlação"
   />
 
 ---
