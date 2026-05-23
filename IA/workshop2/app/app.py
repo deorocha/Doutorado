@@ -120,7 +120,7 @@ tab_detector, tab_info, tab_instrucoes = st.tabs(["🎯 Detector", "📄 Sobre o
 # --- ABA 1: DETECTOR ---
 with tab_detector:
     if image_to_predict:
-        col1, col2 = st.columns([1, 1])
+        col1, col2 = st.columns([1, 2])
 
         with st.spinner('IA analisando a saúde da folha...'):
             results = model.predict(image_to_predict)
@@ -144,7 +144,7 @@ with tab_detector:
                 st.warning("A confiança do maior resultado está abaixo do limiar mínimo definido.")
             
             # st.image(image_to_predict, caption='Imagem Analisada', use_container_width=True)
-            st.image(image_to_predict, caption='Imagem Analisada', width=500)
+            st.image(image_to_predict, caption='Imagem Analisada', width=400)
         
         with col2:
             st.info(f"**Grau de Certeza:** {top_score:.2f}%")
