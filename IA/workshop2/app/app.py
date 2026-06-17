@@ -113,7 +113,7 @@ with st.sidebar:
     min_conf = st.slider("Limiar de Confiança Mínimo (%)", 0, 100, 20)
 
 # --- ÁREA PRINCIPAL (Interface baseada em Abas) ---
-st.markdown('<h1 style="font-size: 35px;">🍅 Sistema de Monitoramento de Tomateiros</h1>', unsafe_allow_html=True)
+st.markdown('<h1 style="font-size: 35px;">🍅 Doenças de Tomateiros</h1>', unsafe_allow_html=True)
 
 tab_detector, tab_info, tab_instrucoes = st.tabs(["🎯 Detector", "📄 Sobre o Projeto", "📖 Instruções"])
 
