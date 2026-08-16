@@ -208,19 +208,19 @@ ALGORITMOS = {
     "Ordem Original": original_order,
     "Vizinho Mais Próximo": nearest_neighbor,
     "Inserção Mais Próxima": nearest_insertion,
-    "2-opt (sobre NN)": lambda pontos: two_opt(pontos, nearest_neighbor(pontos)),
-    "2-opt (sobre inserção)": lambda pontos: two_opt(pontos, nearest_insertion(pontos)),
+    "2-opt/Sobre NN (Nearest Neighbor)": lambda pontos: two_opt(pontos, nearest_neighbor(pontos)),
+    "2-opt/Sobre inserção (Nearest Insertion)": lambda pontos: two_opt(pontos, nearest_insertion(pontos)),
     "Algoritmo Genético": genetic_algorithm,
     "Simulated Annealing": simulated_annealing,
     "Força Bruta": brute_force
 }
 
 # ============================
-# FUNÇÃO PARA GERAR IMAGEM (sem exibir com pyplot)
+# FUNÇÃO PARA GERAR IMAGEM
 # ============================
 def gerar_imagem_bandeja(positions, sensor_str, ordem, pos_atual_idx=None,
                          max_step=None, titulo=""):
-    fig, ax = plt.subplots(figsize=(8, 5))  # reduzido
+    fig, ax = plt.subplots(figsize=(8, 5))
     for i, (x, y) in enumerate(positions):
         ocupado = (sensor_str[i] == '1') if i < len(sensor_str) else False
         cor = 'green' if ocupado else 'lightgray'
@@ -251,13 +251,12 @@ def gerar_imagem_bandeja(positions, sensor_str, ordem, pos_atual_idx=None,
     ax.set_xlim(-20, 420)
     ax.set_ylim(320, -20)
     ax.set_aspect('equal')
-    ax.set_title(titulo, fontsize=10)  # título menor
+    ax.set_title(titulo, fontsize=10)
     ax.grid(True, linestyle='--', alpha=0.3)
     ax.legend(loc='upper right', fontsize=8)
     ax.set_xlabel('X (mm)', fontsize=8)
     ax.set_ylabel('Y (mm)', fontsize=8)
 
-    # Converte para imagem
     buf = io.BytesIO()
     plt.savefig(buf, format='png', dpi=100, bbox_inches='tight')
     buf.seek(0)
@@ -320,7 +319,6 @@ st.title("🧪 Simulador de Escaneamento de Lâminas")
 # --- SIDEBAR ---
 st.sidebar.header("⚙️ Configurações")
 
-# Função para resetar estado ao mudar algoritmo
 def reset_estado():
     for key in ['ordem', 'sensor_str', 'passo', 'finalizado', 'tempo_total',
                 'inicio_animacao', 'distancia_total', 'tempo_calculo']:
@@ -335,9 +333,38 @@ algoritmo_nome = st.sidebar.selectbox(
 seed = st.sidebar.number_input("Seed (para gerar sensores)", value=42, step=1)
 num_ocupados = st.sidebar.slider("Número de lâminas ocupadas", 1, 32, 20)
 velocidade = st.sidebar.slider("Velocidade da animação (segundos/passo)",
-                               0.1, 1.5, 0.3, 0.05)
+                               0.05, 1.5, 0.3, 0.05)
 
-# Botão "Iniciar Scan"
+with st.sidebar.expander("📖 Sobre os Algoritmos", expanded=False):
+    st.markdown("""
+    **Ordem Original** – percorre as lâminas na ordem fixa (linha a linha).  
+    *Baseline para comparação.*
+
+    **Vizinho Mais Próximo** – heurística gulosa: sempre vai para a lâmina mais próxima da posição atual.  
+    *Rápido, mas pode criar cruzamentos.*
+
+    **Inserção Mais Próxima** – constrói a rota inserindo cada lâmina na posição que menos aumenta a distância total.  
+    *Gera rotas iniciais melhores que o Vizinho Mais Próximo.*
+
+    **2-opt/Sobre NN** – aplica a melhoria local 2-opt sobre a rota gerada pelo Vizinho Mais Próximo.  
+    *Elimina cruzamentos e reduz distância, mas depende da rota inicial.*
+
+    **2-opt/Sobre Inserção** – aplica o 2-opt sobre a rota gerada pela Inserção Mais Próxima.  
+    *Parte de uma base melhor, resultando em rotas finais superiores – é a recomendação prática.*
+
+    **Algoritmo Genético** – evolui uma população de rotas usando seleção, crossover (OX) e mutação.  
+    *Encontra soluções de alta qualidade, porém mais lento.*
+
+    **Simulated Annealing** – aceita pioras com probabilidade decrescente para escapar de ótimos locais.  
+    *Robusto e de boa qualidade, sensível aos parâmetros.*
+
+    **Força Bruta** – testa todas as permutações possíveis (exato).  
+    *Só viável para até 10 lâminas.*
+
+    💡 **Diferença entre os 2-opts**:  
+    Ambos usam a mesma técnica de melhoria local, mas **2-opt/Sobre Inserção** parte de uma rota inicial de melhor qualidade, portanto tende a encontrar rotas finais mais curtas.
+    """)
+
 if st.sidebar.button("🚀 Iniciar Scan"):
     reset_estado()
     sensor_str = gerar_sensores(seed=seed, num_ocupados=num_ocupados)
@@ -367,44 +394,42 @@ if st.sidebar.button("🚀 Iniciar Scan"):
     st.session_state['tempo_calculo'] = tempo_calculo
     st.session_state['distancia_total'] = dist_total
     st.session_state['velocidade'] = velocidade
-    st.session_state['passo'] = -1
+    st.session_state['passo'] = 0
     st.session_state['finalizado'] = False
-    st.session_state['inicio_animacao'] = None
+    st.session_state['inicio_animacao'] = time.time()
     st.rerun()
 
-# --- ÁREA PRINCIPAL ---
+# --- ÁREA PRINCIPAL (ANIMAÇÃO SEM PISCA-PISCA) ---
 if 'ordem' in st.session_state and st.session_state.get('ordem', None) is not None:
     ordem = st.session_state['ordem']
     sensor_str = st.session_state['sensor_str']
-    passo = st.session_state.get('passo', -1)
+    passo = st.session_state.get('passo', 0)
     finalizado = st.session_state.get('finalizado', False)
     algoritmo_nome = st.session_state['algoritmo']
 
-    if not finalizado and passo < len(ordem) - 1:
-        if passo == -1:
-            st.session_state['inicio_animacao'] = time.time()
-        novo_passo = passo + 1
-        st.session_state['passo'] = novo_passo
-
-        titulo = f"{algoritmo_nome} - Passo {novo_passo}/{len(ordem)}"
-        img = gerar_imagem_bandeja(positions_mm, sensor_str, ordem,
-                                   pos_atual_idx=novo_passo-1,
-                                   max_step=novo_passo,
-                                   titulo=titulo)
+    if not finalizado:
+        # Se ainda não completou a animação, executa o loop aqui mesmo
         placeholder = st.empty()
-        placeholder.image(img, use_container_width=False, width=700)
+        total_passos = len(ordem)
+        for i in range(passo, total_passos):
+            # Gera imagem do passo atual
+            titulo = f"{algoritmo_nome} - Passo {i+1}/{total_passos}"
+            img = gerar_imagem_bandeja(positions_mm, sensor_str, ordem,
+                                       pos_atual_idx=i,
+                                       max_step=i+1,
+                                       titulo=titulo)
+            placeholder.image(img, use_container_width=False, width=700)
+            time.sleep(velocidade)
+            # Atualiza o passo no estado (para caso haja interrupção)
+            st.session_state['passo'] = i + 1
 
-        time.sleep(velocidade)
-        st.rerun()
+        # Fim da animação
+        st.session_state['finalizado'] = True
+        st.session_state['tempo_total'] = time.time() - st.session_state['inicio_animacao']
+        st.rerun()  # recarrega para mostrar o estado final com métricas
 
     else:
-        if not finalizado and passo == len(ordem) - 1:
-            st.session_state['finalizado'] = True
-            tempo_total = time.time() - st.session_state['inicio_animacao']
-            st.session_state['tempo_total'] = tempo_total
-            st.rerun()
-
-        # Imagem final (rota completa)
+        # Estado final: exibe a imagem completa e as métricas
         img = gerar_imagem_bandeja(positions_mm, sensor_str, ordem,
                                    pos_atual_idx=None,
                                    max_step=None,
@@ -426,7 +451,7 @@ if 'ordem' in st.session_state and st.session_state.get('ordem', None) is not No
             st.rerun()
 
 else:
-    # Estado inicial - apenas a bandeja sem mensagem
+    # Estado inicial
     sensor_exemplo = gerar_sensores(seed=42, num_ocupados=20)
     img = gerar_imagem_bandeja(positions_mm, sensor_exemplo, [],
                                pos_atual_idx=None,
