@@ -310,14 +310,13 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ============================
 # INTERFACE STREAMLIT
-# ============================
 st.set_page_config(layout="wide")
-st.title("🧪 Simulador de Escaneamento de Lâminas")
+# st.title("📊 Comparação de Algoritmos")
 
-# --- SIDEBAR ---
-st.sidebar.header("⚙️ Configurações")
+# SIDEBAR
+st.sidebar.header("📊 Comparação de Algoritmos")
+# st.sidebar.header("⚙️ Configurações")
 
 def reset_estado():
     for key in ['ordem', 'sensor_str', 'passo', 'finalizado', 'tempo_total',
@@ -436,14 +435,15 @@ if 'ordem' in st.session_state and st.session_state.get('ordem', None) is not No
                                    titulo=f"{algoritmo_nome} - Concluído!")
         st.image(img, use_container_width=False, width=700)
 
-        st.success(f"✅ Scan concluído! Tempo total: {st.session_state.get('tempo_total', 0):.2f} s")
-
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
-            st.metric("Lâminas ocupadas", len(ordem))
+            st.success("✅ Scan concluído!")
         with col2:
-            st.metric("Tempo de cálculo", f"{st.session_state.get('tempo_calculo', 0):.4f} s")
+            st.metric("Lâminas ocupadas", len(ordem))
         with col3:
+            # <-- SUBSTITUÍDO "Tempo de cálculo" POR "Tempo total" E USANDO O VALOR DE tempo_total
+            st.metric("Tempo total", f"{st.session_state.get('tempo_total', 0):.2f} s")
+        with col4:
             st.metric("Distância total", f"{st.session_state.get('distancia_total', 0):.2f} mm")
 
         if st.button("🔄 Nova Simulação"):
