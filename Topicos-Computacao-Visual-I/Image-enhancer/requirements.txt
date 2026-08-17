@@ -3,4 +3,4 @@ torch>=2.0.0
 torchvision>=0.15.0
 pillow>=9.0.0
 super-image>=0.2.0
-+opencv-python-headless
+opencv-python-headless
