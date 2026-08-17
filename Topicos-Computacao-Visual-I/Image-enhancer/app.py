@@ -13,7 +13,7 @@ from PIL import Image
 import os
 import tempfile
 import numpy as np
-from super_image import EdsrModel
+from super_image.edsr.model import EdsrModel
 
 st.html(
     """
