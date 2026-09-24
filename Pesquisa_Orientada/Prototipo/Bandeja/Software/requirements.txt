@@ -1,3 +1,0 @@
-streamlit>=1.30
-pyserial>=3.5
-streamlit-autorefresh>=1.0.1
