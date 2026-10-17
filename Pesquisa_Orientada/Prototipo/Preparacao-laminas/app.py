@@ -1,5 +1,3 @@
-# app.py
-
 import json
 from datetime import datetime
 from pathlib import Path
@@ -22,6 +20,8 @@ st.set_page_config(
     layout="wide",
     page_icon="🔬",
 )
+
+DISPLAY_MAX_W = 1400   # largura máxima da imagem enviada ao navegador
 
 # ============================================================
 #                    CSS EXTERNO
@@ -46,18 +46,117 @@ if "current_slide" not in st.session_state:
 STATUS_ICON = {"empty": "⬜", "loaded": "🟦", "prepared": "✅"}
 
 # ============================================================
-#   HELPERS (PDF e Toolbar)
+#   CACHES E HELPERS
 # ============================================================
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def _load_guia_pdf(path_str: str, mtime: float) -> bytes:
     return Path(path_str).read_bytes()
 
 
+@st.cache_data(show_spinner=False, max_entries=1)
+def _load_toolbar_bytes(path_str: str, mtime: float) -> bytes | None:
+    p = Path(path_str)
+    return p.read_bytes() if p.exists() else None
+
+
 def _render_toolbar(width_px: int = 800):
     """Renderiza a barra de ferramentas ilustrativa acima da lâmina."""
-    toolbar_path = Path(__file__).parent / "images" / "toolbar_app.png"
-    if toolbar_path.exists():
-        st.image(str(toolbar_path), width=width_px)
+    p = Path(__file__).parent / "images" / "toolbar_app.png"
+    if not p.exists():
+        return
+    data = _load_toolbar_bytes(str(p), p.stat().st_mtime)
+    if data:
+        st.image(data, width=width_px)
+
+
+def _fit_width(img: np.ndarray, max_width: int) -> tuple[np.ndarray, float]:
+    """Reduz img para caber em max_width. Retorna (img_reduzida, escala)."""
+    h, w = img.shape[:2]
+    if w <= max_width:
+        return img, 1.0
+    scale = max_width / w
+    new_h = int(round(h * scale))
+    return cv2.resize(img, (max_width, new_h),
+                      interpolation=cv2.INTER_AREA), scale
+
+
+def _scale_region(r: dict, scale: float) -> dict:
+    """Escala uma região (x, y, w, h, contour) por `scale`."""
+    out = {
+        "x": int(r["x"] * scale),
+        "y": int(r["y"] * scale),
+        "w": max(1, int(r["w"] * scale)),
+        "h": max(1, int(r["h"] * scale)),
+    }
+    if r.get("contour"):
+        out["contour"] = [
+            [int(px * scale), int(py * scale)] for px, py in r["contour"]
+        ]
+    if "area_px" in r:
+        out["area_px"] = int(r["area_px"] * (scale ** 2))
+    return out
+
+
+@st.cache_data(show_spinner="Carregando imagem...", max_entries=4)
+def _load_slide_base(path_str: str, mtime: float, max_width: int):
+    """Cache: lê a imagem uma única vez, reduz e detecta QR.
+
+    Retorna (img_small, qr_data, scale) ou (None, None, 1.0).
+    `scale = largura_small / largura_original`.
+    """
+    img = cv2.imread(path_str)
+    if img is None:
+        return None, None, 1.0
+    qr_data, _ = read_qr(img)
+    img_small, scale = _fit_width(img, max_width)
+    return img_small, qr_data, scale
+
+
+@st.cache_data(show_spinner="Detectando áreas...", max_entries=16)
+def _detect_small(path_str: str, mtime: float, max_width: int,
+                  params_items: tuple):
+    """Cache: detecção automática na imagem reduzida.
+
+    Escala min_area / padding / kernel proporcionalmente para o espaço
+    da imagem reduzida. Retorna (regions_small, mask_small, scale).
+    """
+    img_small, _, scale = _load_slide_base(path_str, mtime, max_width)
+    if img_small is None:
+        return [], np.zeros((1, 1), np.uint8), 1.0
+
+    params = dict(params_items)
+    # Escalas proporcionais ao quadrado (área) ou linear (distância)
+    params["min_area"] = max(1, int(params["min_area"] * scale * scale))
+    params["padding"] = int(params["padding"] * scale)
+    k = max(1, int(round(params["morph_kernel"] * scale)))
+    if k % 2 == 0:
+        k += 1
+    params["morph_kernel"] = k
+
+    regions, mask = detect_regions(img_small, params)
+    return regions, mask, scale
+
+
+def _save_preparation(tray: int, pos: int, regions_key: str):
+    regs = st.session_state[regions_key]
+    if not regs:
+        st.error("Adicione pelo menos uma região.")
+        return
+    sk_names = ["sat_threshold", "val_threshold", "canny_low",
+                "canny_high", "min_area", "morph_kernel"]
+    params = {
+        k: st.session_state.get(f"p_{k}_{tray}_{pos}", DEFAULT_PARAMS[k])
+        for k in sk_names
+    }
+    params["padding"] = DEFAULT_PARAMS["padding"]
+    update_slide(st.session_state.state, tray, pos, {
+        "scan_mode": "specific",
+        "status": "prepared",
+        "regions": regs,
+        "params": params,
+    })
+    st.session_state.state = load_state()
+    st.success(f"Salvo! {len(regs)} região(ões).")
 
 
 # ============================================================
@@ -99,10 +198,9 @@ with st.sidebar:
                 st.pdf(pdf_bytes, height=520)
                 _rendered = True
             except AttributeError:
-                pass  # Streamlit < 1.49 — sem st.pdf
+                pass
             except StreamlitAPIException:
-                pass  # streamlit-pdf incompatível — fallback abaixo
-
+                pass
             if not _rendered:
                 import base64
                 pdf_b64 = base64.b64encode(pdf_bytes).decode("ascii")
@@ -120,43 +218,7 @@ with st.sidebar:
 
 
 # ============================================================
-#   DETECÇÃO AUTOMÁTICA CACHEADa
-# ============================================================
-@st.cache_data(show_spinner="Detectando áreas...", max_entries=16)
-def _detect_cached(path_str: str, mtime: float, params_items: tuple):
-    img = cv2.imread(path_str)
-    params = dict(params_items)
-    regions, mask = detect_regions(img, params)
-    return regions, mask
-
-
-# ============================================================
-#   SALVAR PREPARAÇÃO (compartilhado entre wand e auto)
-# ============================================================
-def _save_preparation(tray: int, pos: int, regions_key: str):
-    regs = st.session_state[regions_key]
-    if not regs:
-        st.error("Adicione pelo menos uma região.")
-        return
-    sk_names = ["sat_threshold", "val_threshold", "canny_low",
-                "canny_high", "min_area", "morph_kernel"]
-    params = {
-        k: st.session_state.get(f"p_{k}_{tray}_{pos}", DEFAULT_PARAMS[k])
-        for k in sk_names
-    }
-    params["padding"] = DEFAULT_PARAMS["padding"]
-    update_slide(st.session_state.state, tray, pos, {
-        "scan_mode": "specific",
-        "status": "prepared",
-        "regions": regs,
-        "params": params,
-    })
-    st.session_state.state = load_state()
-    st.success(f"Salvo! {len(regs)} região(ões).")
-
-
-# ============================================================
-#        TELA 1 · GRADE 8×2 (lâminas verticais 1"×3")
+#        TELA 1 · GRADE 8×2
 # ============================================================
 def render_tray_grid():
     tray = st.session_state.selected_tray
@@ -184,7 +246,7 @@ def render_tray_grid():
 
 
 # ============================================================
-#                TELA 2 · PREPARAÇÃO DA LÂMINA
+#                TELA 2 · PREPARAÇÃO
 # ============================================================
 def render_slide_prep():
     tray, pos = st.session_state.current_slide
@@ -211,10 +273,15 @@ def render_slide_prep():
             st.rerun()
         return
 
-    img = cv2.imread(str(path))
+    # ---------- carga cacheada (imagem reduzida + QR + escala) ----------
+    _mtime = path.stat().st_mtime
+    img_small, qr_data, scale = _load_slide_base(
+        str(path), _mtime, DISPLAY_MAX_W,
+    )
+    if img_small is None:
+        st.error("Não foi possível carregar a imagem.")
+        return
 
-    # ---------- QR ----------
-    qr_data, _ = read_qr(img)
     if qr_data and slide.get("qr_id") != qr_data:
         update_slide(
             st.session_state.state, tray, pos,
@@ -235,12 +302,9 @@ def render_slide_prep():
         qr_badge = f"QR: `{qr_data}`" if qr_data else "QR: **não detectado**"
         st.markdown(f"{qr_badge} · Status: **{slide['status']}**")
 
-    # ========================================================
-    #    COLUNAS PRINCIPAIS: controles (1/3) | imagem (2/3)
-    # ========================================================
+    # ---------- colunas ----------
     col_ctrl, col_vis = st.columns([1, 2], gap="medium")
 
-    # ---------- controles de nível superior ----------
     with col_ctrl:
         current_mode = slide.get("scan_mode") or "whole"
         scan_mode = st.radio(
@@ -254,7 +318,6 @@ def render_slide_prep():
             horizontal=True,
             key=f"mode_{tray}_{pos}",
         )
-        
         if scan_mode == "specific":
             method = st.radio(
                 "Método",
@@ -266,14 +329,7 @@ def render_slide_prep():
                 horizontal=True,
                 key=f"selmode_{tray}_{pos}",
             )
-            #toolbar_width = st.slider(
-            #    "Largura da barra (px)",
-            #    min_value=100, max_value=1500, value=800, step=50,
-            #    key=f"tbar_w_{tray}_{pos}",
-            #    help="Ajusta o tamanho da barra de ferramentas acima da imagem."
-            #)
             toolbar_width = 300
-            
         else:
             method = None
             toolbar_width = None
@@ -281,10 +337,8 @@ def render_slide_prep():
     # ---------- modo "lâmina inteira" ----------
     if scan_mode == "whole":
         with col_vis:
-            st.image(
-                cv2.cvtColor(img, cv2.COLOR_BGR2RGB),
-                use_container_width=True,
-            )
+            st.image(cv2.cvtColor(img_small, cv2.COLOR_BGR2RGB),
+                     use_container_width=True)
         with col_ctrl:
             st.divider()
             if st.button(
@@ -308,16 +362,18 @@ def render_slide_prep():
         st.session_state[regions_key] = list(slide.get("regions", []))
 
     if method == "wand":
-        render_wand(tray, pos, img, regions_key, col_ctrl, col_vis, toolbar_width)
-    else:
-        render_auto(tray, pos, img, regions_key, slide, path,
+        render_wand(tray, pos, img_small, scale, regions_key,
                     col_ctrl, col_vis, toolbar_width)
+    else:
+        render_auto(tray, pos, path, _mtime, img_small, scale,
+                    regions_key, slide, col_ctrl, col_vis, toolbar_width)
 
 
 # ============================================================
-#          MODO MAGIC WAND
+#          MODO MAGIC WAND (na imagem reduzida)
 # ============================================================
-def render_wand(tray, pos, img, regions_key, col_ctrl, col_vis, toolbar_width):
+def render_wand(tray, pos, img_small, scale, regions_key,
+                col_ctrl, col_vis, toolbar_width):
     thr_k      = f"wand_thr_{tray}_{pos}"
     pad_k      = f"wand_pad_{tray}_{pos}"
     cont_k     = f"wand_cont_{tray}_{pos}"
@@ -333,7 +389,6 @@ def render_wand(tray, pos, img, regions_key, col_ctrl, col_vis, toolbar_width):
     if clahe_k not in st.session_state: st.session_state[clahe_k] = False
     if thick_k not in st.session_state: st.session_state[thick_k] = 1
 
-    # ---------- controles ----------
     with col_ctrl:
         s1, s2 = st.columns(2)
         with s1:
@@ -366,52 +421,69 @@ def render_wand(tray, pos, img, regions_key, col_ctrl, col_vis, toolbar_width):
             help="Espessura das linhas tracejadas que marcam as regiões.",
         )
 
-    # ---------- visualização + click ----------
+    padding_small = max(0, int(round(padding * scale)))
+
+    # ---------- recalcula pendente ANTES de desenhar ----------
     pending = st.session_state.get(pending_k)
-    vis = img.copy()
-    vis = draw_regions(
-        vis, st.session_state[regions_key],
-        color=(0, 180, 0), thickness=thickness,
+    old_sig = st.session_state.get(sig_k)
+    if pending and old_sig:
+        new_sig = (old_sig[0], old_sig[1], threshold, padding,
+                   contiguous, preprocess_val)
+        if old_sig != new_sig:
+            region_small, _ = magic_wand_flood_fill(
+                img_small, old_sig[0], old_sig[1], threshold,
+                padding_small, contiguous, preprocess_val,
+            )
+            if region_small:
+                region_full = _scale_region(region_small, 1.0 / scale)
+                region_full["area_px"] = int(
+                    region_small.get("area_px", 0) / (scale * scale)
+                )
+                st.session_state[pending_k] = region_full
+                pending = region_full
+            else:
+                st.session_state[pending_k] = None
+                pending = None
+            st.session_state[sig_k] = new_sig
+
+    # ---------- desenho (só agora) ----------
+    regions_small = [
+        _scale_region(r, scale)
+        for r in st.session_state[regions_key]
+    ]
+    vis_small = img_small.copy()
+    vis_small = draw_regions(
+        vis_small, regions_small, color=(0, 180, 0), thickness=thickness,
     )
     if pending:
-        vis = draw_regions(
-            vis, [pending], color=(0, 0, 255), thickness=thickness,
+        vis_small = draw_regions(
+            vis_small, [_scale_region(pending, scale)],
+            color=(0, 0, 255), thickness=thickness,
         )
 
     with col_vis:
         _render_toolbar(toolbar_width)
-        coords = clickable_image(
-            vis, key=f"wand_comp_{tray}_{pos}",
-        )
+        coords = clickable_image(vis_small, key=f"wand_comp_{tray}_{pos}")
 
-    # ---------- processa clique / recomputa pendente ----------
-    old_sig = st.session_state.get(sig_k)
-    needs_rerun = False
-
+    # ---------- novo clique ----------
     if coords and coords.get("ts") != st.session_state.get(consumed_k):
         st.session_state[consumed_k] = coords["ts"]
-        sig = (coords["x"], coords["y"], threshold, padding,
+        x_small, y_small = coords["x"], coords["y"]
+        sig = (x_small, y_small, threshold, padding,
                contiguous, preprocess_val)
-        region, _ = magic_wand_flood_fill(
-            img, coords["x"], coords["y"], threshold,
-            padding, contiguous, preprocess_val,
+        region_small, _ = magic_wand_flood_fill(
+            img_small, x_small, y_small, threshold,
+            padding_small, contiguous, preprocess_val,
         )
-        st.session_state[pending_k] = region
-        st.session_state[sig_k] = sig
-        needs_rerun = True
-    elif pending and old_sig:
-        new_sig = (old_sig[0], old_sig[1], threshold, padding,
-                   contiguous, preprocess_val)
-        if old_sig != new_sig:
-            region, _ = magic_wand_flood_fill(
-                img, old_sig[0], old_sig[1], threshold,
-                padding, contiguous, preprocess_val,
+        if region_small:
+            region_full = _scale_region(region_small, 1.0 / scale)
+            region_full["area_px"] = int(
+                region_small.get("area_px", 0) / (scale * scale)
             )
-            st.session_state[pending_k] = region
-            st.session_state[sig_k] = new_sig
-            needs_rerun = True
-
-    if needs_rerun:
+            st.session_state[pending_k] = region_full
+        else:
+            st.session_state[pending_k] = None
+        st.session_state[sig_k] = sig
         st.rerun()
 
     # ---------- ações + Salvar + lista ----------
@@ -448,10 +520,10 @@ def render_wand(tray, pos, img, regions_key, col_ctrl, col_vis, toolbar_width):
 
 
 # ============================================================
-#          MODO DETECÇÃO AUTOMÁTICA
+#          MODO DETECÇÃO AUTOMÁTICA (na imagem reduzida)
 # ============================================================
-def render_auto(tray, pos, img, regions_key, slide, path,
-                col_ctrl, col_vis, toolbar_width):
+def render_auto(tray, pos, path, mtime, img_small, scale,
+                regions_key, slide, col_ctrl, col_vis, toolbar_width):
     sk = {
         "sat_threshold": f"p_sat_threshold_{tray}_{pos}",
         "val_threshold": f"p_val_threshold_{tray}_{pos}",
@@ -469,7 +541,6 @@ def render_auto(tray, pos, img, regions_key, slide, path,
         if key not in st.session_state:
             st.session_state[key] = saved_params.get(k, DEFAULT_PARAMS[k])
 
-    # ---------- controles ----------
     with col_ctrl:
         if st.button("🔄 Valores padrão", use_container_width=True,
                      key=f"reset_{tray}_{pos}"):
@@ -494,35 +565,37 @@ def render_auto(tray, pos, img, regions_key, slide, path,
         "padding", DEFAULT_PARAMS["padding"]
     )
 
-    # ---------- detecção ----------
+    # ---------- detecção cacheada NA IMAGEM REDUZIDA ----------
     params_items = tuple(sorted(current.items()))
-    mtime = path.stat().st_mtime
-    regions_detected, mask = _detect_cached(str(path), mtime, params_items)
+    regions_small, mask_small, _ = _detect_small(
+        str(path), mtime, DISPLAY_MAX_W, params_items,
+    )
 
-    # ---------- imagem + máscara lado a lado ----------
-    vis = draw_regions(img, regions_detected, thickness=thickness)
+    vis_small = draw_regions(img_small.copy(), regions_small,
+                             thickness=thickness)
+
     with col_vis:
         _render_toolbar(toolbar_width)
         col_i, col_m = st.columns(2, gap="small")
         with col_i:
             st.image(
-                cv2.cvtColor(vis, cv2.COLOR_BGR2RGB),
-                caption=f"{len(regions_detected)} área(s)",
+                cv2.cvtColor(vis_small, cv2.COLOR_BGR2RGB),
+                caption=f"{len(regions_small)} área(s)",
                 use_container_width=True,
             )
         with col_m:
             st.image(
-                mask, caption="Máscara",
+                mask_small, caption="Máscara",
                 use_container_width=True, clamp=True,
             )
 
     # ---------- ações + Salvar + lista ----------
     with col_ctrl:
         st.divider()
-        if not regions_detected:
+        if not regions_small:
             st.caption("Nenhuma área acima do limiar.")
         else:
-            st.caption(f"**{len(regions_detected)} área(s) detectada(s)**")
+            st.caption(f"**{len(regions_small)} área(s) detectada(s)**")
             if st.button(
                 "➕ Adicionar todas", type="primary",
                 use_container_width=True,
@@ -533,10 +606,12 @@ def render_auto(tray, pos, img, regions_key, slide, path,
                     for r in st.session_state[regions_key]
                 }
                 added = 0
-                for r in regions_detected:
-                    bbox = (r["x"], r["y"], r["w"], r["h"])
+                for r_small in regions_small:
+                    r_full = _scale_region(r_small, 1.0 / scale)
+                    bbox = (r_full["x"], r_full["y"],
+                            r_full["w"], r_full["h"])
                     if bbox not in existing:
-                        st.session_state[regions_key].append(r)
+                        st.session_state[regions_key].append(r_full)
                         added += 1
                 st.success(f"{added} adicionada(s).")
                 st.rerun()
@@ -544,7 +619,9 @@ def render_auto(tray, pos, img, regions_key, slide, path,
                 "♻️ Substituir lista", use_container_width=True,
                 key=f"auto_sub_{tray}_{pos}",
             ):
-                st.session_state[regions_key] = list(regions_detected)
+                st.session_state[regions_key] = [
+                    _scale_region(r, 1.0 / scale) for r in regions_small
+                ]
                 st.rerun()
 
         if st.button(
