@@ -27,3 +27,73 @@
     margin: 0 !important;
     line-height: 1.1 !important;
 }
+
+/* ============================================================
+   Color picker com swatch retangular (altura da linha do slider)
+
+   O st.color_picker renderiza um "quadrado" ao lado do label. Aqui
+   esticamos esse swatch para largura total da coluna e altura 2.5rem,
+   alinhado com a altura do track do st.slider na coluna ao lado.
+
+   Usamos [class*="st-key-cp_wrap_"] para mirar apenas os color
+   pickers dentro de st.container(key="cp_wrap_..."). Outros
+   color_pickers no app (se houver) permanecem quadrados.
+   ============================================================ */
+[class*="st-key-cp_wrap_"] [data-testid="stColorPicker"] > div:nth-child(2) {
+    width: 100% !important;
+    display: block !important;
+}
+[class*="st-key-cp_wrap_"] [data-testid="stColorPicker"] > div:nth-child(2) > * {
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 2.5rem !important;
+    border-radius: 8px !important;
+    display: block !important;
+}
+[class*="st-key-cp_wrap_"] [data-testid="stColorPicker"] [style*="background-color"] {
+    width: 100% !important;
+    height: 2.5rem !important;
+    border-radius: 8px !important;
+}
+[class*="st-key-cp_wrap_"] [data-testid="stColorPicker"] div[role="button"] {
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 2.5rem !important;
+}
+[class*="st-key-cp_wrap_"] [data-testid="stColorPicker"] div[role="button"] > div {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 8px !important;
+}
+
+/* ============================================================
+   Fundo por status da lâmina (na grade 8×2)
+
+   O status vem do st.container(key="sb_<status>_<tray>_<pos>")
+   que envolve cada botão em render_tray_grid(). O seletor usa
+   *= (substring) para casar com o sufixo de tray/pos.
+
+   - prepared        → verde claro
+   - empty / loaded  → vermelho claro (não configurada)
+   ============================================================ */
+[class*="st-key-sb_prepared"] div[data-testid="stButton"] > button {
+    background: #d4edda !important;
+    border-color: #28a745 !important;
+    color: #155724 !important;
+}
+[class*="st-key-sb_prepared"] div[data-testid="stButton"] > button:hover {
+    background: #c3e6cb !important;
+    border-color: #1e7e34 !important;
+}
+
+[class*="st-key-sb_empty"] div[data-testid="stButton"] > button,
+[class*="st-key-sb_loaded"] div[data-testid="stButton"] > button {
+    background: #f8d7da !important;
+    border-color: #dc3545 !important;
+    color: #721c24 !important;
+}
+[class*="st-key-sb_empty"] div[data-testid="stButton"] > button:hover,
+[class*="st-key-sb_loaded"] div[data-testid="stButton"] > button:hover {
+    background: #f5c6cb !important;
+    border-color: #b02a37 !important;
+}

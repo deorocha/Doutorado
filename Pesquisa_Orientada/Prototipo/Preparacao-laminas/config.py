@@ -1,14 +1,30 @@
 # config.py
 
-"""
-histo_slide_prep/
-├── requirements.txt
-├── app.py
-├── config.py
-├── storage.py
-├── processing.py
-├── qr_utils.py
-└── demo.py
+"""Configuração global do app de Preparação de Lâminas.
+
+ESTRUTURA DOS ARQUIVOS
+    Preparação de lâminas/
+    ├── app.py
+    ├── clickable.py          (componente iframe — CSS interno obrigatório)
+    ├── config.py
+    ├── demo.py
+    ├── processing.py
+    ├── qr_utils.py
+    ├── storage.py
+    ├── styles.css            (CSS da página Streamlit)
+    ├── toolbar.py            (componente iframe — CSS interno obrigatório)
+    ├── requirements.txt
+    ├── data/
+    │   ├── images/
+    │   └── state.json
+    └── images/
+        └── icons/
+            ├── rect.png
+            ├── ellipse.png
+            ├── freedraw.png
+            ├── polygon.png
+            ├── magic_wand.png
+            └── zoom.png
 """
 
 from pathlib import Path
@@ -36,8 +52,13 @@ DEFAULT_PARAMS = {
     "padding":       20,   # margem em volta da bbox
 }
 
+# Cor default dos color pickers (usada em render_manual e render_auto)
+DEFAULT_BORDER_COLOR = "#FFFF00"
+
+
 def image_path(tray: int, pos: int) -> Path:
-    return IMAGES_DIR / f"T{tray:02d}-S{pos:02d}.png"
+    return IMAGES_DIR / f"B{tray:02d}-L{pos:02d}.png"
+
 
 def slide_key(tray: int, pos: int) -> str:
-    return f"T{tray:02d}-S{pos:02d}"
+    return f"B{tray:02d}-L{pos:02d}"
