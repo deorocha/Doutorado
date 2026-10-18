@@ -1,0 +1,441 @@
+{
+  "generated_at": "2026-10-18T02:28:45",
+  "trays": [
+    {
+      "tray_id": 1,
+      "slides": [
+        {
+          "position": 1,
+          "qr_id": null,
+          "scan_mode": "specific",
+          "regions": [
+            {
+              "x": 0,
+              "y": 210,
+              "w": 114,
+              "h": 145
+            },
+            {
+              "x": 193,
+              "y": 297,
+              "w": 144,
+              "h": 152
+            },
+            {
+              "x": 173,
+              "y": 763,
+              "w": 90,
+              "h": 81
+            },
+            {
+              "x": 714,
+              "y": 781,
+              "w": 106,
+              "h": 94
+            },
+            {
+              "x": 722,
+              "y": 57,
+              "w": 179,
+              "h": 169
+            }
+          ],
+          "params": {
+            "sat_threshold": 25,
+            "val_threshold": 230,
+            "canny_low": 50,
+            "canny_high": 150,
+            "min_area": 2000,
+            "morph_kernel": 7,
+            "padding": 20
+          }
+        },
+        {
+          "position": 2,
+          "qr_id": null,
+          "scan_mode": "specific",
+          "regions": [
+            {
+              "x": 66,
+              "y": 0,
+              "w": 158,
+              "h": 138
+            },
+            {
+              "x": 35,
+              "y": 104,
+              "w": 20,
+              "h": 18
+            }
+          ],
+          "params": {
+            "sat_threshold": 25,
+            "val_threshold": 230,
+            "canny_low": 50,
+            "canny_high": 150,
+            "min_area": 2000,
+            "morph_kernel": 7,
+            "padding": 20
+          }
+        },
+        {
+          "position": 3,
+          "qr_id": null,
+          "scan_mode": "whole",
+          "regions": [],
+          "params": {}
+        },
+        {
+          "position": 4,
+          "qr_id": null,
+          "scan_mode": "whole",
+          "regions": [],
+          "params": {}
+        },
+        {
+          "position": 5,
+          "qr_id": null,
+          "scan_mode": "specific",
+          "regions": [
+            {
+              "x": 82,
+              "y": 36,
+              "w": 25,
+              "h": 28
+            },
+            {
+              "x": 41,
+              "y": 18,
+              "w": 31,
+              "h": 32
+            },
+            {
+              "x": 8,
+              "y": 72,
+              "w": 29,
+              "h": 30
+            },
+            {
+              "x": 70,
+              "y": 136,
+              "w": 42,
+              "h": 25
+            }
+          ],
+          "params": {
+            "sat_threshold": 25,
+            "val_threshold": 230,
+            "canny_low": 50,
+            "canny_high": 150,
+            "min_area": 2000,
+            "morph_kernel": 7,
+            "padding": 20
+          }
+        },
+        {
+          "position": 6,
+          "qr_id": null,
+          "scan_mode": "specific",
+          "regions": [
+            {
+              "x": 339,
+              "y": 298,
+              "w": 89,
+              "h": 86
+            },
+            {
+              "x": 436,
+              "y": 120,
+              "w": 137,
+              "h": 145
+            },
+            {
+              "x": 210,
+              "y": 52,
+              "w": 68,
+              "h": 105
+            },
+            {
+              "x": 37,
+              "y": 354,
+              "w": 100,
+              "h": 110
+            },
+            {
+              "x": 653,
+              "y": 364,
+              "w": 226,
+              "h": 168
+            },
+            {
+              "x": 500,
+              "y": 495,
+              "w": 88,
+              "h": 77
+            },
+            {
+              "x": 369,
+              "y": 622,
+              "w": 108,
+              "h": 196
+            },
+            {
+              "x": 301,
+              "y": 759,
+              "w": 119,
+              "h": 136
+            }
+          ],
+          "params": {
+            "sat_threshold": 25,
+            "val_threshold": 230,
+            "canny_low": 50,
+            "canny_high": 150,
+            "min_area": 2000,
+            "morph_kernel": 7,
+            "padding": 20
+          }
+        },
+        {
+          "position": 7,
+          "qr_id": null,
+          "scan_mode": "specific",
+          "regions": [
+            {
+              "x": 139,
+              "y": 366,
+              "w": 79,
+              "h": 71
+            },
+            {
+              "x": 319,
+              "y": 0,
+              "w": 275,
+              "h": 287
+            },
+            {
+              "x": 200,
+              "y": 39,
+              "w": 116,
+              "h": 101
+            },
+            {
+              "x": 689,
+              "y": 349,
+              "w": 164,
+              "h": 211
+            },
+            {
+              "x": 486,
+              "y": 696,
+              "w": 88,
+              "h": 84
+            },
+            {
+              "x": 148,
+              "y": 476,
+              "w": 119,
+              "h": 103
+            }
+          ],
+          "params": {
+            "sat_threshold": 25,
+            "val_threshold": 230,
+            "canny_low": 50,
+            "canny_high": 150,
+            "min_area": 2000,
+            "morph_kernel": 7,
+            "padding": 20
+          }
+        },
+        {
+          "position": 8,
+          "qr_id": null,
+          "scan_mode": "whole",
+          "regions": [],
+          "params": {}
+        },
+        {
+          "position": 10,
+          "qr_id": null,
+          "scan_mode": "specific",
+          "regions": [
+            {
+              "x": 0,
+              "y": 0,
+              "w": 1024,
+              "h": 1024
+            },
+            {
+              "x": 190,
+              "y": 29,
+              "w": 139,
+              "h": 120
+            },
+            {
+              "x": 618,
+              "y": 0,
+              "w": 106,
+              "h": 75
+            },
+            {
+              "x": 588,
+              "y": 292,
+              "w": 60,
+              "h": 62
+            },
+            {
+              "x": 962,
+              "y": 959,
+              "w": 62,
+              "h": 65
+            }
+          ],
+          "params": {
+            "sat_threshold": 25,
+            "val_threshold": 230,
+            "canny_low": 50,
+            "canny_high": 150,
+            "min_area": 2000,
+            "morph_kernel": 7,
+            "padding": 20
+          }
+        },
+        {
+          "position": 12,
+          "qr_id": null,
+          "scan_mode": "specific",
+          "regions": [
+            {
+              "x": 233,
+              "y": 171,
+              "w": 105,
+              "h": 103
+            },
+            {
+              "x": 589,
+              "y": 85,
+              "w": 164,
+              "h": 183
+            },
+            {
+              "x": 438,
+              "y": 407,
+              "w": 69,
+              "h": 83
+            },
+            {
+              "x": 574,
+              "y": 332,
+              "w": 119,
+              "h": 75
+            },
+            {
+              "x": 306,
+              "y": 191,
+              "w": 265,
+              "h": 181
+            },
+            {
+              "x": 398,
+              "y": 764,
+              "w": 188,
+              "h": 95
+            },
+            {
+              "x": 624,
+              "y": 836,
+              "w": 134,
+              "h": 188
+            }
+          ],
+          "params": {
+            "sat_threshold": 25,
+            "val_threshold": 230,
+            "canny_low": 50,
+            "canny_high": 150,
+            "min_area": 2000,
+            "morph_kernel": 7,
+            "padding": 20
+          }
+        },
+        {
+          "position": 15,
+          "qr_id": null,
+          "scan_mode": "specific",
+          "regions": [
+            {
+              "x": 119,
+              "y": 72,
+              "w": 150,
+              "h": 127
+            },
+            {
+              "x": 75,
+              "y": 318,
+              "w": 100,
+              "h": 108
+            },
+            {
+              "x": 202,
+              "y": 383,
+              "w": 88,
+              "h": 76
+            },
+            {
+              "x": 258,
+              "y": 120,
+              "w": 216,
+              "h": 209
+            },
+            {
+              "x": 420,
+              "y": 401,
+              "w": 61,
+              "h": 87
+            },
+            {
+              "x": 594,
+              "y": 287,
+              "w": 91,
+              "h": 95
+            },
+            {
+              "x": 228,
+              "y": 690,
+              "w": 203,
+              "h": 303
+            },
+            {
+              "x": 0,
+              "y": 462,
+              "w": 78,
+              "h": 130
+            },
+            {
+              "x": 180,
+              "y": 538,
+              "w": 85,
+              "h": 84
+            },
+            {
+              "x": 534,
+              "y": 529,
+              "w": 74,
+              "h": 72
+            }
+          ],
+          "params": {
+            "sat_threshold": 25,
+            "val_threshold": 230,
+            "canny_low": 50,
+            "canny_high": 150,
+            "min_area": 2000,
+            "morph_kernel": 7,
+            "padding": 20
+          }
+        }
+      ]
+    }
+  ]
+}
