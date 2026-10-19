@@ -777,7 +777,7 @@ def render_export():
                 if r.get("kind") != "point"
             ]
             slides_out.append({
-                "position": p,
+                "slide_id": p,
                 "qr_id": s.get("qr_id"),
                 "scan_mode": s.get("scan_mode"),
                 "regions": regions_export,
