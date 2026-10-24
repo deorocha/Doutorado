@@ -1,6 +1,6 @@
-streamlit>=1.36
-streamlit-folium>=0.20
-folium>=0.16
+streamlit==1.33.0
+streamlit-folium==0.20.0
+folium==0.16.0
 requests>=2.31
 numpy>=1.26
 pandas>=2.2

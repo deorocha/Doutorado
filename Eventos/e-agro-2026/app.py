@@ -1,42 +1,48 @@
 r"""
-1. ambiente:
+IrrigaCerta — Hackathon E-Agro 2026
+
+# 1. ambiente:
     python -m venv .venv && source .venv/bin/activate
     # Windows: .venv\Scripts\activate
 
-2. instalar dependências
+# 2. instalar dependências
     pip install -r requirements.txt
 
-3. (opcional) puxar dados reais para o cache — rode com internet
+# 3. (opcional) puxar dados reais para o cache — rode com internet
     python -m scripts.prefetch_demo
 
-4. subir o app
+# 4. subir o app
     Windows (cmd):        set IRRIGACERTA_DEMO_MODE=0
     Windows (PowerShell): $env:IRRIGACERTA_DEMO_MODE="0"
     Linux/macOS:          export IRRIGACERTA_DEMO_MODE=0
     streamlit run app.py
-5. limpar cache e arquivo de dados:
+
+# 5. limpar cache e arquivo de dados:
     rmdir /s /q data\cache
     del data\irrigacerta.db
 """
 
+import math
 import os
 import subprocess
 import sys
 from datetime import date, timedelta
 from pathlib import Path
 
+import pandas as pd
 import plotly.graph_objects as go
-
 import streamlit as st
 import folium
 from streamlit_folium import st_folium
 from folium.plugins import Draw
-import pandas as pd
 
 from irrigacerta import config, storage, geo, climate, agronomy, recommender, demo_data
 from irrigacerta.stac import _tem_satelite
 
-st.title("Hackathon - E-Agro 2026 - Recomendação de irrigação")
+# ============================================================
+# PRIMEIRO COMANDO STREAMLIT — deve vir antes de qualquer st.*
+# ============================================================
+st.set_page_config(page_title="IrrigaCerta", page_icon="💧", layout="wide")
 
 # Raiz do projeto — usada como cwd do subprocesso de satélite
 PROJECT_ROOT = Path(__file__).resolve().parent
@@ -54,12 +60,9 @@ EXIT_CODES = {
 
 # ==========================================================================
 # ESTILOS DE MAPA
-# Cada estilo é uma lista de camadas (TileLayer). A primeira camada é o
-# fundo; as seguintes são overlays (rótulos, fronteiras). Para Esri Híbrido,
-# por exemplo, é satélite + rótulos.
 # ==========================================================================
 TILE_PROVIDERS = {
-    # ---------------- Google (via mt1.google.com) ----------------
+    # ---------------- Google ----------------
     "google_sat": {
         "nome": "Google · Satélite",
         "layers": [
@@ -176,19 +179,17 @@ TILE_PROVIDERS = {
     },
 }
 
-# Estilo padrão — híbrido é o mais útil para produtor se orientar
 PROVIDER_DEFAULT = "google_hybrid"
 
-st.set_page_config(page_title="IrrigaCerta", page_icon="💧", layout="wide")
-
+# ============================================================
+# Bootstrap
+# ============================================================
 storage.init_db()
 demo_data.ensure_demo_talhoes()
 
-# Estado da sessão: provider escolhido no sidebar
 if "tile_provider" not in st.session_state:
     st.session_state["tile_provider"] = PROVIDER_DEFAULT
 
-# Nomes dos meses em português — independentes do locale do sistema
 MESES_PT = {
     1: "jan", 2: "fev", 3: "mar", 4: "abr", 5: "mai", 6: "jun",
     7: "jul", 8: "ago", 9: "set", 10: "out", 11: "nov", 12: "dez",
@@ -212,19 +213,25 @@ def _ticks(df, labels, max_ticks=8):
 
 
 def _criar_mapa_folium(lat, lon, zoom, provider_key):
-    """Cria um folium.Map com as camadas do provider escolhido. None se 'nenhum'."""
+    """Cria folium.Map com tiles no construtor (não empilha TileLayer base)."""
     provider = TILE_PROVIDERS.get(provider_key, TILE_PROVIDERS[PROVIDER_DEFAULT])
     if not provider["layers"]:
         return None
 
-    m = folium.Map(location=[lat, lon], zoom_start=zoom, control_scale=True)
-    for layer in provider["layers"]:
+    base = provider["layers"][0]
+    m = folium.Map(
+        location=[lat, lon],
+        zoom_start=zoom,
+        tiles=base["url"],
+        attr=base["attr"],
+    )
+    # Overlays (Esri Híbrido, por exemplo) são camadas separadas
+    for layer in provider["layers"][1:]:
         folium.TileLayer(
             tiles=layer["url"],
             attr=layer["attr"],
-            overlay=layer.get("overlay", False),
+            overlay=True,
             control=False,
-            name=layer.get("name", ""),
         ).add_to(m)
     return m
 
@@ -443,7 +450,6 @@ def render_mapa_talhao(geom, lat, lon, talhao_id: str, altura=450):
             "fillColor": "#00bfff", "fillOpacity": 0.15,
         },
     ).add_to(m)
-    # Key muda com provider para forçar re-render quando troca o estilo
     st_folium(
         m, height=altura, use_container_width=True,
         key=f"map_talhao_{talhao_id}_{provider_key}",
@@ -516,95 +522,245 @@ def _atualizar_satelite(talhao: dict):
 # ---------- página: cadastro ----------
 def render_cadastro():
     st.header("Cadastro de talhão")
-    st.caption(
-        "Desenhe o polígono do talhão no mapa "
-        "(duplo clique fecha o polígono)."
+
+    st.subheader("1. Defina o talhão")
+    metodo = st.radio(
+        "Como você quer definir o talhão?",
+        [
+            "🎨 Desenhar no mapa (recomendado)",
+            "📍 Coordenadas + área",
+            "📁 Upload de GeoJSON/KML",
+        ],
+        horizontal=True,
     )
 
-    col1, col2 = st.columns([2, 1])
-    with col1:
+    geom_info = None
+
+    # =====================================================
+    # Método 1: desenho no mapa
+    # =====================================================
+    if metodo.startswith("🎨"):
+        st.caption(
+            "Desenhe o polígono ou retângulo. Para fechar: clique no primeiro "
+            "ponto de novo (ou dê duplo clique no último)."
+        )
+
+        col_mapa, col_info = st.columns([2, 1])
+        with col_mapa:
+            provider_key = st.session_state.get("tile_provider", PROVIDER_DEFAULT)
+            provider = TILE_PROVIDERS.get(provider_key, TILE_PROVIDERS[PROVIDER_DEFAULT])
+
+            if not provider["layers"]:
+                m = _criar_mapa_folium(
+                    config.DEFAULT_CENTER[0], config.DEFAULT_CENTER[1],
+                    zoom=12, provider_key="osm",
+                )
+                st.caption("⚠️ 'Sem mapa' não permite desenhar. Usando OpenStreetMap.")
+            else:
+                m = _criar_mapa_folium(
+                    config.DEFAULT_CENTER[0], config.DEFAULT_CENTER[1],
+                    zoom=12, provider_key=provider_key,
+                )
+
+            # ATENÇÃO: draw_options é OBRIGATÓRIO neste ambiente — sem ele
+            # o polígono não finaliza (folium 0.16.0 + streamlit-folium 0.20.0).
+            # Círculo desabilitado: vem como Point+radius (não Polygon) e é
+            # filtrado na validação abaixo.
+            Draw(
+                export=True,
+                draw_options={
+                    "polyline": False,
+                    "marker": False,
+                    "circlemarker": False,
+                    "polygon": True,
+                    "rectangle": True,
+                    "circle": True,
+                },
+            ).add_to(m)
+
+            output = st_folium(m, width=700, height=500)
+
+        with col_info:
+            with st.expander("🔍 Debug (o que o mapa retornou)", expanded=False):
+                if output:
+                    st.json({
+                        "tem all_drawings": bool(output.get("all_drawings")),
+                        "n_drawings": len(output.get("all_drawings") or []),
+                        "tipos": [
+                            d.get("geometry", {}).get("type")
+                            for d in (output.get("all_drawings") or [])
+                        ],
+                    })
+                else:
+                    st.caption("output vazio (nenhum desenho ainda)")
+
+            if output and output.get("all_drawings"):
+                polys = [
+                    d for d in output["all_drawings"]
+                    if d.get("geometry", {}).get("type") in ("Polygon", "MultiPolygon")
+                ]
+                if polys:
+                    try:
+                        geom_info = geo.validar_geometria(polys[-1]["geometry"])
+                        st.success(
+                            f"✅ Polígono válido — {geom_info['area_ha']:.2f} ha"
+                        )
+                    except ValueError as e:
+                        st.error(str(e))
+                        geom_info = None
+                else:
+                    st.warning("Desenhe um polígono ou retângulo (outras formas são ignoradas).")
+            else:
+                st.info(
+                    "Aguardando desenho. Se o polígono não fechar, tente "
+                    "**📍 Coordenadas + área**."
+                )
+
+    # =====================================================
+    # Método 2: coordenadas + área
+    # =====================================================
+    elif metodo.startswith("📍"):
+        st.caption(
+            "Informe o centro do talhão e a área aproximada. "
+            "O sistema cria um polígono quadrado ao redor do centro."
+        )
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            lat_c = st.number_input("Latitude", value=-9.40, format="%.6f", step=0.001)
+        with c2:
+            lon_c = st.number_input("Longitude", value=-40.50, format="%.6f", step=0.001)
+        with c3:
+            area_ha = st.number_input("Área (ha)", value=5.0, min_value=0.1, step=0.1)
+
+        lado = math.sqrt(area_ha * 10000) / 111000
+        geom_manual = {
+            "type": "Polygon",
+            "coordinates": [[
+                [lon_c - lado, lat_c - lado],
+                [lon_c + lado, lat_c - lado],
+                [lon_c + lado, lat_c + lado],
+                [lon_c - lado, lat_c + lado],
+                [lon_c - lado, lat_c - lado],
+            ]]
+        }
+        try:
+            geom_info = geo.validar_geometria(geom_manual)
+            st.success(
+                f"✅ Polígono de {geom_info['area_ha']:.2f} ha "
+                f"em ({lat_c:.4f}, {lon_c:.4f})"
+            )
+        except ValueError as e:
+            st.error(str(e))
+
+        # Preview
         provider_key = st.session_state.get("tile_provider", PROVIDER_DEFAULT)
-        provider = TILE_PROVIDERS.get(provider_key, TILE_PROVIDERS[PROVIDER_DEFAULT])
+        m_prev = _criar_mapa_folium(lat_c, lon_c, zoom=15, provider_key=provider_key)
+        if m_prev is not None:
+            folium.GeoJson(
+                geom_manual,
+                style_function=lambda _: {
+                    "color": "#00bfff", "weight": 3,
+                    "fillColor": "#00bfff", "fillOpacity": 0.2,
+                },
+            ).add_to(m_prev)
+            st_folium(m_prev, width=700, height=350)
 
-        # No cadastro, se 'nenhum', usa OSM só para permitir desenho
-        if not provider["layers"]:
-            m = _criar_mapa_folium(
-                config.DEFAULT_CENTER[0], config.DEFAULT_CENTER[1],
-                zoom=12, provider_key="osm",
-            )
-            st.caption(
-                "⚠️ 'Sem mapa' não permite desenhar. Usando OpenStreetMap apenas "
-                "para o cadastro."
-            )
-        else:
-            m = _criar_mapa_folium(
-                config.DEFAULT_CENTER[0], config.DEFAULT_CENTER[1],
-                zoom=12, provider_key=provider_key,
-            )
+    # =====================================================
+    # Método 3: upload de GeoJSON/KML
+    # =====================================================
+    else:
+        uploaded = st.file_uploader(
+            "Arquivo GeoJSON ou KML",
+            type=["geojson", "json", "kml"],
+        )
+        if uploaded:
+            try:
+                if uploaded.name.lower().endswith(".kml"):
+                    import xml.etree.ElementTree as ET
+                    tree = ET.parse(uploaded)
+                    ns = {"kml": "http://www.opengis.net/kml/2.2"}
+                    coords = tree.find(".//kml:coordinates", ns).text.strip()
+                    pts = []
+                    for par in coords.split():
+                        lon_s, lat_s, *_ = par.split(",")
+                        pts.append((float(lon_s), float(lat_s)))
+                    if pts[0] != pts[-1]:
+                        pts.append(pts[0])
+                    geom_upload = {
+                        "type": "Polygon",
+                        "coordinates": [[[p[0], p[1]] for p in pts]],
+                    }
+                else:
+                    import json
+                    data = json.load(uploaded)
+                    if data.get("type") == "FeatureCollection":
+                        geom_upload = data["features"][0]["geometry"]
+                    elif data.get("type") == "Feature":
+                        geom_upload = data["geometry"]
+                    else:
+                        geom_upload = data
 
-        Draw(
-            export=False,
-            draw_options={
-                "polyline": False, "polygon": True, "rectangle": True,
-                "circle": False, "marker": False, "circlemarker": False,
-            },
-        ).add_to(m)
-        desenho = st_folium(m, height=450, use_container_width=True,
-                            key=f"map_cadastro_{provider_key}")
+                geom_info = geo.validar_geometria(geom_upload)
+                st.success(
+                    f"✅ Arquivo lido: polígono de {geom_info['area_ha']:.2f} ha"
+                )
+            except Exception as e:
+                st.error(f"Falha ao ler arquivo: {type(e).__name__}: {e}")
 
-    with col2:
+    # =====================================================
+    # 2. Dados do talhão
+    # =====================================================
+    st.subheader("2. Dados do talhão")
+    c1, c2 = st.columns(2)
+    with c1:
         nome = st.text_input("Nome do talhão", value="Talhão teste")
         cultura = st.selectbox("Cultura", list(config.KC.keys()))
-
         data_plantio = st.date_input(
             "Data de plantio",
             value=date.today() - timedelta(days=60),
-            help="NASA POWER tem latência de ~7 dias. Use datas de plantio com ≥ 8 dias.",
+            help="NASA POWER tem latência de ~7 dias. Use datas com ≥ 8 dias.",
         )
-        if (date.today() - data_plantio).days < 8:
-            st.warning(
-                "Data muito recente. NASA POWER só tem dados até hoje−7; "
-                "o balanço hídrico ficará sem histórico. Use uma data mais antiga."
-            )
-
+    with c2:
         textura = st.selectbox("Textura do solo", list(config.TAW_POR_METRO.keys()))
         sistema = st.selectbox("Sistema de irrigação",
                                ["gotejamento", "aspersao", "pivo", "sulco"])
         vazao = st.number_input("Vazão do sistema (mm/h)", min_value=0.1,
                                 value=5.0, step=0.1)
 
-    geom = None
-    if desenho and desenho.get("all_drawings"):
-        geom = desenho["all_drawings"][0]["geometry"]
-        try:
-            info = geo.validar_geometria(geom)
-            st.success(f"Polígono válido — {info['area_ha']:.2f} ha")
-            if info["area_ha"] > 500:
-                st.warning(
-                    f"Talhão de {info['area_ha']:.0f} ha é grande para NDMI por talhão. "
-                    "Para uma demo realista, desenhe ≤ 500 ha (use zoom alto no mapa)."
-                )
-            geom = info
-        except ValueError as e:
-            st.error(str(e))
-            geom = None
-    else:
-        st.info("Aguardando desenho do talhão no mapa.")
+    if (date.today() - data_plantio).days < 8:
+        st.warning(
+            "Data muito recente. NASA POWER só tem dados até hoje−7; "
+            "o balanço hídrico ficará sem histórico. Use uma data mais antiga."
+        )
 
-    if st.button("Salvar talhão", type="primary", disabled=geom is None):
+    if geom_info and geom_info["area_ha"] > 500:
+        st.warning(
+            f"Talhão de {geom_info['area_ha']:.0f} ha é grande para NDMI por talhão. "
+            "Para demo realista, use ≤ 500 ha."
+        )
+
+    # =====================================================
+    # 3. Salvar
+    # =====================================================
+    st.divider()
+    if st.button("💾 Salvar talhão", type="primary", disabled=geom_info is None):
         tid = storage.criar_talhao(
-            nome=nome, geometry=geom["geometry"], area_ha=geom["area_ha"],
-            cultura=cultura, data_plantio=data_plantio.isoformat(),
-            textura_solo=textura, sistema_irrigacao=sistema,
-            vazao_mm_h=float(vazao), lat=geom["lat"], lon=geom["lon"],
+            nome=nome,
+            geometry=geom_info["geometry"],
+            area_ha=geom_info["area_ha"],
+            cultura=cultura,
+            data_plantio=data_plantio.isoformat(),
+            textura_solo=textura,
+            sistema_irrigacao=sistema,
+            vazao_mm_h=float(vazao),
+            lat=geom_info["lat"],
+            lon=geom_info["lon"],
         )
         st.success(f"Talhão salvo com id `{tid}`. Vá para o Dashboard.")
 
 
 # ---------- página: dashboard (SÓ LÊ CACHE — nunca busca) ----------
 def render_dashboard():
-    # st.header("Dashboard — recomendação de irrigação")
-
     talhoes = storage.listar_talhoes()
     if not talhoes:
         st.warning("Nenhum talhão cadastrado. Vá em **Cadastro** primeiro.")
@@ -671,7 +827,7 @@ def render_dashboard():
             f"**Irrigação:** {talhao['sistema_irrigacao']} ({talhao['vazao_mm_h']} mm/h)"
         )
 
-    # ---- gráficos (um abaixo do outro, responsivos) ----
+    # ---- gráficos (um abaixo do outro) ----
     st.divider()
 
     st.subheader("💧 Água no solo (últimos 60 dias)")
