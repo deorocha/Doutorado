@@ -2,6 +2,7 @@
 
 > **Assistente de irrigação por talhão baseado em satélite, clima e agronomia — para resiliência hídrica no agro.**
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://hackathon-eagro2026.streamlit.app/)
 [![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.33-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![Sentinel-2](https://img.shields.io/badge/Sentinel--2-Copernicus-2E6B3E)](https://www.copernicus.eu/)
@@ -10,11 +11,15 @@
 
 Projeto desenvolvido para o **Hackathon E-Agro 2026** (Salvador/BA, 12–14 de novembro de 2026), na temática de **Resiliência Hídrica no Agro**.
 
+**🌐 Demo ao vivo:** [hackathon-eagro2026.streamlit.app](https://hackathon-eagro2026.streamlit.app/)
+
 ---
 
 ## 📖 Sumário
 
 - [Sobre o projeto](#-sobre-o-projeto)
+- [Demo ao vivo](#-demo-ao-vivo)
+- [Contexto do hackathon](#-contexto-do-hackathon)
 - [O problema](#-o-problema)
 - [A solução](#-a-solução)
 - [Como funciona](#-como-funciona)
@@ -27,8 +32,12 @@ Projeto desenvolvido para o **Hackathon E-Agro 2026** (Salvador/BA, 12–14 de n
 - [Instalação](#-instalação)
 - [Uso](#-uso)
 - [Configuração](#-configuração)
+- [Deploy no Streamlit Cloud](#-deploy-no-streamlit-cloud)
 - [Metodologia agronômica](#-metodologia-agronômica)
 - [Metodologia computacional](#-metodologia-computacional)
+- [Impacto esperado](#-impacto-esperado)
+- [Prova de Conceito (POC)](#-prova-de-conceito-poc)
+- [Pitch](#-pitch)
 - [Limitações conhecidas](#-limitações-conhecidas)
 - [Roadmap](#-roadmap)
 - [Equipe](#-equipe)
@@ -56,6 +65,57 @@ O projeto foi desenhado para funcionar em três modos:
 - 🟢 **Online** — busca dados reais ao vivo.
 - 💾 **Cache** — dados pré-carregados, ideal para demo.
 - 🔌 **Offline (demo mode)** — sem internet, lê apenas o cache local.
+
+---
+
+## 🌐 Demo ao vivo
+
+**[▶️ Acesse o IrrigaCerta em produção](https://hackathon-eagro2026.streamlit.app/)**
+
+O app está deployado no **Streamlit Community Cloud** e roda em **modo demo** (offline), com dois talhões pré-carregados para demonstração imediata:
+
+| Talhão | Cultura | Cenário | Recomendação |
+|---|---|---|---|
+| **Talhão A** | Tomate (Nilo Coelho/PE) | Solo em déficit hídrico | 🔴 **"Regue hoje"** |
+| **Talhão B** | Milho (Nilo Coelho/PE) | Chuva prevista em 48h | 🟦 **"Espere a chuva"** |
+
+> ⚠️ **Modo demo**: para garantir estabilidade na apresentação, a versão pública roda com `IRRIGACERTA_DEMO_MODE=1` — lê apenas o cache local, sem chamadas externas. Para habilitar buscas ao vivo, veja [Deploy no Streamlit Cloud](#-deploy-no-streamlit-cloud).
+
+**O que você pode testar na demo:**
+- ✅ Navegar pelos 2 talhões pré-carregados
+- ✅ Ver recomendação, barra de status e gráficos
+- ✅ Trocar entre 15 estilos de mapa
+- ✅ Cadastrar novos talhões (por desenho, coordenadas ou KML)
+- ⚠️ "Carregar clima" e "Buscar satélite" exigem modo ao vivo (ver acima)
+
+---
+
+## 🎯 Contexto do hackathon
+
+| Item | Detalhe |
+|---|---|
+| **Evento** | Hackathon E-Agro 2026 |
+| **Datas** | 12–14 de novembro de 2026 |
+| **Local** | Centro de Convenções de Salvador (BA) |
+| **Premiação** | R$ 10.000,00 |
+| **Tema principal** | Resiliência Hídrica no Agro |
+| **Formato** | 3 dias — imersão, protótipo, demo day |
+| **Organização** | E-Agro 2026 + Hub Semear / FAEB / SENAR |
+
+### Subtemas atendidos
+
+O IrrigaCerta se encaixa diretamente em **3 dos 5 subtemas** do edital:
+
+- ✅ **1. Irrigação Inteligente e Uso Eficiente da Água** — recomendação de lâmina e frequência de irrigação baseada em dados de satélite e clima.
+- ✅ **2. Monitoramento, Dados e Inteligência Hídrica** — satélite + clima + balanço hídrico em dashboard explicável.
+- ✅ **3. Gestão, Prevenção de Perdas e Adaptação às Secas** — alertas de déficit e linguagem adaptada ao produtor leigo.
+
+### Por que esta solução
+
+- **Problema real**: o produtor irriga "no feeling", desperdiça água/energia, ou perde safra por atraso de dois dias.
+- **MVP viável em 3 dias**: dashboard com mapa + recomendação + gráficos, sem hardware.
+- **Diferencial**: não depende de sensores, usa dados abertos, modelo explicável (não caixa-preta).
+- **Caminho de continuidade**: POC com cooperativa, integração com Hub Semear/FAEB/SENAR.
 
 ---
 
@@ -90,6 +150,14 @@ O **IrrigaCerta** entrega **recomendação diária de irrigação por talhão**,
 - ✅ Funciona **offline** após a primeira busca (cache em JSON).
 - ✅ Todo o processamento de satélite é feito em **subprocesso isolado** — falhas do GDAL não derrubam a aplicação.
 - ✅ Linguagem adaptada ao produtor leigo (não para o técnico).
+
+### Não-escopo (decisões conscientes)
+
+- ❌ **Não construímos hardware** — sensores IoT são caros e complexos para 3 dias.
+- ❌ **Não é "app genérico de gestão"** — foco em **decisão hídrica**, não em finanças, estoque ou CRM.
+- ❌ **Não usamos IA/ML sem dados** — o modelo é FAO-56 (consolidado e explicável), não caixa-preta.
+- ❌ **Um problema, uma persona, um MVP** — produtor irrigante do semiárido baiano.
+- ✅ **Demo offline** — a apresentação roda do cache, sem depender de internet.
 
 ---
 
@@ -231,6 +299,7 @@ flowchart LR
 | **Dados** | pandas + numpy | ≥ 2.2 / 1.26 | Séries e agregação |
 | **Persistência** | SQLite | (nativo) | Zero setup |
 | **Config** | python-dotenv | ≥ 1.0 | `.env` versionável |
+| **Deploy** | Streamlit Community Cloud | — | Deploy gratuito, HTTPS, URL pública |
 
 > **Versões pinadas** (`streamlit==1.33.0`, `streamlit-folium==0.20.0`, `folium==0.16.0`) são necessárias para o correto funcionamento do Leaflet Draw no cadastro. Ver [Limitações conhecidas](#-limitações-conhecidas).
 
@@ -411,11 +480,18 @@ python -m scripts.prefetch_demo
 
 ## ⚙️ Configuração
 
-### Variáveis de ambiente (`.env`)
+### Variáveis de ambiente (`.env` local) e Secrets (Streamlit Cloud)
 
 | Variável | Valores | Padrão | Efeito |
 |---|---|---|---|
 | `IRRIGACERTA_DEMO_MODE` | `0` / `1` | `1` | `1` = só cache (offline); `0` = busca dados reais |
+
+**Ordem de prioridade na leitura:**
+
+1. **Streamlit Secrets** (`st.secrets`) — usado no Streamlit Cloud
+2. Variável de ambiente (`export` / `set`)
+3. Arquivo `.env` (local)
+4. Default: `"1"` (demo)
 
 ### Constantes (`irrigacerta/config.py`)
 
@@ -430,7 +506,92 @@ python -m scripts.prefetch_demo
 
 ### Parâmetros agronômicos
 
-A tabela de **Kc por cultura** (`config.KC`) e a **capacidade de retenção do solo** (`config.TAW_POR_METRO`) são aproximações FAO-56 validadas para o MVP. Para produção, recomenda-se calibrar com dados de campo (ver [Roadmap](#-roadmap)).
+A tabela de **Kc por cultura** (`config.KC`) e a **capacidade de retenção do solo** (`config.TAW_POR_METRO`) são aproximações FAO-56 validadas para o MVP. Para produção, recomenda-se calibrar com dados de campo (ver [POC](#-prova-de-conceito-poc)).
+
+---
+
+## 🚀 Deploy no Streamlit Cloud
+
+O app está disponível em **[hackathon-eagro2026.streamlit.app](https://hackathon-eagro2026.streamlit.app/)**. Abaixo, como replicar o deploy.
+
+### Pré-requisitos
+
+- Repositório público no GitHub
+- Conta em [share.streamlit.io](https://share.streamlit.io) (gratuita)
+
+### Passo a passo
+
+1. **Push do código para o GitHub**
+   ```bash
+   git add .
+   git commit -m "Deploy inicial do IrrigaCerta"
+   git push origin main
+   ```
+
+2. **Conecte o repositório no Streamlit Cloud**
+   - Acesse [share.streamlit.io](https://share.streamlit.io) → **New app**
+   - Selecione o repositório, branch `main` e arquivo `app.py`
+   - Python version: **3.12**
+
+3. **Configure os secrets** (Settings → Secrets)
+   ```toml
+   IRRIGACERTA_DEMO_MODE = "1"
+   ```
+   - `"1"` = **modo demo** (recomendado para apresentação; lê só cache)
+   - `"0"` = **modo ao vivo** (busca satélite/clima ao vivo; mais lento)
+
+4. **Deploy** — clique em **Deploy** e aguarde 2–5 minutos.
+
+### Comportamento no Cloud
+
+| Aspecto | Detalhe |
+|---|---|
+| **Modo padrão** | Demo (`IRRIGACERTA_DEMO_MODE=1`) — previsível e rápido |
+| **Talhões pré-carregados** | `demo_data.ensure_demo_talhoes()` cria Talhão A (tomate, déficit) e Talhão B (milho, chuva) no primeiro acesso |
+| **Persistência** | O diretório `data/` é **efêmero** — caches e talhões criados por visitantes são perdidos entre reinícios |
+| **Sleep** | Free tier dorme após ~15 min inativo; primeira carga após sleep leva ~30 s |
+| **GDAL segfault** | **Não ocorre no Cloud** (Linux); o workaround do subprocesso é específico para Windows |
+| **Rasterio** | Funciona out-of-the-box no Cloud (wheels Linux trazem GDAL estático) |
+| **RAM** | 1 GB (free tier) — suficiente para o app em modo demo |
+
+### Habilitar buscas ao vivo no Cloud (opcional)
+
+Para testar `Carregar clima` / `Buscar satélite` na versão pública:
+
+1. **Settings → Secrets**:
+   ```toml
+   IRRIGACERTA_DEMO_MODE = "0"
+   ```
+2. Reinicie o app.
+
+> ⚠️ **Atenção**: em modo ao vivo, o primeiro fetch de satélite pode levar 3–5 min e consumir RAM (~500 MB). Para o pitch, prefira o modo demo com cache pré-aquecido.
+
+### Ajuste no `config.py` para ler Secrets
+
+Para funcionar tanto localmente (`.env`) quanto no Cloud (`st.secrets`), o `config.py` usa:
+
+```python
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
+
+
+def _get_secret(key: str, default: str = "") -> str:
+    """Prioridade: Streamlit Secrets > env > .env > default."""
+    try:
+        import streamlit as st
+        if key in st.secrets:
+            return str(st.secrets[key])
+    except Exception:
+        pass
+    return os.getenv(key, default)
+
+
+DEMO_MODE = _get_secret("IRRIGACERTA_DEMO_MODE", "1") == "1"
+```
 
 ---
 
@@ -521,6 +682,108 @@ CREATE TABLE talhoes (
 
 ---
 
+## 📊 Impacto esperado (metas a validar em POC)
+
+O IrrigaCerta tem potencial para gerar impacto em três dimensões. As metas abaixo são **hipóteses a validar** na POC (5 propriedades / 60 dias) — **não são promessas**.
+
+### Água e energia
+- **Redução de consumo** de água e energia elétrica sem perda de produtividade.
+- **Detecção precoce** de déficit hídrico antes do estresse visível das plantas.
+
+### Produtividade e renda
+- **Menor risco de perda de safra** por atraso na irrigação.
+- **Priorização** de onde vale investir em sensores (onde o modelo não é suficiente).
+
+### Sustentabilidade e gestão
+- **Dados abertos e gratuitos** (Sentinel-2, NASA POWER, Open-Meteo) — custo próximo de zero.
+- **Explicabilidade**: o produtor entende o "porquê" da recomendação.
+
+### Métricas a acompanhar na POC
+
+| Métrica | Como medir | Meta a validar |
+|---|---|---|
+| Água economizada (mm) | Comparar recomendação vs. manejo atual | — |
+| Energia economizada (kWh) | Vazão × horas de irrigação × tarifa | — |
+| Redução de estresse hídrico | NDMI médio do talhão | — |
+| % de recomendações seguidas | Questionário com produtor | — |
+| NPS do produtor | Escala 0–10 | — |
+
+---
+
+## 💼 Prova de Conceito (POC)
+
+O IrrigaCerta está pronto para ir além do hackathon. A proposta de continuidade é uma **POC com uma cooperativa do semiárido**.
+
+### Escopo proposto
+
+| Item | Detalhe |
+|---|---|
+| **Duração** | 60 dias |
+| **Propriedades** | 5 propriedades irrigantes |
+| **Culturas** | Fruticultura / hortaliça (a definir com a cooperativa) |
+| **Acompanhamento** | Semanal: comparar recomendação vs. manejo atual |
+| **Métricas** | Água/energia economizados, aderência à recomendação, NDMI, NPS |
+
+### O que a POC entrega
+
+1. **Calibração** de `Kc` e `TAW` com dados de campo.
+2. **Validação** da regra de recomendação com agrônomos da cooperativa.
+3. **Coleta de feedback** sobre usabilidade do dashboard (produtor leigo).
+4. **Base para expansão**: 5 → 50 → 500 talhões.
+5. **Indicação** de onde sensores físicos agregam valor (modelo + sensor híbrido).
+
+### Parceiros-alvo
+
+- **Cooperativas** do polo Petrolina/Juazeiro (fruticultura irrigada).
+- **Hub Semear** — conexão com o ecossistema de inovação do agro baiano.
+- **FAEB / SENAR** — capilaridade para extensionismo rural.
+- **Embrapa Semiárido** — validação agronômica.
+
+### O que pedimos ao final do hackathon
+
+- 🎯 **Conexão** com 1 cooperativa do semiárido.
+- 🎯 **Mentoria agronômica** para calibrar Kc/solo.
+- 🎯 **Apoio** na estruturação da POC (documentação, indicadores, cronograma).
+
+---
+
+## 🎤 Pitch
+
+> Roteiro completo em `docs/pitch.md` (a ser criado) ou na apresentação em PDF.
+
+### Estrutura de 8 slides (3 minutos)
+
+| Slide | Tempo | Conteúdo |
+|---|---|---|
+| **1. Abertura** | 0:00–0:20 | "O produtor decide quando irrigar olhando o céu. Às vezes desperdiça água e energia; às vezes perde a safra. O IrrigaCerta resolve isso com dados que já existem de graça." |
+| **2. Persona e dor** | 0:20–0:45 | "Seu João, 20 ha de tomate em Juazeiro, gotejamento. Quer saber: **quando irrigar? quanto? está perdendo água?**" |
+| **3. Solução — DEMO** | 0:45–1:15 | Talhão A: "Regue 12 mm hoje (~2h10)". Talhão B: "Aguarde — 18 mm em 48h". "Satélite + clima + FAO-56. Sem hardware." |
+| **4. Como funciona** | 1:15–1:45 | Satélite (NDVI/NDMI) → Clima → Agronomia → Recomendação. "Modelo explicável, não caixa-preta." |
+| **5. Diferencial** | 1:45–2:00 | "Sem sensor, dados abertos, foco em decisão hídrica. Não é mais um app de gestão." |
+| **6. Impacto e validação** | 2:00–2:20 | "Meta a validar em POC: reduzir consumo sem perder produtividade. Validamos com mentor agrônomo." |
+| **7. Continuidade** | 2:20–2:40 | "POC com 5 propriedades por 60 dias via cooperativa, integrada ao Hub Semear/FAEB/SENAR." |
+| **8. Equipe e pedido** | 2:40–3:00 | "Computação + Agronomia + Produto. Pedido: POC com cooperativa e mentoria para calibrar modelo." |
+
+### Frases-chave
+
+- 💬 *"Ele não precisa de mais um sensor caro. Precisa de uma resposta."*
+- 💬 *"O produtor vê uma recomendação. Por trás, um modelo explicável — não uma caixa-preta."*
+- 💬 *"Não é mais um app de gestão. É decisão hídrica barata e explicável."*
+- 💬 *"A solução já está no ar: [hackathon-eagro2026.streamlit.app](https://hackathon-eagro2026.streamlit.app/)."*
+
+### Q&A preparado
+
+| Pergunta | Resposta curta |
+|---|---|
+| "E se tiver nuvem?" | "Mediana de 30 dias + clima como espinha dorsal; satélite é reforço." |
+| "Qual a acurácia?" | "FAO-56 é padrão consolidado; meta da POC é calibrar Kc e solo com campo." |
+| "Por que não usar sensor?" | "Sensor é ótimo, mas caro. Começamos sem hardware e indicamos onde ele agrega." |
+| "Modelo de negócio?" | "Assinatura por talhão/cooperativa + diagnóstico; dados abertos mantêm custo baixo." |
+| "LGPD?" | "Dados do produtor só com consentimento; polígono é dado sensível." |
+| "Como validar rápido?" | "POC de 60 dias com 5 propriedades, comparando recomendação vs. manejo atual." |
+
+---
+
 ## ⚠️ Limitações conhecidas
 
 | Limitação | Impacto | Contorno |
@@ -534,6 +797,8 @@ CREATE TABLE talhoes (
 | **Kc do café** debatido | Recomendação imprecisa | Validar com mentor ou remover da demo |
 | **Demo em pasta OneDrive** | Streamlit perde conexão (watcher) | Rodar em pasta local (`C:\dev\...`) |
 | **Sem calibração de campo** | Recomendação segue FAO-56 puro | POC para calibrar Kc e solo |
+| **Streamlit Cloud** tem `data/` efêmero | Caches criados por visitantes somem | Demo talhões são recriados a cada restart |
+| **Streamlit Cloud** free tier dorme | Primeira carga após sleep: ~30 s | Esperado; mencionar no pitch |
 
 ---
 
@@ -609,6 +874,6 @@ Este projeto está licenciado sob a **MIT License** — consulte o arquivo [LICE
 
 **Feito com 💧 para um agro mais resiliente, eficiente e sustentável.**
 
-[⬆ Voltar ao topo](#-irrigacerta)
+**[🌐 Teste a demo](https://hackathon-eagro2026.streamlit.app/) · [⬆ Voltar ao topo](#-irrigacerta)**
 
 </div>
