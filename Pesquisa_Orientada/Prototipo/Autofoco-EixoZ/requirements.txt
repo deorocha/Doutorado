@@ -1,0 +1,12 @@
+# Interface
+streamlit>=1.32,<1.40
+
+# Processamento de imagem e dados
+opencv-python-headless>=4.8,<5.0
+numpy>=1.24,<3.0
+pandas>=2.0,<3.0
+matplotlib>=3.7,<4.0
+
+# Hardware (usado só no modo local; no Cloud falha graciosamente)
+pyserial>=3.5
+requests>=2.31
