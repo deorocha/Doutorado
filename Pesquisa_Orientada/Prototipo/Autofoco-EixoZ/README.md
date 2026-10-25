@@ -531,12 +531,13 @@ completo. Uso acadêmico e comercial permitido, com atribuição.
 
 ## 👤 Autor
 
-**André [Sobrenome]**
-Doutorado em Ciência da Computação — PGCOMP/UFBA
-📧 andre@exemplo.br
+**André Rocha**
+Doutorando em Ciência da Computação — PGCOMP/UFBA
+📧 rocha.a@ufba.br
 
 ## 🙏 Agradecimentos
 
+- Meu orientador de Doutorado, o Prof. Dr. Luciano Oliveira
 - Comunidade open-source do Streamlit, OpenCV e NumPy
 - Projeto [OpenFlexure](https://openflexure.org/) — referência de microscopia open-hardware
 - [OpenWSI](https://github.com/AndyFooGuo/OpenWSI) — referência de scanner de baixo custo
