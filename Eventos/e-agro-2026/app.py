@@ -54,7 +54,7 @@ EXIT_CODES = {
     2: "argumentos inválidos",
     3: "talhão não encontrado",
     4: "rasterio/numpy não instalados — `pip install rasterio numpy`",
-    5: f"nenhuma cena válida nos últimos {getattr(config, 'DIAS_SATELITE_DEFAULT', 60)} dias (verifique coordenadas e nuvem)",
+    5: f"nenhuma cena válida nos últimos {getattr(config, 'DIAS_SATELITE_DEFAULT', 90)} dias (verifique coordenadas e nuvem)",
     6: "modo demo ativo no subprocesso (.env ausente?)",
 }
 
@@ -473,8 +473,15 @@ def _atualizar_clima(talhao: dict):
         st.error(f"Falha: {_err}")
 
 
-def _atualizar_satelite(talhao: dict):
-    """Roda em subprocesso para isolar eventuais segfaults de rasterio/GDAL."""
+def _atualizar_satelite(talhao: dict, usar_expander: bool = True):
+    """
+    Roda em subprocesso para isolar eventuais segfaults de rasterio/GDAL.
+
+    Parâmetro usar_expander:
+      - True  → abre um st.expander com o log (padrão, para uso fora de expanders)
+      - False → mostra o log direto com st.code (para uso DENTRO de expanders,
+                pois Streamlit não permite expander dentro de expander)
+    """
     if config.DEMO_MODE:
         st.error("Modo demo LIGADO. Use `IRRIGACERTA_DEMO_MODE=0`.")
         return
@@ -486,7 +493,7 @@ def _atualizar_satelite(talhao: dict):
     env["PYTHONIOENCODING"] = "utf-8"
     env["PYTHONUTF8"] = "1"
 
-    dias = getattr(config, "DIAS_SATELITE_DEFAULT", 60)
+    dias = getattr(config, "DIAS_SATELITE_DEFAULT", 90)
 
     with st.spinner("Buscando Sentinel-2 em subprocesso (1–5 min)..."):
         try:
@@ -505,7 +512,15 @@ def _atualizar_satelite(talhao: dict):
             st.error("Timeout (>10 min). Reduza `MAX_CENAS_PROCESSAR` em `config.py`.")
             return
 
-    with st.expander("Log do subprocesso (stdout / stderr)"):
+    # Log: expander só quando NÃO estiver aninhado em outro expander
+    if usar_expander:
+        with st.expander("Log do subprocesso (stdout / stderr)"):
+            st.markdown("**stdout:**")
+            st.code((proc.stdout or "").strip() or "(vazio)")
+            st.markdown("**stderr:**")
+            st.code((proc.stderr or "").strip() or "(vazio)")
+    else:
+        st.markdown("**Log do subprocesso:**")
         st.markdown("**stdout:**")
         st.code((proc.stdout or "").strip() or "(vazio)")
         st.markdown("**stderr:**")
@@ -717,7 +732,7 @@ def render_cadastro():
         cultura = st.selectbox("Cultura", list(config.KC.keys()))
         data_plantio = st.date_input(
             "Data de plantio",
-            value=date.today() - timedelta(days=60),
+            value=date.today() - timedelta(days=90),
             help="NASA POWER tem latência de ~7 dias. Use datas com ≥ 8 dias.",
         )
     with c2:
@@ -830,7 +845,7 @@ def render_dashboard():
     # ---- gráficos (um abaixo do outro) ----
     st.divider()
 
-    st.subheader("💧 Água no solo (últimos 60 dias)")
+    st.subheader("💧 Água no solo (últimos 90 dias)")
     if balanco:
         fig = _grafico_balanco_plotly(balanco)
         st.plotly_chart(fig, use_container_width=True, key="graf_balanco")
@@ -903,8 +918,8 @@ O **NDMI** (Índice de Umidade por Diferença Normalizada) mede a quantidade de 
                 _atualizar_clima(talhao)
         with col_c:
             if st.button("🛰️ Re-buscar satélite"):
-                _atualizar_satelite(talhao)
-
+                # Dentro de um expander → não pode abrir outro expander
+                _atualizar_satelite(talhao, usar_expander=False)
 
 # ---------- página: sobre ----------
 def render_sobre():
@@ -918,7 +933,7 @@ e **agronomia** (balanço hídrico FAO-56, Kc por cultura) para dizer **quando e
 
 **Diferencial.** Sem sensor; dados abertos; recomendação explicável.
 
-**Próximo passo.** POC com cooperativa (5 propriedades / 60 dias), integrada ao Hub Semear/FAEB/SENAR.
+**Próximo passo.** POC com cooperativa (5 propriedades / 90 dias), integrada ao Hub Semear/FAEB/SENAR.
         """
     )
 
