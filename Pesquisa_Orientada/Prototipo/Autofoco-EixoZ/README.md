@@ -537,7 +537,7 @@ Doutorando em Ciência da Computação — PGCOMP/UFBA
 
 ## 🙏 Agradecimentos
 
-- Meu orientador de Doutorado, o Prof. Dr. Luciano Oliveira
+- Meu orientador de Doutorado, Prof. Dr. Luciano Oliveira
 - Comunidade open-source do Streamlit, OpenCV e NumPy
 - Projeto [OpenFlexure](https://openflexure.org/) — referência de microscopia open-hardware
 - [OpenWSI](https://github.com/AndyFooGuo/OpenWSI) — referência de scanner de baixo custo
