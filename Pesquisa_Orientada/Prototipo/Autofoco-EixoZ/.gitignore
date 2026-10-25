@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Dados gerados pelo app
+autofocus_images/
+*.csv
+!docs/*.csv
+
+# Sistema
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# LaTeX / tese (se dentro do mesmo repo)
+*.aux
+*.log
+*.out
