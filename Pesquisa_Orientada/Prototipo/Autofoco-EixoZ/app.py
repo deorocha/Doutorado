@@ -1,15 +1,18 @@
 """
 streamlit_autofocus.py — Autofoco Z com 4 métricas em interface Streamlit.
 
-Versão 2.5 — correções aplicadas:
-  - Nova aba "📊 Histogramas" (pico por métrica + comparação foco vs. desfoque).
+Versão 2.7 — correções aplicadas:
+  - Seção de resultados usa st.radio persistente em vez de st.tabs
+    (st.tabs resetava para a 1ª aba ao interagir com widgets internos).
+  - Modo Mock: upload de imagem de referência (.png/.jpg/.jpeg/.tif/.tiff).
+  - Aba "📊 Histogramas" (pico por métrica + comparação foco vs. desfoque).
   - Medição de tempo por métrica (acurácia + tempo comparados).
   - Tabela formatada (coarse/refine explicados, decimais consistentes).
   - Gráfico não aparece duplicado (placeholders limpos ao final do sweep).
   - Melhores imagens em grade 2×2.
 
 Hardware:
-  - Mock (demo): sem hardware.
+  - Mock (demo): sem hardware; aceita imagem de referência.
   - ESP8266 Serial USB: Wemos D1 R2 + ZAxis_Nema17_Wemos.ino.
   - ESP8266 WiFi (HTTP): mesmo firmware, interface HTTP.
 
@@ -150,6 +153,83 @@ def _open_serial_robust(port: str, baud: int = 115200,
 # 3) Hardware — Mock
 # ======================================================================
 
+def _prepare_base_image(img: np.ndarray, max_dim: int = 1280) -> np.ndarray:
+    """Redimensiona a imagem se passar de max_dim no maior lado.
+
+    Preserva aspect ratio. Não força grayscale — mantém colorida se for.
+    """
+    h, w = img.shape[:2]
+    if max(h, w) > max_dim:
+        scale = max_dim / max(h, w)
+        new_w = max(1, int(round(w * scale)))
+        new_h = max(1, int(round(h * scale)))
+        img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
+    return img
+
+
+def _load_uploaded_image(uploaded_file) -> Optional[np.ndarray]:
+    """Carrega imagem do st.file_uploader.
+
+    Aceita PNG, JPEG, TIFF (8 ou 16 bits).
+    Retorna ndarray (grayscale 2D ou BGR 3D), dtype uint8.
+    Retorna None se falhar.
+    """
+    if uploaded_file is None:
+        return None
+    try:
+        file_bytes = np.frombuffer(uploaded_file.read(), dtype=np.uint8)
+
+        # 1) OpenCV primeiro (funciona para PNG, JPEG, muitos TIFFs)
+        img = cv2.imdecode(file_bytes, cv2.IMREAD_UNCHANGED)
+
+        # 2) Fallback para PIL (alguns TIFFs comprimidos que cv2 não abre)
+        if img is None:
+            try:
+                import io
+                from PIL import Image
+                pil_img = Image.open(io.BytesIO(file_bytes))
+                if pil_img.mode == "P":
+                    pil_img = pil_img.convert("RGB")
+                arr = np.array(pil_img)
+                if arr.ndim == 3 and arr.shape[2] == 3:
+                    arr = cv2.cvtColor(arr, cv2.COLOR_RGB2BGR)
+                img = arr
+            except ImportError:
+                pass
+            except Exception:
+                pass
+
+        if img is None:
+            return None
+
+        # 3) Normaliza dtype → uint8
+        if img.dtype == np.uint16:
+            img = np.clip(img / 257.0, 0, 255).astype(np.uint8)
+        elif img.dtype != np.uint8:
+            img_f = img.astype(np.float64)
+            rng = img_f.max() - img_f.min()
+            if rng < 1e-9:
+                img = np.zeros(img_f.shape, dtype=np.uint8)
+            else:
+                img = (((img_f - img_f.min()) / rng) * 255.0).astype(np.uint8)
+
+        # 4) Remove canal alpha (BGRA → BGR)
+        if img.ndim == 3 and img.shape[2] == 4:
+            img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
+
+        # 5) Rejeita formatos inesperados
+        if img.ndim not in (2, 3):
+            return None
+        if img.ndim == 3 and img.shape[2] not in (1, 3):
+            return None
+        if img.ndim == 3 and img.shape[2] == 1:
+            img = img[:, :, 0]
+
+        return img
+    except Exception:
+        return None
+
+
 class MockZAxis:
     def __init__(self, pos: float = 0.0):
         self.pos = float(pos)
@@ -162,12 +242,24 @@ class MockZAxis:
 
 
 class MockCamera:
+    """Simula desfoque Gaussiano em função da distância a `true_focus`.
+
+    Se `base_image` for fornecida, usa essa imagem como cena base.
+    Caso contrário, gera uma imagem sintética com círculos e linhas.
+    """
+
     def __init__(self, zaxis: MockZAxis, true_focus_mm: float = 22.0,
-                 size: Tuple[int, int] = (512, 640)):
+                 size: Tuple[int, int] = (512, 640),
+                 base_image: Optional[np.ndarray] = None):
         self.z = zaxis
         self.true_focus = float(true_focus_mm)
-        self.size = size
-        self._base = self._make_base()
+
+        if base_image is not None:
+            self._base = _prepare_base_image(base_image, max_dim=1280)
+            self.size = (self._base.shape[0], self._base.shape[1])
+        else:
+            self.size = size
+            self._base = self._make_base()
 
     def _make_base(self) -> np.ndarray:
         h, w = self.size
@@ -592,7 +684,7 @@ def make_accuracy_fig(best: Dict[str, dict], metric_names: List[str],
     return fig
 
 
-# -------------------- NOVAS FUNÇÕES: HISTOGRAMAS --------------------
+# -------------------- HISTOGRAMAS --------------------
 
 def _load_img_for_hist(path: Optional[str]) -> Optional[np.ndarray]:
     """Carrega imagem do disco e devolve em grayscale. None se indisponível."""
@@ -637,7 +729,6 @@ def make_histogram_fig(samples: List[dict], metric_names: List[str],
             ax.axis("off")
             continue
 
-        # Se quiser RGB, carrega colorida
         if use_color and path and Path(path).exists():
             img_color = cv2.imread(str(path), cv2.IMREAD_COLOR)
             if img_color is not None:
@@ -677,15 +768,10 @@ def make_histogram_fig(samples: List[dict], metric_names: List[str],
 
 def make_histogram_comparison_fig(samples: List[dict],
                                   primary_metric: str) -> Optional[plt.Figure]:
-    """Compara histogramas em z_min, z_ótimo e z_max.
-
-    Ilustra por que histogramas globais NÃO discriminam foco:
-    as curvas são quase idênticas enquanto a métrica varia drasticamente.
-    """
+    """Compara histogramas em z_min, z_ótimo e z_max."""
     if not samples:
         return None
 
-    # Seleciona amostras de interesse
     sorted_s = sorted(samples, key=lambda s: s["z_mm"])
     zmin_s = sorted_s[0]
     zmax_s = sorted_s[-1]
@@ -698,7 +784,6 @@ def make_histogram_comparison_fig(samples: List[dict],
     if peak_s is None:
         return None
 
-    # Deduplica por z (se o pico coincidir com z_min ou z_max)
     targets: List[Tuple[str, dict, str]] = []
     seen_z = set()
     for label, s, color in [
@@ -715,7 +800,6 @@ def make_histogram_comparison_fig(samples: List[dict],
     fig, (ax_hist, ax_info) = plt.subplots(1, 2, figsize=(14, 5),
                                             gridspec_kw={"width_ratios": [2, 1]})
 
-    # --- Histogramas sobrepostos (densidade normalizada) ---
     n_plots = 0
     for label, s, color in targets:
         img_gray = _load_img_for_hist(s.get("img_path"))
@@ -741,7 +825,6 @@ def make_histogram_comparison_fig(samples: List[dict],
         ax_hist.legend(fontsize=9, loc="upper right")
         ax_hist.grid(alpha=0.3)
 
-    # --- Painel de informação ---
     ax_info.axis("off")
     lines = [f"Métrica primária: {DISPLAY[primary_metric]}\n"]
     for label, s, _ in targets:
@@ -847,7 +930,7 @@ def make_histogram_gallery_fig(samples: List[dict],
     return fig
 
 
-# -------------------- /NOVAS FUNÇÕES --------------------
+# -------------------- /HISTOGRAMAS --------------------
 
 
 def make_table(samples: List[dict], metric_names: List[str]) -> pd.DataFrame:
@@ -878,6 +961,11 @@ def main() -> None:
         if k not in st.session_state:
             st.session_state[k] = v
 
+    # Defaults para uso fora do bloco Mock
+    mock_base_image: Optional[np.ndarray] = None
+    h_sim, w_sim = 512, 640
+    true_focus = 22.0
+
     # ---------------- SIDEBAR ----------------
     with st.sidebar:
         st.header("Hardware")
@@ -892,9 +980,51 @@ def main() -> None:
         if hw_mode == "Mock (demo)":
             true_focus = st.number_input("Foco verdadeiro simulado (mm)",
                                          0.0, 40.0, 22.0, 0.5)
-            size_str = st.selectbox("Resolução simulada",
-                                    ["512x640", "768x1024"], index=0)
-            h_sim, w_sim = [int(x) for x in size_str.split("x")]
+
+            # -------- UPLOAD DE IMAGEM DE REFERÊNCIA --------
+            st.markdown("**Imagem base do mock**")
+            uploaded_file = st.file_uploader(
+                "Enviar imagem de referência (opcional)",
+                type=["png", "jpg", "jpeg", "tif", "tiff"],
+                help="Se enviada, o mock aplica o desfoque Gaussiano "
+                     "sobre esta imagem em vez da sintética. Útil para "
+                     "testar o algoritmo em imagens reais de H&E sem o "
+                     "hardware. Redimensionada para no máximo 1280 px "
+                     "no maior lado.",
+                key="mock_base_upload",
+            )
+
+            if uploaded_file is not None:
+                mock_base_image = _load_uploaded_image(uploaded_file)
+                if mock_base_image is None:
+                    st.error(
+                        "❌ Não foi possível carregar a imagem. "
+                        "Verifique o formato e tente novamente."
+                    )
+                    size_str = st.selectbox("Resolução simulada",
+                                            ["512x640", "768x1024"], index=0)
+                    h_sim, w_sim = [int(x) for x in size_str.split("x")]
+                else:
+                    h_img, w_img = mock_base_image.shape[:2]
+                    is_color = mock_base_image.ndim == 3
+                    st.success(
+                        f"✅ Imagem carregada: {w_img}×{h_img} "
+                        f"({'RGB' if is_color else 'grayscale'})"
+                    )
+                    preview = (cv2.cvtColor(mock_base_image,
+                                            cv2.COLOR_BGR2RGB)
+                               if is_color else mock_base_image)
+                    st.image(preview,
+                             caption="Imagem base do mock",
+                             use_column_width=True)
+                    h_sim, w_sim = h_img, w_img
+            else:
+                size_str = st.selectbox(
+                    "Resolução simulada (imagem sintética)",
+                    ["512x640", "768x1024"], index=0,
+                    help="Usado apenas quando nenhuma imagem é enviada.",
+                )
+                h_sim, w_sim = [int(x) for x in size_str.split("x")]
 
         elif hw_mode == "ESP8266 — Serial USB":
             if not HAS_PYSERIAL:
@@ -993,8 +1123,15 @@ def main() -> None:
 
     # ---------------- mensagens de modo ----------------
     if hw_mode == "Mock (demo)":
-        st.info(f"**Modo demo.** Foco verdadeiro simulado em "
-                f"**z = {true_focus:.1f} mm**.")
+        if mock_base_image is not None:
+            st.info(
+                f"**Modo demo com imagem de referência.** Foco verdadeiro "
+                f"simulado em **z = {true_focus:.1f} mm** sobre a imagem "
+                f"enviada ({mock_base_image.shape[1]}×{mock_base_image.shape[0]})."
+            )
+        else:
+            st.info(f"**Modo demo.** Foco verdadeiro simulado em "
+                    f"**z = {true_focus:.1f} mm**.")
     elif hw_mode == "ESP8266 — Serial USB":
         st.warning("**Modo ESP Serial.** Calibre `$102` antes do primeiro "
                    "teste. Depois clique em *Testar conexão*.")
@@ -1052,8 +1189,11 @@ def main() -> None:
         try:
             if hw_mode == "Mock (demo)":
                 zaxis = MockZAxis()
-                camera = MockCamera(zaxis, true_focus_mm=true_focus,
-                                    size=(h_sim, w_sim))
+                camera = MockCamera(
+                    zaxis, true_focus_mm=true_focus,
+                    size=(h_sim, w_sim),
+                    base_image=mock_base_image,
+                )
             elif hw_mode == "ESP8266 — Serial USB":
                 zaxis = ESP8266SerialZAxis(port, int(baud))
                 camera = OpenCVCamera(int(cam_index), int(cam_w), int(cam_h))
@@ -1181,23 +1321,35 @@ def main() -> None:
             c4.metric("Spread entre métricas",
                       f"{(max(zs_opt) - min(zs_opt)):.2f} mm")
 
-        tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
-            ["Curvas sobrepostas", "Painéis por métrica",
-             "🎯 Acurácia + Tempo", "📊 Histogramas",
-             "Tabela", "Melhores imagens"])
+        # 🔧 FIX: st.tabs → st.radio persistente em session_state.
+        RESULT_VIEWS = [
+            "📈 Curvas sobrepostas",
+            "📊 Painéis por métrica",
+            "🎯 Acurácia + Tempo",
+            "📊 Histogramas",
+            "📋 Tabela",
+            "🖼️ Melhores imagens",
+        ]
+        view = st.radio(
+            "Seção de resultados",
+            RESULT_VIEWS,
+            horizontal=True,
+            key="results_view",
+            label_visibility="collapsed",
+        )
 
-        # ---------- TAB 1 ----------
-        with tab1:
+        # ========== Curvas sobrepostas ==========
+        if view == RESULT_VIEWS[0]:
             fig = make_fig(samples, metric_names, best=best)
             st.pyplot(fig); plt.close(fig)
 
-        # ---------- TAB 2 ----------
-        with tab2:
+        # ========== Painéis por métrica ==========
+        elif view == RESULT_VIEWS[1]:
             fig = make_fig_per_metric(samples, metric_names, best)
             st.pyplot(fig); plt.close(fig)
 
-        # ---------- TAB 3: Acurácia + Tempo ----------
-        with tab3:
+        # ========== Acurácia + Tempo ==========
+        elif view == RESULT_VIEWS[2]:
             true_focus_used = st.session_state.get("true_focus_used")
 
             if true_focus_used is not None:
@@ -1208,12 +1360,14 @@ def main() -> None:
                     f"tempo médio de cálculo por imagem."
                 )
                 st.info(
-                    "ℹ️ **Modo mock:** as 4 métricas convergem para o "
-                    "mesmo z porque o simulador aplica um desfoque "
-                    "Gaussiano simétrico. Em imagens reais de H&E, com "
-                    "ruído, texturas e aberrações ópticas distintas, as "
-                    "métricas divergem. Aqui, o **diferenciador prático "
-                    "é o custo computacional**."
+                    "ℹ️ **Sobre a convergência das métricas:** em imagens "
+                    "sintéticas (desfoque Gaussiano simétrico), as 4 "
+                    "métricas tendem a convergir no mesmo pico. Com uma "
+                    "**imagem de referência real** (H&E, foto etc.), "
+                    "as métricas podem divergir — refletindo diferenças "
+                    "espectrais e de textura que o simulador sintético "
+                    "não captura. Neste caso, o diferenciador é tanto "
+                    "**acurácia** quanto **custo computacional**."
                 )
             else:
                 st.markdown(
@@ -1279,8 +1433,8 @@ def main() -> None:
                 mime="text/csv",
             )
 
-        # ---------- TAB 4: 📊 Histogramas ----------
-        with tab4:
+        # ========== Histogramas ==========
+        elif view == RESULT_VIEWS[3]:
             st.markdown(
                 "Histogramas das imagens capturadas em diferentes posições "
                 "do eixo Z. As duas análises abaixo respondem a perguntas "
@@ -1289,7 +1443,6 @@ def main() -> None:
                 "são bons indicadores de foco."
             )
 
-            # --- Seletor de modo ---
             modo_hist = st.radio(
                 "Visualização:",
                 ["Histograma no pico de cada métrica",
@@ -1301,17 +1454,16 @@ def main() -> None:
 
             st.divider()
 
-            # ---------- Seção 1: histogramas por métrica ----------
             if modo_hist == "Histograma no pico de cada métrica":
                 st.subheader("Histogramas no pico de cada métrica")
 
                 use_color = st.checkbox(
                     "Mostrar canais RGB (requer imagem colorida)",
                     False,
-                    help="Se a imagem for em cinza (mock), ignora esta opção."
+                    help="Se a imagem for em cinza (mock sintético), "
+                         "ignora esta opção."
                 )
 
-                # Verifica se há pelo menos uma imagem disponível
                 disponiveis = sum(
                     1 for m in metric_names
                     if m in best
@@ -1321,8 +1473,7 @@ def main() -> None:
                     st.warning(
                         "⚠️ Nenhuma imagem disponível em disco. Verifique se "
                         "**'Salvar imagens permanentemente'** está marcado "
-                        "no sidebar. Imagens em diretório temporário podem "
-                        "expirar durante a sessão."
+                        "no sidebar."
                     )
                 else:
                     fig_h = make_histogram_fig(samples, metric_names, best,
@@ -1332,11 +1483,10 @@ def main() -> None:
                     st.caption(
                         f"**{disponiveis}/{len(metric_names)}** imagens "
                         f"disponíveis. Eixo X = intensidade (0–255); "
-                        f"Eixo Y = densidade. As linhas verticais indicam "
-                        f"média (vermelho) e mediana (verde)."
+                        f"Eixo Y = densidade. Linhas verticais: média "
+                        f"(vermelho) e mediana (verde)."
                     )
 
-            # ---------- Seção 2: comparação foco vs desfoque ----------
             elif modo_hist == "Comparação: foco vs. desfoque (métrica primária)":
                 st.subheader("Por que histogramas globais não discriminam foco")
                 st.markdown(
@@ -1346,8 +1496,7 @@ def main() -> None:
                     "**z_max** (desfocado). Se as três distribuições forem "
                     "quase idênticas, isso confirma que o **histograma "
                     "global não é um bom indicador de foco** — e que é "
-                    "necessário usar uma **métrica espacial** (gradiente, "
-                    "Laplaciano, FFT)."
+                    "necessário usar uma **métrica espacial**."
                 )
 
                 fig_cmp = make_histogram_comparison_fig(samples, primary)
@@ -1360,15 +1509,12 @@ def main() -> None:
                     st.pyplot(fig_cmp)
                     plt.close(fig_cmp)
 
-            # ---------- Seção 3: galeria visual ----------
             else:
                 st.subheader("Galeria visual + histograma")
                 st.markdown(
                     f"Miniaturas das imagens em **z_min**, **pico "
                     f"({DISPLAY[primary]})** e **z_max**, cada uma com "
-                    f"seu histograma abaixo. Útil para inspeção visual "
-                    f"do efeito do desfoque no conteúdo, contrastando "
-                    f"com a quase-invariância dos histogramas."
+                    f"seu histograma abaixo."
                 )
 
                 fig_gal = make_histogram_gallery_fig(samples, primary)
@@ -1381,8 +1527,8 @@ def main() -> None:
                     st.pyplot(fig_gal)
                     plt.close(fig_gal)
 
-        # ---------- TAB 5: Tabela ----------
-        with tab5:
+        # ========== Tabela ==========
+        elif view == RESULT_VIEWS[4]:
             st.caption(
                 "**Fase** — `coarse` = varredura grossa inicial "
                 "(grade uniforme entre Z mínimo e máximo). "
@@ -1406,8 +1552,8 @@ def main() -> None:
                 data=df.to_csv(index=False).encode("utf-8"),
                 file_name="sweep_results.csv", mime="text/csv")
 
-        # ---------- TAB 6: Melhores imagens (2×2) ----------
-        with tab6:
+        # ========== Melhores imagens ==========
+        elif view == RESULT_VIEWS[5]:
             imgs = list(best.items())
             if not imgs:
                 st.info("Sem imagens para exibir.")
