@@ -1,9 +1,9 @@
 """
 streamlit_autofocus.py — Autofoco Z com 4 métricas em interface Streamlit.
 
-Versão 2.4 — correções aplicadas:
+Versão 2.5 — correções aplicadas:
+  - Nova aba "📊 Histogramas" (pico por métrica + comparação foco vs. desfoque).
   - Medição de tempo por métrica (acurácia + tempo comparados).
-  - Aba Acurácia com subplots de erro e tempo + tabela ordenada.
   - Tabela formatada (coarse/refine explicados, decimais consistentes).
   - Gráfico não aparece duplicado (placeholders limpos ao final do sweep).
   - Melhores imagens em grade 2×2.
@@ -511,7 +511,6 @@ def make_accuracy_fig(best: Dict[str, dict], metric_names: List[str],
 
     names = [DISPLAY[m] for m, _ in valid]
 
-    # ---------- Subplot esquerdo: acurácia / z_ótimo ----------
     if true_focus is not None:
         errors = [abs(b["z_mm"] - true_focus) for _, b in valid]
         best_idx = int(np.argmin(errors))
@@ -558,7 +557,6 @@ def make_accuracy_fig(best: Dict[str, dict], metric_names: List[str],
 
     ax_acc.grid(axis="y", alpha=0.3)
 
-    # ---------- Subplot direito: tempo médio de cálculo ----------
     time_data = []
     for m in metric_names:
         valid_t = [s["times"][m] for s in samples
@@ -592,6 +590,264 @@ def make_accuracy_fig(best: Dict[str, dict], metric_names: List[str],
 
     fig.tight_layout()
     return fig
+
+
+# -------------------- NOVAS FUNÇÕES: HISTOGRAMAS --------------------
+
+def _load_img_for_hist(path: Optional[str]) -> Optional[np.ndarray]:
+    """Carrega imagem do disco e devolve em grayscale. None se indisponível."""
+    if not path:
+        return None
+    p = Path(path)
+    if not p.exists():
+        return None
+    img = cv2.imread(str(p), cv2.IMREAD_UNCHANGED)
+    if img is None:
+        return None
+    if img.ndim == 3:
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    return img
+
+
+def make_histogram_fig(samples: List[dict], metric_names: List[str],
+                       best: Dict[str, dict],
+                       use_color: bool = False) -> plt.Figure:
+    """2×2 grid: histograma da imagem no z_ótimo de cada métrica."""
+    n = len(metric_names)
+    nrows = (n + 1) // 2
+    fig, axes = plt.subplots(nrows, 2, figsize=(13, 4.2 * nrows),
+                             squeeze=False)
+
+    for i, m in enumerate(metric_names):
+        ax = axes[i // 2][i % 2]
+        if m not in best:
+            ax.axis("off")
+            continue
+
+        sample = best[m]
+        path = sample.get("img_path")
+        img_gray = _load_img_for_hist(path)
+
+        if img_gray is None:
+            ax.text(0.5, 0.5,
+                    "Imagem não disponível\n(use 'Salvar imagens')",
+                    ha="center", va="center",
+                    transform=ax.transAxes, fontsize=11)
+            ax.set_title(f"{DISPLAY[m]} — z={sample['z_mm']:.3f} mm")
+            ax.axis("off")
+            continue
+
+        # Se quiser RGB, carrega colorida
+        if use_color and path and Path(path).exists():
+            img_color = cv2.imread(str(path), cv2.IMREAD_COLOR)
+            if img_color is not None:
+                for c, color, label in zip(range(3),
+                                           ("#3498db", "#27ae60", "#e74c3c"),
+                                           ("Azul (B)", "Verde (G)", "Vermelho (R)")):
+                    ax.hist(img_color[:, :, c].ravel(), bins=64,
+                            color=color, alpha=0.45, label=label,
+                            density=True)
+                ax.legend(fontsize=7, loc="upper right")
+        else:
+            ax.hist(img_gray.ravel(), bins=64, color="steelblue",
+                    alpha=0.8, density=True)
+            ax.axvline(float(img_gray.mean()), color="#e74c3c",
+                       linestyle="--", linewidth=1.5,
+                       label=f"média = {img_gray.mean():.1f}")
+            ax.axvline(float(np.median(img_gray)), color="#27ae60",
+                       linestyle=":", linewidth=1.5,
+                       label=f"mediana = {np.median(img_gray):.1f}")
+            ax.legend(fontsize=7, loc="upper right")
+
+        ax.set_title(f"{DISPLAY[m]} — z={sample['z_mm']:.3f} mm "
+                     f"(score={sample['scores'][m]:.3e})",
+                     fontsize=10)
+        ax.set_xlabel("Intensidade (0–255)")
+        ax.set_ylabel("Densidade")
+        ax.grid(alpha=0.3)
+
+    for j in range(n, nrows * 2):
+        axes[j // 2][j % 2].axis("off")
+
+    fig.suptitle("Histogramas das imagens no pico de cada métrica",
+                 fontsize=12, y=1.02)
+    fig.tight_layout()
+    return fig
+
+
+def make_histogram_comparison_fig(samples: List[dict],
+                                  primary_metric: str) -> Optional[plt.Figure]:
+    """Compara histogramas em z_min, z_ótimo e z_max.
+
+    Ilustra por que histogramas globais NÃO discriminam foco:
+    as curvas são quase idênticas enquanto a métrica varia drasticamente.
+    """
+    if not samples:
+        return None
+
+    # Seleciona amostras de interesse
+    sorted_s = sorted(samples, key=lambda s: s["z_mm"])
+    zmin_s = sorted_s[0]
+    zmax_s = sorted_s[-1]
+    peak_s = max(
+        (s for s in samples if not np.isnan(s["scores"].get(primary_metric, np.nan))),
+        key=lambda s: s["scores"][primary_metric],
+        default=None,
+    )
+
+    if peak_s is None:
+        return None
+
+    # Deduplica por z (se o pico coincidir com z_min ou z_max)
+    targets: List[Tuple[str, dict, str]] = []
+    seen_z = set()
+    for label, s, color in [
+        ("Desfocado (z_min)", zmin_s, "#95a5a6"),
+        (f"Pico ({DISPLAY[primary_metric]})", peak_s, "#e74c3c"),
+        ("Desfocado (z_max)", zmax_s, "#3498db"),
+    ]:
+        z_key = round(s["z_mm"], 3)
+        if z_key in seen_z:
+            continue
+        seen_z.add(z_key)
+        targets.append((label, s, color))
+
+    fig, (ax_hist, ax_info) = plt.subplots(1, 2, figsize=(14, 5),
+                                            gridspec_kw={"width_ratios": [2, 1]})
+
+    # --- Histogramas sobrepostos (densidade normalizada) ---
+    n_plots = 0
+    for label, s, color in targets:
+        img_gray = _load_img_for_hist(s.get("img_path"))
+        if img_gray is None:
+            continue
+        ax_hist.hist(img_gray.ravel(), bins=64, color=color, alpha=0.45,
+                     label=f"{label}  z={s['z_mm']:.2f} mm",
+                     density=True, edgecolor=color, linewidth=0.5)
+        ax_hist.axvline(float(img_gray.mean()), color=color,
+                        linestyle="--", alpha=0.8, linewidth=1.2)
+        n_plots += 1
+
+    if n_plots == 0:
+        ax_hist.text(0.5, 0.5, "Imagens não disponíveis",
+                     ha="center", va="center", transform=ax_hist.transAxes)
+        ax_hist.axis("off")
+    else:
+        ax_hist.set_xlabel("Intensidade (0–255)")
+        ax_hist.set_ylabel("Densidade")
+        ax_hist.set_title(
+            "Histogramas globais em 3 posições Z — quase idênticos",
+            fontsize=11)
+        ax_hist.legend(fontsize=9, loc="upper right")
+        ax_hist.grid(alpha=0.3)
+
+    # --- Painel de informação ---
+    ax_info.axis("off")
+    lines = [f"Métrica primária: {DISPLAY[primary_metric]}\n"]
+    for label, s, _ in targets:
+        v = s["scores"].get(primary_metric, np.nan)
+        img_gray = _load_img_for_hist(s.get("img_path"))
+        if img_gray is not None:
+            mu = float(img_gray.mean())
+            sd = float(img_gray.std())
+            lines.append(
+                f"{label}\n"
+                f"  z     = {s['z_mm']:.3f} mm\n"
+                f"  μ     = {mu:.1f}\n"
+                f"  σ     = {sd:.1f}\n"
+                f"  score = {v:.3e}\n"
+            )
+        else:
+            lines.append(f"{label}\n  z = {s['z_mm']:.3f} mm\n"
+                         f"  score = {v:.3e}\n  (imagem indisponível)\n")
+
+    lines.append(
+        "─────────────────────────\n"
+        "Se μ e σ são quase iguais\n"
+        "nas 3 posições, mas o score\n"
+        "varia drasticamente:\n"
+        "→ histograma GLOBAL não\n"
+        "  discrimina foco.\n"
+        "→ é preciso métrica ESPACIAL\n"
+        "  (gradiente, Laplaciano, FFT)."
+    )
+    ax_info.text(0.0, 1.0, "\n".join(lines),
+                 va="top", ha="left", fontsize=9, family="monospace",
+                 bbox=dict(boxstyle="round,pad=0.6",
+                           facecolor="#f8f9fa", edgecolor="#7f8c8d"))
+
+    fig.tight_layout()
+    return fig
+
+
+def make_histogram_gallery_fig(samples: List[dict],
+                               primary_metric: str) -> Optional[plt.Figure]:
+    """Grade 1×3 com imagens em z_min, pico e z_max + histograma abaixo."""
+    if not samples:
+        return None
+
+    sorted_s = sorted(samples, key=lambda s: s["z_mm"])
+    zmin_s = sorted_s[0]
+    zmax_s = sorted_s[-1]
+    peak_s = max(
+        (s for s in samples
+         if not np.isnan(s["scores"].get(primary_metric, np.nan))),
+        key=lambda s: s["scores"][primary_metric],
+        default=None,
+    )
+    if peak_s is None:
+        return None
+
+    targets: List[Tuple[str, dict, str]] = [
+        ("z_min (desfocado)", zmin_s, "#95a5a6"),
+        (f"z_ótimo ({DISPLAY[primary_metric]})", peak_s, "#e74c3c"),
+        ("z_max (desfocado)", zmax_s, "#3498db"),
+    ]
+
+    fig, axes = plt.subplots(2, len(targets),
+                              figsize=(5 * len(targets), 7),
+                              gridspec_kw={"height_ratios": [2, 1]})
+    if len(targets) == 1:
+        axes = axes.reshape(2, 1)
+
+    for col, (label, s, color) in enumerate(targets):
+        ax_img = axes[0, col]
+        ax_hist = axes[1, col]
+
+        img_gray = _load_img_for_hist(s.get("img_path"))
+        if img_gray is None:
+            ax_img.text(0.5, 0.5, "Imagem indisponível",
+                        ha="center", va="center",
+                        transform=ax_img.transAxes)
+            ax_img.axis("off")
+            ax_hist.axis("off")
+            continue
+
+        ax_img.imshow(img_gray, cmap="gray", vmin=0, vmax=255)
+        ax_img.set_title(
+            f"{label}\nz = {s['z_mm']:.3f} mm  ·  "
+            f"score = {s['scores'].get(primary_metric, np.nan):.3e}",
+            fontsize=10)
+        ax_img.axis("off")
+
+        ax_hist.hist(img_gray.ravel(), bins=64, color=color,
+                     alpha=0.8, density=True)
+        ax_hist.axvline(float(img_gray.mean()), color="black",
+                        linestyle="--", linewidth=1.2,
+                        label=f"μ = {img_gray.mean():.1f}")
+        ax_hist.set_xlabel("Intensidade")
+        ax_hist.set_ylabel("Densidade")
+        ax_hist.set_xlim(0, 255)
+        ax_hist.legend(fontsize=8, loc="upper right")
+        ax_hist.grid(alpha=0.3)
+
+    fig.suptitle("Comparação visual + histograma (3 posições Z)",
+                 fontsize=12, y=1.01)
+    fig.tight_layout()
+    return fig
+
+
+# -------------------- /NOVAS FUNÇÕES --------------------
 
 
 def make_table(samples: List[dict], metric_names: List[str]) -> pd.DataFrame:
@@ -716,7 +972,8 @@ def main() -> None:
         st.header("Saída")
         save_images = st.checkbox(
             "Salvar imagens permanentemente", True,
-            help="Se desmarcado, imagens vão para diretório temporário."
+            help="Se desmarcado, imagens vão para diretório temporário. "
+                 "A aba Histogramas requer imagens em disco."
         )
         save_dir_str = st.text_input("Diretório", "autofocus_images",
                                      disabled=not save_images)
@@ -874,7 +1131,6 @@ def main() -> None:
         elapsed = time.time() - t0
         progress.progress(1.0, text=f"✅ Concluído em {elapsed:.1f} s")
 
-        # 🔧 Limpa placeholders ao vivo (evita duplicação com as abas)
         status.success(f"✅ {len(collected)} medidas em {elapsed:.1f} s")
         chart_ph.empty()
         img_ph.empty()
@@ -925,9 +1181,10 @@ def main() -> None:
             c4.metric("Spread entre métricas",
                       f"{(max(zs_opt) - min(zs_opt)):.2f} mm")
 
-        tab1, tab2, tab3, tab4, tab5 = st.tabs(
+        tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
             ["Curvas sobrepostas", "Painéis por métrica",
-             "🎯 Acurácia + Tempo", "Tabela", "Melhores imagens"])
+             "🎯 Acurácia + Tempo", "📊 Histogramas",
+             "Tabela", "Melhores imagens"])
 
         # ---------- TAB 1 ----------
         with tab1:
@@ -953,11 +1210,10 @@ def main() -> None:
                 st.info(
                     "ℹ️ **Modo mock:** as 4 métricas convergem para o "
                     "mesmo z porque o simulador aplica um desfoque "
-                    "Gaussiano simétrico (sem variação espectral "
-                    "discriminante entre métricas). Em imagens reais de "
-                    "H&E, com ruído, texturas e aberrações ópticas "
-                    "distintas, as métricas divergem. Aqui, o "
-                    "**diferenciador prático é o custo computacional**."
+                    "Gaussiano simétrico. Em imagens reais de H&E, com "
+                    "ruído, texturas e aberrações ópticas distintas, as "
+                    "métricas divergem. Aqui, o **diferenciador prático "
+                    "é o custo computacional**."
                 )
             else:
                 st.markdown(
@@ -969,7 +1225,6 @@ def main() -> None:
                                         true_focus=true_focus_used)
             st.pyplot(fig_acc); plt.close(fig_acc)
 
-            # ---- Tabela detalhada ----
             st.markdown("**Detalhamento**")
             rows = []
             for m in metric_names:
@@ -1004,7 +1259,6 @@ def main() -> None:
             df_acc.index = df_acc.index + 1
             df_acc.index.name = "Rank"
 
-            # Formatação consistente para exibição
             df_disp = df_acc.copy()
             df_disp["z_ótimo (mm)"] = df_disp["z_ótimo (mm)"].map(
                 lambda x: f"{x:.3f}")
@@ -1025,8 +1279,110 @@ def main() -> None:
                 mime="text/csv",
             )
 
-        # ---------- TAB 4: Tabela ----------
+        # ---------- TAB 4: 📊 Histogramas ----------
         with tab4:
+            st.markdown(
+                "Histogramas das imagens capturadas em diferentes posições "
+                "do eixo Z. As duas análises abaixo respondem a perguntas "
+                "distintas: **(1)** como as imagens no pico de cada métrica "
+                "se comparam; **(2)** por que histogramas globais **não** "
+                "são bons indicadores de foco."
+            )
+
+            # --- Seletor de modo ---
+            modo_hist = st.radio(
+                "Visualização:",
+                ["Histograma no pico de cada métrica",
+                 "Comparação: foco vs. desfoque (métrica primária)",
+                 "Galeria visual + histograma (3 posições)"],
+                horizontal=True,
+                key="hist_mode",
+            )
+
+            st.divider()
+
+            # ---------- Seção 1: histogramas por métrica ----------
+            if modo_hist == "Histograma no pico de cada métrica":
+                st.subheader("Histogramas no pico de cada métrica")
+
+                use_color = st.checkbox(
+                    "Mostrar canais RGB (requer imagem colorida)",
+                    False,
+                    help="Se a imagem for em cinza (mock), ignora esta opção."
+                )
+
+                # Verifica se há pelo menos uma imagem disponível
+                disponiveis = sum(
+                    1 for m in metric_names
+                    if m in best
+                    and _load_img_for_hist(best[m].get("img_path")) is not None
+                )
+                if disponiveis == 0:
+                    st.warning(
+                        "⚠️ Nenhuma imagem disponível em disco. Verifique se "
+                        "**'Salvar imagens permanentemente'** está marcado "
+                        "no sidebar. Imagens em diretório temporário podem "
+                        "expirar durante a sessão."
+                    )
+                else:
+                    fig_h = make_histogram_fig(samples, metric_names, best,
+                                                use_color=use_color)
+                    st.pyplot(fig_h)
+                    plt.close(fig_h)
+                    st.caption(
+                        f"**{disponiveis}/{len(metric_names)}** imagens "
+                        f"disponíveis. Eixo X = intensidade (0–255); "
+                        f"Eixo Y = densidade. As linhas verticais indicam "
+                        f"média (vermelho) e mediana (verde)."
+                    )
+
+            # ---------- Seção 2: comparação foco vs desfoque ----------
+            elif modo_hist == "Comparação: foco vs. desfoque (métrica primária)":
+                st.subheader("Por que histogramas globais não discriminam foco")
+                st.markdown(
+                    "Os **três histogramas abaixo** correspondem à mesma "
+                    "cena nas posições **z_min** (desfocado), "
+                    f"**z_ótimo** (pico da métrica *{DISPLAY[primary]}*) e "
+                    "**z_max** (desfocado). Se as três distribuições forem "
+                    "quase idênticas, isso confirma que o **histograma "
+                    "global não é um bom indicador de foco** — e que é "
+                    "necessário usar uma **métrica espacial** (gradiente, "
+                    "Laplaciano, FFT)."
+                )
+
+                fig_cmp = make_histogram_comparison_fig(samples, primary)
+                if fig_cmp is None:
+                    st.warning(
+                        "⚠️ Não foi possível gerar a comparação. "
+                        "Verifique se as imagens estão em disco."
+                    )
+                else:
+                    st.pyplot(fig_cmp)
+                    plt.close(fig_cmp)
+
+            # ---------- Seção 3: galeria visual ----------
+            else:
+                st.subheader("Galeria visual + histograma")
+                st.markdown(
+                    f"Miniaturas das imagens em **z_min**, **pico "
+                    f"({DISPLAY[primary]})** e **z_max**, cada uma com "
+                    f"seu histograma abaixo. Útil para inspeção visual "
+                    f"do efeito do desfoque no conteúdo, contrastando "
+                    f"com a quase-invariância dos histogramas."
+                )
+
+                fig_gal = make_histogram_gallery_fig(samples, primary)
+                if fig_gal is None:
+                    st.warning(
+                        "⚠️ Não foi possível carregar as imagens. "
+                        "Verifique se estão em disco."
+                    )
+                else:
+                    st.pyplot(fig_gal)
+                    plt.close(fig_gal)
+
+        # ---------- TAB 5: Tabela ----------
+        with tab5:
             st.caption(
                 "**Fase** — `coarse` = varredura grossa inicial "
                 "(grade uniforme entre Z mínimo e máximo). "
@@ -1050,8 +1406,8 @@ def main() -> None:
                 data=df.to_csv(index=False).encode("utf-8"),
                 file_name="sweep_results.csv", mime="text/csv")
 
-        # ---------- TAB 5: Melhores imagens (2×2) ----------
-        with tab5:
+        # ---------- TAB 6: Melhores imagens (2×2) ----------
+        with tab6:
             imgs = list(best.items())
             if not imgs:
                 st.info("Sem imagens para exibir.")
