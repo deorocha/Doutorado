@@ -1,0 +1,8 @@
+# Interface
+streamlit>=1.32,<1.42
+
+# Leitura da serial (Arduino + PCF8574 + sensores Hall 3144)
+pyserial>=3.5,<4.0
+
+# Re-render automático da página (enquanto a leitura está ativa)
+streamlit-autorefresh>=1.0.1,<2.0
