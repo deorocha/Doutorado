@@ -33,7 +33,7 @@ lâminas H&E, com medição de **acurácia** e **tempo de cálculo** por métric
 
 ## 🚀 Demonstração online
 
-🔗 **[Abrir no Streamlit Cloud](https://SEU-USUARIO-autofocus-z-app-XXXX.streamlit.app)**
+🔗 **[Abrir no Streamlit Cloud](https://autofoco-eixoz.streamlit.app/)**
 
 > ⚠️ **Na nuvem, apenas o modo "Mock (demo)" funciona.**
 >
