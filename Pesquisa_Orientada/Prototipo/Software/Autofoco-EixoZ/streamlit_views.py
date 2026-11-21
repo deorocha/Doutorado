@@ -207,8 +207,7 @@ def view_best_images(best: Dict[str, dict], **_) -> None:
                 st.caption(f"z = **{s['z_mm']:.3f} mm** · "
                            f"score = {s['scores'][m]:.3e}")
                 if s.get("img_path") and Path(s["img_path"]).exists():
-                    st.image(s["img_path"], width='stretch')
-
+                    st.image(s["img_path"], use_container_width=True)
 
 # ---------------- dispatcher ----------------
 
