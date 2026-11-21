@@ -117,7 +117,7 @@ def _render_mock_sidebar():
         h, w = img.shape[:2]
         st.success(f"✅ {w}×{h} ({'RGB' if img.ndim == 3 else 'grayscale'})")
         preview = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) if img.ndim == 3 else img
-        st.image(preview, caption="Imagem base", width='stretch')
+        st.image(preview, caption="Imagem base", use_container_width=True)
         return img, h, w, true_focus
 
     size_str = st.selectbox("Resolução simulada (sintética)",
@@ -376,9 +376,9 @@ def main() -> None:
                             and Path(sample["img_path"]).exists()):
                         preview_ph.image(
                             sample["img_path"],
-                            caption=f"**{sample['phase']}** @ "
-                                    f"z = {sample['z_mm']:.2f} mm",
-                            width='stretch')
+                            caption=f"**{sample['phase']}** @ z = {sample['z_mm']:.2f} mm",
+                            use_container_width=True,
+                        )
                     scores_txt = "  \n".join(
                         f"- **{DISPLAY[k]}**: {v:.4g}"
                         for k, v in sample["scores"].items())
@@ -412,10 +412,10 @@ def main() -> None:
         if show_final_preview and primary in best and best[primary].get("img_path"):
             preview_ph.image(
                 best[primary]["img_path"],
-                caption=f"🏆 **Foco ótimo** @ z = "
-                        f"{best[primary]['z_mm']:.3f} mm "
+                caption=f"🏆 **Foco ótimo** @ z = {best[primary]['z_mm']:.3f} mm "
                         f"({DISPLAY[primary]})",
-                width='stretch')
+                use_container_width=True,
+            )
             status_ph.markdown(
                 f"✅ Varredura concluída em **{elapsed:.1f} s**\n\n"
                 f"**{len(collected)}** medidas  \n"
