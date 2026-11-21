@@ -1,0 +1,9 @@
+# Interface
+streamlit>=1.32,<1.42
+
+# Visualização e cálculo numérico
+matplotlib>=3.7,<4.0
+numpy>=1.24,<3.0
+
+# Manipulação da imagem da bandeja (PIL.Image.open sobre BytesIO)
+pillow>=10.0,<12.0
