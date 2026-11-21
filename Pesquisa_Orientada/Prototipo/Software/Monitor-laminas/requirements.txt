@@ -1,3 +1,11 @@
-streamlit>=1.30
-pyserial>=3.5
-streamlit-autorefresh>=1.0.1
+# Interface
+streamlit>=1.32,<1.42
+
+# Tabelas editáveis + Int64 (statísticas por slot)
+pandas>=2.0,<3.0
+
+# Leitura da serial (Arduino + MUX + LDR)
+pyserial>=3.5,<4.0
+
+# Re-render automático (300 ms) enquanto lê
+streamlit-autorefresh>=1.0.1,<2.0
