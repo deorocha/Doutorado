@@ -1,5 +1,10 @@
-streamlit>=1.49
-opencv-python-headless
-numpy>=1.24
-pillow>=10.0
-qrcode[pil]>=7.4
+# Interface
+streamlit>=1.40,<1.42
+
+# Visão computacional — núcleo do app (detecção, magic wand, desenho)
+# IMPORTANTE: 'headless' evita libGL.so.1 no Linux do Streamlit Cloud
+opencv-python-headless>=4.8,<5.0
+numpy>=1.24,<3.0
+
+# Exibição de imagens (Streamlit já depende, pin explícito para consistência)
+pillow>=10.0,<12.0
