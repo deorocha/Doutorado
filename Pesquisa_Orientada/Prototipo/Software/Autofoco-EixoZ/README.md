@@ -35,7 +35,7 @@ lâminas H&E, com medição de **acurácia** e **tempo de cálculo** por métric
 
 🔗 **[Abrir no Streamlit Cloud](https://autofoco-eixoz.streamlit.app/)**
 
-<a href="https://autofoco-eixoz.streamlit.app/">
+<a target="_blank" href="https://autofoco-eixoz.streamlit.app/">
   <img src="https://img.shields.io/badge/🚀_Abrir_no_Streamlit_Cloud-FF4B4B?style=for-the-badge" alt="Streamlit Cloud">
 </a>
 
