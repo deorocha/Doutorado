@@ -8,3 +8,5 @@ numpy>=1.24,<3.0
 
 # Exibição de imagens (Streamlit já depende, pin explícito para consistência)
 pillow>=10.0,<12.0
+
+qrcode[pil]>=7.4
