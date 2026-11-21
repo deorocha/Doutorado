@@ -35,10 +35,6 @@ lâminas H&E, com medição de **acurácia** e **tempo de cálculo** por métric
 
 🔗 **[Abrir no Streamlit Cloud](https://autofoco-eixoz.streamlit.app/)**
 
-<a target="_blank" href="https://autofoco-eixoz.streamlit.app/">
-  <img src="https://img.shields.io/badge/🚀_Abrir_no_Streamlit_Cloud-FF4B4B?style=for-the-badge" alt="Streamlit Cloud">
-</a>
-
 > ⚠️ **Na nuvem, apenas o modo "Mock (demo)" funciona.**
 >
 > O Streamlit Cloud **não tem acesso** à câmera local nem à porta serial do
